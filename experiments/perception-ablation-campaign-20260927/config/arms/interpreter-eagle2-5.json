@@ -1,0 +1,32 @@
+{
+  "resources": {
+    "providers": {
+      "semantic_interpretation.interpreter": "REPLACE_WITH_YOUR_LOADERS_MODULE:load_eagle2_5"
+    }
+  },
+  "components": {
+    "semantic_interpretation": {
+      "interpreter": {
+        "backend": "eagle2_5",
+        "eagle2_5": {
+          "model": "nvidia/Eagle2.5-8B",
+          "revision": "REPLACE-WITH-THE-40-HEX-EAGLE-REVISION",
+          "device": "cuda",
+          "precision": "REPLACE-WITH-THE-EAGLE-PRECISION",
+          "max_new_tokens": "REPLACE-WITH-THE-EAGLE-TOKEN-BUDGET",
+          "temperature": 0.0,
+          "max_dynamic_tiles": 6,
+          "prompt_policy": {
+            "scene": "scene/v1",
+            "region": "region/v1"
+          },
+          "view_policy": {
+            "region_views": [
+              "tight_crop"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

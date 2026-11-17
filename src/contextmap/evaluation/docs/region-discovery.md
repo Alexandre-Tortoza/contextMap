@@ -1,0 +1,131 @@
+# Avaliação de Region Discovery
+
+O protocolo mede evidência geométrica 2D e custo de execução sem usar qualidade semântica ou
+resultados downstream. O mesmo `RegionDiscoveryReferenceSet` e o mesmo schema de report recebem
+execuções SAM2, SAM3, Florence-2 ou fakes.
+
+## Fluxo de avaliação
+
+```mermaid
+flowchart LR
+    REF["RegionDiscoveryReferenceSet"] --> EV["RegionDiscoveryEvaluator"]
+    DESC["EvaluationRunDescriptor"] --> EV
+    EXEC["DiscoveryRunResult<br/>+ NormalizationResult"] --> EV
+    EV --> ACC["Accuracy<br/>quando há annotation"]
+    EV --> DIAG["Diagnostics"]
+    EV --> PERF["Performance"]
+    ACC --> REP["RegionDiscoveryEvaluationReport"]
+    DIAG --> REP
+    PERF --> REP
+    REP --> CMP["compare_region_discovery_reports()"]
+```
+
+O protocolo mede a capability de descoberta geométrica, não a interpretação semântica posterior. O contrato e o fluxo de produção das regiões estão documentados em [`region_perception/docs/region-discovery.md`](../../region_perception/docs/region-discovery.md).
+
+## Reprodutibilidade
+
+Cada report registra:
+
+- versão do reference set e seleção ordenada de frames;
+- `perception_run_id` e artifact ID;
+- backend, checkpoint, versão e estratégia;
+- digest da configuração e do pipeline graph;
+- thresholds e variáveis controladas;
+- versão do schema de métricas;
+- tipo da execução, por exemplo `ci_contract` ou `real_model`.
+
+Constraints pertencem ao `PreparedImage` de cada frame. Assim, um valid region declarado para uma
+condição wide-angle não é aplicado implicitamente aos demais frames.
+
+## Definições das métricas
+
+Diagnostics independentes de annotation:
+
+- `raw_candidate_count`: count nativo antes do filtering do adapter, quando reportado; caso
+  contrário, count canônico retornado pelo backend;
+- `accepted_region_count`: regiões após normalização e geometry freeze;
+- `rejected_candidate_count`: rejeições de passes e normalização;
+- `duplicate_merge_ratio`: merge decisions dividido pelo count bruto;
+- `area_pixels`: área canônica das regiões aceitas;
+- `invalid_geometry_count`: rejeições `invalid_geometry`;
+- `constraint_violation_count`: rejeições por valid/exclusion constraints.
+
+Em frames anotados, para cada ground-truth mask é selecionada a predição de maior IoU:
+
+```text
+IoU  = |P ∩ G| / |P ∪ G|
+Dice = 2|P ∩ G| / (|P| + |G|)
+```
+
+- `mean_iou` e `mean_dice`: média do melhor valor por região anotada;
+- `region_recall`: fração das regiões anotadas cujo melhor IoU atinge o threshold do evaluator;
+- `coverage`: união prevista intersectada com união anotada, dividida pela união anotada;
+- `over_segmentation_rate`: predições sobrepostas excedentes por ground truth, normalizadas pelo
+  count previsto;
+- `under_segmentation_rate`: predições que sobrepõem mais de um ground truth, normalizadas pelo
+  count previsto;
+- `duplicate_region_rate`: atribuições previstas repetidas ao mesmo melhor ground truth,
+  normalizadas pelo count previsto.
+
+O melhor IoU é escolhido por ground truth, **sem atribuição 1:1**: uma predição que cobre duas
+regiões anotadas pode contar recall para ambas, e o caso aparece em `under_segmentation_rate`.
+
+As três taxas de segmentação têm como população as predições do frame. Um frame anotado em que o
+backend não descobriu nenhuma região não tem essa população, e as três valem `null`, nunca `0.0`:
+zero seria o melhor valor possível, atribuído justamente ao backend que não produziu nada.
+`mean_iou`, `mean_dice`, `region_recall` e `coverage` continuam `0.0` nesse frame, porque são
+normalizados pela anotação e medem uma falha real. A `metric_schema_version` `2.0.0` introduziu
+esse `null`; a `1.0.0` reportava `0.0` nas três taxas.
+
+Frames sem annotation mantêm `accuracy = null`. Candidate count, área ou inspeção visual não são
+apresentados como substitutos de accuracy.
+
+Performance permanece em bloco separado: duração por pass, duração total e pico de memória quando
+o runtime reporta. `compare_region_discovery_reports` exige o mesmo `schema` de report, a mesma
+`metric_schema_version` e o mesmo reference set, e valida que exatamente uma variável declarada
+mudou antes de calcular deltas separados de qualidade e custo. Versões de schema diferentes são
+recusadas com `ValueError` que nomeia as duas, sem noção de versão compatível: uma mudança de
+versão pode mudar a definição de uma métrica (a `2.0.0` trocou `0.0` por `null` nas taxas de
+segmentação), e deltas entre definições diferentes não medem a variável declarada. A comparação
+segue o padrão das demais recusas desta função, um erro explícito, e não produz um estado
+"não comparável": um relatório `1.0.0` não é migrado nem reinterpretado (#629).
+Além de `run.variables`, a validação mantém backend, versão, checkpoint, estratégia, thresholds,
+pipeline graph, `config_digest` e tipo de execução constantes, exceto quando o próprio campo
+estruturado corresponde à variável declarada. IDs de run/artifact podem mudar porque identificam a
+nova execução. O `config_digest` identifica a configuração controlada comum aos dois lados e não
+pode mudar: a variável de ablação fica explicitamente em `run.variables`. Como um digest é opaco,
+aceitar sua alteração impediria provar que somente a variável declarada mudou.
+
+## Ablations controladas
+
+```mermaid
+flowchart TD
+    A["Report baseline"] --> SCHEMA{"mesmo schema e<br/>metric_schema_version?"}
+    B["Report alterado"] --> SCHEMA
+    SCHEMA --> CHECK{"mesmo reference set<br/>e frame selection?"}
+    CHECK --> VAR{"exatamente uma variável<br/>declarada mudou?"}
+    VAR --> INV{"backend/checkpoint/version/<br/>strategy/thresholds/pipeline/<br/>config digest/execution kind invariantes?"}
+    INV -->|sim| DELTA["calcular deltas<br/>quality e performance separados"]
+    SCHEMA -->|não| ERR["rejeitar comparação"]
+    CHECK -->|não| ERR
+    VAR -->|não| ERR
+    INV -->|não| ERR
+```
+
+IDs de run e artifact podem mudar entre execuções. O `config_digest` não pode mudar silenciosamente, porque é opaco e impediria provar que a diferença observada veio apenas da variável declarada.
+
+## Baselines
+
+Os fixtures versionados incluem duas condições sintéticas e um baseline `ci_contract` do adapter
+SAM3. Ele protege schema, determinismo, métricas e integração do adapter; checkpoint
+`test://sam3-deterministic-runtime` deixa explícito que esse report não mede qualidade do modelo
+real.
+
+Um baseline científico deve usar `execution_kind = real_model`, frames reais versionados e o
+checkpoint SAM3 configurado. Ele é produzido pelo mesmo evaluator quando os pesos, runtime e
+reference frames reais estiverem disponíveis. Não se deve renomear o baseline de CI nem extrapolar
+seus números como qualidade do SAM3.
+
+## Regra de IoU compartilhada
+
+A regra de sobreposição destas métricas é pública em `region_discovery`: `region_pixels()` (máscara inline, ou os pixels cujo centro cai na caixa semiaberta), `box_pixels()`, `mask_pixels()` e `pixel_set_iou()`. A junção entre regiões de referência e regiões de um run (`region_join`, #658) usa exatamente essa regra, para que uma região "recuperada" em `region.recall.mean` e uma região "juntada" para a avaliação semântica meçam a mesma sobreposição. `box_pixels()` testa o predicado do centro só nas colunas e linhas que podem satisfazê-lo, com o mesmo resultado da varredura da imagem inteira.

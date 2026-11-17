@@ -1,0 +1,35 @@
+# Overlay opt-in: máscaras de preparação de imagem para corridor-02 (câmera camera_1).
+#
+# Aplique SOBRE o canonical (nunca substituindo o baseline congelado):
+#
+#     contextmap ... --config examples/v0.2.0/canonical-config.toml \
+#                    --config examples/v0.2.0/corridor-02-image-masks.toml
+#
+# Efeito:
+#   - valid_region: exclui a vinheta preta do fisheye (fora do círculo válido), que hoje
+#     vira labels espúrias ("dark surface", "cloudy sky", ...);
+#   - exclusion "ego": exclui o rig (o quadriciclo) que ocupa a faixa inferior, para que o
+#     SAM/Qwen não o segmentem/rotulem e para que os pontos LiDAR nele não sejam associados.
+#
+# As referências resolvem contra o diretório de trabalho atual; use caminhos absolutos se
+# executar de outro lugar. As máscaras são estáticas por câmera (o rig e a vinheta ocupam os
+# mesmos pixels em todo frame) e estão no espaço da imagem preparada (640x480).
+#
+# NB: os assets aqui são a faixa inferior da V1 (correção PARCIAL — ver
+# experiments/rgb-lidar-association-validation-20260930). Uma silhueta ajustada do rig seria
+# mais precisa e reduziria as rejeições colaterais de chão/superfície na borda do rig.
+
+schema_version = "0.1.0"
+
+[image_preparation."camera_1_image_raw-calib"]
+valid_region = "examples/v0.2.0/assets/corridor-02/camera_1-valid.npy"
+exclusions.ego = "examples/v0.2.0/assets/corridor-02/camera_1-ego.npy"
+
+# Ao ligar valid_region/exclusions, os limiares de normalização precisam ser afrouxados: o
+# default minimum_valid_fraction=1.0 rejeitaria por inteiro qualquer região que apenas
+# encoste na vinheta (inclusive a parede dominante). 0.5 rejeita só quando a maioria da
+# região cai fora do círculo. maximum_exclusion_fraction=0.0 (default) rejeita a região que
+# encostar no rig — necessário para remover as regiões de veículo que só o tangenciam.
+[components.region_perception.discovery.sam2.normalization_config]
+minimum_valid_fraction = 0.5
+maximum_exclusion_fraction = 0.0

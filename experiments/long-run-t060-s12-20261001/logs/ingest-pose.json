@@ -1,0 +1,140 @@
+{
+  "artifact_id": "b916f8dc57a24fd190995baeb1caf14f",
+  "artifact_path": "workspace/run-t060-s12/sequences/corridor-02-pose/gt",
+  "content_hash": "sha256:de4240654afbbb9cf8e956a16927456524c61062ed7d0c88083540597276ad4d",
+  "diagnostics": {
+    "dropped_events": 0,
+    "processing_observations": 5522,
+    "synchronization_policy": "nearest_within_tolerance",
+    "validation_problems": []
+  },
+  "events": [
+    {
+      "data": {
+        "request_identity": "sha256:2ac722c7e6191b8a454be6e5d224787bcbf16226e5aee4110bbf768f5f471e50",
+        "sequence_name": "corridor-02-pose",
+        "source_type": "pose_file"
+      },
+      "kind": "ingestion.planned",
+      "sequence": 1,
+      "stage_id": null,
+      "time": "2026-10-01T12:07:45.747+00:00"
+    },
+    {
+      "data": {},
+      "kind": "ingestion.reading-source",
+      "sequence": 2,
+      "stage_id": null,
+      "time": "2026-10-01T12:07:45.806+00:00"
+    },
+    {
+      "data": {
+        "observations_read": 1000
+      },
+      "kind": "ingestion.progress",
+      "sequence": 3,
+      "stage_id": null,
+      "time": "2026-10-01T12:07:45.834+00:00"
+    },
+    {
+      "data": {
+        "observations_read": 2000
+      },
+      "kind": "ingestion.progress",
+      "sequence": 4,
+      "stage_id": null,
+      "time": "2026-10-01T12:07:45.861+00:00"
+    },
+    {
+      "data": {
+        "observations_read": 3000
+      },
+      "kind": "ingestion.progress",
+      "sequence": 5,
+      "stage_id": null,
+      "time": "2026-10-01T12:07:45.887+00:00"
+    },
+    {
+      "data": {
+        "observations_read": 4000
+      },
+      "kind": "ingestion.progress",
+      "sequence": 6,
+      "stage_id": null,
+      "time": "2026-10-01T12:07:45.913+00:00"
+    },
+    {
+      "data": {
+        "observations_read": 5000
+      },
+      "kind": "ingestion.progress",
+      "sequence": 7,
+      "stage_id": null,
+      "time": "2026-10-01T12:07:45.941+00:00"
+    },
+    {
+      "data": {},
+      "kind": "ingestion.validating",
+      "sequence": 8,
+      "stage_id": null,
+      "time": "2026-10-01T12:07:45.959+00:00"
+    },
+    {
+      "data": {},
+      "kind": "ingestion.synchronizing",
+      "sequence": 9,
+      "stage_id": null,
+      "time": "2026-10-01T12:07:45.961+00:00"
+    },
+    {
+      "data": {},
+      "kind": "ingestion.writing-artifact",
+      "sequence": 10,
+      "stage_id": null,
+      "time": "2026-10-01T12:07:45.999+00:00"
+    },
+    {
+      "data": {
+        "artifact_id": "b916f8dc57a24fd190995baeb1caf14f",
+        "phase": "writing-artifact"
+      },
+      "kind": "ingestion.completed",
+      "sequence": 11,
+      "stage_id": null,
+      "time": "2026-10-01T12:07:46.125+00:00"
+    }
+  ],
+  "failure": null,
+  "metrics": {
+    "bytes_written": 8085394,
+    "dropped_events": 0,
+    "elapsed_s": 0.37805,
+    "files_written": 8,
+    "observation_counts": {
+      "external_pose": 5522,
+      "image": 0,
+      "imu": 0,
+      "lidar": 0
+    },
+    "observations_read": 5522,
+    "phase_seconds": {
+      "planned": 0.058386,
+      "reading-source": 0.153624,
+      "synchronizing": 0.038173,
+      "validating": 0.001417,
+      "writing-artifact": 0.12645
+    },
+    "processing_observations": 5522,
+    "warnings": 0
+  },
+  "observation_counts": {
+    "external_pose": 5522,
+    "image": 0,
+    "imu": 0,
+    "lidar": 0
+  },
+  "request_identity": "sha256:2ac722c7e6191b8a454be6e5d224787bcbf16226e5aee4110bbf768f5f471e50",
+  "sequence_name": "corridor-02-pose",
+  "status": "completed",
+  "warnings": []
+}

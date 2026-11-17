@@ -1,0 +1,204 @@
+{
+  "experiment": "C3 deskew validation, corridor-02 628-637 s (frame 10:31)",
+  "inputs": {
+    "sequence_artifact": "workspace-old/frame-10_31-raw/sequences/corridor-02/aa0551d92f7b4a7aa3508dbaa1ee8ea3",
+    "state_estimation_run": "workspace-old/frame-10_31-raw/state_estimation",
+    "pose_lookup_and_motion_policy_from": "workspace-old/frame-10_31-raw/geometric_mapping/config.json"
+  },
+  "deskew_policy": {
+    "policy_id": "pose-interpolation-deskew-v1",
+    "time_field": "time",
+    "time_unit": "seconds",
+    "reference": "scan_timestamp",
+    "time_bin_ns": 1000000
+  },
+  "plans": {
+    "in_repo_raw": {
+      "accepted_scan_count": 81,
+      "rejected": {
+        "velodyne_points-000055": "pose_lookup_rejected: interpolation_gap: neighboring poses are 605112000 ns apart, tolerance is 400000000 ns",
+        "velodyne_points-000056": "pose_lookup_rejected: interpolation_gap: neighboring poses are 605112000 ns apart, tolerance is 400000000 ns",
+        "velodyne_points-000057": "pose_lookup_rejected: interpolation_gap: neighboring poses are 605112000 ns apart, tolerance is 400000000 ns",
+        "velodyne_points-000058": "pose_lookup_rejected: interpolation_gap: neighboring poses are 605112000 ns apart, tolerance is 400000000 ns",
+        "velodyne_points-000059": "pose_lookup_rejected: interpolation_gap: neighboring poses are 605112000 ns apart, tolerance is 400000000 ns",
+        "velodyne_points-000076": "pose_lookup_rejected: interpolation_gap: neighboring poses are 403392000 ns apart, tolerance is 400000000 ns",
+        "velodyne_points-000077": "pose_lookup_rejected: interpolation_gap: neighboring poses are 403392000 ns apart, tolerance is 400000000 ns",
+        "velodyne_points-000078": "pose_lookup_rejected: interpolation_gap: neighboring poses are 403392000 ns apart, tolerance is 400000000 ns"
+      },
+      "motion_correction_states": [
+        "unknown"
+      ],
+      "assembly_s": 0.34
+    },
+    "in_repo_deskew": {
+      "accepted_scan_count": 79,
+      "rejected": {
+        "velodyne_points-000054": "deskew_rejected: points of scan 'velodyne_points-000054' measured 1.000 ms after its timestamp (time bin 1000000 ns) have no acceptable pose: interpolation_gap: neighboring poses are 605112000 ns apart, tolerance is 400000000 ns",
+        "velodyne_points-000055": "pose_lookup_rejected: interpolation_gap: neighboring poses are 605112000 ns apart, tolerance is 400000000 ns",
+        "velodyne_points-000056": "pose_lookup_rejected: interpolation_gap: neighboring poses are 605112000 ns apart, tolerance is 400000000 ns",
+        "velodyne_points-000057": "pose_lookup_rejected: interpolation_gap: neighboring poses are 605112000 ns apart, tolerance is 400000000 ns",
+        "velodyne_points-000058": "pose_lookup_rejected: interpolation_gap: neighboring poses are 605112000 ns apart, tolerance is 400000000 ns",
+        "velodyne_points-000059": "pose_lookup_rejected: interpolation_gap: neighboring poses are 605112000 ns apart, tolerance is 400000000 ns",
+        "velodyne_points-000075": "deskew_rejected: points of scan 'velodyne_points-000075' measured 1.000 ms after its timestamp (time bin 1000000 ns) have no acceptable pose: interpolation_gap: neighboring poses are 403392000 ns apart, tolerance is 400000000 ns",
+        "velodyne_points-000076": "pose_lookup_rejected: interpolation_gap: neighboring poses are 403392000 ns apart, tolerance is 400000000 ns",
+        "velodyne_points-000077": "pose_lookup_rejected: interpolation_gap: neighboring poses are 403392000 ns apart, tolerance is 400000000 ns",
+        "velodyne_points-000078": "pose_lookup_rejected: interpolation_gap: neighboring poses are 403392000 ns apart, tolerance is 400000000 ns"
+      },
+      "motion_correction_states": [
+        "corrected"
+      ],
+      "assembly_s": 0.63
+    }
+  },
+  "geometry": {
+    "e0_geometry_bin": "sha256:d4e4b03ead3ce667bbf747fc6895cad5fe2bba3a71fe0b2fce8f17ac7b06c4e6",
+    "in_repo_raw": {
+      "sha256": "sha256:d4e4b03ead3ce667bbf747fc6895cad5fe2bba3a71fe0b2fce8f17ac7b06c4e6",
+      "size_bytes": 148628736,
+      "point_count": 2322324,
+      "scan_count": 81
+    },
+    "in_repo_raw_byte_identical_to_e0": true,
+    "in_repo_deskew": {
+      "sha256": "sha256:59b225db4b12cad41db8c027d7817cdd71304f96002dd5276edfb581010418a8",
+      "size_bytes": 144941824,
+      "point_count": 2264716,
+      "scan_count": 79
+    }
+  },
+  "investigation_metric": {
+    "reference_scan": "velodyne_points-000022",
+    "scans_in_window": 52,
+    "max_range_m": 12.0,
+    "window_s": 3.0,
+    "arms": {
+      "in_repo_raw": {
+        "scans_compared": 51,
+        "matched": 1080456,
+        "median_m": 0.03282,
+        "p90_m": 0.10048,
+        "p95_m": 0.12668
+      },
+      "in_repo_deskew": {
+        "scans_compared": 51,
+        "matched": 1087707,
+        "median_m": 0.02155,
+        "p90_m": 0.06841,
+        "p95_m": 0.10056
+      },
+      "offline_deskew": {
+        "scans_compared": 51,
+        "matched": 1089956,
+        "median_m": 0.02161,
+        "p90_m": 0.06852,
+        "p95_m": 0.10089
+      }
+    },
+    "investigation_recorded": {
+      "raw": {
+        "median_m": 0.03282,
+        "p90_m": 0.10048
+      },
+      "offline_deskew": {
+        "median_m": 0.02161,
+        "p90_m": 0.06852
+      }
+    },
+    "in_repo_vs_offline_relative_difference": {
+      "median": 0.0028,
+      "p90": 0.0016
+    },
+    "in_repo_vs_investigation_recorded_relative_difference": {
+      "median": 0.0028,
+      "p90": 0.0016
+    },
+    "plan_acceptance": {
+      "median_le_0_024_m": true,
+      "p90_le_0_072_m": true,
+      "within_5_percent_of_offline": true
+    }
+  },
+  "point_agreement_in_repo_vs_offline_deskew_m": {
+    "all": {
+      "points": 1488681,
+      "median": 0.0027999104885594772,
+      "p99": 0.010849954296259425,
+      "max": 0.07817551238839812
+    },
+    "range_lt_12m": {
+      "points": 1458403,
+      "median": 0.0027816122827179295,
+      "p99": 0.009102501499898693,
+      "max": 0.029131026008613243
+    },
+    "range_ge_12m": {
+      "points": 30278,
+      "median": 0.0043807706824566745,
+      "p99": 0.03977332753697674,
+      "max": 0.07817551238839812
+    }
+  },
+  "scan_overlap_report": {
+    "protocol": {
+      "adjacent_scan_lag": 1,
+      "coherence_pair_count": 100,
+      "coherence_points_per_scan": 1000,
+      "plane_neighbour_count": 12,
+      "max_plane_curvature": 0.02,
+      "max_correspondence_distance_m": 0.25,
+      "ghost_residual_m": 0.05
+    },
+    "arms": {
+      "in_repo_raw": {
+        "pair_count": 80,
+        "overlap_fraction": 0.7337875,
+        "inconsistent_fraction": 0.06476670698260736,
+        "pooled_residual_m": {
+          "count": 58703,
+          "minimum": 6.568451996419658e-08,
+          "median": 0.010378443036513467,
+          "p95": 0.05531252764598126,
+          "maximum": 0.22767797694619896
+        },
+        "pooled_p90_residual_m": 0.04121823000738294,
+        "by_motion_correction": [
+          {
+            "state": "unknown",
+            "pair_count": 80,
+            "correspondence_count": 58703,
+            "median_residual_m": 0.010378443036513467,
+            "p90_residual_m": 0.04121823000738294,
+            "p95_residual_m": 0.05531252764598126
+          }
+        ],
+        "transform_trace_within_tolerance": true,
+        "integrity_problems": []
+      },
+      "in_repo_deskew": {
+        "pair_count": 78,
+        "overlap_fraction": 0.7320128205128205,
+        "inconsistent_fraction": 0.048829185421300596,
+        "pooled_residual_m": {
+          "count": 57097,
+          "minimum": 2.99503947595417e-07,
+          "median": 0.009633582129875922,
+          "p95": 0.049553565386237765,
+          "maximum": 0.23239288859898688
+        },
+        "pooled_p90_residual_m": 0.037883600797085956,
+        "by_motion_correction": [
+          {
+            "state": "corrected",
+            "pair_count": 78,
+            "correspondence_count": 57097,
+            "median_residual_m": 0.009633582129875922,
+            "p90_residual_m": 0.037883600797085956,
+            "p95_residual_m": 0.049553565386237765
+          }
+        ],
+        "transform_trace_within_tolerance": true,
+        "integrity_problems": []
+      }
+    }
+  }
+}

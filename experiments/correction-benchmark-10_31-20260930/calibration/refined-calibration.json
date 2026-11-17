@@ -1,0 +1,202 @@
+{
+  "schema_version": "0.1.0",
+  "entries": [
+    {
+      "calibration_id": "camera_1_image_raw-calib",
+      "sensor_id": "camera_1_image_raw",
+      "frame_id": "d",
+      "camera_model": {
+        "kind": "mei",
+        "width": 640,
+        "height": 480,
+        "fx": 761.6791126513665,
+        "fy": 678.7676595096547,
+        "cx": 317.73997456826834,
+        "cy": 233.50210820810244,
+        "distortion_coefficients": [
+          -0.07083665039247518,
+          0.3094574364801575,
+          0.0004607746627279861,
+          0.00015704097191542886
+        ],
+        "xi": 1.5629934283981157
+      },
+      "provenance": {
+        "source_type": "dataset",
+        "source_path": "datasets/corridor-02",
+        "original_values": {},
+        "conversions_applied": [
+          "rebuilt fresh from YAMLs (#688 item 5)"
+        ]
+      },
+      "content_hash": "sha256:48840f61617fb425d509eaad88c364ec45b1e5d31549a05b0b52d4f80764c057"
+    },
+    {
+      "calibration_id": "velodyne_points-calib",
+      "sensor_id": "velodyne_points",
+      "frame_id": "cmu_rc1_velodyne",
+      "camera_model": null,
+      "provenance": {
+        "source_type": "dataset",
+        "source_path": "datasets/corridor-02",
+        "original_values": {},
+        "conversions_applied": [
+          "rebuilt fresh from YAMLs (#688 item 5)"
+        ]
+      },
+      "content_hash": "sha256:defe6462b90bdf9f4c5657a70e085bf5fedfd12d277bf47f59bc0c08af880f41"
+    },
+    {
+      "calibration_id": "imu_data-calib",
+      "sensor_id": "imu_data",
+      "frame_id": "epson",
+      "camera_model": null,
+      "provenance": {
+        "source_type": "dataset",
+        "source_path": "datasets/corridor-02",
+        "original_values": {},
+        "conversions_applied": [
+          "rebuilt fresh from YAMLs (#688 item 5)"
+        ]
+      },
+      "content_hash": "sha256:d1e8c3c50ca7ca9f48a20804311d04fa985f4c094fce1653f1739bf86d34aaf8"
+    }
+  ],
+  "static_transforms": [
+    {
+      "parent_frame": "epson",
+      "child_frame": "d",
+      "translation": [
+        0.17313616,
+        0.0476788,
+        -0.01933398
+      ],
+      "rotation": [
+        0.5121600865474627,
+        -0.47796527081001794,
+        0.4945197983405075,
+        -0.514481695200583
+      ]
+    },
+    {
+      "parent_frame": "epson",
+      "child_frame": "cmu_rc1_velodyne",
+      "translation": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        0.004749982138040742,
+        0.0,
+        0.9999887187712111
+      ]
+    }
+  ],
+  "refinements": [
+    {
+      "refinement_id": "corridor-02-camera-body-refinement-v1",
+      "target": {
+        "parent_frame": "epson",
+        "child_frame": "d",
+        "base_transform_digest": "sha256:13220205ca6b64055fd9810c1c25491f395ad33a7428fa7b0e900a1bfe1be94a"
+      },
+      "rotation_correction": {
+        "yaw_deg": 4.0,
+        "pitch_deg": -1.75,
+        "roll_deg": 0.0,
+        "convention": "p_camera = Rz(roll) @ Rx(pitch) @ Ry(yaw) @ p_camera_base; optical axes x right, y down, z forward"
+      },
+      "method": "multi-frame photometric consistency (contextmap.evaluation.camera_body_calibration.photometric_inconsistency, pipeline MEI projection) over 7 groups of 8 frames of the 628-637 s window, offline per-point deskew with the GT trajectory, visibility under the base extrinsic; grid 1 deg in +-8 deg then 0.25 deg in +-1.5 deg on the fit groups (even), roll fixed at 0",
+      "estimator": {
+        "module": "experiments/correction-benchmark-10_31-20260930/calibration/estimate_refinement.py",
+        "code_identity": "git:a3a175f099fd1609e710614a27753b0d0e24be3d;files:sha256:2d9e4fe0ca93d185257aa191ab6d328292b20fabf5916fe785cfd2ed88cca118"
+      },
+      "pose_source": {
+        "kind": "ground_truth_tum",
+        "digest": "sha256:cddb6739230ded86c57412e768e071e5cd6d62a5de5ff310618032ca2e38be0a"
+      },
+      "source_files": {
+        "corridor-02-Intrinsics.yaml": "sha256:8d47e98aed48cf941c8ee642136514b50ea7e6dd0bd26de9266081bd8693fe12",
+        "corridor-02-extrinsics.yaml": "sha256:892bf743dc0f51eabfe9d8ae71dc98663753f174910ae9cc40ee244c77a9e217"
+      },
+      "validation": {
+        "fit_ids": [
+          "camera_1_image_raw-000000",
+          "camera_1_image_raw-000003",
+          "camera_1_image_raw-000006",
+          "camera_1_image_raw-000009",
+          "camera_1_image_raw-000012",
+          "camera_1_image_raw-000015",
+          "camera_1_image_raw-000018",
+          "camera_1_image_raw-000021",
+          "camera_1_image_raw-000054",
+          "camera_1_image_raw-000057",
+          "camera_1_image_raw-000060",
+          "camera_1_image_raw-000063",
+          "camera_1_image_raw-000066",
+          "camera_1_image_raw-000069",
+          "camera_1_image_raw-000072",
+          "camera_1_image_raw-000075",
+          "camera_1_image_raw-000108",
+          "camera_1_image_raw-000111",
+          "camera_1_image_raw-000114",
+          "camera_1_image_raw-000117",
+          "camera_1_image_raw-000120",
+          "camera_1_image_raw-000123",
+          "camera_1_image_raw-000126",
+          "camera_1_image_raw-000129",
+          "camera_1_image_raw-000189",
+          "camera_1_image_raw-000192",
+          "camera_1_image_raw-000195",
+          "camera_1_image_raw-000198",
+          "camera_1_image_raw-000201",
+          "camera_1_image_raw-000204",
+          "camera_1_image_raw-000207",
+          "camera_1_image_raw-000210"
+        ],
+        "held_out_ids": [
+          "camera_1_image_raw-000027",
+          "camera_1_image_raw-000030",
+          "camera_1_image_raw-000033",
+          "camera_1_image_raw-000036",
+          "camera_1_image_raw-000039",
+          "camera_1_image_raw-000042",
+          "camera_1_image_raw-000045",
+          "camera_1_image_raw-000048",
+          "camera_1_image_raw-000081",
+          "camera_1_image_raw-000084",
+          "camera_1_image_raw-000087",
+          "camera_1_image_raw-000090",
+          "camera_1_image_raw-000093",
+          "camera_1_image_raw-000096",
+          "camera_1_image_raw-000099",
+          "camera_1_image_raw-000102",
+          "camera_1_image_raw-000162",
+          "camera_1_image_raw-000165",
+          "camera_1_image_raw-000168",
+          "camera_1_image_raw-000171",
+          "camera_1_image_raw-000174",
+          "camera_1_image_raw-000177",
+          "camera_1_image_raw-000180",
+          "camera_1_image_raw-000183"
+        ],
+        "metrics": {
+          "fit_photometric_inconsistency_base": 0.2023798250004058,
+          "fit_photometric_inconsistency_refined": 0.13035506595249183,
+          "fit_point_count": 240000.0,
+          "held_out_photometric_inconsistency_base": 0.18965678556663446,
+          "held_out_photometric_inconsistency_refined": 0.12906731285809306,
+          "held_out_point_count": 180000.0,
+          "held_out_relative_improvement": 0.31946904787782426,
+          "held_out_photometric_inconsistency_v1_correction": 0.1278996029085506,
+          "held_out_relative_improvement_v1_correction": 0.32562601160603316,
+          "frame_55_pixel_displacement_median_px": 22.43,
+          "frame_55_pixel_displacement_p10_px": 20.54,
+          "frame_55_pixel_displacement_p90_px": 23.33
+        }
+      }
+    }
+  ]
+}

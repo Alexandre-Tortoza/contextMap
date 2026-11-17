@@ -1,0 +1,85 @@
+{
+  "context_build": {
+    "branch": "frame-10_31-raw",
+    "code_identity": "a3a175f+local.04d61c01a05c",
+    "context_build_id": "sha256:4c359ad8e414202544f3c5caec00f0df30d6bad007ff7682265cb572468edce9",
+    "context_run_ids": [
+      "sha256:852279f990d18dc0750d69dc3b385be51f2f3e364372104a744b4ba671af7e68",
+      "sha256:ea3e4a8fdaeeb20c28384fdce609a57978620682f3af6b3ce03c3961d772c0b4"
+    ],
+    "foundation": {
+      "geometry": {
+        "artifact_id": "1ee700b9bedfe887767f1b0206acf674",
+        "content_hash": "sha256:b0e8034b04f51b761a8174d718b08ec70ebedbed3e3ae784ada3107a0b580480",
+        "contract": "GeometricMapArtifact",
+        "location": "corridor-02/run-0001/geometric_mapping",
+        "stage_id": "geometric_mapping"
+      },
+      "identity": "sha256:67b83cc3f2d0dbd59082cc14963828bf40a12f316d23d530ec2e0af442aceeac",
+      "sequence": {
+        "artifact_id": "4a4d895e0e4e4731ad91326114607296",
+        "content_hash": "sha256:a5aedeec06003aa335a26dd071bce5de5de1a38b46d0c791ecdcc6cf442f9f41",
+        "contract": "SequenceArtifact",
+        "location": "sequences/corridor-02/frame-10_31-refined",
+        "stage_id": "ingestion"
+      },
+      "state_estimation": {
+        "artifact_id": "656b7e023842c4e0d1b2759644634026",
+        "content_hash": "sha256:1de9434ff4cfa527b5bc652629776b0a5febea5fe76f96c2a236525b6f8d5cfe",
+        "contract": "StateEstimationRunArtifact",
+        "location": "corridor-02/run-0001/state_estimation",
+        "stage_id": "state_estimation"
+      }
+    },
+    "provided": {
+      "sensor_association": [
+        {
+          "artifact_id": "750c2116e13e6174350a72ba51bf3f7b",
+          "content_hash": "sha256:00a83843e9926e8d13591cc86e93100d5b64dd18693d0a1a15ea80a80c6963fe",
+          "contract": "SensorAssociationRunArtifact",
+          "location": "corridor-02/run-0007/sensor_association",
+          "stage_id": "sensor_association"
+        },
+        {
+          "artifact_id": "b613809942ac8459d663d38b79154a4d",
+          "content_hash": "sha256:ffdc3a15e68a78cd995a981b3034ee2695fe4cc480edb70aa3722a5956389c93",
+          "contract": "SensorAssociationRunArtifact",
+          "location": "corridor-02/run-0006/sensor_association",
+          "stage_id": "sensor_association"
+        }
+      ],
+      "visual_perception": [
+        {
+          "artifact_id": "bdb3a1a34ad65531210cfd28ce3d84ee",
+          "content_hash": "sha256:79b57cd9bd022d3030e8e76d19b11a6fb14cec2c4999412118ef9a0c4da8351c",
+          "contract": "PerceptionRunArtifact",
+          "location": "corridor-02/run-0007/visual_perception",
+          "stage_id": "visual_perception"
+        },
+        {
+          "artifact_id": "c4e5415bf8afbb83bcdd401f4cbfae50",
+          "content_hash": "sha256:b7e18dddbe1c67f08e771d8674dfb938c594e6e43ee17948ebe0ba54d01ce7e3",
+          "contract": "PerceptionRunArtifact",
+          "location": "corridor-02/run-0006/visual_perception",
+          "stage_id": "visual_perception"
+        }
+      ]
+    },
+    "revision": 2,
+    "schema_version": "0.1.0",
+    "stage_configs": {
+      "context_map": "sha256:af772dfb2aac71d9a2e2db4ca2fd68c17c44b29f04786c469f965cb833b2a73e",
+      "entity_resolution": "sha256:4c4c8bda3fd2e17b4d25e49ffa2ac08d874f5f2e10cf701b583b2ebac1a37771",
+      "semantic_fusion": "sha256:57c957f84ae74fd3fe0e5d6a5de15d7872e70b4ebf3c580f82c7a4965f4e54e5",
+      "semantic_mapping": "sha256:aeb70fe7c9e60a85fbfcaaad1e5f1bb33226d769baca7523d22e31e2be843335",
+      "spatial_relations": "sha256:15c57368663085fc68bda6697e4b3e90adb5dd4320904b7a14c6c1e92ad0bbdd"
+    }
+  },
+  "context_map_id": "91a94edf924d74485a33587a805e02fb",
+  "map": {
+    "index": 1,
+    "location": "workspace/frame-10_31-raw/000001"
+  },
+  "ok": true,
+  "run_directory": "workspace/run-frame-10_31/corridor-02/run-0012"
+}

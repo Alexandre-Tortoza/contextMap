@@ -1,0 +1,21 @@
+{
+  "integrity": {
+    "ok": true,
+    "problems": [],
+    "warnings": [
+      "dependency.optional_missing: the sequence '4a4d895e0e4e4731ad91326114607296' has no recorded hint; pass its location explicitly",
+      "dependency.optional_missing: the semantic_fusion_run '5ae345549dda54bef4d6f4659ad38a05' has no recorded hint; pass its location explicitly",
+      "dependency.optional_missing: the semantic_map 'semantic-map-corridor-02' has no recorded hint; pass its location explicitly"
+    ]
+  },
+  "kind": "artifact",
+  "path": "workspace/corridor02-f055-f061-sam2-qwen-minarea1536-vox10/000001",
+  "summary": {
+    "code_version": "4b67748+local.51f44dbb81b3",
+    "content_identity": "sha256:8f383b5a09dc13a58c81a78c0d7bae65bf06d66b2cc21bf70ffa46679b662dd9",
+    "context_map_id": "45ab48e6c67ac0baebc822e1433c6eca",
+    "files": 8,
+    "schema_version": "0.2.0",
+    "total_bytes": 2726549
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "components": {
+    "semantic_interpretation": {
+      "interpreter": {
+        "qwen": {
+          "view_policy": {
+            "region_views": [
+              "masked_subject"
+            ],
+            "mask_fill_rgb": [
+              0,
+              0,
+              0
+            ]
+          }
+        }
+      }
+    }
+  }
+}

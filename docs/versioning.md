@@ -1,0 +1,73 @@
+# Versionamento e releases
+
+O ContextMap2 usa Semantic Versioning com tags no formato:
+
+```text
+vMAJOR.MINOR.PATCH
+```
+
+## Fase de validação
+
+Enquanto o canonical pipeline estiver em validação, releases permanecem na versão major zero:
+
+```text
+v0.1.0
+v0.2.0
+v0.2.1
+```
+
+Use:
+
+- `PATCH` para correções compatíveis, documentação e pequenas melhorias internas que não alteram intencionalmente o contrato do artefato;
+- `MINOR` para novas capabilities, mudanças mensuráveis de pipeline ou evolução compatível do artefato/schema durante a fase de validação;
+- `MAJOR` somente depois que existir um contrato externo estável e mudanças incompatíveis precisarem ser comunicadas formalmente.
+
+### Versões de schema entre releases
+
+O escopo congelado de uma release (ex.: [release-v0.1.0.md](release-v0.1.0.md)) registra as versões de schema que ela entregou, e esse registro não muda. Entre releases, o código pode mudar uma versão de schema desde que a transição (`<artifact> <versão da última release> → <versão nova>`) esteja em `[Não lançado]` do `CHANGELOG.md`, no mesmo change que a introduz; `tests/packaging/test_release_scope.py` recusa qualquer divergência sem esse registro. O leitor novo continua abrindo os artifacts da release congelada enquanto eles tiverem consumidor (o demo de `examples/`).
+
+Os exemplos de uma release (`examples/v0.1.0/`) também são congelados. Se o código passa a resolver o exemplo canônico para outra identidade, a transição vai para `[Não lançado]` da mesma forma, com os nomes `canonical effective configuration` (o digest do documento efetivo) e `canonical plan topology` (o digest da topologia do plano resolvido): `<nome> <digest congelado> → <digest do código>`. `tests/packaging/test_release_examples.py` recusa a divergência sem esse registro e, mesmo com ele, só aceita acréscimos: todo valor do documento efetivo e toda linha do plano congelados precisam continuar resolvendo iguais. O mecanismo é o mesmo das versões de schema (`tests/packaging/release_record.py`).
+
+## Origem das releases
+
+Somente commits presentes em `main` podem receber tags de release.
+
+O fluxo esperado é:
+
+```text
+issue branch
+    ↓
+milestone/*
+    ↓
+dev
+    ↓
+main
+    ↓
+vMAJOR.MINOR.PATCH
+```
+
+Uma branch de issue ou milestone nunca deve ser tagueada diretamente.
+
+## Requisitos de release
+
+Uma tag de release deve apontar para um commit que:
+
+- passe a CI;
+- tenha a evidência de avaliação relevante registrada;
+- tenha uma entrada datada no `CHANGELOG.md` e notas de release finais em `docs/releases/vX.Y.Z.md` (sem a linha `Status: rascunho`), com capacidades validadas, backends experimentais, limitações conhecidas, dados e modelos externos exigidos, versões de schema e configuração e a identidade do relatório de validação;
+- não possua corrupção conhecida de artefato ou regressão de serialização;
+- documente mudanças incompatíveis de schema;
+- seja reproduzível a partir da configuração e do código versionados;
+- tenha sido promovido pelo fluxo normal até `main`.
+
+## Automação
+
+A tag é criada por um mantenedor; nenhum workflow cria tags. Ao receber uma tag que corresponda a `v*.*.*`, o workflow `Release` executa, em ordem, e só cria a GitHub Release se todas as etapas passarem:
+
+1. `verify`: a tag tem o formato estrito `vMAJOR.MINOR.PATCH` e o commit tagueado é ancestral de `origin/main` (`.github/scripts/verify_release_tag.sh`, coberto por `tests/packaging/test_release_gate.py`). Se `main` não existir, o gate falha. O mesmo job confere o changelog e as notas (`.github/scripts/verify_release_notes.sh`, coberto por `tests/packaging/test_release_notes_gate.py`): a tag é recusada se o `CHANGELOG.md` não tiver `## [X.Y.Z] - AAAA-MM-DD` ou se `docs/releases/vX.Y.Z.md` faltar ou ainda for rascunho;
+2. `checks`: reutiliza o workflow `CI` sobre o commit da tag (qualidade em Python 3.11, testes em 3.12 a 3.14, build de sdist e wheel com `twine check --strict`, smoke de instalação em ambientes novos e suíte completa contra a wheel instalada só com NumPy);
+3. `publish`: instala a wheel que a CI construiu e testou, exige que ela reporte a versão da tag, gera `SHA256SUMS` e cria a release com `gh release create --verify-tag`, com as wheels, o sdist e os checksums, usando `docs/releases/vX.Y.Z.md` como corpo. Somente este job tem `contents: write`; o workflow não usa segredos além do `GITHUB_TOKEN`.
+
+Releases da série `v0.x.y` são marcadas como pre-release automaticamente. O passo de criação da release não tem execução a seco: ele só roda com uma tag real, e o restante do caminho (build, smoke, gate de tag) é exercitado a cada pull request pela CI.
+
+O repositório não publica no PyPI durante a fase de validação do canonical pipeline.

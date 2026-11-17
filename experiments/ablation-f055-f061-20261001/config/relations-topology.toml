@@ -1,0 +1,7 @@
+# R1: mesma percepção e associação do B0; a única variável é o conjunto de predicados candidatos,
+# acrescentando os topológicos/de suporte já implementados (inside, on_top_of, above). Hipótese:
+# "contido_em" (inside) sai das caixas das entidades resolvidas e marca puxador/visor dentro da porta.
+schema_version = "0.1.0"
+
+[components.spatial_relations.candidate.bounds-neighborhood-candidates-v1]
+predicates = ["next_to", "touching", "within_interaction_range", "inside", "on_top_of", "above"]

@@ -1,0 +1,104 @@
+{
+  "schema": "calibration-refinement/1",
+  "refinement_id": "corridor-02-camera-body-refinement-v1",
+  "target": {
+    "parent_frame": "epson",
+    "child_frame": "d",
+    "base_transform_digest": "sha256:13220205ca6b64055fd9810c1c25491f395ad33a7428fa7b0e900a1bfe1be94a"
+  },
+  "rotation_correction": {
+    "yaw_deg": 4.0,
+    "pitch_deg": -1.75,
+    "roll_deg": 0.0,
+    "convention": "p_camera = Rz(roll) @ Rx(pitch) @ Ry(yaw) @ p_camera_base; optical axes x right, y down, z forward"
+  },
+  "method": "multi-frame photometric consistency (contextmap.evaluation.camera_body_calibration.photometric_inconsistency, pipeline MEI projection) over 7 groups of 8 frames of the 628-637 s window, offline per-point deskew with the GT trajectory, visibility under the base extrinsic; grid 1 deg in +-8 deg then 0.25 deg in +-1.5 deg on the fit groups (even), roll fixed at 0",
+  "estimator": {
+    "module": "experiments/correction-benchmark-10_31-20260930/calibration/estimate_refinement.py",
+    "code_identity": "git:a3a175f099fd1609e710614a27753b0d0e24be3d;files:sha256:2d9e4fe0ca93d185257aa191ab6d328292b20fabf5916fe785cfd2ed88cca118"
+  },
+  "pose_source": {
+    "kind": "ground_truth_tum",
+    "digest": "sha256:cddb6739230ded86c57412e768e071e5cd6d62a5de5ff310618032ca2e38be0a"
+  },
+  "source_files": {
+    "corridor-02-Intrinsics.yaml": "sha256:8d47e98aed48cf941c8ee642136514b50ea7e6dd0bd26de9266081bd8693fe12",
+    "corridor-02-extrinsics.yaml": "sha256:892bf743dc0f51eabfe9d8ae71dc98663753f174910ae9cc40ee244c77a9e217"
+  },
+  "validation": {
+    "fit_ids": [
+      "camera_1_image_raw-000000",
+      "camera_1_image_raw-000003",
+      "camera_1_image_raw-000006",
+      "camera_1_image_raw-000009",
+      "camera_1_image_raw-000012",
+      "camera_1_image_raw-000015",
+      "camera_1_image_raw-000018",
+      "camera_1_image_raw-000021",
+      "camera_1_image_raw-000054",
+      "camera_1_image_raw-000057",
+      "camera_1_image_raw-000060",
+      "camera_1_image_raw-000063",
+      "camera_1_image_raw-000066",
+      "camera_1_image_raw-000069",
+      "camera_1_image_raw-000072",
+      "camera_1_image_raw-000075",
+      "camera_1_image_raw-000108",
+      "camera_1_image_raw-000111",
+      "camera_1_image_raw-000114",
+      "camera_1_image_raw-000117",
+      "camera_1_image_raw-000120",
+      "camera_1_image_raw-000123",
+      "camera_1_image_raw-000126",
+      "camera_1_image_raw-000129",
+      "camera_1_image_raw-000189",
+      "camera_1_image_raw-000192",
+      "camera_1_image_raw-000195",
+      "camera_1_image_raw-000198",
+      "camera_1_image_raw-000201",
+      "camera_1_image_raw-000204",
+      "camera_1_image_raw-000207",
+      "camera_1_image_raw-000210"
+    ],
+    "held_out_ids": [
+      "camera_1_image_raw-000027",
+      "camera_1_image_raw-000030",
+      "camera_1_image_raw-000033",
+      "camera_1_image_raw-000036",
+      "camera_1_image_raw-000039",
+      "camera_1_image_raw-000042",
+      "camera_1_image_raw-000045",
+      "camera_1_image_raw-000048",
+      "camera_1_image_raw-000081",
+      "camera_1_image_raw-000084",
+      "camera_1_image_raw-000087",
+      "camera_1_image_raw-000090",
+      "camera_1_image_raw-000093",
+      "camera_1_image_raw-000096",
+      "camera_1_image_raw-000099",
+      "camera_1_image_raw-000102",
+      "camera_1_image_raw-000162",
+      "camera_1_image_raw-000165",
+      "camera_1_image_raw-000168",
+      "camera_1_image_raw-000171",
+      "camera_1_image_raw-000174",
+      "camera_1_image_raw-000177",
+      "camera_1_image_raw-000180",
+      "camera_1_image_raw-000183"
+    ],
+    "metrics": {
+      "fit_photometric_inconsistency_base": 0.2023798250004058,
+      "fit_photometric_inconsistency_refined": 0.13035506595249183,
+      "fit_point_count": 240000.0,
+      "held_out_photometric_inconsistency_base": 0.18965678556663446,
+      "held_out_photometric_inconsistency_refined": 0.12906731285809306,
+      "held_out_point_count": 180000.0,
+      "held_out_relative_improvement": 0.31946904787782426,
+      "held_out_photometric_inconsistency_v1_correction": 0.1278996029085506,
+      "held_out_relative_improvement_v1_correction": 0.32562601160603316,
+      "frame_55_pixel_displacement_median_px": 22.43,
+      "frame_55_pixel_displacement_p10_px": 20.54,
+      "frame_55_pixel_displacement_p90_px": 23.33
+    }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "schema_version": "0.1.0",
+  "entries": [
+    {
+      "stage_id": "ingestion",
+      "contract": "SequenceArtifact",
+      "artifact_id": "4a89e7314a37415c8443f6fd71a8c8bc",
+      "content_hash": "sha256:89b476397082ab14a6e0084273f927ce3516a467aef554f4e6e8f914895f24ab",
+      "location": "sequences/corridor-02/t057-t363-refined",
+      "run_index": 1,
+      "lineage": {}
+    },
+    {
+      "stage_id": "pose_ingestion",
+      "contract": "SequenceArtifact",
+      "artifact_id": "b916f8dc57a24fd190995baeb1caf14f",
+      "content_hash": "sha256:de4240654afbbb9cf8e956a16927456524c61062ed7d0c88083540597276ad4d",
+      "location": "sequences/corridor-02-pose/gt",
+      "run_index": 1,
+      "lineage": {}
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "correction": {
+    "anchor_reference_time": {
+      "clock_id": "corridor-02-recording-time",
+      "nanoseconds": 410417577,
+      "seconds": 1724621416
+    },
+    "anchor_source_time": {
+      "clock_id": "corridor-02-header",
+      "nanoseconds": 997985442,
+      "seconds": 1646000057
+    },
+    "offset_nanoseconds": 78621358412432135,
+    "type": "constant_offset"
+  },
+  "event_clock": "header_stamp",
+  "window_clock": "recording_time"
+}

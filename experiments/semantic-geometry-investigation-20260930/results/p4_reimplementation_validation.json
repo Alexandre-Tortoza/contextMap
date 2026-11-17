@@ -1,0 +1,40 @@
+{
+  "raw": {
+    "regions_compared": 83,
+    "regions_mismatched": 0,
+    "mismatch_detail": {},
+    "state_counts_pipeline": {
+      "behind_camera": 539107,
+      "occluded": 1516151,
+      "outside_image": 234151,
+      "outside_valid_support": 8967,
+      "visible": 23948
+    },
+    "state_counts_reimpl": {
+      "behind_camera": 539107,
+      "outside_image": 234151,
+      "outside_valid_support": 8967,
+      "occluded": 1516151,
+      "visible": 23948
+    }
+  },
+  "voxel": {
+    "regions_compared": 83,
+    "regions_mismatched": 0,
+    "mismatch_detail": {},
+    "state_counts_pipeline": {
+      "behind_camera": 106069,
+      "occluded": 246351,
+      "outside_image": 43731,
+      "outside_valid_support": 1744,
+      "visible": 4731
+    },
+    "state_counts_reimpl": {
+      "behind_camera": 106069,
+      "outside_image": 43731,
+      "outside_valid_support": 1744,
+      "occluded": 246351,
+      "visible": 4731
+    }
+  }
+}

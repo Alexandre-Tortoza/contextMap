@@ -1,0 +1,84 @@
+region_id,E0-original:outcome,E0-original:label,E0-original:category,r1:outcome,r1:label,r1:category,r2:outcome,r2:label,r2:category,r3:outcome,r3:label,r3:category,x1:outcome,x1:label,x1:category,x2:outcome,x2:label,x2:category,x3:outcome,x3:label,x3:category
+region-0001,claim,door,door,claim,door,thing,claim,door,thing,claim,door,door,claim,door,door,claim,door,door,claim,door,door
+region-0002,claim,peeling paint,surface,claim,peeling paint,surface,claim,peeling paint,surface,claim,peeling paint,surface,claim,peeling paint,surface,claim,peeling paint,surface,claim,peeling paint,surface
+region-0003,claim,wooden plank,thing,claim,wooden plank,thing,claim,wooden plank,thing,claim,wooden plank,object,claim,wooden plank,thing,claim,wooden plank,thing,claim,wooden plank,thing
+region-0004,claim,dark surface,surface,claim,dark surface,surface,claim,dark surface,surface,claim,dark surface,surface,claim,dark surface,surface,claim,dark surface,surface,claim,dark surface,surface
+region-0005,claim,flooded hallway,structure,claim,flooded hallway,structure,claim,flooded hallway,structure,claim,flooded hallway,structure,claim,flooded hallway,structure,claim,flooded hallway,structure,claim,flooded hallway,structure
+region-0006,claim,metal railing,thing,claim,metal railing,thing,claim,metal railing,thing,claim,metal railing,structure,claim,metal railing,thing,claim,metal railing,thing,claim,metal railing,thing
+region-0007,claim,metal rod,thing,claim,metal rod,thing,claim,metal rod,thing,claim,metal rod,thing,claim,metal rod,thing,claim,metal rod,thing,claim,metal rod,thing
+region-0008,claim,door,thing,claim,door,thing,claim,door,thing,claim,door,thing,claim,door,thing,claim,door,thing,claim,door,thing
+region-0009,claim,metal handle,thing,claim,metal handle,thing,claim,metallic handle,thing,claim,metal handle,thing,claim,metal handle,thing,claim,metal handle,thing,claim,metal handle,thing
+region-0010,claim,blue door,door,claim,blue door,door,claim,blue door,thing,claim,blue door,door,claim,blue door,door,claim,blue door,door,claim,blue door,door
+region-0011,claim,metallic object,thing,claim,metallic object,thing,claim,metallic object,thing,claim,metallic object,thing,claim,metallic object,thing,claim,metallic object,thing,claim,metallic object,thing
+region-0012,claim,yellow paint,surface,claim,yellow paint,surface,claim,yellow paint,surface,claim,yellow paint,surface,claim,yellow paint,surface,claim,yellow paint,surface,claim,yellow paint,surface
+region-0013,claim,dark horizontal bar,structure,claim,dark horizontal bar,structure,claim,dark horizontal bar,structure,claim,dark horizontal bar,structure,claim,dark horizontal bar,structure,claim,dark horizontal bar,structure,claim,dark horizontal bar,structure
+region-0014,claim,door,structure,claim,door,structure,claim,door,structure,claim,door,structure,claim,door,structure,claim,door,structure,claim,door,structure
+region-0015,claim,blue door,door,claim,blue door,door,claim,blue door,door,claim,blue door,door,claim,blue door,door,claim,blue door,door,claim,blue door,door
+region-0016,claim,metal rod,tool,claim,metal rod,tool,claim,metal rod,tool,claim,metal rod,tool,claim,metal rod,tool,claim,metal rod,tool,claim,metal rod,tool
+region-0017,claim,door,thing,claim,blue door,door,claim,blue door,door,claim,door,thing,claim,door,thing,claim,door,thing,claim,door,thing
+region-0018,claim,window,structure,claim,window,structure,claim,window,structure,claim,window,structure,claim,window,structure,claim,window,structure,claim,window,structure
+region-0019,claim,spacecraft,thing,claim,spacecraft,thing,claim,spacecraft,thing,claim,spacecraft,vehicle,claim,spacecraft,thing,claim,spacecraft,thing,claim,spacecraft,thing
+region-0020,claim,window,structure,claim,window,structure,claim,window,structure,claim,window,structure,claim,window,structure,claim,window,structure,claim,window,structure
+region-0021,claim,window,structure,claim,window,structure,claim,window,structure,claim,window,structure,claim,window,structure,claim,window,structure,claim,window,structure
+region-0022,claim,metal pole,structure,claim,metal pole,thing,claim,metal pole,thing,claim,metal pole,structure,claim,metal pole,structure,claim,metal pole,structure,claim,metal pole,structure
+region-0023,parse_failure,,,claim,gray surface,surface,claim,gray surface,surface,claim,gray surface,surface,parse_failure,,,parse_failure,,,parse_failure,,
+region-0024,claim,vertical surface,wall,claim,vertical surface,structure,claim,vertical surface,structure,claim,vertical surface,wall,claim,vertical surface,wall,claim,vertical surface,wall,claim,vertical surface,wall
+region-0025,claim,ceiling tile,structure,claim,ceiling tile,structure,claim,ceiling tile,structure,claim,ceiling tile,structure,claim,ceiling tile,structure,claim,ceiling tile,structure,claim,ceiling tile,structure
+region-0026,claim,metal door,door,claim,metal door,door,claim,metal door,door,claim,metal door,door,claim,metal door,door,claim,metal door,door,claim,metal door,door
+region-0027,parse_failure,,,parse_failure,,,parse_failure,,,parse_failure,,,parse_failure,,,parse_failure,,,parse_failure,,
+region-0028,claim,window,structure,claim,window,structure,claim,window,structure,claim,window,structure,claim,window,structure,claim,window,structure,claim,window,structure
+region-0029,claim,ceiling tile,structure,claim,ceiling tile,structure,claim,ceiling tile,structure,claim,ceiling tile,structure,claim,ceiling tile,structure,claim,ceiling tile,structure,claim,ceiling tile,structure
+region-0030,claim,metal towel rack,fixture,claim,metal towel rack,fixture,claim,metal towel rack,fixture,claim,metal towel rack,fixture,claim,metal towel rack,fixture,claim,metal towel rack,fixture,claim,metal towel rack,fixture
+region-0031,claim,ceiling panel,structure,claim,ceiling panel,structure,claim,ceiling panel,structure,claim,ceiling panel,structure,claim,ceiling panel,structure,claim,ceiling panel,structure,claim,ceiling panel,structure
+region-0032,claim,text,text,claim,text,text,claim,text,text,claim,text,text,claim,text,text,claim,text,text,claim,text,text
+region-0033,parse_failure,,,parse_failure,,,parse_failure,,,parse_failure,,,parse_failure,,,parse_failure,,,parse_failure,,
+region-0034,claim,metal bracket,hardware,claim,metal bracket,hardware,claim,metal bracket,hardware,claim,metal bracket,hardware,claim,metal bracket,hardware,claim,metal bracket,hardware,claim,metal bracket,hardware
+region-0035,claim,metal railing,structure,claim,metal railing,structure,claim,metal railing,structure,claim,metal railing,structure,claim,metal railing,structure,claim,metal railing,structure,claim,metal railing,structure
+region-0036,claim,orange peel,food,claim,orange peel,food,claim,orange peel,food,claim,orange peel,food,claim,orange peel,food,claim,orange peel,food,claim,orange peel,food
+region-0037,claim,metal hook,hardware,claim,metal hook,hardware,claim,metal hook,hardware,claim,metal hook,hardware,claim,metal hook,hardware,claim,metal hook,hardware,claim,metal hook,hardware
+region-0038,claim,curved edge,surface,claim,curved edge,surface,claim,curved edge,surface,claim,curved edge,surface,claim,curved edge,surface,claim,curved edge,surface,claim,curved edge,surface
+region-0039,claim,baseboard,structure,claim,baseboard,structure,claim,baseboard,structure,claim,baseboard,structure,claim,baseboard,structure,claim,baseboard,structure,claim,baseboard,structure
+region-0040,claim,ceiling tile,structure,claim,ceiling tile,building material,claim,ceiling tile,structure,claim,ceiling tile,building material,claim,ceiling tile,structure,claim,ceiling tile,structure,claim,ceiling tile,structure
+region-0041,claim,floor tile,surface,claim,floor tile,surface,claim,floor tile,surface,claim,floor tile,surface,claim,floor tile,surface,claim,floor tile,surface,claim,floor tile,surface
+region-0042,claim,door,structure,claim,door,structure,claim,door,structure,claim,door,structure,claim,door,structure,claim,door,structure,claim,door,structure
+region-0043,claim,blue trim,structure,claim,blue trim,structure,claim,blue trim,structure,claim,blue trim,structure,claim,blue trim,structure,claim,blue trim,structure,claim,blue trim,structure
+region-0044,claim,metal edge,object,claim,metal edge,object,claim,metal edge,object,claim,metal edge,object,claim,metal edge,object,claim,metal edge,object,claim,metal edge,object
+region-0045,parse_failure,,,parse_failure,,,parse_failure,,,parse_failure,,,parse_failure,,,parse_failure,,,parse_failure,,
+region-0046,claim,ceiling tile,structure,claim,ceiling tile,structure,claim,ceiling tile,structure,claim,ceiling tile,structure,claim,ceiling tile,structure,claim,ceiling tile,structure,claim,ceiling tile,structure
+region-0047,claim,metal rod,thing,claim,metal rod,thing,claim,metal rod,thing,claim,metal rod,tool,claim,metal rod,thing,claim,metal rod,thing,claim,metal rod,thing
+region-0048,claim,dark surface,surface,claim,dark surface,surface,claim,dark surface,surface,claim,dark surface,surface,claim,dark surface,surface,claim,dark surface,surface,claim,dark surface,surface
+region-0049,claim,metal pole,structure,claim,metal pole,thing,claim,metal pole,thing,claim,metal pole,structure,claim,metal pole,structure,claim,metal pole,structure,claim,metal pole,structure
+region-0050,claim,door,structure,claim,door,structure,claim,door,structure,claim,door,structure,claim,door,structure,claim,door,structure,claim,door,structure
+region-0051,claim,metal rail,structure,claim,metal rail,structure,claim,metal rail,structure,claim,metal rail,structure,claim,metal rail,structure,claim,metal rail,structure,claim,metal rail,structure
+region-0052,claim,ceiling panel,structure,claim,ceiling panel,structure,claim,ceiling panel,structure,claim,ceiling panel,structure,claim,ceiling panel,structure,claim,ceiling panel,structure,claim,ceiling panel,structure
+region-0053,parse_failure,,,parse_failure,,,parse_failure,,,parse_failure,,,parse_failure,,,parse_failure,,,parse_failure,,
+region-0054,claim,metal latch,hardware,claim,metal latch,hardware,claim,metal latch,hardware,claim,metal latch,hardware,claim,metal latch,hardware,claim,metal latch,hardware,claim,metal latch,hardware
+region-0055,claim,metal door,door,claim,metal door,door,claim,metal door,door,claim,metal door,door,claim,metal door,door,claim,metal door,door,claim,metal door,door
+region-0056,claim,metal pole,structure,claim,metal pole,thing,claim,metal pole,thing,claim,metal pole,structure,claim,metal pole,structure,claim,metal pole,structure,claim,metal pole,structure
+region-0057,claim,blurry image,image,claim,blurry image,image,claim,blurry image,image,claim,blurry image,image,claim,blurry image,image,claim,blurry image,image,claim,blurry image,image
+region-0058,claim,ceiling panel,structure,claim,ceiling panel,structure,claim,ceiling panel,structure,claim,ceiling panel,structure,claim,ceiling panel,structure,claim,ceiling panel,structure,claim,ceiling panel,structure
+region-0059,claim,metal latch,hardware,claim,metal latch,hardware,claim,metal latch,hardware,claim,metal latch,hardware,claim,metal latch,hardware,claim,metal latch,hardware,claim,metal latch,hardware
+region-0060,claim,metal bracket,thing,claim,metal bracket,thing,claim,metal bracket,thing,claim,metal bracket,thing,claim,metal bracket,thing,claim,metal bracket,thing,claim,metal bracket,thing
+region-0061,claim,metal rod,tool,claim,metal rod,tool,claim,metal rod,tool,claim,metal rod,tool,claim,metal rod,tool,claim,metal rod,tool,claim,metal rod,tool
+region-0062,claim,window frame,structure,claim,window frame,structure,claim,window frame,structure,claim,window frame,structure,claim,window frame,structure,claim,window frame,structure,claim,window frame,structure
+region-0063,claim,blue wall,wall,claim,blue wall,wall,claim,blue wall,wall,claim,blue wall,wall,claim,blue wall,wall,claim,blue wall,wall,claim,blue wall,wall
+region-0064,claim,window frame,structure,claim,window frame,structure,claim,window frame,structure,claim,window frame,structure,claim,window frame,structure,claim,window frame,structure,claim,window frame,structure
+region-0065,claim,window,structure,claim,window,structure,claim,window,structure,claim,window,structure,claim,window,structure,claim,window,structure,claim,window,structure
+region-0066,claim,metal rail,structure,claim,metal handle,thing,claim,metal handle,thing,claim,metal rod,structure,claim,metal rail,structure,claim,metal rail,structure,claim,metal rail,structure
+region-0067,claim,blue surface,surface,claim,curved edge,surface,claim,blue surface,surface,claim,curved edge,surface,claim,blue surface,surface,claim,blue surface,surface,claim,blue surface,surface
+region-0068,parse_failure,,,parse_failure,,,parse_failure,,,parse_failure,,,parse_failure,,,parse_failure,,,parse_failure,,
+region-0069,claim,blue door,door,claim,blue door,door,claim,blue door,door,claim,blue door,door,claim,blue door,door,claim,blue door,door,claim,blue door,door
+region-0070,claim,door handle,door,claim,metal handle,thing,claim,metal handle,thing,claim,door,door,claim,door handle,door,claim,door handle,door,claim,door handle,door
+region-0071,claim,door,door,claim,door,door,claim,door,door,claim,door,door,claim,door,door,claim,door,door,claim,door,door
+region-0072,claim,curved edge,surface,claim,curved edge,surface,claim,curved edge,surface,claim,curved edge,surface,claim,curved edge,surface,claim,curved edge,surface,claim,curved edge,surface
+region-0073,claim,metal latch,mechanism,claim,metal latch,mechanism,claim,metal latch,mechanism,claim,metal latch,mechanism,claim,metal latch,mechanism,claim,metal latch,mechanism,claim,metal latch,mechanism
+region-0074,claim,dark surface,surface,claim,dark surface,surface,parse_failure,,,parse_failure,,,claim,dark surface,surface,claim,dark surface,surface,claim,dark surface,surface
+region-0075,claim,ceiling panel,structure,claim,ceiling panel,structure,claim,ceiling panel,structure,claim,ceiling panel,structure,claim,ceiling panel,structure,claim,ceiling panel,structure,claim,ceiling panel,structure
+region-0076,claim,metal hook,hardware,claim,metal hook,hardware,claim,metal hook,hardware,claim,metal hook,hardware,claim,metal hook,hardware,claim,metal hook,hardware,claim,metal hook,hardware
+region-0077,claim,blue vertical bar,structure,claim,blue vertical bar,structure,claim,blue vertical bar,structure,claim,blue vertical bar,structure,claim,blue vertical bar,structure,claim,blue vertical bar,structure,claim,blue vertical bar,structure
+region-0078,claim,doorway,structure,claim,doorway,structure,claim,doorway,structure,claim,doorway,structure,claim,doorway,structure,claim,doorway,structure,claim,doorway,structure
+region-0079,claim,metal latch,mechanical component,claim,metal latch,mechanical component,claim,metal latch,mechanical component,claim,metal latch,mechanical component,claim,metal latch,mechanical component,claim,metal latch,mechanical component,claim,metal latch,mechanical component
+region-0080,claim,metal pole,structure,claim,metal pole,structure,claim,metal pole,structure,claim,metal pole,structure,claim,metal pole,structure,claim,metal pole,structure,claim,metal pole,structure
+region-0081,claim,metal rod,thing,claim,metal rod,thing,claim,metal rod,thing,claim,metal rod,thing,claim,metal rod,thing,claim,metal rod,thing,claim,metal rod,thing
+region-0082,claim,metal pole,structure,claim,metal pole,structure,claim,metal pole,structure,claim,metal pole,structure,claim,metal pole,structure,claim,metal pole,structure,claim,metal pole,structure
+region-0083,claim,dark surface,surface,claim,dark surface,surface,claim,dark surface,surface,claim,dark surface,surface,claim,dark surface,surface,claim,dark surface,surface,claim,dark surface,surface

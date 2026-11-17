@@ -1,0 +1,57 @@
+# Camada declarativa do perfil canonical/2. Use-a depois de uma configuração de
+# execução que fixe os checkpoints, providers, políticas e a sequência:
+#
+#   contextmap inspect plan -c base.toml -c canonical-2-profile.toml
+#
+# Esta camada não contém segredos, caminhos de modelos nem IDs de artifacts.
+
+[pipeline]
+preset = "canonical/2"
+
+[pipeline.stages]
+semantic_scoring = true
+
+[components.region_perception.discovery]
+backend = "sam2"
+
+[components.region_perception.discovery.sam2.pass_config]
+include_full_frame = true
+max_candidates_per_pass = 256
+
+[components.visual_features.dense]
+backend = "dinov2"
+
+[components.visual_features.region]
+backend = "clip"
+
+[components.semantic_scoring.scorer]
+backend = "clip"
+
+[components.semantic_fusion.accumulation]
+backend = "baseline-evidence-accumulation-v1"
+
+[components.semantic_fusion.accumulation.baseline-evidence-accumulation-v1]
+channels = ["semantic_claims", "semantic_scores", "visual_features"]
+
+# Canal semântico de relações (raio de interação por objeto, SCENARIO_VERSION 1.1.0). O candidate
+# gera pares within_interaction_range dentro de interaction_radius_m (teto do pré-filtro
+# geométrico; pares além disso não são medidos), e o avaliador semântico decide cada relação
+# comparando o gap com o raio da entidade sujeito. proximity/directional_radius_m continuam
+# obrigatórios no candidate mesmo sem os predicados geométricos selecionados.
+# IMPORTANTE: o raio por entidade vem do interaction_factor da VLM — a config de execução (base)
+# precisa selecionar o prompt região "region-interaction/v1" no semantic_interpretation, senão
+# nenhuma entidade recebe interaction_radius_m e o canal não produz relações.
+[components.spatial_relations.candidate]
+backend = "bounds-neighborhood-candidates-v1"
+
+[components.spatial_relations.candidate.bounds-neighborhood-candidates-v1]
+predicates = ["within_interaction_range"]
+proximity_radius_m = 0.6
+directional_radius_m = 1.0
+interaction_radius_m = 2.0
+
+[components.spatial_relations.semantic_predicate]
+backend = "interaction-range-predicate-v1"
+
+[components.spatial_relations.semantic_predicate.interaction-range-predicate-v1]
+boundary_tolerance_m = 0.02

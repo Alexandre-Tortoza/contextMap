@@ -1,0 +1,188 @@
+{
+  "annotation": {
+    "path": "experiments/correction-benchmark-10_31-20260930/annotations/frame-55.json",
+    "sha256": null,
+    "status": "pending_annotation"
+  },
+  "arm": {
+    "arm_id": "E3-g-iou0.80-stab0.80",
+    "arm_kind": "none",
+    "checkpoint_override": null,
+    "config_stack": [
+      "examples/v0.2.0/canonical-config.toml",
+      "experiments/canonical-2-empirical-validation-20260929/config/base.template.toml",
+      "experiments/frame-10_31-raw-vs-voxel-20260930/providers.toml",
+      "examples/v0.2.0/corridor-02-image-masks.toml",
+      "experiments/frame-10_31-raw-vs-voxel-20260930/region-label.toml"
+    ],
+    "cuda_max_memory_allocated_bytes": 2391476224,
+    "discovery_identity": {
+      "border_truncation_policy_id": "internal_edge_contact_v1",
+      "mask_remap_policy_id": "nearest_pixel_center_v1",
+      "normalization_config_digest": "sha256:c2a42c0da8c7138fbdea886f92088d7a816d041c7cdbb71702b99a4efdf09faa",
+      "pass_config_digest": "sha256:f1c08c0821b7243c23463304f1f5d8be5a2b3c7a328a6d83f6573e1dc1262aae",
+      "pass_planning_policy_id": "row_major_edge_aligned_v1"
+    },
+    "effective_config_digest": "sha256:970d1a324f850a36af6780650dd15b20cd824d37da70ea043222965345cf69ee",
+    "elapsed_s": 6.25,
+    "image_id": "camera_1_image_raw-000055",
+    "input_workspace": "workspace-old/frame-10_31-raw",
+    "overrides": [
+      "components.visual_perception.region_discovery.sam2.predicted_iou_threshold=0.8",
+      "components.visual_perception.region_discovery.sam2.stability_threshold=0.8"
+    ],
+    "perception_dir": "outputs/correction-benchmark-10_31-20260930/c4/E3-g-iou0.80-stab0.80/visual_perception",
+    "perception_run_id": "6cb92fa6cd382e71de6c85308562be52",
+    "predicted_iou_threshold": 0.8,
+    "preset": "canonical/1-regions-only",
+    "region_discovery_backend": {
+      "backend_id": "sam2",
+      "capability": "region_discovery",
+      "configuration_fingerprint": "sha256:23c36640efec73af1559a0bbbf9d50c151d60c330ea36e24dd22bb272eeb2b2a",
+      "model": "facebook/sam2.1-hiera-tiny",
+      "provider": "facebook",
+      "version": "de431c4043854a71d8101e17995dfe596bf101a5"
+    },
+    "stability_threshold": 0.8,
+    "target_layer": "regions",
+    "torch": "2.8.0+cu126",
+    "variable": "sam2 predicted_iou_threshold / stability_threshold"
+  },
+  "arm_id": "E3-g-iou0.80-stab0.80",
+  "benchmark": "B1",
+  "image_id": "camera_1_image_raw-000055",
+  "layers": {
+    "association": {
+      "status": "not_in_run"
+    },
+    "calibration": {
+      "status": "not_in_run"
+    },
+    "entities": {
+      "status": "not_in_run"
+    },
+    "geometry": {
+      "status": "not_in_run"
+    },
+    "regions": {
+      "accepted_mask_ratio": 0.625,
+      "accepted_region_count": 35,
+      "area_px_median": 967.0,
+      "area_px_p10": 242.0,
+      "area_px_p90": 4764.200000000001,
+      "contained_pair_count": 2,
+      "covered_pixel_count": 80585,
+      "definition": {
+        "area_quantile_method": "linear",
+        "connectivity": 4,
+        "containment_threshold": 0.8,
+        "duplicate_iou_threshold": 0.8
+      },
+      "definitions": {
+        "containment_threshold": 0.8,
+        "duplicate_iou_threshold": 0.8,
+        "proposal_count": "SAM2 raw proposals minus those filtered by the backend thresholds",
+        "usable_area": "camera_1-valid.npy AND NOT camera_1-ego.npy"
+      },
+      "discovery_backend": {
+        "backend_id": "sam2",
+        "capability": "region_discovery",
+        "configuration_fingerprint": "sha256:23c36640efec73af1559a0bbbf9d50c151d60c330ea36e24dd22bb272eeb2b2a",
+        "model": "facebook/sam2.1-hiera-tiny",
+        "provider": "facebook",
+        "version": "de431c4043854a71d8101e17995dfe596bf101a5"
+      },
+      "discovery_identity": {
+        "border_truncation_policy_id": "internal_edge_contact_v1",
+        "mask_remap_policy_id": "nearest_pixel_center_v1",
+        "normalization_config_digest": "sha256:c2a42c0da8c7138fbdea886f92088d7a816d041c7cdbb71702b99a4efdf09faa",
+        "pass_config_digest": "sha256:f1c08c0821b7243c23463304f1f5d8be5a2b3c7a328a6d83f6573e1dc1262aae",
+        "pass_planning_policy_id": "row_major_edge_aligned_v1"
+      },
+      "duplicate_pair_count": 0,
+      "fragmentation_rate": 0.4,
+      "fragmented_mask_count": 14,
+      "implementation": "contextmap.evaluation.region_structure 1.0.0",
+      "known_object_recall": "pending_annotation",
+      "mask_count": 35,
+      "mask_sha256_by_region": {
+        "region-0001": "sha256:26f71eed8f6a40a1af7660a6a7c0ae34f211e2dbf80ec90010f0a0ce4192e7b7",
+        "region-0002": "sha256:e8498b89ea0a341fcd64fb7d8e956ee66e8b623e88d72ac90157bed68570f797",
+        "region-0003": "sha256:44e3b2c7a8e65f8aa1af084c4e48e2d9b585a4a9c02188847cbc828af3e7b033",
+        "region-0004": "sha256:5f41b9aed3beeb279901bc5bc39e01f60a441f987b5d375470d9df49d88300e3",
+        "region-0005": "sha256:c66a1a90b1a0cdd8cda0015e5a71478f12338f554346295082bbb033b629d159",
+        "region-0006": "sha256:0b1d6146170e8d51412f02e3db8bd664243d296a6bb9d6b0501d7aaf6e8e8bdc",
+        "region-0007": "sha256:74a0a955a2bf8169fbc4128d5693d7cf1441bf28c890cee4fdc74b83cb5b64dd",
+        "region-0008": "sha256:51d76e6cf2823be972fea7a581cbca03e14ead4c0d1092deac488cdea6db1fc7",
+        "region-0009": "sha256:300603432479db9bc3a6ecdb55a10baf66eb61649089227c55700c3cc59030fd",
+        "region-0010": "sha256:96b500b448ea39fb0e96eb3b4a2420801ddec79ae52a60c55f5d7939bd09869b",
+        "region-0011": "sha256:72ba6b605d1aaa488eebdfcd2486d7e8e7762b3f08c70cd6db6f48b1c30dbd9f",
+        "region-0012": "sha256:6b3b1352f0efa5f255addf2375bd51e5db5bcc2a32fe6f503d20ac42de55adac",
+        "region-0013": "sha256:c9363e5c0b3874801413257b6cb1c9834da43ddd42e4133d172765d4b587f04d",
+        "region-0014": "sha256:165c065944400d0e6992ad5fb02642a74284e622f25ba74e350b3285f453b04b",
+        "region-0015": "sha256:12d3e2a2594936b4d55e700073525799dbf88ddd44aa09361476ee6fd06f5762",
+        "region-0016": "sha256:8eb0d5ea5b760026d416f44f12f439789982f338d6134f3b7f1c6f3691f4dfb3",
+        "region-0017": "sha256:d95955ea892096a13338fbb3a82405af0b047e86386c75dfa5430984e5aaf17f",
+        "region-0018": "sha256:006d06fa5ebf4a4aa4d9aa0935d64eba63c0bdfbcc14b69e5158c81fcad5b8bf",
+        "region-0019": "sha256:d6467da77a258c4b4d916e4ed5dd62498a41dfb4c8ae04b9fc97ae52f845ed41",
+        "region-0020": "sha256:50a5074685d27efc95a661836fdff235fca3d52768586a15144a2b071711c154",
+        "region-0021": "sha256:d1c2a6434243e579a8c03af5885e36a2148751871b377e50a048ba0ee4a19b31",
+        "region-0022": "sha256:c781a58bac6bfbff6ba299142dcc034f95afa32ef27c0c334e2be36d00ebd47b",
+        "region-0023": "sha256:3e7840a8ce37b4f80c06f607216df7ef5f8c81dd70fd0d146ca3e3adde741525",
+        "region-0024": "sha256:1669a138b87690ff3588e4fc77c23d3e82a7a256cd57a27b6580c4cd278cf573",
+        "region-0025": "sha256:6e4f221a77ec6aa4ff577372e5cf76dca8c48ab4ad478758884774fe7a19724c",
+        "region-0026": "sha256:e5f91292a6e687879a43d663bbf4b6ac8f7b6323c31463f74e3edb8872902d2e",
+        "region-0027": "sha256:2a6df94245841d9929de274ae74466ecf9a05ce1b6276eb2f913e11dde321312",
+        "region-0028": "sha256:a30e84f4572ee0b889e03f3db023c716b1a0a38eb110bee93e86c1a5ff1b6c63",
+        "region-0029": "sha256:540dd51d974395f25f4a60c1ed21187f1435dae4cf642556077a978e9d941ddb",
+        "region-0030": "sha256:4f3114a0cd2c32f91325f58189a2236ef40748dfb16b8c95cbdbef415f144aee",
+        "region-0031": "sha256:794b1cb621834aa88cd19c3b86d2b43da9d908b2a067642d189be06978d19a48",
+        "region-0032": "sha256:925aa962c5ae528e8bf00dedeba08deddf022d9578d31ab5537b5c9f918f7b53",
+        "region-0033": "sha256:3b5684a665bdb43b5a0980438b39fcb4aa0d0b8d2e8544747092ac4c78b7b887",
+        "region-0034": "sha256:039093006eaad093c01a16361a17b87a80b9f2f63fe8e478d5d7d762e1ee900b",
+        "region-0035": "sha256:e9538328369e1bc2925737011f05efe7ad309e10620e925b5fc1155205cb8601"
+      },
+      "masks_below_500px": 8,
+      "masks_contained_in_another": 2,
+      "masks_measured": 35,
+      "masks_with_gt_10_components": 2,
+      "max_nesting_depth": 3,
+      "median_components": 1.0,
+      "merge_decisions_by_kind": {
+        "containment": 2,
+        "iou_duplicate": 5
+      },
+      "metric_version": "1.0.0",
+      "multiple_mask_pixel_fraction": 0.04541788173977787,
+      "nesting_depth_histogram": {
+        "1": 76925,
+        "2": 3656,
+        "3": 4
+      },
+      "normalization_rejections_by_reason": {
+        "exclusion_overlap": 8,
+        "merged_duplicate": 7,
+        "outside_valid_region": 6
+      },
+      "overlapping_pair_count": 16,
+      "pass_rejections_by_reason": {},
+      "pixels_with_multiple_masks": 3660,
+      "proposal_count": 56,
+      "region_count_total": 35,
+      "sam2_filtered_by_threshold_count": 0,
+      "sam2_raw_proposal_count": 56,
+      "status": "measured",
+      "usable_area_coverage": 0.338518716056908,
+      "usable_pixel_count": 236241
+    },
+    "relations": {
+      "status": "not_in_run"
+    },
+    "semantics": {
+      "status": "not_in_run"
+    }
+  },
+  "notes": "bra\u00e7o C4 (s\u00f3 regi\u00f5es)",
+  "run_dir": "outputs/correction-benchmark-10_31-20260930/c4/E3-g-iou0.80-stab0.80",
+  "schema": "correction-benchmark/metrics/v1"
+}

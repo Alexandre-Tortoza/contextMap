@@ -1,0 +1,159 @@
+[build-system]
+requires = ["setuptools>=84.0.0", "setuptools-scm>=8"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "contextmap"
+dynamic = ["version"]
+description = "Research implementation for generating persistent 3D contextual map artifacts from robotic sensor data."
+readme = "README.md"
+requires-python = ">=3.11"
+# Expressão SPDX (PEP 639) no lugar da tabela ``{ file = ... }`` e do classifier
+# ``License ::``, ambos depreciados: o setuptools deixa de aceitá-los em 2027-02-18.
+# O texto do LICENSE é o do AGPL v3 e o classifier antigo dizia "v3" sem "or later".
+license = "AGPL-3.0-only"
+license-files = ["LICENSE"]
+authors = [
+  { name = "Alexandre Tortoza" }
+]
+classifiers = [
+  "Development Status :: 2 - Pre-Alpha",
+  "Intended Audience :: Science/Research",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
+  "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+# numpy is pinned below 2.4 because 2.4+ ships stub files using PEP 695
+# `type` aliases, which mypy cannot parse while targeting python_version
+# 3.11 (see [tool.mypy] below). Revisit once the project's floor moves to
+# 3.12+ or mypy's stub handling improves.
+dependencies = [
+  "numpy<2.4",
+]
+
+[project.scripts]
+contextmap = "contextmap.runtime.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/Alexandre-Tortoza/contextmap2"
+Repository = "https://github.com/Alexandre-Tortoza/contextmap2"
+Issues = "https://github.com/Alexandre-Tortoza/contextmap2/issues"
+
+# Cada extra instala apenas o que o código empacotado importa de fato (verificado
+# por tests/packaging/test_dependencies.py). O que o PyPI não distribui (SAM 2,
+# AlphaCLIP, Pointcept/PTv3, o binário do FAST-LIO) não tem extra: fica em
+# docs/installation.md.
+[project.optional-dependencies]
+# ``rosbags`` lê bags ROS 1 e ROS 2 sem instalar o ROS. Serve aos adapters de
+# ingestion e ao wrapper de bag do FAST-LIO; ``ros2`` só nomeia a fonte.
+ros1 = [
+  "rosbags>=0.9,<1",
+]
+ros2 = [
+  "rosbags>=0.9,<1",
+]
+# Adapters DINOv2, DINOv3, CLIP e SigLIP2, os runtimes Hugging Face de Qwen, Florence-2,
+# Eagle 2.5 e LocateAnything (transformers) e a autocast do SAM 3.
+# ``transformers`` 5.x exige ``torchvision`` para o image processor; os pisos vêm do
+# que o transformers 5.x declara (torch>=2.5, Pillow>=10.0.1) e a validação real
+# (2026-09-20) usou torch 2.14, torchvision 0.29, transformers 5.17 e Pillow 12.3.
+# A escolha do build CUDA do torch é do usuário: instale-o antes, do índice da PyTorch.
+# Pelo mesmo motivo ``flash-attn`` e ``magi-attention`` (atenções opcionais do LocateAnything e
+# do vision tower do Eagle 2.5) ficam fora do extra: dependem do build CUDA de quem instala.
+vision = [
+  "torch>=2.5",
+  "torchvision",
+  "transformers>=5.17,<6",
+  "Pillow>=10.0.1",
+]
+gemini = [
+  "google-genai>=2,<3",
+  "httpx>=0.28,<1",
+]
+dev = [
+  "build>=1.6.1",
+  # O SDK do Gemini entra no dev para os testes de contrato saírem do skip permanente:
+  # eles respondem por httpx.MockTransport e nenhuma requisição sai do processo.
+  "google-genai>=2,<3",
+  "httpx>=0.28,<1",
+  # Testes de propriedade; o perfil determinístico da CI fica em tests/conftest.py.
+  "hypothesis>=6",
+  "mypy>=2.3.1",
+  "pre-commit>=3.8",
+  "pytest>=9.1.1",
+  "pytest-cov>=7.1.0",
+  "pyyaml>=6",
+  "ruff>=0.6",
+  "rosbags>=0.9,<1",
+]
+
+[tool.setuptools]
+package-dir = { "" = "src" }
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools_scm]
+fallback_version = "0.0.0"
+version_scheme = "guess-next-dev"
+local_scheme = "node-and-date"
+
+[tool.ruff]
+target-version = "py311"
+line-length = 100
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM", "RUF", "D"]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**/*.py" = ["D"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+line-ending = "lf"
+
+[tool.mypy]
+python_version = "3.11"
+files = ["src", "tests"]
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+no_implicit_optional = true
+check_untyped_defs = true
+
+[tool.pytest.ini_options]
+addopts = "-ra --strict-config --strict-markers"
+testpaths = ["tests"]
+# Os testes não são pacotes: os builders de Semantic Fusion, Semantic Mapping e Point Representation,
+# que Entity Resolution reutiliza para construir entidades e runs reais, ficam importáveis pelo
+# nome do módulo, assim como os cenários de máscara de Visual Perception que os testes de
+# backends/ reutilizam. Spatial Support reutiliza os builders de mapa/voxel de Geometric Mapping
+# para derivar suporte semântico sobre uma agregação real.
+pythonpath = [
+  "tests",
+  "tests/architecture",
+  "tests/semantic_fusion",
+  "tests/semantic_mapping",
+  "tests/point_representation",
+  "tests/entity_resolution",
+  "tests/visual_perception",
+  "tests/geometric_mapping",
+  "tests/runtime",
+  "tests/spatial_relations",
+]
+
+[tool.coverage.run]
+source = ["contextmap"]
+branch = true
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = true

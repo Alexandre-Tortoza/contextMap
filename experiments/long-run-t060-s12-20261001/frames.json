@@ -1,0 +1,2406 @@
+{
+ "stride": 12,
+ "bag_start_epoch": 1724621084.660316,
+ "frames": [
+  {
+   "observation_id": "camera_1_image_raw-000071",
+   "t_s": 60.034
+  },
+  {
+   "observation_id": "camera_1_image_raw-000083",
+   "t_s": 60.523
+  },
+  {
+   "observation_id": "camera_1_image_raw-000095",
+   "t_s": 61.012
+  },
+  {
+   "observation_id": "camera_1_image_raw-000107",
+   "t_s": 61.541
+  },
+  {
+   "observation_id": "camera_1_image_raw-000119",
+   "t_s": 62.03
+  },
+  {
+   "observation_id": "camera_1_image_raw-000131",
+   "t_s": 62.519
+  },
+  {
+   "observation_id": "camera_1_image_raw-000143",
+   "t_s": 63.048
+  },
+  {
+   "observation_id": "camera_1_image_raw-000155",
+   "t_s": 63.537
+  },
+  {
+   "observation_id": "camera_1_image_raw-000167",
+   "t_s": 64.026
+  },
+  {
+   "observation_id": "camera_1_image_raw-000179",
+   "t_s": 64.515
+  },
+  {
+   "observation_id": "camera_1_image_raw-000191",
+   "t_s": 65.045
+  },
+  {
+   "observation_id": "camera_1_image_raw-000203",
+   "t_s": 65.534
+  },
+  {
+   "observation_id": "camera_1_image_raw-000215",
+   "t_s": 66.022
+  },
+  {
+   "observation_id": "camera_1_image_raw-000227",
+   "t_s": 66.511
+  },
+  {
+   "observation_id": "camera_1_image_raw-000239",
+   "t_s": 67.041
+  },
+  {
+   "observation_id": "camera_1_image_raw-000251",
+   "t_s": 67.53
+  },
+  {
+   "observation_id": "camera_1_image_raw-000263",
+   "t_s": 68.019
+  },
+  {
+   "observation_id": "camera_1_image_raw-000275",
+   "t_s": 68.507
+  },
+  {
+   "observation_id": "camera_1_image_raw-000287",
+   "t_s": 69.037
+  },
+  {
+   "observation_id": "camera_1_image_raw-000299",
+   "t_s": 69.526
+  },
+  {
+   "observation_id": "camera_1_image_raw-000311",
+   "t_s": 70.015
+  },
+  {
+   "observation_id": "camera_1_image_raw-000323",
+   "t_s": 70.544
+  },
+  {
+   "observation_id": "camera_1_image_raw-000335",
+   "t_s": 71.033
+  },
+  {
+   "observation_id": "camera_1_image_raw-000347",
+   "t_s": 71.522
+  },
+  {
+   "observation_id": "camera_1_image_raw-000359",
+   "t_s": 72.011
+  },
+  {
+   "observation_id": "camera_1_image_raw-000371",
+   "t_s": 72.54
+  },
+  {
+   "observation_id": "camera_1_image_raw-000383",
+   "t_s": 73.029
+  },
+  {
+   "observation_id": "camera_1_image_raw-000395",
+   "t_s": 73.518
+  },
+  {
+   "observation_id": "camera_1_image_raw-000407",
+   "t_s": 74.007
+  },
+  {
+   "observation_id": "camera_1_image_raw-000419",
+   "t_s": 74.535
+  },
+  {
+   "observation_id": "camera_1_image_raw-000431",
+   "t_s": 75.024
+  },
+  {
+   "observation_id": "camera_1_image_raw-000443",
+   "t_s": 75.513
+  },
+  {
+   "observation_id": "camera_1_image_raw-000455",
+   "t_s": 76.042
+  },
+  {
+   "observation_id": "camera_1_image_raw-000467",
+   "t_s": 76.531
+  },
+  {
+   "observation_id": "camera_1_image_raw-000479",
+   "t_s": 77.02
+  },
+  {
+   "observation_id": "camera_1_image_raw-000491",
+   "t_s": 77.509
+  },
+  {
+   "observation_id": "camera_1_image_raw-000503",
+   "t_s": 78.038
+  },
+  {
+   "observation_id": "camera_1_image_raw-000515",
+   "t_s": 78.527
+  },
+  {
+   "observation_id": "camera_1_image_raw-000527",
+   "t_s": 79.016
+  },
+  {
+   "observation_id": "camera_1_image_raw-000539",
+   "t_s": 79.546
+  },
+  {
+   "observation_id": "camera_1_image_raw-000551",
+   "t_s": 80.035
+  },
+  {
+   "observation_id": "camera_1_image_raw-000563",
+   "t_s": 80.524
+  },
+  {
+   "observation_id": "camera_1_image_raw-000575",
+   "t_s": 81.012
+  },
+  {
+   "observation_id": "camera_1_image_raw-000587",
+   "t_s": 81.542
+  },
+  {
+   "observation_id": "camera_1_image_raw-000599",
+   "t_s": 82.031
+  },
+  {
+   "observation_id": "camera_1_image_raw-000611",
+   "t_s": 82.52
+  },
+  {
+   "observation_id": "camera_1_image_raw-000623",
+   "t_s": 83.009
+  },
+  {
+   "observation_id": "camera_1_image_raw-000635",
+   "t_s": 83.539
+  },
+  {
+   "observation_id": "camera_1_image_raw-000647",
+   "t_s": 84.027
+  },
+  {
+   "observation_id": "camera_1_image_raw-000659",
+   "t_s": 84.515
+  },
+  {
+   "observation_id": "camera_1_image_raw-000671",
+   "t_s": 85.045
+  },
+  {
+   "observation_id": "camera_1_image_raw-000683",
+   "t_s": 85.534
+  },
+  {
+   "observation_id": "camera_1_image_raw-000695",
+   "t_s": 86.023
+  },
+  {
+   "observation_id": "camera_1_image_raw-000707",
+   "t_s": 86.512
+  },
+  {
+   "observation_id": "camera_1_image_raw-000719",
+   "t_s": 87.041
+  },
+  {
+   "observation_id": "camera_1_image_raw-000731",
+   "t_s": 87.531
+  },
+  {
+   "observation_id": "camera_1_image_raw-000743",
+   "t_s": 88.02
+  },
+  {
+   "observation_id": "camera_1_image_raw-000755",
+   "t_s": 88.509
+  },
+  {
+   "observation_id": "camera_1_image_raw-000767",
+   "t_s": 89.037
+  },
+  {
+   "observation_id": "camera_1_image_raw-000779",
+   "t_s": 89.526
+  },
+  {
+   "observation_id": "camera_1_image_raw-000791",
+   "t_s": 90.015
+  },
+  {
+   "observation_id": "camera_1_image_raw-000803",
+   "t_s": 90.544
+  },
+  {
+   "observation_id": "camera_1_image_raw-000815",
+   "t_s": 91.034
+  },
+  {
+   "observation_id": "camera_1_image_raw-000827",
+   "t_s": 91.523
+  },
+  {
+   "observation_id": "camera_1_image_raw-000839",
+   "t_s": 92.012
+  },
+  {
+   "observation_id": "camera_1_image_raw-000851",
+   "t_s": 92.542
+  },
+  {
+   "observation_id": "camera_1_image_raw-000863",
+   "t_s": 93.031
+  },
+  {
+   "observation_id": "camera_1_image_raw-000875",
+   "t_s": 93.519
+  },
+  {
+   "observation_id": "camera_1_image_raw-000887",
+   "t_s": 94.008
+  },
+  {
+   "observation_id": "camera_1_image_raw-000899",
+   "t_s": 94.538
+  },
+  {
+   "observation_id": "camera_1_image_raw-000911",
+   "t_s": 95.027
+  },
+  {
+   "observation_id": "camera_1_image_raw-000923",
+   "t_s": 95.515
+  },
+  {
+   "observation_id": "camera_1_image_raw-000935",
+   "t_s": 96.045
+  },
+  {
+   "observation_id": "camera_1_image_raw-000947",
+   "t_s": 96.534
+  },
+  {
+   "observation_id": "camera_1_image_raw-000959",
+   "t_s": 97.023
+  },
+  {
+   "observation_id": "camera_1_image_raw-000971",
+   "t_s": 97.511
+  },
+  {
+   "observation_id": "camera_1_image_raw-000983",
+   "t_s": 98.04
+  },
+  {
+   "observation_id": "camera_1_image_raw-000995",
+   "t_s": 98.529
+  },
+  {
+   "observation_id": "camera_1_image_raw-001007",
+   "t_s": 99.018
+  },
+  {
+   "observation_id": "camera_1_image_raw-001019",
+   "t_s": 99.506
+  },
+  {
+   "observation_id": "camera_1_image_raw-001031",
+   "t_s": 100.036
+  },
+  {
+   "observation_id": "camera_1_image_raw-001043",
+   "t_s": 100.526
+  },
+  {
+   "observation_id": "camera_1_image_raw-001055",
+   "t_s": 101.015
+  },
+  {
+   "observation_id": "camera_1_image_raw-001067",
+   "t_s": 101.503
+  },
+  {
+   "observation_id": "camera_1_image_raw-001079",
+   "t_s": 102.033
+  },
+  {
+   "observation_id": "camera_1_image_raw-001091",
+   "t_s": 102.522
+  },
+  {
+   "observation_id": "camera_1_image_raw-001103",
+   "t_s": 103.011
+  },
+  {
+   "observation_id": "camera_1_image_raw-001115",
+   "t_s": 103.54
+  },
+  {
+   "observation_id": "camera_1_image_raw-001127",
+   "t_s": 104.029
+  },
+  {
+   "observation_id": "camera_1_image_raw-001139",
+   "t_s": 104.518
+  },
+  {
+   "observation_id": "camera_1_image_raw-001151",
+   "t_s": 105.007
+  },
+  {
+   "observation_id": "camera_1_image_raw-001163",
+   "t_s": 105.536
+  },
+  {
+   "observation_id": "camera_1_image_raw-001175",
+   "t_s": 106.025
+  },
+  {
+   "observation_id": "camera_1_image_raw-001187",
+   "t_s": 106.514
+  },
+  {
+   "observation_id": "camera_1_image_raw-001199",
+   "t_s": 107.044
+  },
+  {
+   "observation_id": "camera_1_image_raw-001211",
+   "t_s": 107.533
+  },
+  {
+   "observation_id": "camera_1_image_raw-001223",
+   "t_s": 108.021
+  },
+  {
+   "observation_id": "camera_1_image_raw-001235",
+   "t_s": 108.51
+  },
+  {
+   "observation_id": "camera_1_image_raw-001247",
+   "t_s": 109.04
+  },
+  {
+   "observation_id": "camera_1_image_raw-001259",
+   "t_s": 109.529
+  },
+  {
+   "observation_id": "camera_1_image_raw-001271",
+   "t_s": 110.018
+  },
+  {
+   "observation_id": "camera_1_image_raw-001283",
+   "t_s": 110.506
+  },
+  {
+   "observation_id": "camera_1_image_raw-001295",
+   "t_s": 111.036
+  },
+  {
+   "observation_id": "camera_1_image_raw-001307",
+   "t_s": 111.525
+  },
+  {
+   "observation_id": "camera_1_image_raw-001319",
+   "t_s": 112.014
+  },
+  {
+   "observation_id": "camera_1_image_raw-001331",
+   "t_s": 112.543
+  },
+  {
+   "observation_id": "camera_1_image_raw-001343",
+   "t_s": 113.032
+  },
+  {
+   "observation_id": "camera_1_image_raw-001355",
+   "t_s": 113.521
+  },
+  {
+   "observation_id": "camera_1_image_raw-001367",
+   "t_s": 114.01
+  },
+  {
+   "observation_id": "camera_1_image_raw-001379",
+   "t_s": 114.54
+  },
+  {
+   "observation_id": "camera_1_image_raw-001391",
+   "t_s": 115.028
+  },
+  {
+   "observation_id": "camera_1_image_raw-001403",
+   "t_s": 115.517
+  },
+  {
+   "observation_id": "camera_1_image_raw-001415",
+   "t_s": 116.006
+  },
+  {
+   "observation_id": "camera_1_image_raw-001427",
+   "t_s": 116.536
+  },
+  {
+   "observation_id": "camera_1_image_raw-001439",
+   "t_s": 117.025
+  },
+  {
+   "observation_id": "camera_1_image_raw-001451",
+   "t_s": 117.514
+  },
+  {
+   "observation_id": "camera_1_image_raw-001463",
+   "t_s": 118.043
+  },
+  {
+   "observation_id": "camera_1_image_raw-001475",
+   "t_s": 118.532
+  },
+  {
+   "observation_id": "camera_1_image_raw-001487",
+   "t_s": 119.021
+  },
+  {
+   "observation_id": "camera_1_image_raw-001499",
+   "t_s": 119.51
+  },
+  {
+   "observation_id": "camera_1_image_raw-001511",
+   "t_s": 120.039
+  },
+  {
+   "observation_id": "camera_1_image_raw-001523",
+   "t_s": 120.528
+  },
+  {
+   "observation_id": "camera_1_image_raw-001535",
+   "t_s": 121.017
+  },
+  {
+   "observation_id": "camera_1_image_raw-001547",
+   "t_s": 121.506
+  },
+  {
+   "observation_id": "camera_1_image_raw-001559",
+   "t_s": 122.035
+  },
+  {
+   "observation_id": "camera_1_image_raw-001571",
+   "t_s": 122.524
+  },
+  {
+   "observation_id": "camera_1_image_raw-001583",
+   "t_s": 123.013
+  },
+  {
+   "observation_id": "camera_1_image_raw-001595",
+   "t_s": 123.543
+  },
+  {
+   "observation_id": "camera_1_image_raw-001607",
+   "t_s": 124.031
+  },
+  {
+   "observation_id": "camera_1_image_raw-001619",
+   "t_s": 124.52
+  },
+  {
+   "observation_id": "camera_1_image_raw-001631",
+   "t_s": 125.009
+  },
+  {
+   "observation_id": "camera_1_image_raw-001643",
+   "t_s": 125.539
+  },
+  {
+   "observation_id": "camera_1_image_raw-001655",
+   "t_s": 126.028
+  },
+  {
+   "observation_id": "camera_1_image_raw-001667",
+   "t_s": 126.517
+  },
+  {
+   "observation_id": "camera_1_image_raw-001679",
+   "t_s": 127.005
+  },
+  {
+   "observation_id": "camera_1_image_raw-001691",
+   "t_s": 127.535
+  },
+  {
+   "observation_id": "camera_1_image_raw-001703",
+   "t_s": 128.024
+  },
+  {
+   "observation_id": "camera_1_image_raw-001715",
+   "t_s": 128.513
+  },
+  {
+   "observation_id": "camera_1_image_raw-001727",
+   "t_s": 129.042
+  },
+  {
+   "observation_id": "camera_1_image_raw-001739",
+   "t_s": 129.531
+  },
+  {
+   "observation_id": "camera_1_image_raw-001751",
+   "t_s": 130.02
+  },
+  {
+   "observation_id": "camera_1_image_raw-001763",
+   "t_s": 130.509
+  },
+  {
+   "observation_id": "camera_1_image_raw-001775",
+   "t_s": 131.038
+  },
+  {
+   "observation_id": "camera_1_image_raw-001787",
+   "t_s": 131.527
+  },
+  {
+   "observation_id": "camera_1_image_raw-001799",
+   "t_s": 132.016
+  },
+  {
+   "observation_id": "camera_1_image_raw-001811",
+   "t_s": 132.546
+  },
+  {
+   "observation_id": "camera_1_image_raw-001823",
+   "t_s": 133.035
+  },
+  {
+   "observation_id": "camera_1_image_raw-001835",
+   "t_s": 133.523
+  },
+  {
+   "observation_id": "camera_1_image_raw-001847",
+   "t_s": 134.012
+  },
+  {
+   "observation_id": "camera_1_image_raw-001859",
+   "t_s": 134.542
+  },
+  {
+   "observation_id": "camera_1_image_raw-001871",
+   "t_s": 135.031
+  },
+  {
+   "observation_id": "camera_1_image_raw-001883",
+   "t_s": 135.52
+  },
+  {
+   "observation_id": "camera_1_image_raw-001895",
+   "t_s": 136.009
+  },
+  {
+   "observation_id": "camera_1_image_raw-001907",
+   "t_s": 136.538
+  },
+  {
+   "observation_id": "camera_1_image_raw-001919",
+   "t_s": 137.027
+  },
+  {
+   "observation_id": "camera_1_image_raw-001931",
+   "t_s": 137.516
+  },
+  {
+   "observation_id": "camera_1_image_raw-001943",
+   "t_s": 138.045
+  },
+  {
+   "observation_id": "camera_1_image_raw-001955",
+   "t_s": 138.534
+  },
+  {
+   "observation_id": "camera_1_image_raw-001967",
+   "t_s": 139.023
+  },
+  {
+   "observation_id": "camera_1_image_raw-001979",
+   "t_s": 139.512
+  },
+  {
+   "observation_id": "camera_1_image_raw-001991",
+   "t_s": 140.042
+  },
+  {
+   "observation_id": "camera_1_image_raw-002003",
+   "t_s": 140.53
+  },
+  {
+   "observation_id": "camera_1_image_raw-002015",
+   "t_s": 141.019
+  },
+  {
+   "observation_id": "camera_1_image_raw-002027",
+   "t_s": 141.508
+  },
+  {
+   "observation_id": "camera_1_image_raw-002039",
+   "t_s": 142.039
+  },
+  {
+   "observation_id": "camera_1_image_raw-002051",
+   "t_s": 142.527
+  },
+  {
+   "observation_id": "camera_1_image_raw-002063",
+   "t_s": 143.015
+  },
+  {
+   "observation_id": "camera_1_image_raw-002075",
+   "t_s": 143.545
+  },
+  {
+   "observation_id": "camera_1_image_raw-002087",
+   "t_s": 144.034
+  },
+  {
+   "observation_id": "camera_1_image_raw-002099",
+   "t_s": 144.523
+  },
+  {
+   "observation_id": "camera_1_image_raw-002111",
+   "t_s": 145.012
+  },
+  {
+   "observation_id": "camera_1_image_raw-002123",
+   "t_s": 145.542
+  },
+  {
+   "observation_id": "camera_1_image_raw-002135",
+   "t_s": 146.029
+  },
+  {
+   "observation_id": "camera_1_image_raw-002147",
+   "t_s": 146.517
+  },
+  {
+   "observation_id": "camera_1_image_raw-002159",
+   "t_s": 147.006
+  },
+  {
+   "observation_id": "camera_1_image_raw-002171",
+   "t_s": 147.537
+  },
+  {
+   "observation_id": "camera_1_image_raw-002183",
+   "t_s": 148.026
+  },
+  {
+   "observation_id": "camera_1_image_raw-002195",
+   "t_s": 148.517
+  },
+  {
+   "observation_id": "camera_1_image_raw-002207",
+   "t_s": 149.047
+  },
+  {
+   "observation_id": "camera_1_image_raw-002219",
+   "t_s": 149.535
+  },
+  {
+   "observation_id": "camera_1_image_raw-002231",
+   "t_s": 150.022
+  },
+  {
+   "observation_id": "camera_1_image_raw-002243",
+   "t_s": 150.511
+  },
+  {
+   "observation_id": "camera_1_image_raw-002255",
+   "t_s": 151.041
+  },
+  {
+   "observation_id": "camera_1_image_raw-002267",
+   "t_s": 151.531
+  },
+  {
+   "observation_id": "camera_1_image_raw-002279",
+   "t_s": 152.02
+  },
+  {
+   "observation_id": "camera_1_image_raw-002291",
+   "t_s": 152.509
+  },
+  {
+   "observation_id": "camera_1_image_raw-002303",
+   "t_s": 153.038
+  },
+  {
+   "observation_id": "camera_1_image_raw-002315",
+   "t_s": 153.527
+  },
+  {
+   "observation_id": "camera_1_image_raw-002327",
+   "t_s": 154.016
+  },
+  {
+   "observation_id": "camera_1_image_raw-002339",
+   "t_s": 154.546
+  },
+  {
+   "observation_id": "camera_1_image_raw-002351",
+   "t_s": 155.035
+  },
+  {
+   "observation_id": "camera_1_image_raw-002363",
+   "t_s": 155.523
+  },
+  {
+   "observation_id": "camera_1_image_raw-002375",
+   "t_s": 156.012
+  },
+  {
+   "observation_id": "camera_1_image_raw-002387",
+   "t_s": 156.542
+  },
+  {
+   "observation_id": "camera_1_image_raw-002399",
+   "t_s": 157.031
+  },
+  {
+   "observation_id": "camera_1_image_raw-002411",
+   "t_s": 157.52
+  },
+  {
+   "observation_id": "camera_1_image_raw-002423",
+   "t_s": 158.009
+  },
+  {
+   "observation_id": "camera_1_image_raw-002435",
+   "t_s": 158.537
+  },
+  {
+   "observation_id": "camera_1_image_raw-002447",
+   "t_s": 159.027
+  },
+  {
+   "observation_id": "camera_1_image_raw-002459",
+   "t_s": 159.515
+  },
+  {
+   "observation_id": "camera_1_image_raw-002471",
+   "t_s": 160.045
+  },
+  {
+   "observation_id": "camera_1_image_raw-002483",
+   "t_s": 160.533
+  },
+  {
+   "observation_id": "camera_1_image_raw-002495",
+   "t_s": 161.023
+  },
+  {
+   "observation_id": "camera_1_image_raw-002507",
+   "t_s": 161.512
+  },
+  {
+   "observation_id": "camera_1_image_raw-002519",
+   "t_s": 162.041
+  },
+  {
+   "observation_id": "camera_1_image_raw-002531",
+   "t_s": 162.53
+  },
+  {
+   "observation_id": "camera_1_image_raw-002543",
+   "t_s": 163.018
+  },
+  {
+   "observation_id": "camera_1_image_raw-002555",
+   "t_s": 163.507
+  },
+  {
+   "observation_id": "camera_1_image_raw-002567",
+   "t_s": 164.037
+  },
+  {
+   "observation_id": "camera_1_image_raw-002579",
+   "t_s": 164.526
+  },
+  {
+   "observation_id": "camera_1_image_raw-002591",
+   "t_s": 165.016
+  },
+  {
+   "observation_id": "camera_1_image_raw-002603",
+   "t_s": 165.545
+  },
+  {
+   "observation_id": "camera_1_image_raw-002615",
+   "t_s": 166.034
+  },
+  {
+   "observation_id": "camera_1_image_raw-002627",
+   "t_s": 166.523
+  },
+  {
+   "observation_id": "camera_1_image_raw-002639",
+   "t_s": 167.012
+  },
+  {
+   "observation_id": "camera_1_image_raw-002651",
+   "t_s": 167.541
+  },
+  {
+   "observation_id": "camera_1_image_raw-002663",
+   "t_s": 168.029
+  },
+  {
+   "observation_id": "camera_1_image_raw-002675",
+   "t_s": 168.518
+  },
+  {
+   "observation_id": "camera_1_image_raw-002687",
+   "t_s": 169.007
+  },
+  {
+   "observation_id": "camera_1_image_raw-002699",
+   "t_s": 169.536
+  },
+  {
+   "observation_id": "camera_1_image_raw-002711",
+   "t_s": 170.025
+  },
+  {
+   "observation_id": "camera_1_image_raw-002723",
+   "t_s": 170.514
+  },
+  {
+   "observation_id": "camera_1_image_raw-002735",
+   "t_s": 171.044
+  },
+  {
+   "observation_id": "camera_1_image_raw-002747",
+   "t_s": 171.533
+  },
+  {
+   "observation_id": "camera_1_image_raw-002759",
+   "t_s": 172.021
+  },
+  {
+   "observation_id": "camera_1_image_raw-002771",
+   "t_s": 172.511
+  },
+  {
+   "observation_id": "camera_1_image_raw-002783",
+   "t_s": 173.04
+  },
+  {
+   "observation_id": "camera_1_image_raw-002795",
+   "t_s": 173.529
+  },
+  {
+   "observation_id": "camera_1_image_raw-002807",
+   "t_s": 174.018
+  },
+  {
+   "observation_id": "camera_1_image_raw-002819",
+   "t_s": 174.548
+  },
+  {
+   "observation_id": "camera_1_image_raw-002831",
+   "t_s": 175.037
+  },
+  {
+   "observation_id": "camera_1_image_raw-002843",
+   "t_s": 175.526
+  },
+  {
+   "observation_id": "camera_1_image_raw-002855",
+   "t_s": 176.015
+  },
+  {
+   "observation_id": "camera_1_image_raw-002867",
+   "t_s": 176.544
+  },
+  {
+   "observation_id": "camera_1_image_raw-002879",
+   "t_s": 177.032
+  },
+  {
+   "observation_id": "camera_1_image_raw-002891",
+   "t_s": 177.521
+  },
+  {
+   "observation_id": "camera_1_image_raw-002903",
+   "t_s": 178.01
+  },
+  {
+   "observation_id": "camera_1_image_raw-002915",
+   "t_s": 178.539
+  },
+  {
+   "observation_id": "camera_1_image_raw-002927",
+   "t_s": 179.028
+  },
+  {
+   "observation_id": "camera_1_image_raw-002939",
+   "t_s": 179.518
+  },
+  {
+   "observation_id": "camera_1_image_raw-002951",
+   "t_s": 180.007
+  },
+  {
+   "observation_id": "camera_1_image_raw-002963",
+   "t_s": 180.536
+  },
+  {
+   "observation_id": "camera_1_image_raw-002975",
+   "t_s": 181.025
+  },
+  {
+   "observation_id": "camera_1_image_raw-002987",
+   "t_s": 181.514
+  },
+  {
+   "observation_id": "camera_1_image_raw-002999",
+   "t_s": 182.044
+  },
+  {
+   "observation_id": "camera_1_image_raw-003011",
+   "t_s": 182.533
+  },
+  {
+   "observation_id": "camera_1_image_raw-003023",
+   "t_s": 183.021
+  },
+  {
+   "observation_id": "camera_1_image_raw-003035",
+   "t_s": 183.509
+  },
+  {
+   "observation_id": "camera_1_image_raw-003047",
+   "t_s": 184.039
+  },
+  {
+   "observation_id": "camera_1_image_raw-003059",
+   "t_s": 184.528
+  },
+  {
+   "observation_id": "camera_1_image_raw-003071",
+   "t_s": 185.017
+  },
+  {
+   "observation_id": "camera_1_image_raw-003083",
+   "t_s": 185.506
+  },
+  {
+   "observation_id": "camera_1_image_raw-003095",
+   "t_s": 186.036
+  },
+  {
+   "observation_id": "camera_1_image_raw-003107",
+   "t_s": 186.525
+  },
+  {
+   "observation_id": "camera_1_image_raw-003119",
+   "t_s": 187.014
+  },
+  {
+   "observation_id": "camera_1_image_raw-003131",
+   "t_s": 187.543
+  },
+  {
+   "observation_id": "camera_1_image_raw-003143",
+   "t_s": 188.032
+  },
+  {
+   "observation_id": "camera_1_image_raw-003155",
+   "t_s": 188.521
+  },
+  {
+   "observation_id": "camera_1_image_raw-003167",
+   "t_s": 189.05
+  },
+  {
+   "observation_id": "camera_1_image_raw-003179",
+   "t_s": 189.538
+  },
+  {
+   "observation_id": "camera_1_image_raw-003191",
+   "t_s": 190.027
+  },
+  {
+   "observation_id": "camera_1_image_raw-003203",
+   "t_s": 190.516
+  },
+  {
+   "observation_id": "camera_1_image_raw-003215",
+   "t_s": 191.006
+  },
+  {
+   "observation_id": "camera_1_image_raw-003227",
+   "t_s": 191.535
+  },
+  {
+   "observation_id": "camera_1_image_raw-003239",
+   "t_s": 192.024
+  },
+  {
+   "observation_id": "camera_1_image_raw-003251",
+   "t_s": 192.513
+  },
+  {
+   "observation_id": "camera_1_image_raw-003263",
+   "t_s": 193.043
+  },
+  {
+   "observation_id": "camera_1_image_raw-003275",
+   "t_s": 193.531
+  },
+  {
+   "observation_id": "camera_1_image_raw-003287",
+   "t_s": 194.02
+  },
+  {
+   "observation_id": "camera_1_image_raw-003299",
+   "t_s": 194.509
+  },
+  {
+   "observation_id": "camera_1_image_raw-003311",
+   "t_s": 195.039
+  },
+  {
+   "observation_id": "camera_1_image_raw-003323",
+   "t_s": 195.528
+  },
+  {
+   "observation_id": "camera_1_image_raw-003335",
+   "t_s": 196.017
+  },
+  {
+   "observation_id": "camera_1_image_raw-003347",
+   "t_s": 196.547
+  },
+  {
+   "observation_id": "camera_1_image_raw-003359",
+   "t_s": 197.036
+  },
+  {
+   "observation_id": "camera_1_image_raw-003371",
+   "t_s": 197.525
+  },
+  {
+   "observation_id": "camera_1_image_raw-003383",
+   "t_s": 198.014
+  },
+  {
+   "observation_id": "camera_1_image_raw-003395",
+   "t_s": 198.542
+  },
+  {
+   "observation_id": "camera_1_image_raw-003407",
+   "t_s": 199.031
+  },
+  {
+   "observation_id": "camera_1_image_raw-003419",
+   "t_s": 199.519
+  },
+  {
+   "observation_id": "camera_1_image_raw-003431",
+   "t_s": 200.008
+  },
+  {
+   "observation_id": "camera_1_image_raw-003443",
+   "t_s": 200.538
+  },
+  {
+   "observation_id": "camera_1_image_raw-003455",
+   "t_s": 201.027
+  },
+  {
+   "observation_id": "camera_1_image_raw-003467",
+   "t_s": 201.515
+  },
+  {
+   "observation_id": "camera_1_image_raw-003479",
+   "t_s": 202.004
+  },
+  {
+   "observation_id": "camera_1_image_raw-003491",
+   "t_s": 202.534
+  },
+  {
+   "observation_id": "camera_1_image_raw-003503",
+   "t_s": 203.023
+  },
+  {
+   "observation_id": "camera_1_image_raw-003515",
+   "t_s": 203.512
+  },
+  {
+   "observation_id": "camera_1_image_raw-003527",
+   "t_s": 204.041
+  },
+  {
+   "observation_id": "camera_1_image_raw-003539",
+   "t_s": 204.53
+  },
+  {
+   "observation_id": "camera_1_image_raw-003551",
+   "t_s": 205.019
+  },
+  {
+   "observation_id": "camera_1_image_raw-003563",
+   "t_s": 205.508
+  },
+  {
+   "observation_id": "camera_1_image_raw-003575",
+   "t_s": 206.037
+  },
+  {
+   "observation_id": "camera_1_image_raw-003587",
+   "t_s": 206.526
+  },
+  {
+   "observation_id": "camera_1_image_raw-003599",
+   "t_s": 207.016
+  },
+  {
+   "observation_id": "camera_1_image_raw-003611",
+   "t_s": 207.545
+  },
+  {
+   "observation_id": "camera_1_image_raw-003623",
+   "t_s": 208.033
+  },
+  {
+   "observation_id": "camera_1_image_raw-003635",
+   "t_s": 208.521
+  },
+  {
+   "observation_id": "camera_1_image_raw-003647",
+   "t_s": 209.011
+  },
+  {
+   "observation_id": "camera_1_image_raw-003659",
+   "t_s": 209.541
+  },
+  {
+   "observation_id": "camera_1_image_raw-003671",
+   "t_s": 210.03
+  },
+  {
+   "observation_id": "camera_1_image_raw-003683",
+   "t_s": 210.518
+  },
+  {
+   "observation_id": "camera_1_image_raw-003695",
+   "t_s": 211.006
+  },
+  {
+   "observation_id": "camera_1_image_raw-003707",
+   "t_s": 211.536
+  },
+  {
+   "observation_id": "camera_1_image_raw-003719",
+   "t_s": 212.025
+  },
+  {
+   "observation_id": "camera_1_image_raw-003731",
+   "t_s": 212.514
+  },
+  {
+   "observation_id": "camera_1_image_raw-003743",
+   "t_s": 213.044
+  },
+  {
+   "observation_id": "camera_1_image_raw-003755",
+   "t_s": 213.532
+  },
+  {
+   "observation_id": "camera_1_image_raw-003767",
+   "t_s": 214.021
+  },
+  {
+   "observation_id": "camera_1_image_raw-003779",
+   "t_s": 214.51
+  },
+  {
+   "observation_id": "camera_1_image_raw-003791",
+   "t_s": 215.039
+  },
+  {
+   "observation_id": "camera_1_image_raw-003803",
+   "t_s": 215.528
+  },
+  {
+   "observation_id": "camera_1_image_raw-003815",
+   "t_s": 216.017
+  },
+  {
+   "observation_id": "camera_1_image_raw-003827",
+   "t_s": 216.506
+  },
+  {
+   "observation_id": "camera_1_image_raw-003839",
+   "t_s": 217.036
+  },
+  {
+   "observation_id": "camera_1_image_raw-003851",
+   "t_s": 217.524
+  },
+  {
+   "observation_id": "camera_1_image_raw-003863",
+   "t_s": 218.013
+  },
+  {
+   "observation_id": "camera_1_image_raw-003875",
+   "t_s": 218.544
+  },
+  {
+   "observation_id": "camera_1_image_raw-003887",
+   "t_s": 219.032
+  },
+  {
+   "observation_id": "camera_1_image_raw-003899",
+   "t_s": 219.519
+  },
+  {
+   "observation_id": "camera_1_image_raw-003911",
+   "t_s": 220.008
+  },
+  {
+   "observation_id": "camera_1_image_raw-003923",
+   "t_s": 220.538
+  },
+  {
+   "observation_id": "camera_1_image_raw-003935",
+   "t_s": 221.027
+  },
+  {
+   "observation_id": "camera_1_image_raw-003947",
+   "t_s": 221.516
+  },
+  {
+   "observation_id": "camera_1_image_raw-003959",
+   "t_s": 222.046
+  },
+  {
+   "observation_id": "camera_1_image_raw-003971",
+   "t_s": 222.536
+  },
+  {
+   "observation_id": "camera_1_image_raw-003983",
+   "t_s": 223.025
+  },
+  {
+   "observation_id": "camera_1_image_raw-003995",
+   "t_s": 223.514
+  },
+  {
+   "observation_id": "camera_1_image_raw-004007",
+   "t_s": 224.002
+  },
+  {
+   "observation_id": "camera_1_image_raw-004019",
+   "t_s": 224.532
+  },
+  {
+   "observation_id": "camera_1_image_raw-004031",
+   "t_s": 225.021
+  },
+  {
+   "observation_id": "camera_1_image_raw-004043",
+   "t_s": 225.51
+  },
+  {
+   "observation_id": "camera_1_image_raw-004055",
+   "t_s": 226.039
+  },
+  {
+   "observation_id": "camera_1_image_raw-004067",
+   "t_s": 226.528
+  },
+  {
+   "observation_id": "camera_1_image_raw-004079",
+   "t_s": 227.017
+  },
+  {
+   "observation_id": "camera_1_image_raw-004091",
+   "t_s": 227.547
+  },
+  {
+   "observation_id": "camera_1_image_raw-004103",
+   "t_s": 228.035
+  },
+  {
+   "observation_id": "camera_1_image_raw-004115",
+   "t_s": 228.524
+  },
+  {
+   "observation_id": "camera_1_image_raw-004127",
+   "t_s": 229.013
+  },
+  {
+   "observation_id": "camera_1_image_raw-004139",
+   "t_s": 229.543
+  },
+  {
+   "observation_id": "camera_1_image_raw-004151",
+   "t_s": 230.032
+  },
+  {
+   "observation_id": "camera_1_image_raw-004163",
+   "t_s": 230.52
+  },
+  {
+   "observation_id": "camera_1_image_raw-004175",
+   "t_s": 231.009
+  },
+  {
+   "observation_id": "camera_1_image_raw-004187",
+   "t_s": 231.539
+  },
+  {
+   "observation_id": "camera_1_image_raw-004199",
+   "t_s": 232.028
+  },
+  {
+   "observation_id": "camera_1_image_raw-004211",
+   "t_s": 232.517
+  },
+  {
+   "observation_id": "camera_1_image_raw-004223",
+   "t_s": 233.005
+  },
+  {
+   "observation_id": "camera_1_image_raw-004235",
+   "t_s": 233.535
+  },
+  {
+   "observation_id": "camera_1_image_raw-004247",
+   "t_s": 234.024
+  },
+  {
+   "observation_id": "camera_1_image_raw-004259",
+   "t_s": 234.512
+  },
+  {
+   "observation_id": "camera_1_image_raw-004271",
+   "t_s": 235.042
+  },
+  {
+   "observation_id": "camera_1_image_raw-004283",
+   "t_s": 235.53
+  },
+  {
+   "observation_id": "camera_1_image_raw-004295",
+   "t_s": 236.02
+  },
+  {
+   "observation_id": "camera_1_image_raw-004307",
+   "t_s": 236.509
+  },
+  {
+   "observation_id": "camera_1_image_raw-004319",
+   "t_s": 237.038
+  },
+  {
+   "observation_id": "camera_1_image_raw-004331",
+   "t_s": 237.526
+  },
+  {
+   "observation_id": "camera_1_image_raw-004343",
+   "t_s": 238.015
+  },
+  {
+   "observation_id": "camera_1_image_raw-004355",
+   "t_s": 238.503
+  },
+  {
+   "observation_id": "camera_1_image_raw-004367",
+   "t_s": 239.033
+  },
+  {
+   "observation_id": "camera_1_image_raw-004379",
+   "t_s": 239.521
+  },
+  {
+   "observation_id": "camera_1_image_raw-004391",
+   "t_s": 240.01
+  },
+  {
+   "observation_id": "camera_1_image_raw-004403",
+   "t_s": 240.54
+  },
+  {
+   "observation_id": "camera_1_image_raw-004415",
+   "t_s": 241.029
+  },
+  {
+   "observation_id": "camera_1_image_raw-004427",
+   "t_s": 241.517
+  },
+  {
+   "observation_id": "camera_1_image_raw-004439",
+   "t_s": 242.005
+  },
+  {
+   "observation_id": "camera_1_image_raw-004451",
+   "t_s": 242.535
+  },
+  {
+   "observation_id": "camera_1_image_raw-004463",
+   "t_s": 243.024
+  },
+  {
+   "observation_id": "camera_1_image_raw-004475",
+   "t_s": 243.513
+  },
+  {
+   "observation_id": "camera_1_image_raw-004487",
+   "t_s": 244.042
+  },
+  {
+   "observation_id": "camera_1_image_raw-004499",
+   "t_s": 244.531
+  },
+  {
+   "observation_id": "camera_1_image_raw-004511",
+   "t_s": 245.02
+  },
+  {
+   "observation_id": "camera_1_image_raw-004523",
+   "t_s": 245.508
+  },
+  {
+   "observation_id": "camera_1_image_raw-004535",
+   "t_s": 246.038
+  },
+  {
+   "observation_id": "camera_1_image_raw-004547",
+   "t_s": 246.527
+  },
+  {
+   "observation_id": "camera_1_image_raw-004559",
+   "t_s": 247.016
+  },
+  {
+   "observation_id": "camera_1_image_raw-004571",
+   "t_s": 247.504
+  },
+  {
+   "observation_id": "camera_1_image_raw-004583",
+   "t_s": 248.034
+  },
+  {
+   "observation_id": "camera_1_image_raw-004595",
+   "t_s": 248.523
+  },
+  {
+   "observation_id": "camera_1_image_raw-004607",
+   "t_s": 249.012
+  },
+  {
+   "observation_id": "camera_1_image_raw-004619",
+   "t_s": 249.5
+  },
+  {
+   "observation_id": "camera_1_image_raw-004631",
+   "t_s": 250.03
+  },
+  {
+   "observation_id": "camera_1_image_raw-004643",
+   "t_s": 250.519
+  },
+  {
+   "observation_id": "camera_1_image_raw-004655",
+   "t_s": 251.008
+  },
+  {
+   "observation_id": "camera_1_image_raw-004667",
+   "t_s": 251.537
+  },
+  {
+   "observation_id": "camera_1_image_raw-004679",
+   "t_s": 252.026
+  },
+  {
+   "observation_id": "camera_1_image_raw-004691",
+   "t_s": 252.515
+  },
+  {
+   "observation_id": "camera_1_image_raw-004703",
+   "t_s": 253.004
+  },
+  {
+   "observation_id": "camera_1_image_raw-004715",
+   "t_s": 253.533
+  },
+  {
+   "observation_id": "camera_1_image_raw-004727",
+   "t_s": 254.022
+  },
+  {
+   "observation_id": "camera_1_image_raw-004739",
+   "t_s": 254.511
+  },
+  {
+   "observation_id": "camera_1_image_raw-004751",
+   "t_s": 255.041
+  },
+  {
+   "observation_id": "camera_1_image_raw-004763",
+   "t_s": 255.53
+  },
+  {
+   "observation_id": "camera_1_image_raw-004775",
+   "t_s": 256.019
+  },
+  {
+   "observation_id": "camera_1_image_raw-004787",
+   "t_s": 256.507
+  },
+  {
+   "observation_id": "camera_1_image_raw-004799",
+   "t_s": 257.037
+  },
+  {
+   "observation_id": "camera_1_image_raw-004811",
+   "t_s": 257.526
+  },
+  {
+   "observation_id": "camera_1_image_raw-004823",
+   "t_s": 258.015
+  },
+  {
+   "observation_id": "camera_1_image_raw-004835",
+   "t_s": 258.504
+  },
+  {
+   "observation_id": "camera_1_image_raw-004847",
+   "t_s": 259.033
+  },
+  {
+   "observation_id": "camera_1_image_raw-004859",
+   "t_s": 259.522
+  },
+  {
+   "observation_id": "camera_1_image_raw-004871",
+   "t_s": 260.011
+  },
+  {
+   "observation_id": "camera_1_image_raw-004883",
+   "t_s": 260.54
+  },
+  {
+   "observation_id": "camera_1_image_raw-004895",
+   "t_s": 261.029
+  },
+  {
+   "observation_id": "camera_1_image_raw-004907",
+   "t_s": 261.518
+  },
+  {
+   "observation_id": "camera_1_image_raw-004919",
+   "t_s": 262.007
+  },
+  {
+   "observation_id": "camera_1_image_raw-004931",
+   "t_s": 262.536
+  },
+  {
+   "observation_id": "camera_1_image_raw-004943",
+   "t_s": 263.025
+  },
+  {
+   "observation_id": "camera_1_image_raw-004955",
+   "t_s": 263.514
+  },
+  {
+   "observation_id": "camera_1_image_raw-004967",
+   "t_s": 264.003
+  },
+  {
+   "observation_id": "camera_1_image_raw-004979",
+   "t_s": 264.533
+  },
+  {
+   "observation_id": "camera_1_image_raw-004991",
+   "t_s": 265.022
+  },
+  {
+   "observation_id": "camera_1_image_raw-005003",
+   "t_s": 265.51
+  },
+  {
+   "observation_id": "camera_1_image_raw-005015",
+   "t_s": 266.04
+  },
+  {
+   "observation_id": "camera_1_image_raw-005027",
+   "t_s": 266.529
+  },
+  {
+   "observation_id": "camera_1_image_raw-005039",
+   "t_s": 267.018
+  },
+  {
+   "observation_id": "camera_1_image_raw-005051",
+   "t_s": 267.506
+  },
+  {
+   "observation_id": "camera_1_image_raw-005063",
+   "t_s": 268.036
+  },
+  {
+   "observation_id": "camera_1_image_raw-005075",
+   "t_s": 268.525
+  },
+  {
+   "observation_id": "camera_1_image_raw-005087",
+   "t_s": 269.014
+  },
+  {
+   "observation_id": "camera_1_image_raw-005099",
+   "t_s": 269.503
+  },
+  {
+   "observation_id": "camera_1_image_raw-005111",
+   "t_s": 270.032
+  },
+  {
+   "observation_id": "camera_1_image_raw-005123",
+   "t_s": 270.521
+  },
+  {
+   "observation_id": "camera_1_image_raw-005135",
+   "t_s": 271.01
+  },
+  {
+   "observation_id": "camera_1_image_raw-005147",
+   "t_s": 271.539
+  },
+  {
+   "observation_id": "camera_1_image_raw-005159",
+   "t_s": 272.028
+  },
+  {
+   "observation_id": "camera_1_image_raw-005171",
+   "t_s": 272.517
+  },
+  {
+   "observation_id": "camera_1_image_raw-005183",
+   "t_s": 273.006
+  },
+  {
+   "observation_id": "camera_1_image_raw-005195",
+   "t_s": 273.536
+  },
+  {
+   "observation_id": "camera_1_image_raw-005207",
+   "t_s": 274.024
+  },
+  {
+   "observation_id": "camera_1_image_raw-005219",
+   "t_s": 274.513
+  },
+  {
+   "observation_id": "camera_1_image_raw-005231",
+   "t_s": 275.002
+  },
+  {
+   "observation_id": "camera_1_image_raw-005243",
+   "t_s": 275.532
+  },
+  {
+   "observation_id": "camera_1_image_raw-005255",
+   "t_s": 276.021
+  },
+  {
+   "observation_id": "camera_1_image_raw-005267",
+   "t_s": 276.51
+  },
+  {
+   "observation_id": "camera_1_image_raw-005279",
+   "t_s": 277.039
+  },
+  {
+   "observation_id": "camera_1_image_raw-005291",
+   "t_s": 277.528
+  },
+  {
+   "observation_id": "camera_1_image_raw-005303",
+   "t_s": 278.017
+  },
+  {
+   "observation_id": "camera_1_image_raw-005315",
+   "t_s": 278.506
+  },
+  {
+   "observation_id": "camera_1_image_raw-005327",
+   "t_s": 279.035
+  },
+  {
+   "observation_id": "camera_1_image_raw-005339",
+   "t_s": 279.524
+  },
+  {
+   "observation_id": "camera_1_image_raw-005351",
+   "t_s": 280.013
+  },
+  {
+   "observation_id": "camera_1_image_raw-005363",
+   "t_s": 280.543
+  },
+  {
+   "observation_id": "camera_1_image_raw-005375",
+   "t_s": 281.032
+  },
+  {
+   "observation_id": "camera_1_image_raw-005387",
+   "t_s": 281.52
+  },
+  {
+   "observation_id": "camera_1_image_raw-005399",
+   "t_s": 282.009
+  },
+  {
+   "observation_id": "camera_1_image_raw-005411",
+   "t_s": 282.539
+  },
+  {
+   "observation_id": "camera_1_image_raw-005423",
+   "t_s": 283.028
+  },
+  {
+   "observation_id": "camera_1_image_raw-005435",
+   "t_s": 283.516
+  },
+  {
+   "observation_id": "camera_1_image_raw-005447",
+   "t_s": 284.005
+  },
+  {
+   "observation_id": "camera_1_image_raw-005459",
+   "t_s": 284.535
+  },
+  {
+   "observation_id": "camera_1_image_raw-005471",
+   "t_s": 285.024
+  },
+  {
+   "observation_id": "camera_1_image_raw-005483",
+   "t_s": 285.513
+  },
+  {
+   "observation_id": "camera_1_image_raw-005495",
+   "t_s": 286.002
+  },
+  {
+   "observation_id": "camera_1_image_raw-005507",
+   "t_s": 286.531
+  },
+  {
+   "observation_id": "camera_1_image_raw-005519",
+   "t_s": 287.02
+  },
+  {
+   "observation_id": "camera_1_image_raw-005531",
+   "t_s": 287.509
+  },
+  {
+   "observation_id": "camera_1_image_raw-005543",
+   "t_s": 288.038
+  },
+  {
+   "observation_id": "camera_1_image_raw-005555",
+   "t_s": 288.527
+  },
+  {
+   "observation_id": "camera_1_image_raw-005567",
+   "t_s": 289.016
+  },
+  {
+   "observation_id": "camera_1_image_raw-005579",
+   "t_s": 289.505
+  },
+  {
+   "observation_id": "camera_1_image_raw-005591",
+   "t_s": 290.035
+  },
+  {
+   "observation_id": "camera_1_image_raw-005603",
+   "t_s": 290.523
+  },
+  {
+   "observation_id": "camera_1_image_raw-005615",
+   "t_s": 291.012
+  },
+  {
+   "observation_id": "camera_1_image_raw-005627",
+   "t_s": 291.501
+  },
+  {
+   "observation_id": "camera_1_image_raw-005639",
+   "t_s": 292.031
+  },
+  {
+   "observation_id": "camera_1_image_raw-005651",
+   "t_s": 292.52
+  },
+  {
+   "observation_id": "camera_1_image_raw-005663",
+   "t_s": 293.008
+  },
+  {
+   "observation_id": "camera_1_image_raw-005675",
+   "t_s": 293.538
+  },
+  {
+   "observation_id": "camera_1_image_raw-005687",
+   "t_s": 294.027
+  },
+  {
+   "observation_id": "camera_1_image_raw-005699",
+   "t_s": 294.516
+  },
+  {
+   "observation_id": "camera_1_image_raw-005711",
+   "t_s": 295.005
+  },
+  {
+   "observation_id": "camera_1_image_raw-005723",
+   "t_s": 295.534
+  },
+  {
+   "observation_id": "camera_1_image_raw-005735",
+   "t_s": 296.023
+  },
+  {
+   "observation_id": "camera_1_image_raw-005747",
+   "t_s": 296.512
+  },
+  {
+   "observation_id": "camera_1_image_raw-005759",
+   "t_s": 297.042
+  },
+  {
+   "observation_id": "camera_1_image_raw-005771",
+   "t_s": 297.53
+  },
+  {
+   "observation_id": "camera_1_image_raw-005783",
+   "t_s": 298.019
+  },
+  {
+   "observation_id": "camera_1_image_raw-005795",
+   "t_s": 298.508
+  },
+  {
+   "observation_id": "camera_1_image_raw-005807",
+   "t_s": 299.038
+  },
+  {
+   "observation_id": "camera_1_image_raw-005819",
+   "t_s": 299.527
+  },
+  {
+   "observation_id": "camera_1_image_raw-005831",
+   "t_s": 300.015
+  },
+  {
+   "observation_id": "camera_1_image_raw-005843",
+   "t_s": 300.504
+  },
+  {
+   "observation_id": "camera_1_image_raw-005855",
+   "t_s": 301.034
+  },
+  {
+   "observation_id": "camera_1_image_raw-005867",
+   "t_s": 301.523
+  },
+  {
+   "observation_id": "camera_1_image_raw-005879",
+   "t_s": 302.012
+  },
+  {
+   "observation_id": "camera_1_image_raw-005891",
+   "t_s": 302.5
+  },
+  {
+   "observation_id": "camera_1_image_raw-005903",
+   "t_s": 303.03
+  },
+  {
+   "observation_id": "camera_1_image_raw-005915",
+   "t_s": 303.519
+  },
+  {
+   "observation_id": "camera_1_image_raw-005927",
+   "t_s": 304.008
+  },
+  {
+   "observation_id": "camera_1_image_raw-005939",
+   "t_s": 304.537
+  },
+  {
+   "observation_id": "camera_1_image_raw-005951",
+   "t_s": 305.026
+  },
+  {
+   "observation_id": "camera_1_image_raw-005963",
+   "t_s": 305.515
+  },
+  {
+   "observation_id": "camera_1_image_raw-005975",
+   "t_s": 306.004
+  },
+  {
+   "observation_id": "camera_1_image_raw-005987",
+   "t_s": 306.533
+  },
+  {
+   "observation_id": "camera_1_image_raw-005999",
+   "t_s": 307.022
+  },
+  {
+   "observation_id": "camera_1_image_raw-006011",
+   "t_s": 307.511
+  },
+  {
+   "observation_id": "camera_1_image_raw-006023",
+   "t_s": 308.0
+  },
+  {
+   "observation_id": "camera_1_image_raw-006035",
+   "t_s": 308.53
+  },
+  {
+   "observation_id": "camera_1_image_raw-006047",
+   "t_s": 309.018
+  },
+  {
+   "observation_id": "camera_1_image_raw-006059",
+   "t_s": 309.507
+  },
+  {
+   "observation_id": "camera_1_image_raw-006071",
+   "t_s": 310.037
+  },
+  {
+   "observation_id": "camera_1_image_raw-006083",
+   "t_s": 310.526
+  },
+  {
+   "observation_id": "camera_1_image_raw-006095",
+   "t_s": 311.015
+  },
+  {
+   "observation_id": "camera_1_image_raw-006107",
+   "t_s": 311.503
+  },
+  {
+   "observation_id": "camera_1_image_raw-006119",
+   "t_s": 312.033
+  },
+  {
+   "observation_id": "camera_1_image_raw-006131",
+   "t_s": 312.522
+  },
+  {
+   "observation_id": "camera_1_image_raw-006143",
+   "t_s": 313.011
+  },
+  {
+   "observation_id": "camera_1_image_raw-006155",
+   "t_s": 313.5
+  },
+  {
+   "observation_id": "camera_1_image_raw-006167",
+   "t_s": 314.029
+  },
+  {
+   "observation_id": "camera_1_image_raw-006179",
+   "t_s": 314.518
+  },
+  {
+   "observation_id": "camera_1_image_raw-006191",
+   "t_s": 315.007
+  },
+  {
+   "observation_id": "camera_1_image_raw-006203",
+   "t_s": 315.537
+  },
+  {
+   "observation_id": "camera_1_image_raw-006215",
+   "t_s": 316.025
+  },
+  {
+   "observation_id": "camera_1_image_raw-006227",
+   "t_s": 316.514
+  },
+  {
+   "observation_id": "camera_1_image_raw-006239",
+   "t_s": 317.003
+  },
+  {
+   "observation_id": "camera_1_image_raw-006251",
+   "t_s": 317.533
+  },
+  {
+   "observation_id": "camera_1_image_raw-006263",
+   "t_s": 318.022
+  },
+  {
+   "observation_id": "camera_1_image_raw-006275",
+   "t_s": 318.51
+  },
+  {
+   "observation_id": "camera_1_image_raw-006287",
+   "t_s": 319.04
+  },
+  {
+   "observation_id": "camera_1_image_raw-006299",
+   "t_s": 319.529
+  },
+  {
+   "observation_id": "camera_1_image_raw-006311",
+   "t_s": 320.018
+  },
+  {
+   "observation_id": "camera_1_image_raw-006323",
+   "t_s": 320.506
+  },
+  {
+   "observation_id": "camera_1_image_raw-006335",
+   "t_s": 321.036
+  },
+  {
+   "observation_id": "camera_1_image_raw-006347",
+   "t_s": 321.525
+  },
+  {
+   "observation_id": "camera_1_image_raw-006359",
+   "t_s": 322.014
+  },
+  {
+   "observation_id": "camera_1_image_raw-006371",
+   "t_s": 322.503
+  },
+  {
+   "observation_id": "camera_1_image_raw-006383",
+   "t_s": 323.032
+  },
+  {
+   "observation_id": "camera_1_image_raw-006395",
+   "t_s": 323.521
+  },
+  {
+   "observation_id": "camera_1_image_raw-006407",
+   "t_s": 324.01
+  },
+  {
+   "observation_id": "camera_1_image_raw-006419",
+   "t_s": 324.539
+  },
+  {
+   "observation_id": "camera_1_image_raw-006431",
+   "t_s": 325.028
+  },
+  {
+   "observation_id": "camera_1_image_raw-006443",
+   "t_s": 325.517
+  },
+  {
+   "observation_id": "camera_1_image_raw-006455",
+   "t_s": 326.006
+  },
+  {
+   "observation_id": "camera_1_image_raw-006467",
+   "t_s": 326.536
+  },
+  {
+   "observation_id": "camera_1_image_raw-006479",
+   "t_s": 327.025
+  },
+  {
+   "observation_id": "camera_1_image_raw-006491",
+   "t_s": 327.513
+  },
+  {
+   "observation_id": "camera_1_image_raw-006503",
+   "t_s": 328.043
+  },
+  {
+   "observation_id": "camera_1_image_raw-006515",
+   "t_s": 328.532
+  },
+  {
+   "observation_id": "camera_1_image_raw-006527",
+   "t_s": 329.021
+  },
+  {
+   "observation_id": "camera_1_image_raw-006539",
+   "t_s": 329.51
+  },
+  {
+   "observation_id": "camera_1_image_raw-006551",
+   "t_s": 329.998
+  },
+  {
+   "observation_id": "camera_1_image_raw-006563",
+   "t_s": 330.528
+  },
+  {
+   "observation_id": "camera_1_image_raw-006575",
+   "t_s": 331.017
+  },
+  {
+   "observation_id": "camera_1_image_raw-006587",
+   "t_s": 331.506
+  },
+  {
+   "observation_id": "camera_1_image_raw-006599",
+   "t_s": 332.035
+  },
+  {
+   "observation_id": "camera_1_image_raw-006611",
+   "t_s": 332.524
+  },
+  {
+   "observation_id": "camera_1_image_raw-006623",
+   "t_s": 333.013
+  },
+  {
+   "observation_id": "camera_1_image_raw-006635",
+   "t_s": 333.502
+  },
+  {
+   "observation_id": "camera_1_image_raw-006647",
+   "t_s": 334.031
+  },
+  {
+   "observation_id": "camera_1_image_raw-006659",
+   "t_s": 334.52
+  },
+  {
+   "observation_id": "camera_1_image_raw-006671",
+   "t_s": 335.009
+  },
+  {
+   "observation_id": "camera_1_image_raw-006683",
+   "t_s": 335.498
+  },
+  {
+   "observation_id": "camera_1_image_raw-006695",
+   "t_s": 336.028
+  },
+  {
+   "observation_id": "camera_1_image_raw-006707",
+   "t_s": 336.516
+  },
+  {
+   "observation_id": "camera_1_image_raw-006719",
+   "t_s": 337.005
+  },
+  {
+   "observation_id": "camera_1_image_raw-006731",
+   "t_s": 337.535
+  },
+  {
+   "observation_id": "camera_1_image_raw-006743",
+   "t_s": 338.024
+  },
+  {
+   "observation_id": "camera_1_image_raw-006755",
+   "t_s": 338.513
+  },
+  {
+   "observation_id": "camera_1_image_raw-006767",
+   "t_s": 339.001
+  },
+  {
+   "observation_id": "camera_1_image_raw-006779",
+   "t_s": 339.531
+  },
+  {
+   "observation_id": "camera_1_image_raw-006791",
+   "t_s": 340.02
+  },
+  {
+   "observation_id": "camera_1_image_raw-006803",
+   "t_s": 340.509
+  },
+  {
+   "observation_id": "camera_1_image_raw-006815",
+   "t_s": 340.998
+  },
+  {
+   "observation_id": "camera_1_image_raw-006827",
+   "t_s": 341.527
+  },
+  {
+   "observation_id": "camera_1_image_raw-006839",
+   "t_s": 342.016
+  },
+  {
+   "observation_id": "camera_1_image_raw-006851",
+   "t_s": 342.505
+  },
+  {
+   "observation_id": "camera_1_image_raw-006863",
+   "t_s": 343.035
+  },
+  {
+   "observation_id": "camera_1_image_raw-006875",
+   "t_s": 343.523
+  },
+  {
+   "observation_id": "camera_1_image_raw-006887",
+   "t_s": 344.012
+  },
+  {
+   "observation_id": "camera_1_image_raw-006899",
+   "t_s": 344.501
+  },
+  {
+   "observation_id": "camera_1_image_raw-006911",
+   "t_s": 345.031
+  },
+  {
+   "observation_id": "camera_1_image_raw-006923",
+   "t_s": 345.52
+  },
+  {
+   "observation_id": "camera_1_image_raw-006935",
+   "t_s": 346.008
+  },
+  {
+   "observation_id": "camera_1_image_raw-006947",
+   "t_s": 346.538
+  },
+  {
+   "observation_id": "camera_1_image_raw-006959",
+   "t_s": 347.027
+  },
+  {
+   "observation_id": "camera_1_image_raw-006971",
+   "t_s": 347.516
+  },
+  {
+   "observation_id": "camera_1_image_raw-006983",
+   "t_s": 348.005
+  },
+  {
+   "observation_id": "camera_1_image_raw-006995",
+   "t_s": 348.534
+  },
+  {
+   "observation_id": "camera_1_image_raw-007007",
+   "t_s": 349.023
+  },
+  {
+   "observation_id": "camera_1_image_raw-007019",
+   "t_s": 349.512
+  },
+  {
+   "observation_id": "camera_1_image_raw-007031",
+   "t_s": 350.041
+  },
+  {
+   "observation_id": "camera_1_image_raw-007043",
+   "t_s": 350.53
+  },
+  {
+   "observation_id": "camera_1_image_raw-007055",
+   "t_s": 351.019
+  },
+  {
+   "observation_id": "camera_1_image_raw-007067",
+   "t_s": 351.508
+  },
+  {
+   "observation_id": "camera_1_image_raw-007079",
+   "t_s": 352.038
+  },
+  {
+   "observation_id": "camera_1_image_raw-007091",
+   "t_s": 352.526
+  },
+  {
+   "observation_id": "camera_1_image_raw-007103",
+   "t_s": 353.015
+  },
+  {
+   "observation_id": "camera_1_image_raw-007115",
+   "t_s": 353.504
+  },
+  {
+   "observation_id": "camera_1_image_raw-007127",
+   "t_s": 354.034
+  },
+  {
+   "observation_id": "camera_1_image_raw-007139",
+   "t_s": 354.523
+  },
+  {
+   "observation_id": "camera_1_image_raw-007151",
+   "t_s": 355.012
+  },
+  {
+   "observation_id": "camera_1_image_raw-007163",
+   "t_s": 355.541
+  },
+  {
+   "observation_id": "camera_1_image_raw-007175",
+   "t_s": 356.03
+  },
+  {
+   "observation_id": "camera_1_image_raw-007187",
+   "t_s": 356.519
+  },
+  {
+   "observation_id": "camera_1_image_raw-007199",
+   "t_s": 357.008
+  },
+  {
+   "observation_id": "camera_1_image_raw-007211",
+   "t_s": 357.537
+  },
+  {
+   "observation_id": "camera_1_image_raw-007223",
+   "t_s": 358.026
+  },
+  {
+   "observation_id": "camera_1_image_raw-007235",
+   "t_s": 358.515
+  },
+  {
+   "observation_id": "camera_1_image_raw-007247",
+   "t_s": 359.004
+  },
+  {
+   "observation_id": "camera_1_image_raw-007259",
+   "t_s": 359.533
+  }
+ ]
+}

@@ -1,0 +1,408 @@
+{
+  "config": {
+    "components": {
+      "entity_resolution": {
+        "appearance": {
+          "backend": null
+        },
+        "belief": {
+          "backend": "resolved-belief-min-support-v1",
+          "resolved-belief-min-support-v1": {
+            "min_supporting_physical_observations": 2
+          }
+        },
+        "geometry_comparison": {
+          "backend": "entity-geometry-comparison-v1",
+          "entity-geometry-comparison-v1": {
+            "min_bounds_containment": 0.9,
+            "min_bounds_iou": 0.5,
+            "min_conflict_gap_m": 0.5,
+            "min_extent_ratio": 0.3,
+            "min_shared_support_jaccard": 0.5
+          }
+        },
+        "representation": {
+          "backend": null
+        },
+        "resolution": {
+          "backend": "conservative-staged-resolution-v1",
+          "conservative-staged-resolution-v1": {
+            "min_supporting_channels": 1,
+            "use_channels": [
+              "geometry"
+            ]
+          }
+        },
+        "retrieval": {
+          "backend": "entity-candidate-retrieval-v1",
+          "entity-candidate-retrieval-v1": {
+            "bounds_margin_m": 0.1,
+            "centroid_radius_m": 20.0
+          }
+        },
+        "semantic_compatibility": {
+          "backend": null
+        },
+        "temporal_compatibility": {
+          "backend": null
+        }
+      },
+      "geometric_mapping": {
+        "aggregation": {
+          "backend": null
+        },
+        "deskew": {
+          "backend": "pose-interpolation-deskew-v1",
+          "pose-interpolation-deskew-v1": {
+            "reference": "scan_timestamp",
+            "time_bin_ns": 1000000,
+            "time_field": "time",
+            "time_unit": "seconds"
+          }
+        },
+        "motion_correction": {
+          "backend": "motion-correction-v1",
+          "motion-correction-v1": {
+            "raw": "accept",
+            "unknown": "warn"
+          }
+        },
+        "pose_lookup": {
+          "backend": "lookup-policy-v1",
+          "lookup-policy-v1": {
+            "max_interpolation_gap_ns": 400000000,
+            "mode": "interpolated"
+          }
+        }
+      },
+      "ingestion": {
+        "source_adapter": {
+          "backend": "ros1_bag",
+          "ros1_bag": {}
+        }
+      },
+      "semantic_fusion": {
+        "accumulation": {
+          "backend": "baseline-evidence-accumulation-v1",
+          "baseline-evidence-accumulation-v1": {
+            "channels": [
+              "semantic_claims",
+              "visual_features"
+            ]
+          }
+        },
+        "support": {
+          "backend": "geometry-jaccard-support-v1",
+          "geometry-jaccard-support-v1": {
+            "min_geometry_count": 5,
+            "min_overlap": 0.3
+          }
+        }
+      },
+      "semantic_mapping": {
+        "geometry_summary": {
+          "backend": "entity-geometry-summary-v1",
+          "entity-geometry-summary-v1": {
+            "connectivity_radius_m": 0.5,
+            "sparse_point_threshold": 3
+          }
+        }
+      },
+      "sensor_association": {
+        "dense_sampling": {
+          "backend": null
+        },
+        "occlusion": {
+          "backend": "conservative-depth-support-v1",
+          "conservative-depth-support-v1": {
+            "cell_size_px": 4,
+            "depth_margin_m": 0.1,
+            "depth_margin_ratio": 0.02,
+            "neighborhood_radius_cells": 2
+          }
+        },
+        "pose_policy": {
+          "backend": "lookup-policy-v1",
+          "lookup-policy-v1": {
+            "max_interpolation_gap_ns": 450000000,
+            "mode": "interpolated"
+          }
+        },
+        "tolerances": {
+          "backend": "diagnostic-tolerances-v1",
+          "diagnostic-tolerances-v1": {
+            "max_map_window_offset_ns": 1000000000,
+            "max_pose_time_delta_ns": 250000000,
+            "max_reprojection_invalid_rate": 1.0,
+            "max_reprojection_p95_px": 100000.0
+          }
+        }
+      },
+      "spatial_relations": {
+        "candidate": {
+          "backend": "bounds-neighborhood-candidates-v1",
+          "bounds-neighborhood-candidates-v1": {
+            "derive_interaction_radius": true,
+            "directional_radius_m": 2.0,
+            "predicates": [
+              "next_to",
+              "touching",
+              "within_interaction_range"
+            ],
+            "proximity_radius_m": 0.6
+          }
+        },
+        "contact_predicate": {
+          "backend": "point-contact-predicates-v1",
+          "point-contact-predicates-v1": {
+            "contact_distance_m": 0.05,
+            "contact_tolerance_m": 0.02,
+            "leaning_max_tilt_deg": 80.0,
+            "leaning_min_tilt_deg": 10.0,
+            "leaning_min_vertical_overlap_m": 0.3,
+            "min_contact_points": 3,
+            "support_footprint_fraction": 0.5,
+            "support_height_tolerance_m": 0.05,
+            "tilt_tolerance_deg": 2.0
+          }
+        },
+        "frame_conventions": {
+          "backend": "map-frame-conventions-v1",
+          "map-frame-conventions-v1": {
+            "forward_axis": "+x",
+            "map_frame": "map",
+            "up_axis": "+z"
+          }
+        },
+        "geometric_predicate": {
+          "backend": "bounds-geometric-predicates-v1",
+          "bounds-geometric-predicates-v1": {
+            "adjacent_penetration_m": 0.05,
+            "boundary_tolerance_m": 0.02,
+            "containment_slack_m": 0.05,
+            "directional_overlap_fraction": 0.5,
+            "next_to_max_gap_m": 0.5
+          }
+        },
+        "geometry_summary": {
+          "backend": "entity-geometry-summary-v1",
+          "entity-geometry-summary-v1": {
+            "connectivity_radius_m": 0.5,
+            "sparse_point_threshold": 3
+          }
+        },
+        "semantic_predicate": {
+          "backend": "interaction-range-predicate-v1",
+          "interaction-range-predicate-v1": {
+            "boundary_tolerance_m": 0.02
+          }
+        }
+      },
+      "state_estimation": {
+        "estimator": {
+          "backend": "external_pose",
+          "external_pose": {
+            "body_frame": "epson",
+            "invalid_sample_policy": "skip",
+            "reference_frame": "map"
+          }
+        }
+      },
+      "visual_perception": {
+        "dense_features": {
+          "backend": "dinov2",
+          "dinov2": {
+            "checkpoint": "facebook/dinov2-base",
+            "device": "cuda",
+            "precision": "float32",
+            "revision": "f9e44c814b77203eaa57a6bdbbd535f21ede1415"
+          }
+        },
+        "region_discovery": {
+          "backend": "sam2",
+          "sam2": {
+            "checkpoint": "facebook/sam2.1-hiera-tiny",
+            "device": "cuda",
+            "model_version": "de431c4043854a71d8101e17995dfe596bf101a5",
+            "normalization_config": {
+              "maximum_exclusion_fraction": 0.0,
+              "minimum_valid_fraction": 0.5
+            },
+            "pass_config": {
+              "include_full_frame": true,
+              "max_candidates_per_pass": 256
+            },
+            "precision": "float32",
+            "predicted_iou_threshold": 0.5,
+            "stability_threshold": 0.8
+          }
+        },
+        "region_features": {
+          "backend": "clip",
+          "clip": {
+            "checkpoint": "openai/clip-vit-large-patch14",
+            "device": "cuda",
+            "precision": "float32",
+            "revision": "32bd64288804d66eefd0ccbe215aa642df71cc41"
+          }
+        },
+        "region_grounding": {
+          "backend": null
+        },
+        "region_refinement": {
+          "backend": null
+        },
+        "semantic_interpretation": {
+          "backend": "qwen",
+          "qwen": {
+            "device": "cuda",
+            "max_new_tokens": 1024,
+            "model": "Qwen/Qwen3-VL-4B-Instruct",
+            "precision": "bfloat16",
+            "prompt_policy": {
+              "region": "region-interaction/v3",
+              "scene": null
+            },
+            "quantization": "4bit",
+            "revision": "ebb281ec70b05090aa6165b016eac8ec08e71b17",
+            "temperature": 0.0,
+            "view_policy": {
+              "mask_outline": {
+                "rgb": [
+                  255,
+                  0,
+                  255
+                ],
+                "width_px": 2
+              },
+              "region_views": [
+                "mask_outline_crop"
+              ]
+            }
+          }
+        },
+        "semantic_scoring": {
+          "backend": "clip",
+          "clip": {
+            "checkpoint": "openai/clip-vit-large-patch14",
+            "device": "cuda",
+            "precision": "float32",
+            "revision": "32bd64288804d66eefd0ccbe215aa642df71cc41",
+            "text_template": "a photo of a {hypothesis}"
+          }
+        }
+      }
+    },
+    "image_preparation": {
+      "camera_1_image_raw-calib": {
+        "exclusions": {
+          "ego": "examples/v0.2.0/assets/corridor-02/camera_1-ego.npy"
+        },
+        "valid_region": "examples/v0.2.0/assets/corridor-02/camera_1-valid.npy"
+      }
+    },
+    "inputs": {
+      "named": {},
+      "observation_selection": {
+        "kind": "explicit_ids",
+        "observation_ids": [
+          "camera_1_image_raw-000055"
+        ]
+      },
+      "selections": {},
+      "sequence": "corridor-02"
+    },
+    "pipeline": {
+      "preset": "canonical/2",
+      "stages": {
+        "context_map": true,
+        "entity_resolution": true,
+        "geometric_mapping": true,
+        "ingestion": true,
+        "point_representation": false,
+        "pose_ingestion": true,
+        "semantic_fusion": true,
+        "semantic_mapping": true,
+        "semantic_scoring": true,
+        "sensor_association": true,
+        "spatial_relations": true,
+        "state_estimation": true,
+        "visual_perception": true
+      }
+    },
+    "policies": {
+      "association_max_range_m": null,
+      "debug_level": "standard",
+      "trajectory_mode": "allow_ground_truth"
+    },
+    "resources": {
+      "device": "cuda",
+      "maps_root": "workspace",
+      "providers": {
+        "visual_perception.region_discovery": "ablation_providers:load_sam2",
+        "visual_perception.semantic_interpretation": "ablation_providers:load_qwen"
+      },
+      "workspace": "workspace/run-frame-10_31"
+    },
+    "schema_version": "0.1.0"
+  },
+  "digest": "sha256:1036c52afcc7b526968e67267c5b51093ed8e992b0df5c985dbc581b88574ee2",
+  "schema_version": "0.1.0",
+  "sources": [
+    {
+      "content_hash": null,
+      "identity": "canonical/1",
+      "kind": "profile"
+    },
+    {
+      "content_hash": "sha256:c4803e6fb9355d157217f9675daa8cdf657af7bd333ed5c5d0855b75b5e5392b",
+      "identity": "examples/v0.2.0/canonical-config.toml",
+      "kind": "file"
+    },
+    {
+      "content_hash": "sha256:22416bcc27be610a696213808348eb9bfe3d985e22a431939078bb3771472f4b",
+      "identity": "experiments/canonical-2-empirical-validation-20260929/config/base.template.toml",
+      "kind": "file"
+    },
+    {
+      "content_hash": "sha256:27a010af8ab7e030aa837a5b14a54139cc4725683036439173b4ecd4e63daac5",
+      "identity": "experiments/frame-10_31-raw-vs-voxel-20260930/providers.toml",
+      "kind": "file"
+    },
+    {
+      "content_hash": "sha256:3db7731c21a5542d0160aba7b88344aba5e3b10ced0cde20957b7cbbfcd8552f",
+      "identity": "examples/v0.2.0/corridor-02-image-masks.toml",
+      "kind": "file"
+    },
+    {
+      "content_hash": "sha256:92ead669be237389a77fdbde73399ade005ee4c43e19b56504e879cbda9e9757",
+      "identity": "experiments/frame-10_31-raw-vs-voxel-20260930/region-label.toml",
+      "kind": "file"
+    },
+    {
+      "content_hash": "sha256:bbeb8c01bdfd4495f1454119f1424a49e4953f3e4f50552e8ee8277202f44ce3",
+      "identity": "experiments/run-frame-10_31-cli-20260930/run.toml",
+      "kind": "file"
+    },
+    {
+      "content_hash": null,
+      "identity": "components.visual_perception.semantic_interpretation.qwen.prompt_policy.scene",
+      "kind": "override"
+    },
+    {
+      "content_hash": null,
+      "identity": "inputs.observation_selection",
+      "kind": "override"
+    },
+    {
+      "content_hash": null,
+      "identity": "resources.workspace",
+      "kind": "override"
+    },
+    {
+      "content_hash": null,
+      "identity": "resources.maps_root",
+      "kind": "override"
+    }
+  ]
+}

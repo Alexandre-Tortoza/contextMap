@@ -1,0 +1,8 @@
+# Braço voxel: o mapa funde os pontos de cada scan que caem no mesmo voxel de 0,10 m (como o E0-voxel).
+schema_version = "0.1.0"
+
+[components.geometric_mapping.aggregation]
+backend = "scan-voxel-centroid-v1"
+
+[components.geometric_mapping.aggregation.scan-voxel-centroid-v1]
+cell_m = 0.1

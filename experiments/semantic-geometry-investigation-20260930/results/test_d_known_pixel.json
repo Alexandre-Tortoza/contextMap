@@ -1,0 +1,44 @@
+{
+  "geometry_index": 481273,
+  "point_world_map_m": [
+    43.693388712255434,
+    -90.92019656617117,
+    -1.0064192781761085
+  ],
+  "point_sensor_m": [
+    2.1033859252929688,
+    0.3754279911518097,
+    0.5725077390670776
+  ],
+  "source_scan_ordinal": 16,
+  "point_camera_m_base": [
+    -0.5953975128816129,
+    -0.5324752096799714,
+    0.6647451469491727
+  ],
+  "range_m": 1.0391891828063922,
+  "pixel_base": [
+    120.49001521288031,
+    76.32646656922697
+  ],
+  "pixel_with_v1_correction": [
+    142.1443172641207,
+    88.59224713318386
+  ],
+  "pixel_shift_px": 24.886907605596495,
+  "regions_base": {
+    "region-0005": "flooded hallway",
+    "region-0009": "metal handle",
+    "region-0017": "door"
+  },
+  "regions_persisted": {
+    "region-0005": "flooded hallway",
+    "region-0009": "metal handle",
+    "region-0017": "door"
+  },
+  "regions_with_v1_correction": {
+    "region-0005": "flooded hallway",
+    "region-0016": "metal rod"
+  },
+  "visible_with_v1_correction": true
+}

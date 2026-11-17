@@ -1,0 +1,13 @@
+{
+  "schema": "contextmap.experiment.canonical-2-validation.environment/v1",
+  "python": "3.12.14",
+  "torch": "2.8.0+cu126",
+  "cuda": "12.6",
+  "gpu": "NVIDIA GeForce RTX 3060 (8 GB)",
+  "cuda_alloc_conf": "PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True",
+  "notes": [
+    "SAM2 and Qwen require a machine-local RuntimeProvider module named in resources.providers; it is intentionally not committed.",
+    "Checkpoint weights, the Hugging Face cache and the dataset are the environment's responsibility; only model identities/revisions are recorded.",
+    "contextmap installed editable at code_commit 6788b83."
+  ]
+}

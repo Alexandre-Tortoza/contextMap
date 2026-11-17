@@ -1,0 +1,76 @@
+{
+  "policy_id": "c10-gate/v1",
+  "description": "Gate C10 do benchmark B1: invariantes de geometria/identidade e não-regressão das camadas anteriores à camada-alvo do braço. Uma camada-alvo e as posteriores só geram deltas informativos; o aceite da camada-alvo é o critério do próprio Cn.",
+  "layer_order": [
+    "geometry",
+    "calibration",
+    "regions",
+    "association",
+    "semantics",
+    "entities",
+    "relations"
+  ],
+  "arm_kinds": {
+    "none": "C4-C9: geometry.bin, map_id e point_count idênticos ao baseline.",
+    "calibration": "C2: geometry.bin byte-idêntico; calibration_identity e map_id diferentes.",
+    "geometry": "C3: geometry.bin pode mudar; se mudar, map_id tem de mudar (identidade nova)."
+  },
+  "non_regression": {
+    "regions.multiple_mask_pixel_fraction": {
+      "better": "lower",
+      "tolerance_abs": 0.0
+    },
+    "regions.fragmentation_rate": {
+      "better": "lower",
+      "tolerance_abs": 0.0
+    },
+    "regions.masks_contained_in_another": {
+      "better": "lower",
+      "tolerance_abs": 0
+    },
+    "regions.usable_area_coverage": {
+      "better": "higher",
+      "tolerance_abs": 0.0
+    },
+    "regions.known_object_recall.recall": {
+      "better": "higher",
+      "tolerance_abs": 0.0
+    },
+    "calibration.reprojection_residual_px.median": {
+      "better": "lower",
+      "tolerance_abs": 0.0
+    },
+    "association.multi_mask_point_fraction": {
+      "better": "lower",
+      "tolerance_abs": 0.0
+    },
+    "semantics.parse_failures": {
+      "better": "lower",
+      "tolerance_abs": 1,
+      "tolerance_source": "faixa (max-min) entre E0 e os reruns r1-r3 do Qwen (run id próprio por rerun), results/E0-qwen-variance/summary.json"
+    },
+    "semantics.color_or_material_prefix_fraction": {
+      "better": "lower",
+      "tolerance_abs": 0.039,
+      "tolerance_source": "faixa (max-min) entre E0 e os reruns r1-r3 do Qwen (run id próprio por rerun), results/E0-qwen-variance/summary.json"
+    },
+    "semantics.hallucination_rate.rate": {
+      "better": "lower",
+      "tolerance_abs": null,
+      "tolerance_note": "null = só reportada até existir anotação e a variância dessas taxas entre reruns"
+    },
+    "semantics.scene_label_rate.rate": {
+      "better": "lower",
+      "tolerance_abs": null,
+      "tolerance_note": "null = só reportada até existir anotação e a variância dessas taxas entre reruns"
+    },
+    "entities.isolated_entity_rate": {
+      "better": "lower",
+      "tolerance_abs": 0.0
+    }
+  },
+  "required_true": [
+    "geometry.geometry_bin_sha256_matches_manifest",
+    "association.recount.agrees_with_diagnostics"
+  ]
+}

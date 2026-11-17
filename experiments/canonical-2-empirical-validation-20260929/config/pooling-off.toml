@@ -1,0 +1,4 @@
+# Arm OFF: dense_region_pooling disabled (canonical/1). Layer over base.template.toml.
+# This is the SOLE difference between the two arms.
+[pipeline]
+preset = "canonical/1"

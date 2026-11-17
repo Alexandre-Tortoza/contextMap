@@ -1,0 +1,292 @@
+{
+  "schema": "contextmap.experiment.perception-ablation-campaign.matrix/v1",
+  "issue": 670,
+  "selection": {"image_stride": 6},
+  "voxel_layers": {
+    "script": "experiments/geometric-aggregation-raw-vs-voxel-20260926/scripts/run_all.py",
+    "cells_m": [0.05, 0.10]
+  },
+  "variables": [
+    {
+      "name": "region_discovery",
+      "kind": "backend",
+      "touches": ["region_perception.discovery"],
+      "values": ["sam2-automatic", "sam3-concept-set"],
+      "baseline_value": "sam2-automatic",
+      "description": "SAM2 automatic masks against SAM3 over one concept set in one run (#662)",
+      "configuration_fields": ["backend", "sam2", "sam3"]
+    },
+    {
+      "name": "region_prompt",
+      "kind": "policy",
+      "touches": ["semantic_interpretation.interpreter"],
+      "values": ["region/v1", "region-abstention/v1", "region-scene-context/v1"],
+      "baseline_value": "region/v1",
+      "description": "the instruction template of region requests, with scene context for #529",
+      "configuration_fields": [
+        "qwen.prompt_policy.region",
+        "qwen.prompt_policy.region_scene_context"
+      ]
+    },
+    {
+      "name": "semantic_interpreter",
+      "kind": "backend",
+      "touches": ["semantic_interpretation.interpreter"],
+      "values": ["qwen3-vl-4b", "eagle2_5", "florence2-region-category"],
+      "baseline_value": "qwen3-vl-4b",
+      "description": "the semantic interpreter under the same request contract: Qwen3-VL-4B, Eagle 2.5 (#570) or Florence-2 answering the <REGION_TO_CATEGORY> task",
+      "configuration_fields": ["backend", "qwen", "eagle2_5", "florence2"]
+    },
+    {
+      "name": "region_view",
+      "kind": "policy",
+      "touches": ["semantic_interpretation.interpreter"],
+      "values": ["tight_crop", "contextual_crop", "masked_subject"],
+      "baseline_value": "tight_crop",
+      "description": "the one evidence view of every Qwen region request (#524)",
+      "configuration_fields": ["qwen.view_policy"]
+    },
+    {
+      "name": "fusion_accumulation",
+      "kind": "backend",
+      "touches": ["semantic_fusion.accumulation"],
+      "values": ["baseline-evidence-accumulation-v1", "quality-aware-evidence-accumulation-v1"],
+      "baseline_value": "baseline-evidence-accumulation-v1",
+      "description": "baseline evidence accumulation against the quality-aware policy (#655), over the baseline's perception and association",
+      "configuration_fields": [
+        "backend",
+        "baseline-evidence-accumulation-v1",
+        "quality-aware-evidence-accumulation-v1"
+      ]
+    },
+    {
+      "name": "association_dense_channel",
+      "kind": "backend",
+      "touches": ["sensor_association.dense_sampling"],
+      "values": ["none", "dense-feature-sampling-v1"],
+      "baseline_value": "none",
+      "description": "geometry-only association against the DINOv3 dense channel sampled per association (#651), over the baseline's perception",
+      "configuration_fields": ["backend", "dense-feature-sampling-v1"]
+    },
+    {
+      "name": "semantic_scoring_stage",
+      "kind": "configuration",
+      "touches": ["pipeline"],
+      "values": ["off", "on"],
+      "baseline_value": "off",
+      "description": "the optional semantic_scoring stage (#652), switched on in the pipeline",
+      "configuration_fields": ["stages.semantic_scoring"]
+    },
+    {
+      "name": "semantic_scorer",
+      "kind": "topology",
+      "touches": ["semantic_scoring.scorer"],
+      "values": ["none", "clip"],
+      "baseline_value": "none",
+      "description": "the scorer the semantic_scoring stage inserts: CLIP text against the CLIP region feature of the baseline's perception run",
+      "configuration_fields": []
+    }
+  ],
+  "arms": [
+    {
+      "slug": "sam2-region-v1",
+      "role": "baseline",
+      "group": "discovery-x-region-prompt",
+      "assignments": {},
+      "layer": "sam2-region-v1.json",
+      "execution": "perception",
+      "reuse": null
+    },
+    {
+      "slug": "fusion-quality-aware",
+      "role": "arm",
+      "group": "fusion",
+      "assignments": {"fusion_accumulation": "quality-aware-evidence-accumulation-v1"},
+      "layer": "fusion-quality-aware.json",
+      "execution": "downstream_build",
+      "reuse": "sam2-region-v1"
+    },
+    {
+      "slug": "association-dinov3-dense",
+      "role": "arm",
+      "group": "association-dense-channel",
+      "assignments": {"association_dense_channel": "dense-feature-sampling-v1"},
+      "layer": "association-dinov3-dense.json",
+      "execution": "association_rerun",
+      "reuse": "sam2-region-v1"
+    },
+    {
+      "slug": "scoring-clip",
+      "role": "arm",
+      "group": "semantic-scoring",
+      "assignments": {"semantic_scoring_stage": "on", "semantic_scorer": "clip"},
+      "layer": "scoring-clip.json",
+      "execution": "semantic_scoring",
+      "reuse": "sam2-region-v1"
+    },
+    {
+      "slug": "sam2-region-abstention-v1",
+      "role": "arm",
+      "group": "discovery-x-region-prompt",
+      "assignments": {"region_prompt": "region-abstention/v1"},
+      "layer": "sam2-region-abstention-v1.json",
+      "execution": "perception",
+      "reuse": null
+    },
+    {
+      "slug": "sam2-region-scene-context-v1",
+      "role": "arm",
+      "group": "discovery-x-region-prompt",
+      "assignments": {"region_prompt": "region-scene-context/v1"},
+      "layer": "sam2-region-scene-context-v1.json",
+      "execution": "perception",
+      "reuse": null
+    },
+    {
+      "slug": "sam3-region-v1",
+      "role": "arm",
+      "group": "discovery-x-region-prompt",
+      "assignments": {"region_discovery": "sam3-concept-set"},
+      "layer": "sam3-region-v1.json",
+      "execution": "perception",
+      "reuse": null
+    },
+    {
+      "slug": "sam3-region-abstention-v1",
+      "role": "arm",
+      "group": "discovery-x-region-prompt",
+      "assignments": {
+        "region_discovery": "sam3-concept-set",
+        "region_prompt": "region-abstention/v1"
+      },
+      "layer": "sam3-region-abstention-v1.json",
+      "execution": "perception",
+      "reuse": null
+    },
+    {
+      "slug": "sam3-region-scene-context-v1",
+      "role": "arm",
+      "group": "discovery-x-region-prompt",
+      "assignments": {
+        "region_discovery": "sam3-concept-set",
+        "region_prompt": "region-scene-context/v1"
+      },
+      "layer": "sam3-region-scene-context-v1.json",
+      "execution": "perception",
+      "reuse": null
+    },
+    {
+      "slug": "interpreter-florence2-region-category",
+      "role": "arm",
+      "group": "interpreter",
+      "assignments": {"semantic_interpreter": "florence2-region-category"},
+      "layer": "interpreter-florence2-region-category.json",
+      "execution": "perception",
+      "reuse": null
+    },
+    {
+      "slug": "qwen-view-contextual-crop",
+      "role": "arm",
+      "group": "qwen-view",
+      "assignments": {"region_view": "contextual_crop"},
+      "layer": "qwen-view-contextual-crop.json",
+      "execution": "perception",
+      "reuse": null
+    },
+    {
+      "slug": "qwen-view-masked-subject",
+      "role": "arm",
+      "group": "qwen-view",
+      "assignments": {"region_view": "masked_subject"},
+      "layer": "qwen-view-masked-subject.json",
+      "execution": "perception",
+      "reuse": null
+    },
+    {
+      "slug": "sam2-region-v1-replica",
+      "role": "replica",
+      "group": "discovery-x-region-prompt",
+      "assignments": {},
+      "layer": "sam2-region-v1-replica.json",
+      "execution": "perception",
+      "reuse": null
+    },
+    {
+      "slug": "interpreter-eagle2-5",
+      "role": "arm",
+      "group": "interpreter",
+      "assignments": {"semantic_interpreter": "eagle2_5"},
+      "layer": "interpreter-eagle2-5.json",
+      "execution": "perception",
+      "reuse": null
+    }
+  ],
+  "parameters": [
+    {
+      "name": "context_margin_ratio",
+      "arm": "qwen-view-contextual-crop",
+      "path": "components.semantic_interpretation.interpreter.qwen.view_policy.context_margin_ratio",
+      "value": 0.5,
+      "origin": "exemplo de src/contextmap/runtime/docs/composition.md, política de views semânticas (#524)"
+    },
+    {
+      "name": "mask_fill_rgb",
+      "arm": "qwen-view-masked-subject",
+      "path": "components.semantic_interpretation.interpreter.qwen.view_policy.mask_fill_rgb",
+      "value": [0, 0, 0],
+      "origin": "exemplo de src/contextmap/runtime/docs/composition.md, política de views semânticas (#524)"
+    },
+    {
+      "name": "quality_ramps",
+      "arm": "fusion-quality-aware",
+      "path": "components.semantic_fusion.accumulation.quality-aware-evidence-accumulation-v1.ramps",
+      "value": [
+        {"quality_input": "support_depth_median_m", "good": 4.0, "bad": 30.0},
+        {"quality_input": "border_distance_median_px", "good": 60.0, "bad": 10.0}
+      ],
+      "origin": "braço quality_aware_depth_border de experiments/semantic-fusion-corridor-02-20260921/scripts/s04_fusion.py (QUALITY_RAMPS)"
+    },
+    {
+      "name": "quality_neutral_factor",
+      "arm": "fusion-quality-aware",
+      "path": "components.semantic_fusion.accumulation.quality-aware-evidence-accumulation-v1.neutral_factor",
+      "value": 0.5,
+      "origin": "experiments/semantic-fusion-corridor-02-20260921/scripts/s04_fusion.py (NEUTRAL_FACTOR)"
+    },
+    {
+      "name": "quality_definitions_version",
+      "arm": "fusion-quality-aware",
+      "path": "components.semantic_fusion.accumulation.quality-aware-evidence-accumulation-v1.definitions_version",
+      "value": "observation-quality-v3",
+      "origin": "tabela da issue #670: a versão atual das definições de qualidade da Sensor Association (QUALITY_DEFINITIONS_VERSION em src/contextmap/sensor_association/quality.py); o s04_fusion.py de 2026-09-21 declarou observation-quality-v1, que a associação atual não grava mais"
+    },
+    {
+      "name": "dense_interpolation",
+      "arm": "association-dinov3-dense",
+      "path": "components.sensor_association.dense_sampling.dense-feature-sampling-v1.interpolation",
+      "value": "bilinear",
+      "origin": "escolha registrada na issue #670"
+    },
+    {
+      "name": "eagle_max_dynamic_tiles",
+      "arm": "interpreter-eagle2-5",
+      "path": "components.semantic_interpretation.interpreter.eagle2_5.max_dynamic_tiles",
+      "value": 6,
+      "origin": "escolha registrada na issue #670 (o exemplo de src/contextmap/visual_perception/docs/eagle2_5.md usa o mesmo valor)"
+    },
+    {
+      "name": "florence2_task",
+      "arm": "interpreter-florence2-region-category",
+      "path": "components.semantic_interpretation.interpreter.florence2.task",
+      "value": "<REGION_TO_CATEGORY>",
+      "origin": "escolha registrada na issue #670"
+    },
+    {
+      "name": "clip_scoring_template",
+      "arm": "scoring-clip",
+      "path": "components.semantic_scoring.scorer.clip.text_template",
+      "value": "a photo of a {hypothesis}.",
+      "origin": "escolha registrada na issue #670"
+    }
+  ]
+}

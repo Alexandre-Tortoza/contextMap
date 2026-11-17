@@ -1,0 +1,70 @@
+{
+  "context_build": {
+    "branch": "v0c-sota-nofloor-f055-f061-vox10",
+    "code_identity": "4b67748+local.0278d71d82ce",
+    "context_build_id": "sha256:b3c28268eb84bba32b9779e00b5433ca370f76057f1acadb3c425357667f8c1b",
+    "context_run_ids": [
+      "sha256:bdcfba6aae338d9bd1314d2fe6cce6b65578cfe0805296ec6a3e632287e937e6"
+    ],
+    "foundation": {
+      "geometry": {
+        "artifact_id": "8e0d9b1194c264e7e648e73cc6e2944c",
+        "content_hash": "sha256:781b46918b9ce5ff855636bccc2c3cffe6cfcde5e33174a457594a7f9e8658de",
+        "contract": "GeometricMapArtifact",
+        "location": "corridor-02/run-0003/geometric_mapping",
+        "stage_id": "geometric_mapping"
+      },
+      "identity": "sha256:eb299e02fe667515223342c14b5077213586b4db0d8360fedc2fbf9e07bb9cb4",
+      "sequence": {
+        "artifact_id": "4a4d895e0e4e4731ad91326114607296",
+        "content_hash": "sha256:a5aedeec06003aa335a26dd071bce5de5de1a38b46d0c791ecdcc6cf442f9f41",
+        "contract": "SequenceArtifact",
+        "location": "sequences/corridor-02/frame-10_31-refined",
+        "stage_id": "ingestion"
+      },
+      "state_estimation": {
+        "artifact_id": "656b7e023842c4e0d1b2759644634026",
+        "content_hash": "sha256:1de9434ff4cfa527b5bc652629776b0a5febea5fe76f96c2a236525b6f8d5cfe",
+        "contract": "StateEstimationRunArtifact",
+        "location": "corridor-02/run-0001/state_estimation",
+        "stage_id": "state_estimation"
+      }
+    },
+    "provided": {
+      "sensor_association": [
+        {
+          "artifact_id": "2e48b3a7ee5d7bb993c05915f0e9b9b3",
+          "content_hash": "sha256:fdc2abd64f5b5850c4b614ab1633f23993f089a9661366be292598b632a25ab1",
+          "contract": "SensorAssociationRunArtifact",
+          "location": "corridor-02/run-0044/sensor_association",
+          "stage_id": "sensor_association"
+        }
+      ],
+      "visual_perception": [
+        {
+          "artifact_id": "5a137c79029f509a4c53346166ff605b",
+          "content_hash": "sha256:06cb3630b460f61901d0525b16a43e7c619de611c276a9f31d715d75375869ca",
+          "contract": "PerceptionRunArtifact",
+          "location": "corridor-02/run-0044/visual_perception",
+          "stage_id": "visual_perception"
+        }
+      ]
+    },
+    "revision": 1,
+    "schema_version": "0.1.0",
+    "stage_configs": {
+      "context_map": "sha256:af772dfb2aac71d9a2e2db4ca2fd68c17c44b29f04786c469f965cb833b2a73e",
+      "entity_resolution": "sha256:4c4c8bda3fd2e17b4d25e49ffa2ac08d874f5f2e10cf701b583b2ebac1a37771",
+      "semantic_fusion": "sha256:57c957f84ae74fd3fe0e5d6a5de15d7872e70b4ebf3c580f82c7a4965f4e54e5",
+      "semantic_mapping": "sha256:aeb70fe7c9e60a85fbfcaaad1e5f1bb33226d769baca7523d22e31e2be843335",
+      "spatial_relations": "sha256:a25368e5df1cdea2e7255f65a326e894ae7c200b4e36229a0df21deba2703fc5"
+    }
+  },
+  "context_map_id": "66fed483438c5cefeaba19725f9e9707",
+  "map": {
+    "index": 1,
+    "location": "workspace/v0c-sota-nofloor-f055-f061-vox10/000001"
+  },
+  "ok": true,
+  "run_directory": "workspace/run-frame-10_31/corridor-02/run-0045"
+}

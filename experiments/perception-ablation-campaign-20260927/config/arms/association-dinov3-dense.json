@@ -1,0 +1,10 @@
+{
+  "components": {
+    "sensor_association": {
+      "dense_sampling": {
+        "backend": "dense-feature-sampling-v1",
+        "dense-feature-sampling-v1": {"interpolation": "bilinear"}
+      }
+    }
+  }
+}

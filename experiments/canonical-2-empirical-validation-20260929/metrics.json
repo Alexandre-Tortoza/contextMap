@@ -1,0 +1,350 @@
+{
+  "note": "Multi-frame execution on the 8 GB device is currently affected by a reproducible degradation after the first frame. Each selected frame succeeds when executed in an isolated process. This empirical ablation therefore uses process-isolated per-frame perception artifacts, while the multi-frame model-lifecycle issue is tracked separately.",
+  "pooling_on": {
+    "runs": 4,
+    "total_regions": 357,
+    "clip_region_features": 357,
+    "dino_pooled_features": 357,
+    "region_claims": 266,
+    "scene_claims": 9,
+    "dino_pooling_coverage_fraction": {
+      "n": 357,
+      "min": 1.0,
+      "p50": 1.0,
+      "mean": 1.0,
+      "max": 1.0
+    },
+    "per_run": [
+      {
+        "run_id": "a10bb11a4c0683ea9d01dde9c01c03bb",
+        "frames": 1,
+        "total_regions": 91,
+        "clip_region_features": 91,
+        "dino_pooled_features": 91,
+        "region_claims": 66,
+        "scene_claims": 1,
+        "claim_roles": {
+          "PRIMARY": 66
+        },
+        "claim_categories": {
+          "thing": 46,
+          "scene": 6,
+          "surface": 6,
+          "door": 3,
+          "stuff": 3,
+          "region": 1,
+          "ceiling tile": 1
+        },
+        "dino_pooling_coverage_fraction": {
+          "n": 91,
+          "min": 1.0,
+          "p50": 1.0,
+          "mean": 1.0,
+          "max": 1.0
+        },
+        "dino_pooling_success": 91,
+        "dino_pooling_attempts": 91,
+        "per_frame": [
+          {
+            "frame": "camera_1_image_raw-000000",
+            "regions": 91,
+            "clip_region_features": 91,
+            "dino_pooled_features": 91,
+            "region_claims": 66,
+            "scene_claims": 1
+          }
+        ]
+      },
+      {
+        "run_id": "f42b358a4abb48d6411c39792aaba6f4",
+        "frames": 1,
+        "total_regions": 94,
+        "clip_region_features": 94,
+        "dino_pooled_features": 94,
+        "region_claims": 72,
+        "scene_claims": 1,
+        "claim_roles": {
+          "PRIMARY": 72
+        },
+        "claim_categories": {
+          "thing": 55,
+          "ceiling": 5,
+          "stuff": 4,
+          "surface": 2,
+          "door": 2,
+          "scene": 2,
+          "wall": 1,
+          "light": 1
+        },
+        "dino_pooling_coverage_fraction": {
+          "n": 94,
+          "min": 1.0,
+          "p50": 1.0,
+          "mean": 1.0,
+          "max": 1.0
+        },
+        "dino_pooling_success": 94,
+        "dino_pooling_attempts": 94,
+        "per_frame": [
+          {
+            "frame": "camera_1_image_raw-000012",
+            "regions": 94,
+            "clip_region_features": 94,
+            "dino_pooled_features": 94,
+            "region_claims": 72,
+            "scene_claims": 1
+          }
+        ]
+      },
+      {
+        "run_id": "4c95d1f79aae3f1c8a8f8099c4946c41",
+        "frames": 1,
+        "total_regions": 84,
+        "clip_region_features": 84,
+        "dino_pooled_features": 84,
+        "region_claims": 61,
+        "scene_claims": 1,
+        "claim_roles": {
+          "PRIMARY": 61
+        },
+        "claim_categories": {
+          "thing": 45,
+          "ceiling": 4,
+          "sign": 3,
+          "exit sign": 2,
+          "wall": 1,
+          "door": 1,
+          "surface": 1,
+          "image": 1
+        },
+        "dino_pooling_coverage_fraction": {
+          "n": 84,
+          "min": 1.0,
+          "p50": 1.0,
+          "mean": 1.0,
+          "max": 1.0
+        },
+        "dino_pooling_success": 84,
+        "dino_pooling_attempts": 84,
+        "per_frame": [
+          {
+            "frame": "camera_1_image_raw-000018",
+            "regions": 84,
+            "clip_region_features": 84,
+            "dino_pooled_features": 84,
+            "region_claims": 61,
+            "scene_claims": 1
+          }
+        ]
+      },
+      {
+        "run_id": "e5ac3a122de85889824639b27d685d26",
+        "frames": 1,
+        "total_regions": 88,
+        "clip_region_features": 88,
+        "dino_pooled_features": 88,
+        "region_claims": 67,
+        "scene_claims": 6,
+        "claim_roles": {
+          "PRIMARY": 67
+        },
+        "claim_categories": {
+          "thing": 48,
+          "door": 4,
+          "surface": 3,
+          "scene": 3,
+          "wall": 2,
+          "ceiling": 2,
+          "visual": 2,
+          "corridor": 1
+        },
+        "dino_pooling_coverage_fraction": {
+          "n": 88,
+          "min": 1.0,
+          "p50": 1.0,
+          "mean": 1.0,
+          "max": 1.0
+        },
+        "dino_pooling_success": 88,
+        "dino_pooling_attempts": 88,
+        "per_frame": [
+          {
+            "frame": "camera_1_image_raw-000006",
+            "regions": 88,
+            "clip_region_features": 88,
+            "dino_pooled_features": 88,
+            "region_claims": 67,
+            "scene_claims": 6
+          }
+        ]
+      }
+    ]
+  },
+  "pooling_off": {
+    "runs": 4,
+    "total_regions": 357,
+    "clip_region_features": 357,
+    "dino_pooled_features": 0,
+    "region_claims": 267,
+    "scene_claims": 9,
+    "dino_pooling_coverage_fraction": {},
+    "per_run": [
+      {
+        "run_id": "1dc0b46d4d30ba6cc046cf08a76ebda5",
+        "frames": 1,
+        "total_regions": 91,
+        "clip_region_features": 91,
+        "dino_pooled_features": 0,
+        "region_claims": 66,
+        "scene_claims": 1,
+        "claim_roles": {
+          "PRIMARY": 66
+        },
+        "claim_categories": {
+          "thing": 43,
+          "scene": 8,
+          "surface": 5,
+          "door": 4,
+          "stuff": 2,
+          "ceiling": 1,
+          "region": 1,
+          "exit sign": 1
+        },
+        "dino_pooling_coverage_fraction": {},
+        "dino_pooling_success": 0,
+        "dino_pooling_attempts": 0,
+        "per_frame": [
+          {
+            "frame": "camera_1_image_raw-000000",
+            "regions": 91,
+            "clip_region_features": 91,
+            "dino_pooled_features": 0,
+            "region_claims": 66,
+            "scene_claims": 1
+          }
+        ]
+      },
+      {
+        "run_id": "ff9ab2b67676d207e0e707db4579f7e6",
+        "frames": 1,
+        "total_regions": 94,
+        "clip_region_features": 94,
+        "dino_pooled_features": 0,
+        "region_claims": 70,
+        "scene_claims": 1,
+        "claim_roles": {
+          "PRIMARY": 70
+        },
+        "claim_categories": {
+          "thing": 55,
+          "ceiling": 4,
+          "door": 2,
+          "scene": 2,
+          "stuff": 2,
+          "wall": 1,
+          "ceiling tile": 1,
+          "surface": 1
+        },
+        "dino_pooling_coverage_fraction": {},
+        "dino_pooling_success": 0,
+        "dino_pooling_attempts": 0,
+        "per_frame": [
+          {
+            "frame": "camera_1_image_raw-000012",
+            "regions": 94,
+            "clip_region_features": 94,
+            "dino_pooled_features": 0,
+            "region_claims": 70,
+            "scene_claims": 1
+          }
+        ]
+      },
+      {
+        "run_id": "71dda6240486df3dcf9d751545ac3938",
+        "frames": 1,
+        "total_regions": 84,
+        "clip_region_features": 84,
+        "dino_pooled_features": 0,
+        "region_claims": 62,
+        "scene_claims": 1,
+        "claim_roles": {
+          "PRIMARY": 62
+        },
+        "claim_categories": {
+          "thing": 44,
+          "ceiling": 5,
+          "sign": 3,
+          "visual": 3,
+          "surface": 2,
+          "wall": 1,
+          "region": 1,
+          "image region": 1
+        },
+        "dino_pooling_coverage_fraction": {},
+        "dino_pooling_success": 0,
+        "dino_pooling_attempts": 0,
+        "per_frame": [
+          {
+            "frame": "camera_1_image_raw-000018",
+            "regions": 84,
+            "clip_region_features": 84,
+            "dino_pooled_features": 0,
+            "region_claims": 62,
+            "scene_claims": 1
+          }
+        ]
+      },
+      {
+        "run_id": "e0fd7194472a9e080af48c246a6ad40b",
+        "frames": 1,
+        "total_regions": 88,
+        "clip_region_features": 88,
+        "dino_pooled_features": 0,
+        "region_claims": 69,
+        "scene_claims": 6,
+        "claim_roles": {
+          "PRIMARY": 69
+        },
+        "claim_categories": {
+          "thing": 48,
+          "door": 5,
+          "surface": 4,
+          "ceiling": 3,
+          "scene": 3,
+          "wall": 2,
+          "stuff": 2,
+          "line": 1
+        },
+        "dino_pooling_coverage_fraction": {},
+        "dino_pooling_success": 0,
+        "dino_pooling_attempts": 0,
+        "per_frame": [
+          {
+            "frame": "camera_1_image_raw-000006",
+            "regions": 88,
+            "clip_region_features": 88,
+            "dino_pooled_features": 0,
+            "region_claims": 69,
+            "scene_claims": 6
+          }
+        ]
+      }
+    ]
+  },
+  "scoring": {
+    "f0on_semantic_scoring": {
+      "run_id": "0a04d5fc4554e9af4cced478b4d18dd6",
+      "n_scores": 66,
+      "clip_cosine_raw": {
+        "n": 66,
+        "min": 0.157,
+        "p50": 0.2581,
+        "mean": 0.252,
+        "max": 0.3554
+      },
+      "unscored_region_claims": 0,
+      "scene_claims": 1,
+      "note": "cosine kept as a raw score in [-1,1]; never a probability"
+    }
+  }
+}

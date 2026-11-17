@@ -1,0 +1,300 @@
+{
+  "chain": {
+    "regions_accepted": 83,
+    "spatial_observations": 83,
+    "observations_with_zero_support": 8,
+    "excluded_from_fusion_lt_min_geometry": 23,
+    "fusion_supports": 41,
+    "observations_per_support_hist": {
+      "3": 2,
+      "1": 29,
+      "4": 1,
+      "5": 1,
+      "2": 8
+    },
+    "semantic_entities": 41,
+    "semantic_mapping_rejected_candidates": 0,
+    "resolved_entities": 38,
+    "members_per_resolved_hist": {
+      "1": 35,
+      "2": 3
+    },
+    "resolution_decisions": {
+      "distinct": 699,
+      "unresolved": 113,
+      "match": 8
+    },
+    "context_map_entities": 38,
+    "physical_observations_per_entity": {
+      "1": 38
+    }
+  },
+  "door_family": [
+    {
+      "id": "entity-0002",
+      "labels": [
+        "door"
+      ],
+      "status": "unambiguous",
+      "points": 841,
+      "centroid": [
+        39.09,
+        -79.61,
+        -0.92
+      ],
+      "extent": [
+        3.08,
+        4.44,
+        0.87
+      ]
+    },
+    {
+      "id": "entity-0011",
+      "labels": [
+        "blue trim",
+        "ceiling panel",
+        "ceiling tile",
+        "door",
+        "metal bracket"
+      ],
+      "status": "ambiguous",
+      "points": 659,
+      "centroid": [
+        43.66,
+        -88.28,
+        0.26
+      ],
+      "extent": [
+        6.17,
+        10.36,
+        1.74
+      ]
+    },
+    {
+      "id": "entity-0017",
+      "labels": [
+        "metal door"
+      ],
+      "status": "unambiguous",
+      "points": 117,
+      "centroid": [
+        43.62,
+        -90.66,
+        -1.41
+      ],
+      "extent": [
+        0.21,
+        0.23,
+        1.57
+      ]
+    },
+    {
+      "id": "entity-0025",
+      "labels": [
+        "blue door",
+        "door",
+        "door handle",
+        "metal latch",
+        "metal rod",
+        "metal towel rack"
+      ],
+      "status": "ambiguous",
+      "points": 4482,
+      "centroid": [
+        45.61,
+        -89.57,
+        -1.44
+      ],
+      "extent": [
+        1.25,
+        2.55,
+        1.65
+      ]
+    },
+    {
+      "id": "entity-0026",
+      "labels": [
+        "blue door"
+      ],
+      "status": "unambiguous",
+      "points": 11424,
+      "centroid": [
+        45.39,
+        -89.4,
+        -1.42
+      ],
+      "extent": [
+        3.07,
+        4.37,
+        2.89
+      ]
+    },
+    {
+      "id": "entity-0027",
+      "labels": [
+        "door",
+        "flooded hallway",
+        "metal pole",
+        "metal railing"
+      ],
+      "status": "ambiguous",
+      "points": 6261,
+      "centroid": [
+        43.66,
+        -90.95,
+        -1.47
+      ],
+      "extent": [
+        1.46,
+        3.37,
+        2.25
+      ]
+    },
+    {
+      "id": "entity-0032",
+      "labels": [
+        "doorway"
+      ],
+      "status": "unambiguous",
+      "points": 45,
+      "centroid": [
+        39.59,
+        -80.31,
+        -0.41
+      ],
+      "extent": [
+        3.07,
+        4.4,
+        0.44
+      ]
+    }
+  ],
+  "door_pairs_3d": [
+    {
+      "a": "entity-0017",
+      "b": "entity-0027",
+      "voxel_iou": 0.175,
+      "containment_min": 0.976
+    },
+    {
+      "a": "entity-0025",
+      "b": "entity-0026",
+      "voxel_iou": 0.282,
+      "containment_min": 0.685
+    },
+    {
+      "a": "entity-0011",
+      "b": "entity-0032",
+      "voxel_iou": 0.044,
+      "containment_min": 0.643
+    },
+    {
+      "a": "entity-0011",
+      "b": "entity-0026",
+      "voxel_iou": 0.188,
+      "containment_min": 0.515
+    },
+    {
+      "a": "entity-0026",
+      "b": "entity-0027",
+      "voxel_iou": 0.009,
+      "containment_min": 0.026
+    },
+    {
+      "a": "entity-0017",
+      "b": "entity-0026",
+      "voxel_iou": 0.002,
+      "containment_min": 0.024
+    },
+    {
+      "a": "entity-0011",
+      "b": "entity-0025",
+      "voxel_iou": 0.005,
+      "containment_min": 0.01
+    },
+    {
+      "a": "entity-0011",
+      "b": "entity-0027",
+      "voxel_iou": 0.005,
+      "containment_min": 0.01
+    },
+    {
+      "a": "entity-0002",
+      "b": "entity-0011",
+      "voxel_iou": 0.0,
+      "containment_min": 0.0
+    },
+    {
+      "a": "entity-0002",
+      "b": "entity-0017",
+      "voxel_iou": 0.0,
+      "containment_min": 0.0
+    },
+    {
+      "a": "entity-0002",
+      "b": "entity-0025",
+      "voxel_iou": 0.0,
+      "containment_min": 0.0
+    },
+    {
+      "a": "entity-0002",
+      "b": "entity-0026",
+      "voxel_iou": 0.0,
+      "containment_min": 0.0
+    },
+    {
+      "a": "entity-0002",
+      "b": "entity-0027",
+      "voxel_iou": 0.0,
+      "containment_min": 0.0
+    },
+    {
+      "a": "entity-0002",
+      "b": "entity-0032",
+      "voxel_iou": 0.0,
+      "containment_min": 0.0
+    },
+    {
+      "a": "entity-0011",
+      "b": "entity-0017",
+      "voxel_iou": 0.0,
+      "containment_min": 0.0
+    },
+    {
+      "a": "entity-0017",
+      "b": "entity-0025",
+      "voxel_iou": 0.0,
+      "containment_min": 0.0
+    },
+    {
+      "a": "entity-0017",
+      "b": "entity-0032",
+      "voxel_iou": 0.0,
+      "containment_min": 0.0
+    },
+    {
+      "a": "entity-0025",
+      "b": "entity-0027",
+      "voxel_iou": 0.0,
+      "containment_min": 0.0
+    },
+    {
+      "a": "entity-0025",
+      "b": "entity-0032",
+      "voxel_iou": 0.0,
+      "containment_min": 0.0
+    },
+    {
+      "a": "entity-0026",
+      "b": "entity-0032",
+      "voxel_iou": 0.0,
+      "containment_min": 0.0
+    },
+    {
+      "a": "entity-0027",
+      "b": "entity-0032",
+      "voxel_iou": 0.0,
+      "containment_min": 0.0
+    }
+  ]
+}

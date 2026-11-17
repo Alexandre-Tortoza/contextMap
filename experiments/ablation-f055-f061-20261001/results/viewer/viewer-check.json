@@ -1,0 +1,131 @@
+{
+  "corridor02-f055-f061-sam2-qwen-minarea1536-vox10": {
+    "steps": [
+      {
+        "name": "select map",
+        "ok": true
+      },
+      {
+        "name": "focus geometry",
+        "ok": true
+      },
+      {
+        "name": "geometry",
+        "ok": true
+      },
+      {
+        "name": "semantic labels mode",
+        "ok": true
+      },
+      {
+        "name": "relations layer",
+        "ok": true
+      },
+      {
+        "name": "select door entity",
+        "ok": true
+      },
+      {
+        "name": "evidence of the right door",
+        "ok": true
+      }
+    ],
+    "selectorText": "corridor02-f055-f061-sam2-qwen-minarea1536-vox10 · 393.054 pts",
+    "selectedEntity": {
+      "id": "entity-0018",
+      "labels": [
+        "door"
+      ],
+      "refs": 490
+    },
+    "entityDetail": "biguous\nentity-0010\nunambiguous\nentity-0011\nunambiguous\nentity-0012\nunambiguous\nentity-0013\nunambiguous\nentity-0014\nconflicting\nentity-0015\nunambiguous\nentity-0016\nunambiguous\nentity-0017\nunambiguous\nentity-0018\nunambiguous\nentity-0019\nunambiguous\nentity-0020\nunambiguous\nentity-0021\nconflicting\nentity-0022\nconflicting\nentity-0023\nambiguous\nentity-0024\nambiguous\nentity-0025\nunambiguous\nentity-0026\nunambiguous\nentity-0027\nunambiguous\nentity-0028\nunambiguous\n\nRELAÇÕES\n\nrelation-0001\nentity-0024 next_to entity-0018\nrelation-0002\nentity-0003 next_to entity-0012\nrelation-0003\nentity-0028 next_to entity-0027\nrelation-0004\nentity-0008 next_to entity-0014\nrelation-0005\nentity-0002 next_to entity-0011\nrelation-0006\nentity-0028 next_to entity-0009\nrelation-0007\nentity-0028 next_to entity-0002\nrelation-0008\nentity-0012 next_to entity-0019\nrelation-0009\nentity-0021 next_to entity-0001\nrelation-0010\nentity-0018 next_to entity-0015\nrelation-0011\nentity-0026 next_to entity-0014\nrelation-0012\nentity-0024 next_to entity-0020\nrelation-0013\nentity-0002 next_to entity-0021\nrelation-0014\nentity-0002 next_to entity-0023\nrelation-0015\nentity-0024 next_to entity-0022\nrelation-0016\nentity-0019 next_to entity-0025\nrelation-0017\nentity-0016 next_to entity-0013\nrelation-0018\nentity-0009 next_to entity-0019\nrelation-0019\nentity-0017 next_to entity-0026\nrelation-0020\nentity-0013 next_to entity-0003\nrelation-0021\nentity-0001 next_to entity-0027\nrelation-0022\nentity-0027 next_to entity-0003\nrelation-0023\nentity-0016 next_to entity-0027\nrelation-0024\nentity-0026 next_to entity-0024\nrelation-0025\nentity-0022 next_to entity-0007\nrelation-0026\nentity-0007 next_to entity-0014\nrelation-0027\nentity-0025 next_to",
+    "evidencePanel": "EVIDÊNCIA VISUAL\n\nImagens, regiões e camadas externas ligadas ao mapa.\n\nEVIDÊNCIA DE ORIGEM\n\nFrame ou região\ncamera_1_image_raw-000061 · region-0001 · 582 pontos\ncamera_1_image_raw-000061 · region-0002 · 94 pontos\ncamera_1_image_raw-000061 · region-0003 · 29 pontos\ncamera_1_image_raw-000061 · region-0004 · 143 pontos\ncamera_1_image_raw-000061 · region-0005 · 2349 pontos\ncamera_1_image_raw-000061 · region-0006 · 152 pontos\ncamera_1_image_raw-000061 · region-0007 · 73 pontos\ncamera_1_image_raw-000061 · region-0008 · 48 pontos\ncamera_1_image_raw-000061 · region-0009 · 15 pontos\ncamera_1_image_raw-000061 · region-0010 · 957 pontos\ncamera_1_image_raw-000061 · region-0011 · 53 pontos\ncamera_1_image_raw-000061 · region-0012 · 38 pontos\ncamera_1_image_raw-000061 · region-0013 · 4 pontos\ncamera_1_image_raw-000061 · region-0014 · 3 pontos\ncamera_1_image_raw-000061 · region-0015 · 8 pontos\ncamera_1_image_raw-000061 · region-0016 · 26 pontos\ncamera_1_image_raw-000061 · region-0017 · 64 pontos\ncamera_1_image_raw-000061 · region-0018 · 85 pontos\ncamera_1_image_raw-000061 · region-0019 · 8 pontos\ncamera_1_image_raw-000061 · region-0020 · 33 pontos\ncamera_1_image_raw-000061 · region-0021 · 71 pontos\ncamera_1_image_raw-000055 · region-0001 · 349 pontos\ncamera_1_image_raw-000055 · region-0002 · 37 pontos\ncamera_1_image_raw-000055 · region-0003 · 616 pontos\ncamera_1_image_raw-000055 · region-0004 · 117 pontos\ncamera_1_image_raw-000055 · region-0005 · 4 pontos\ncamera_1_image_raw-000055 · region-0006 · 49 pontos\ncamera_1_image_raw-000055 · region-0007 · 16 pontos\ncamera_1_image_raw-000055 · region-0008 · 2758 pontos\ncamera_1_image_raw-000055 · region-0009 · 69 pontos\ncamera_1_image_raw-000055 · region-0010 · 4 pontos\ncamera_1_image_raw-000055 · region-0011 · 115 pontos\ncamera_1_image_raw-000055 · region-0012 · 26 pontos\ncamera_1_image_raw-000055 · region-0013 · 37 pontos\ncamera_1_image_raw-000055 · region-0014 · 42 pontos\ncamera_1_image_raw-000055 · region-0015 · 517 pontos\ncamera_1_image_raw-000055 · region-0016 · 50 pontos\ncamera_1_image_raw-000055 · region-0017 · 40 pontos\ncamera_1_image_raw-000055 · region-0018 · 39 pontos\ncamera_1_image_raw-000055 · region-0019 · 490 pontos\ncamera_1_image_raw-000055 · region-0020 · 7 pontos\ncamera_1_image_raw-000055 · region-0021 · 5 pontos\n\nname_matched · deccd0d56ef20abbf379830f5d8a4a86\n\nFOCAR SUPORTE DA REGIÃO EM 3DLIMPAR DESTAQUE DE SUPORTE\n\nIMAGEM DE ORIGEM · CAMERA_1_IMAGE_RAW\n\nEXPANDIR IMAGEM ORIGINAL\n\n{\"clock_id\":\"corridor-02-head",
+    "visibleText": "ContextMap\n2\nVIEWER.\nATUALIZAR MAPAS\ncorridor02-f055-f061-sam2-qwen-minarea1536-vox10 · 393.054 pts\n\nCAMADAS\n\nGeometria\nligada\nTrajetória\ndesligada\nEvidência\nligada\nInspecionar entidades\nligada\nRelações\nligada\nNavegação\ndesligada\n\nNAVEGAÇÃO\n\nÓRBITA\nVOO\nINÍCIO\nTOPO\nISOMÉTRICA\nFOCAR GEOMETRIA\nAtalhos de navegação\nmap\nvertical Z · declarado\n393.054 pontos · 727 chunks\nJANELA DE OBSERVAÇÃO\n8,9 s · 1.724.621.712.715.761.126 → 1.724.621.721.591.008.128 ns · relógio corridor-02-header\n\nINSPETOR\n\nEXPORTAR RELATÓRIO\nEXPLORAR\nMAPA\nEVIDÊNCIA\nFERRAMENTAS\nEVIDÊNCIA VISUAL\n\nImagens, regiões e camadas externas ligadas ao mapa.\n\nEVIDÊNCIA DE ORIGEM\n\nFrame ou região\ncamera_1_image_raw-000061 · region-0001 · 582 pontos\ncamera_1_image_raw-000061 · region-0002 · 94 pontos\ncamera_1_image_raw-000061 · region-0003 · 29 pontos\ncamera_1_image_raw-000061 · region-0004 · 143 pontos\ncamera_1_image_raw-000061 · region-0005 · 2349 pontos\ncamera_1_image_raw-000061 · region-0006 · 152 pontos\ncamera_1_image_raw-000061 · region-0007 · 73 pontos\ncamera_1_image_raw-000061 · region-0008 · 48 pontos\ncamera_1_image_raw-000061 · region-0009 · 15 pontos\ncamera_1_image_raw-000061 · region-0010 · 957 pontos\ncamera_1_image_raw-000061 · region-0011 · 53 pontos\ncamera_1_image_raw-000061 · region-0012 · 38 pontos\ncamera_1_image_raw-000061 · region-0013 · 4 pontos\ncamera_1_image_raw-000061 · region-0014 · 3 pontos\ncamera_1_image_raw-000061 · region-0015 · 8 pontos\ncamera_1_image_raw-000061 · region-0016 · 26 pontos\ncamera_1_image_raw-000061 · region-0017 · 64 pontos\ncamera_1_image_raw-000061 · region-0018 · 85 pontos\ncamera_1_image_raw-000061 · region-0019 · 8 pontos\ncamera_1_image_raw-000061 · region-0020 · 33 pontos\ncamera_1_image_raw-000061 · region-0021 · 71 pontos\ncamera_1_image_raw-000055 · region-0001 · 349 pontos\ncamera_1_image_raw-000055 · region-0002 · 37 pontos\ncamera_1_image_raw-000055 · region-0003 · 616 pontos\ncamera_1_image_raw-000055 · region-0004 · 117 pontos\ncamera_1_image_raw-000055 · region-0005 · 4 pontos\ncamera_1_image_raw-000055 · region-0006 · 49 pontos\ncamera_1_image_raw-000055 · region-0007 · 16 pontos\ncamera_1_image_raw-000055 · region-0008 · 2758 pontos\ncamera_1_image_raw-000055 · region-0009 · 69 pontos\ncamera_1_image_raw-000055 · region-0010 · 4 pontos\ncamera_1_image_raw-000055 · region-0011 · 115 pontos\ncamera_1_image_raw-000055 · region-0012 · 26 pontos\ncamera_1_image_raw-000055 · region-0013 · 37 pontos\ncamera_1_image_raw-000055 · region-0014 · 42 pontos\ncamera_1_image_raw-000055 · region-0015 · 517 pontos\ncamera_1_image_raw-000055 · region-0016 · 50 pontos\ncamera_1_image_raw-000055 · region-0017 · 40 pontos\ncamera_1_image_raw-000055 · region-0018 · 39 pontos\ncamera_1_image_raw-000055 · region-0019 · 490 pontos\ncamera_1_image_raw-000055 · region-0020 · 7 pontos\ncamera_1_image_raw-000055 · region-0021 · 5 pontos\n\nname_matched · deccd0d56ef20abbf379830f5d8a4a86\n\nFOCAR SUPORTE DA REGIÃO EM 3DLIMPAR DESTAQUE DE SUPORTE\n\nIMAGEM DE ORIGEM · CAMERA_1_IMAGE_RAW\n\nEXPANDIR IMAGEM ORIGINAL\n\n{\"clock_id\":\"corridor-02-header\",\"nanoseconds\":984856033,\"seconds\":1724621714}\n\nCOORDENADAS DE REGIÃO PREPARADAS\n\nCaixas e máscara selecionada no espaço da imagem preparada da associação. Clique numa caixa ou selecione uma região acima.\n\n mostrar máscara selecionada (carrega sob demanda)\nINSPECIONAR OBSERVAÇÃO DE ORIGEM CANÔNICAINSPECIONAR DECISÕES DE SINCRONIZAÇÃO\n\nENTRADA EXATA DO MODELO\n\nMODEL VIEW PERSISTIDA\nNenhuma imagem carregada\nAssociação e proveniência\nJSON\nDiagnósticos de qualidade, visibilidade e pose\nJSON\nHipóteses de percepção e features\nJSON\nMAPA PRONTO\n393.054 / 393.054 pontos · 727 / 727 chunks"
+  },
+  "corridor02-f055-f061-florencerp-qwen-boxdepth-vox10": {
+    "steps": [
+      {
+        "name": "select map",
+        "ok": true
+      },
+      {
+        "name": "focus geometry",
+        "ok": true
+      },
+      {
+        "name": "geometry",
+        "ok": true
+      },
+      {
+        "name": "semantic labels mode",
+        "ok": true
+      },
+      {
+        "name": "relations layer",
+        "ok": true
+      },
+      {
+        "name": "select door entity",
+        "ok": true
+      },
+      {
+        "name": "evidence of the right door",
+        "ok": true
+      }
+    ],
+    "selectorText": "corridor02-f055-f061-florencerp-qwen-boxdepth-vox10 · 393.054 pts",
+    "selectedEntity": {
+      "id": "entity-0004",
+      "labels": [
+        "door"
+      ],
+      "refs": 483
+    },
+    "entityDetail": "adas no mapa. Selecione uma para rastrear suas fontes gravadas — “produzido por” descreve derivação, nunca confiança.\n\nENTIDADES\n\nentity-0001\nunambiguous\nentity-0002\nambiguous\nentity-0003\nunambiguous\nentity-0004\nunambiguous\n\nRELAÇÕES\n\nrelation-0001\nentity-0004 next_to entity-0001\nrelation-0002\nentity-0001 next_to entity-0004\nrelation-0003\nentity-0004 touching entity-0001\nrelation-0004\nentity-0001 touching entity-0004\nrelation-0005\nentity-0001 within_interaction_range entity-0004\nrelation-0006\nentity-0004 within_interaction_range entity-0001\nGRAFO DE RELAÇÕES\nPROVENIÊNCIA DA ENTIDADE\nLIMPAR\nENTIDADE\nentity-0004\ncopiar\nESTADO SEMÂNTICO\numa hipótese declarada\nSUPORTE MULTI-VIEW\ntentativa: suporte multi-view insuficiente\nCATEGORIA\nnão derivada\nREFS DE GEOMETRIA\n483\nID RESOLVIDO\nresolved--be836e7e8aa308ee\ninspecionar entidade resolvida · 2762d54f0b5b7b6b100f37f7024adbd5 · resolved--be836e7e8aa308ee\nEntidades-membro de origem · 1\nVizinhos de identidade não resolvida · 1\nDecisões de resolução · 0\n\nPRODUZIDO POR\n\nMultiview Fused\n\nPolítica: connected-components-materialization @ v1\n\n2762d54f0b5b7b6b100f37f7024adbd5\nresolved--be836e7e8aa308ee\nsomente metadados; payload não carregado\n\nATRIBUTOS\n\ncategory\nstructure\nmultiview_fused · claim-attribute\ncolor\ndark\nmultiview_fused · claim-attribute\n\nRELAÇÕES DESTA ENTIDADE\n\nnext_to\n→ entity-0001\nrejected\nnext_to\n← entity-0001\nrejected\ntouching\n→ entity-0001\nsupported\ntouching\n← entity-0001\nsupported\nwithin_interaction_range\n← entity-0001\nsupported\nwithin_interaction_range\n→ entity-0001\nsupported\n\nHIPÓTESES DECLARADAS\n\ndoor\nscore: not recorded\n1 observação(ões) física(s)\n\nPRODUZIDO POR\n\nMultiview Fused\n\nPolítica: label-hypothesis-merge-by-t",
+    "evidencePanel": "EVIDÊNCIA VISUAL\n\nImagens, regiões e camadas externas ligadas ao mapa.\n\nEVIDÊNCIA DE ORIGEM\n\nFrame ou região\ncamera_1_image_raw-000061 · region-0001 · 232 pontos\ncamera_1_image_raw-000061 · region-0003 · 476 pontos\ncamera_1_image_raw-000055 · region-0001 · 3396 pontos\ncamera_1_image_raw-000055 · region-0002 · 228 pontos\ncamera_1_image_raw-000055 · region-0004 · 483 pontos\n\nname_matched · 46a1fe65c8bcfaff05b7c0acaf92d089\n\nFOCAR SUPORTE DA REGIÃO EM 3DLIMPAR DESTAQUE DE SUPORTE\n\nIMAGEM DE ORIGEM · CAMERA_1_IMAGE_RAW\n\nEXPANDIR IMAGEM ORIGINAL\n\n{\"clock_id\":\"corridor-02-header\",\"nanoseconds\":984856033,\"seconds\":1724621714}\n\nCOORDENADAS DE REGIÃO PREPARADAS\n\nCaixas e máscara selecionada no espaço da imagem preparada da associação. Clique numa caixa ou selecione uma região acima.\n\n mostrar máscara selecionada (carrega sob demanda)\nINSPECIONAR OBSERVAÇÃO DE ORIGEM CANÔNICAINSPECIONAR DECISÕES DE SINCRONIZAÇÃO\n\nENTRADA EXATA DO MODELO\n\nMODEL VIEW PERSISTIDA\nNenhuma imagem carregada\nAssociação e proveniência\nJSON\nDiagnósticos de qualidade, visibilidade e pose\nJSON\nHipóteses de percepção e features\nJSON\nMAPA PRONTO\n393.054 / 393.054 pontos · 727 / 727 chunks",
+    "visibleText": "ContextMap\n2\nVIEWER.\nATUALIZAR MAPAS\ncorridor02-f055-f061-florencerp-qwen-boxdepth-vox10 · 393.054 pts\n\nCAMADAS\n\nGeometria\nligada\nTrajetória\ndesligada\nEvidência\nligada\nInspecionar entidades\nligada\nRelações\nligada\nNavegação\ndesligada\n\nNAVEGAÇÃO\n\nÓRBITA\nVOO\nINÍCIO\nTOPO\nISOMÉTRICA\nFOCAR GEOMETRIA\nAtalhos de navegação\nmap\nvertical Z · declarado\n393.054 pontos · 727 chunks\nJANELA DE OBSERVAÇÃO\n8,9 s · 1.724.621.712.715.761.126 → 1.724.621.721.591.008.128 ns · relógio corridor-02-header\n\nINSPETOR\n\nEXPORTAR RELATÓRIO\nEXPLORAR\nMAPA\nEVIDÊNCIA\nFERRAMENTAS\nEVIDÊNCIA VISUAL\n\nImagens, regiões e camadas externas ligadas ao mapa.\n\nEVIDÊNCIA DE ORIGEM\n\nFrame ou região\ncamera_1_image_raw-000061 · region-0001 · 232 pontos\ncamera_1_image_raw-000061 · region-0003 · 476 pontos\ncamera_1_image_raw-000055 · region-0001 · 3396 pontos\ncamera_1_image_raw-000055 · region-0002 · 228 pontos\ncamera_1_image_raw-000055 · region-0004 · 483 pontos\n\nname_matched · 46a1fe65c8bcfaff05b7c0acaf92d089\n\nFOCAR SUPORTE DA REGIÃO EM 3DLIMPAR DESTAQUE DE SUPORTE\n\nIMAGEM DE ORIGEM · CAMERA_1_IMAGE_RAW\n\nEXPANDIR IMAGEM ORIGINAL\n\n{\"clock_id\":\"corridor-02-header\",\"nanoseconds\":984856033,\"seconds\":1724621714}\n\nCOORDENADAS DE REGIÃO PREPARADAS\n\nCaixas e máscara selecionada no espaço da imagem preparada da associação. Clique numa caixa ou selecione uma região acima.\n\n mostrar máscara selecionada (carrega sob demanda)\nINSPECIONAR OBSERVAÇÃO DE ORIGEM CANÔNICAINSPECIONAR DECISÕES DE SINCRONIZAÇÃO\n\nENTRADA EXATA DO MODELO\n\nMODEL VIEW PERSISTIDA\nNenhuma imagem carregada\nAssociação e proveniência\nJSON\nDiagnósticos de qualidade, visibilidade e pose\nJSON\nHipóteses de percepção e features\nJSON\nMAPA PRONTO\n393.054 / 393.054 pontos · 727 / 727 chunks"
+  },
+  "corridor02-f055-f061-sam2-qwentight-vox10": {
+    "steps": [
+      {
+        "name": "select map",
+        "ok": true
+      },
+      {
+        "name": "focus geometry",
+        "ok": true
+      },
+      {
+        "name": "geometry",
+        "ok": true
+      },
+      {
+        "name": "semantic labels mode",
+        "ok": true
+      },
+      {
+        "name": "relations layer",
+        "ok": true
+      },
+      {
+        "name": "select door entity",
+        "ok": true
+      },
+      {
+        "name": "evidence of the right door",
+        "ok": true
+      }
+    ],
+    "selectorText": "corridor02-f055-f061-sam2-qwentight-vox10 · 393.054 pts",
+    "selectedEntity": {
+      "id": "entity-0015",
+      "labels": [
+        "door"
+      ],
+      "refs": 808
+    },
+    "entityDetail": "nt_evidence\nentity-0008\nconflicting\nentity-0009\ninsufficient_evidence\nentity-0010\nconflicting\nentity-0011\nunambiguous\nentity-0012\nunambiguous\nentity-0013\nunambiguous\nentity-0014\ninsufficient_evidence\nentity-0015\nunambiguous\nentity-0016\ninsufficient_evidence\nentity-0017\ninsufficient_evidence\nentity-0018\nunambiguous\nentity-0019\nambiguous\nentity-0020\nunambiguous\nentity-0021\nunambiguous\nentity-0022\nconflicting\nentity-0023\nunambiguous\nentity-0024\nunambiguous\nentity-0025\nunambiguous\nentity-0026\nunambiguous\nentity-0027\ninsufficient_evidence\nentity-0028\nunambiguous\nentity-0029\ninsufficient_evidence\nentity-0030\nunambiguous\nentity-0031\nambiguous\nentity-0032\nunambiguous\nentity-0033\nunambiguous\nentity-0034\nunambiguous\nentity-0035\ninsufficient_evidence\nentity-0036\nunambiguous\nentity-0037\ninsufficient_evidence\nentity-0038\nunambiguous\nentity-0039\nunambiguous\nentity-0040\nunambiguous\nentity-0041\nunambiguous\nentity-0042\nunambiguous\nentity-0043\nunambiguous\nentity-0044\nconflicting\nentity-0045\nunambiguous\nentity-0046\nambiguous\nentity-0047\nunambiguous\nentity-0048\nunambiguous\nentity-0049\nambiguous\nentity-0050\nunambiguous\nentity-0051\nambiguous\n\nRELAÇÕES\n\nrelation-0001\nentity-0021 next_to entity-0016\nrelation-0002\nentity-0037 next_to entity-0046\nrelation-0003\nentity-0033 next_to entity-0041\nrelation-0004\nentity-0039 next_to entity-0022\nrelation-0005\nentity-0016 next_to entity-0013\nrelation-0006\nentity-0003 next_to entity-0046\nrelation-0007\nentity-0031 next_to entity-0023\nrelation-0008\nentity-0033 next_to entity-0013\nrelation-0009\nentity-0037 next_to entity-0034\nrelation-0010\nentity-0051 next_to entity-0035\nrelation-0011\nentity-0016 next_to entity-0014\nrelation-0012\nentity-0010 next_to entity-0028",
+    "evidencePanel": "EVIDÊNCIA VISUAL\n\nImagens, regiões e camadas externas ligadas ao mapa.\n\nEVIDÊNCIA DE ORIGEM\n\nFrame ou região\ncamera_1_image_raw-000055 · region-0001 · 349 pontos\ncamera_1_image_raw-000055 · region-0002 · 37 pontos\ncamera_1_image_raw-000055 · region-0003 · 616 pontos\ncamera_1_image_raw-000055 · region-0004 · 43 pontos\ncamera_1_image_raw-000055 · region-0005 · 117 pontos\ncamera_1_image_raw-000055 · region-0006 · 4 pontos\ncamera_1_image_raw-000055 · region-0007 · 18 pontos\ncamera_1_image_raw-000055 · region-0008 · 43 pontos\ncamera_1_image_raw-000055 · region-0009 · 49 pontos\ncamera_1_image_raw-000055 · region-0010 · 16 pontos\ncamera_1_image_raw-000055 · region-0011 · 21 pontos\ncamera_1_image_raw-000055 · region-0012 · 0 pontos\ncamera_1_image_raw-000055 · region-0013 · 490 pontos\ncamera_1_image_raw-000055 · region-0014 · 54 pontos\ncamera_1_image_raw-000055 · region-0015 · 2758 pontos\ncamera_1_image_raw-000055 · region-0016 · 39 pontos\ncamera_1_image_raw-000055 · region-0017 · 10 pontos\ncamera_1_image_raw-000055 · region-0018 · 7 pontos\ncamera_1_image_raw-000055 · region-0019 · 69 pontos\ncamera_1_image_raw-000055 · region-0020 · 5 pontos\ncamera_1_image_raw-000055 · region-0021 · 4 pontos\ncamera_1_image_raw-000055 · region-0022 · 1 pontos\ncamera_1_image_raw-000055 · region-0023 · 12 pontos\ncamera_1_image_raw-000055 · region-0024 · 8 pontos\ncamera_1_image_raw-000055 · region-0025 · 1 pontos\ncamera_1_image_raw-000055 · region-0026 · 19 pontos\ncamera_1_image_raw-000055 · region-0027 · 50 pontos\ncamera_1_image_raw-000055 · region-0028 · 115 pontos\ncamera_1_image_raw-000055 · region-0029 · 9 pontos\ncamera_1_image_raw-000055 · region-0030 · 2 pontos\ncamera_1_image_raw-000055 · region-0031 · 2 pontos\ncamera_1_image_raw-000055 · region-0032 · 1 pontos\ncamera_1_image_raw-000055 · region-0033 · 0 pontos\ncamera_1_image_raw-000055 · region-0034 · 26 pontos\ncamera_1_image_raw-000055 · region-0035 · 37 pontos\ncamera_1_image_raw-000055 · region-0036 · 2 pontos\ncamera_1_image_raw-000055 · region-0037 · 2 pontos\ncamera_1_image_raw-000055 · region-0038 · 3 pontos\ncamera_1_image_raw-000055 · region-0039 · 42 pontos\ncamera_1_image_raw-000055 · region-0040 · 2 pontos\ncamera_1_image_raw-000055 · region-0041 · 517 pontos\ncamera_1_image_raw-000055 · region-0042 · 0 pontos\ncamera_1_image_raw-000055 · region-0043 · 1 pontos\ncamera_1_image_raw-000055 · region-0044 · 6 pontos\ncamera_1_image_raw-000055 · region-0045 · 0 pontos\ncamera_1_image_raw-000055 · region-0046 · 390 pontos\ncamera_1_im",
+    "visibleText": "ContextMap\n2\nVIEWER.\nATUALIZAR MAPAS\ncorridor02-f055-f061-sam2-qwentight-vox10 · 393.054 pts\n\nCAMADAS\n\nGeometria\nligada\nTrajetória\ndesligada\nEvidência\nligada\nInspecionar entidades\nligada\nRelações\nligada\nNavegação\ndesligada\n\nNAVEGAÇÃO\n\nÓRBITA\nVOO\nINÍCIO\nTOPO\nISOMÉTRICA\nFOCAR GEOMETRIA\nAtalhos de navegação\nmap\nvertical Z · declarado\n393.054 pontos · 727 chunks\nJANELA DE OBSERVAÇÃO\n8,9 s · 1.724.621.712.715.761.126 → 1.724.621.721.591.008.128 ns · relógio corridor-02-header\n\nINSPETOR\n\nEXPORTAR RELATÓRIO\nEXPLORAR\nMAPA\nEVIDÊNCIA\nFERRAMENTAS\nEVIDÊNCIA VISUAL\n\nImagens, regiões e camadas externas ligadas ao mapa.\n\nEVIDÊNCIA DE ORIGEM\n\nFrame ou região\ncamera_1_image_raw-000055 · region-0001 · 349 pontos\ncamera_1_image_raw-000055 · region-0002 · 37 pontos\ncamera_1_image_raw-000055 · region-0003 · 616 pontos\ncamera_1_image_raw-000055 · region-0004 · 43 pontos\ncamera_1_image_raw-000055 · region-0005 · 117 pontos\ncamera_1_image_raw-000055 · region-0006 · 4 pontos\ncamera_1_image_raw-000055 · region-0007 · 18 pontos\ncamera_1_image_raw-000055 · region-0008 · 43 pontos\ncamera_1_image_raw-000055 · region-0009 · 49 pontos\ncamera_1_image_raw-000055 · region-0010 · 16 pontos\ncamera_1_image_raw-000055 · region-0011 · 21 pontos\ncamera_1_image_raw-000055 · region-0012 · 0 pontos\ncamera_1_image_raw-000055 · region-0013 · 490 pontos\ncamera_1_image_raw-000055 · region-0014 · 54 pontos\ncamera_1_image_raw-000055 · region-0015 · 2758 pontos\ncamera_1_image_raw-000055 · region-0016 · 39 pontos\ncamera_1_image_raw-000055 · region-0017 · 10 pontos\ncamera_1_image_raw-000055 · region-0018 · 7 pontos\ncamera_1_image_raw-000055 · region-0019 · 69 pontos\ncamera_1_image_raw-000055 · region-0020 · 5 pontos\ncamera_1_image_raw-000055 · region-0021 · 4 pontos\ncamera_1_image_raw-000055 · region-0022 · 1 pontos\ncamera_1_image_raw-000055 · region-0023 · 12 pontos\ncamera_1_image_raw-000055 · region-0024 · 8 pontos\ncamera_1_image_raw-000055 · region-0025 · 1 pontos\ncamera_1_image_raw-000055 · region-0026 · 19 pontos\ncamera_1_image_raw-000055 · region-0027 · 50 pontos\ncamera_1_image_raw-000055 · region-0028 · 115 pontos\ncamera_1_image_raw-000055 · region-0029 · 9 pontos\ncamera_1_image_raw-000055 · region-0030 · 2 pontos\ncamera_1_image_raw-000055 · region-0031 · 2 pontos\ncamera_1_image_raw-000055 · region-0032 · 1 pontos\ncamera_1_image_raw-000055 · region-0033 · 0 pontos\ncamera_1_image_raw-000055 · region-0034 · 26 pontos\ncamera_1_image_raw-000055 · region-0035 · 37 pontos\ncamera_1_image_raw-000055 · region-0036 · 2 pontos\ncamera_1_image_raw-000055 · region-0037 · 2 pontos\ncamera_1_image_raw-000055 · region-0038 · 3 pontos\ncamera_1_image_raw-000055 · region-0039 · 42 pontos\ncamera_1_image_raw-000055 · region-0040 · 2 pontos\ncamera_1_image_raw-000055 · region-0041 · 517 pontos\ncamera_1_image_raw-000055 · region-0042 · 0 pontos\ncamera_1_image_raw-000055 · region-0043 · 1 pontos\ncamera_1_image_raw-000055 · region-0044 · 6 pontos\ncamera_1_image_raw-000055 · region-0045 · 0 pontos\ncamera_1_image_raw-000055 · region-0046 · 390 pontos\ncamera_1_image_raw-000055 · region-0047 · 3 pontos\ncamera_1_image_raw-000055 · region-0048 · 40 pontos\ncamera_1_image_raw-000055 · region-0049 · 0 pontos\ncamera_1_image_raw-000055 · region-0050 · 0 pontos\nMOSTRAR MAIS\n\nname_matched · ab0c8c98c06a7bbeb69fdc6422ecbd46\n\nFOCAR SUPORTE DA REGIÃO EM 3DLIMPAR DESTAQUE DE SUPORTE\n\nIMAGEM DE ORIGEM · CAMERA_1_IMAGE_RAW\n\nEXPANDIR IMAGEM ORIGINAL\n\n{\"clock_id\":\"corridor-02-header\",\"nanoseconds\":984856033,\"seconds\":1724621714}\n\nCOORDENADAS DE REGIÃO PREPARADAS\n\nCaixas e máscara selecionada no espaço da imagem preparada da associação. Clique numa caixa ou selecione uma região acima.\n\n mostrar máscara selecionada (carrega sob demanda)\nINSPECIONAR OBSERVAÇÃO DE ORIGEM CANÔNICAINSPECIONAR DECISÕES DE SINCRONIZAÇÃO\n\nENTRADA EXATA DO MODELO\n\nMODEL VIEW PERSISTIDA\nNenhuma imagem carregada\nAssociação e proveniência\nJSON\nDiagnósticos de qualidade, visibilidade e pose\nJSON\nHipóteses de percepção e features\nJSON\nMAPA PRONTO\n393."
+  }
+}

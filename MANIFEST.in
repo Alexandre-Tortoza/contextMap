@@ -1,0 +1,4 @@
+# setuptools-scm starts from tracked files. Research notebooks, results and local data belong to
+# the repository record, not to the Python source distribution.
+prune alexmrtr
+prune experiments

@@ -1,0 +1,161 @@
+{
+  "all_ids_exist": true,
+  "caveats": [
+    "frames a ~0,25 s t\u00eam pouca varia\u00e7\u00e3o de ponto de vista (risco do plano C8)",
+    "percep\u00e7\u00e3o multi-frame em 8 GB: rodar 1 frame por processo (#689) ou stage-major",
+    "frames com bracket de pose > 450 ms s\u00e3o recusados pela pol\u00edtica de pose da associa\u00e7\u00e3o"
+  ],
+  "decision_pending": "D1 (composi\u00e7\u00e3o exata do B2 e esfor\u00e7o de anota\u00e7\u00e3o de identidade cross-frame)",
+  "frames": [
+    {
+      "exists_in_sequence": true,
+      "frame_index_in_window": 37,
+      "image_id": "camera_1_image_raw-000037",
+      "inside_map_time_bounds": true,
+      "nearest_scan": {
+        "scan_header_minus_image_ms": 20.14,
+        "scan_id": "velodyne_points-000015"
+      },
+      "pose_bracket": {
+        "bracket_gap_ms": 201.7,
+        "nearest_pose_delta_ms": 20.14,
+        "within_association_pose_gap_450ms": true,
+        "within_mapping_pose_gap_400ms": true
+      },
+      "seconds_from_frame_55": -0.776,
+      "timestamp_ns": 1724621714208466293
+    },
+    {
+      "exists_in_sequence": true,
+      "frame_index_in_window": 43,
+      "image_id": "camera_1_image_raw-000043",
+      "inside_map_time_bounds": true,
+      "nearest_scan": {
+        "scan_header_minus_image_ms": 37.13,
+        "scan_id": "velodyne_points-000018"
+      },
+      "pose_bracket": {
+        "bracket_gap_ms": 201.7,
+        "nearest_pose_delta_ms": 63.73,
+        "within_association_pose_gap_450ms": true,
+        "within_mapping_pose_gap_400ms": true
+      },
+      "seconds_from_frame_55": -0.491,
+      "timestamp_ns": 1724621714494022275
+    },
+    {
+      "exists_in_sequence": true,
+      "frame_index_in_window": 49,
+      "image_id": "camera_1_image_raw-000049",
+      "inside_map_time_bounds": true,
+      "nearest_scan": {
+        "scan_header_minus_image_ms": -6.96,
+        "scan_id": "velodyne_points-000020"
+      },
+      "pose_bracket": {
+        "bracket_gap_ms": 100.9,
+        "nearest_pose_delta_ms": 6.96,
+        "within_association_pose_gap_450ms": true,
+        "within_mapping_pose_gap_400ms": true
+      },
+      "seconds_from_frame_55": -0.245,
+      "timestamp_ns": 1724621714739833972
+    },
+    {
+      "exists_in_sequence": true,
+      "frame_index_in_window": 55,
+      "image_id": "camera_1_image_raw-000055",
+      "inside_map_time_bounds": true,
+      "nearest_scan": {
+        "scan_header_minus_image_ms": -50.26,
+        "scan_id": "velodyne_points-000022"
+      },
+      "pose_bracket": {
+        "bracket_gap_ms": 302.6,
+        "nearest_pose_delta_ms": 50.26,
+        "within_association_pose_gap_450ms": true,
+        "within_mapping_pose_gap_400ms": true
+      },
+      "seconds_from_frame_55": 0.0,
+      "timestamp_ns": 1724621714984856033
+    },
+    {
+      "exists_in_sequence": true,
+      "frame_index_in_window": 61,
+      "image_id": "camera_1_image_raw-000061",
+      "inside_map_time_bounds": true,
+      "nearest_scan": {
+        "scan_header_minus_image_ms": 7.87,
+        "scan_id": "velodyne_points-000025"
+      },
+      "pose_bracket": {
+        "bracket_gap_ms": 302.6,
+        "nearest_pose_delta_ms": 7.87,
+        "within_association_pose_gap_450ms": true,
+        "within_mapping_pose_gap_400ms": true
+      },
+      "seconds_from_frame_55": 0.244,
+      "timestamp_ns": 1724621715229301649
+    },
+    {
+      "exists_in_sequence": true,
+      "frame_index_in_window": 67,
+      "image_id": "camera_1_image_raw-000067",
+      "inside_map_time_bounds": true,
+      "nearest_scan": {
+        "scan_header_minus_image_ms": -35.03,
+        "scan_id": "velodyne_points-000027"
+      },
+      "pose_bracket": {
+        "bracket_gap_ms": 100.9,
+        "nearest_pose_delta_ms": 35.03,
+        "within_association_pose_gap_450ms": true,
+        "within_mapping_pose_gap_400ms": true
+      },
+      "seconds_from_frame_55": 0.489,
+      "timestamp_ns": 1724621715473865745
+    },
+    {
+      "exists_in_sequence": true,
+      "frame_index_in_window": 73,
+      "image_id": "camera_1_image_raw-000073",
+      "inside_map_time_bounds": true,
+      "nearest_scan": {
+        "scan_header_minus_image_ms": 23.27,
+        "scan_id": "velodyne_points-000030"
+      },
+      "pose_bracket": {
+        "bracket_gap_ms": 201.7,
+        "nearest_pose_delta_ms": 23.27,
+        "within_association_pose_gap_450ms": true,
+        "within_mapping_pose_gap_400ms": true
+      },
+      "seconds_from_frame_55": 0.733,
+      "timestamp_ns": 1724621715718147425
+    },
+    {
+      "exists_in_sequence": true,
+      "frame_index_in_window": 79,
+      "image_id": "camera_1_image_raw-000079",
+      "inside_map_time_bounds": true,
+      "nearest_scan": {
+        "scan_header_minus_image_ms": -19.43,
+        "scan_id": "velodyne_points-000032"
+      },
+      "pose_bracket": {
+        "bracket_gap_ms": 201.7,
+        "nearest_pose_delta_ms": 81.43,
+        "within_association_pose_gap_450ms": true,
+        "within_mapping_pose_gap_400ms": true
+      },
+      "seconds_from_frame_55": 0.978,
+      "timestamp_ns": 1724621715962567225
+    }
+  ],
+  "ingestion": "a mesma do B1 (janela 628-637 s); nenhuma re-ingest\u00e3o",
+  "schema": "correction-benchmark/b2-proposal/v1",
+  "selection_rule": "imagens 37..79 a cada 6 (~0,25 s a ~24 Hz), centradas na 55",
+  "sequence_artifact_id": "aa0551d92f7b4a7aa3508dbaa1ee8ea3",
+  "status": "proposal",
+  "use": "s\u00f3 C8/C9 (multi-view); B1 continua o benchmark principal"
+}

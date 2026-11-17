@@ -1,0 +1,84 @@
+# Aumento opcional da resolução de features densas
+
+Este documento descreve `src/contextmap/visual_perception/visual_features/ports.py` (port `FeatureResolutionEnhancement`), `feature_enhancement.py` (validação da saída) e a lineage opcional adicionada a `DenseFeatureMap`.
+
+## Contrato do estágio
+
+```text
+DenseFeatureMap nativo
+    -> FeatureResolutionEnhancement
+    -> DenseFeatureMap enhanced
+```
+
+O contrato não se chama LoftUp, FeatUp ou pelo nome de outro modelo. Um backend concreto implementa `enhance(source)` e devolve o mesmo tipo público consumido por pooling e, futuramente, Sensor Association. `enhance_feature_resolution()` aplica as invariantes comuns sem carregar SDK ou checkpoint.
+
+O mapa de origem é uma dataclass imutável. A saída deve possuir novos `feature_id` e `payload_reference`, mas pode pertencer ao mesmo `VisualEvidenceArtifact` que a feature nativa. Isso permite que um único run publique as duas representações sem confundir suas identidades. Um artifact já finalizado continua imutável: uma nova execução deve produzir outro artifact em vez de sobrescrever o anterior.
+
+## Lineage obrigatória
+
+Um mapa nativo possui `DenseFeatureMap.enhancement=None`. Um mapa enhanced carrega `FeatureResolutionEnhancementProvenance`, que registra:
+
+- feature, artifact e payload reference de origem;
+- `EmbeddingSpace`, dtype, normalização e transformação espacial de origem;
+- backend/modelo/configuração efetivamente selecionados;
+- dimensões dos grids de entrada e saída;
+- dimensões da imagem preparada;
+- `EmbeddingSpace` declarado para a saída;
+- device, precision, runtime e peak memory;
+
+O `DenseFeatureMap` de saída continua registrando shape, dtype, normalização, payload, backend e `DenseFeatureSampling` completos. O wrapper rejeita lineage que não identifica exatamente o input, provenance divergente do backend selecionado, dimensões espaciais inconsistentes, reutilização do `feature_id` ou `payload_reference` de origem ou um grid que não aumente ao menos um eixo sem reduzir o outro.
+
+Hash e tamanho dos bytes persistidos pertencem ao `FeaturePayloadEntry` mantido pelo feature store. A lineage do backend não repete esses valores porque não recebe o registro persistido e, portanto, não poderia validá-los sem apenas aceitar uma declaração do próprio backend.
+
+Se o enhancement alterar a semântica da representação, o backend deve declarar outro `output_embedding_space_id`. Preservar o fingerprint é permitido somente quando os vetores continuam no mesmo espaço; alterar a normalização mantendo o mesmo fingerprint é rejeitado.
+
+## Estágio opcional no DAG
+
+`execution/pipeline_resolution.py` conhece a capability local `feature_resolution_enhancement`. Ela só é construída quando um `StageSpec` de um preset local alternativo a seleciona:
+
+```text
+native_dense_feature (source)
+    -> feature_resolution_enhancement (optional=True)
+```
+
+`CANONICAL_PRESET_V1` permanece inalterado e não inclui o estágio. O DAG de artifacts do runtime também não declara estágio ou slot para esse port. Ausência de dependência/checkpoint concreto não afeta o caminho padrão; quando um preset local seleciona o estágio, a falta de sua `StageBackendFactory` falha na resolução antes da execução.
+
+O grafo local resolvido calcula um `configuration_digest`. Quando houver um executor que use esse preset alternativo, ele deverá registrar a configuração efetiva no `VisualEvidenceArtifact` para tornar a inserção ou remoção do estágio auditável. O runtime atual não executa esse port.
+
+## Consumo comum
+
+`pool_region_feature()` recebe mapas native e enhanced pela mesma assinatura e usa apenas `DenseFeatureSampling`. Não há `if loftup`, `if enhanced` ou heurística baseada no tamanho do grid. Cada transformação mantém `coordinate_transform_id` próprio, então a associação espacial continua determinística.
+
+## Backend aprendido
+
+Esta issue não materializa um backend LoftUp-style. Não existe no repositório uma dependência/checkpoint validado nem uma execução com pesos que demonstre compatibilidade e benefício no dataset do projeto. Inventar um wrapper sem essa validação transformaria uma hipótese da literatura em backend aparentemente suportado.
+
+O port, a composição opcional, a lineage e os testes fake deixam a fronteira pronta para um backend real posterior. Esse backend deverá permanecer em `visual_perception/visual_features/adapters/`, falhar apenas quando selecionado e ser avaliado pelo protocolo de `contextmap.evaluation` antes de integrar qualquer preset canônico.
+
+## Fora da campanha do milestone #22 (#656)
+
+A comparação "features DINO nativas × o mesmo artifact DINO passado por `FeatureResolutionEnhancement`" (braço A2 do experimento A da #197; "native DINO dense features vs `FeatureResolutionEnhancement` stage" da #180) **não entra** na campanha do milestone #22. A decisão foi tomada antes do freeze dos manifests (#527), porque:
+
+- não existe backend concreto: nenhum código implementa `enhance()` além do port;
+- escolher um (LoftUp, FeatUp, JAFAR ou outro) e demonstrar compatibilidade com DINOv2/DINOv3, licença, checkpoint com revisão fixada e custo de VRAM é um projeto de pesquisa, com problema, justificativa, métrica e avaliação registrados antes da escolha do modelo (AGENTS §22), e não uma lacuna a fechar;
+- o runtime não tem estágio nem slot que rode o port: o adapter vive só no grafo interno de Visual Perception, fora do preset canônico, e o executor de percepção usa sempre esse preset.
+
+A matriz de capacidades inventaria a técnica como `contextmap2.feature_resolution_enhancement`, `out_of_scope`, com a decisão; a expansão de fases recusa todo arm que a declara ([`experiment-phases.md`](../../evaluation/docs/experiment-phases.md#técnicas-opcionais-fora-da-campanha-656-657)), e o relatório da campanha lista A2 como "sem backend". Nada do contrato muda: o port, a lineage e o protocolo do experimento A continuam prontos para uma campanha futura com um backend avaliado. Até lá, a técnica fica sem evidência própria e o port sem consumidor real.
+
+## Trade-offs explícitos
+
+- O port trabalha com referências de artifact/payload, não com `numpy.ndarray` na identidade pública. O feature store é responsável pela escrita atômica e pela integridade dos payloads persistidos; o backend selecionado produz a feature e sua lineage científica.
+- `peak_memory_bytes` preserva o valor medido, mas a semântica da fonte (VRAM, RSS etc.) deve ser documentada pelo backend; sinais heterogêneos não são somados.
+- A validação exige aumento geométrico do grid, mas não afirma ganho de qualidade. Qualidade, estabilidade e custo permanecem métricas separadas.
+- O estágio aceita um novo `EmbeddingSpace` explícito, mas nunca assume compatibilidade por dimensão.
+
+## O que deliberadamente não faz
+
+- não altera a resolução produzida pelo backend DINO nativo;
+- não adiciona o estágio ao preset canônico;
+- não executa/download pesos nem escolhe LoftUp como arquitetura pública;
+- não produz labels, máscaras ou associação LiDAR;
+- não implementa cache/reuse global; apenas preserva identidades para o runtime fazê-lo;
+- não mistura custo com qualidade em um score único.
+
+Ver [`dense_region_association.md`](dense_region_association.md) para o contrato espacial/consumidor comum, [`pipeline.md`](pipeline.md) para composição declarativa e [`../../evaluation/docs/feature_extraction.md`](../../evaluation/docs/feature_extraction.md) para o protocolo native versus enhanced.

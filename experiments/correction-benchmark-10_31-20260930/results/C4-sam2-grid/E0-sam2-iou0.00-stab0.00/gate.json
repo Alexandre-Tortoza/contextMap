@@ -1,0 +1,47 @@
+{
+  "arm": "E0-sam2-iou0.00-stab0.00",
+  "arm_kind": "none",
+  "baseline_arm": "E0",
+  "deltas": {
+    "association": {
+      "arm": "not_in_run",
+      "baseline": "measured",
+      "status": "not_compared"
+    },
+    "calibration": {
+      "arm": "not_in_run",
+      "baseline": "pending_annotation",
+      "status": "not_compared"
+    },
+    "entities": {
+      "arm": "not_in_run",
+      "baseline": "measured",
+      "status": "not_compared"
+    },
+    "geometry": {
+      "arm": "not_in_run",
+      "baseline": "measured",
+      "status": "not_compared"
+    },
+    "regions": {},
+    "relations": {
+      "arm": "not_in_run",
+      "baseline": "measured",
+      "status": "not_compared"
+    },
+    "semantics": {
+      "arm": "not_in_run",
+      "baseline": "measured",
+      "status": "not_compared"
+    }
+  },
+  "gate_policy": "c10-gate/v1",
+  "invariants": {
+    "geometry": "not_applicable (a side has no geometry layer)"
+  },
+  "non_regression": [],
+  "passed": true,
+  "target_layer": "regions",
+  "violations": [],
+  "warnings": []
+}

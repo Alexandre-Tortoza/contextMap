@@ -1,0 +1,125 @@
+# Run de dois frames do corridor-02 (10:31 = imagem 55, e 6 imagens depois = imagem 61) pelo CLI.
+# Camada final, por cima da mesma pilha do E0 (bench_common.CONFIG_STACK do bundle
+# correction-benchmark-10_31-20260930). O braço voxel acrescenta voxel.toml.
+schema_version = "0.1.0"
+
+[pipeline.stages]
+# O GT (corridor-02-gt.txt) entra como sequência de pose, lida pelo estimador external_pose.
+pose_ingestion = true
+# A fusão desta run não consome scores (canais semantic_claims e visual_features, abaixo), e o
+# scoring toma um run de percepção só, não os dois do build. A camada base o liga; os context
+# runs foram gravados com ele ligado, mas ele não é estágio de contexto e nunca rodou neles.
+semantic_scoring = false
+
+[inputs]
+sequence = "corridor-02"
+
+[inputs.observation_selection]
+kind = "explicit_ids"
+observation_ids = ["camera_1_image_raw-000055", "camera_1_image_raw-000061"]
+
+# --- percepção -------------------------------------------------------------------------------
+
+# Limiares do SAM2 escolhidos sem anotação (grade C4: 61 máscaras, 13% dos pixels em >=2 máscaras).
+[components.region_perception.discovery.sam2]
+predicted_iou_threshold = 0.5
+stability_threshold = 0.8
+
+# Só labels de região (sem cena), com o fator de interação; o VLM vê o recorte com o contorno
+# da máscara (view B da ablação C6, ainda não comparada). v3: com a v1 o Qwen pôs o fator fora
+# de attributes em 31 de 61 regiões (run-0004), com a v2 devolveu o claim sem envelope em 59 de
+# 61 (run-0005). Os dois runs ficam no run store, fora das branches (ver README).
+[components.semantic_interpretation.interpreter.qwen]
+prompt_policy = { region = "region-interaction/v3" }
+view_policy = { region_views = ["mask_outline_crop"], mask_outline = { rgb = [255, 0, 255], width_px = 2 } }
+
+# --- geometria -------------------------------------------------------------------------------
+
+[components.geometric_mapping.deskew]
+backend = "pose-interpolation-deskew-v1"
+
+[components.geometric_mapping.deskew.pose-interpolation-deskew-v1]
+time_field = "time"
+time_unit = "seconds"
+reference = "scan_timestamp"
+time_bin_ns = 1000000
+
+# --- fusão, mapeamento, resolução ------------------------------------------------------------
+
+# O context run não roda o scoring CLIP: a fusão declara só os canais que recebe.
+[components.semantic_fusion.accumulation.baseline-evidence-accumulation-v1]
+channels = ["semantic_claims", "visual_features"]
+
+[components.semantic_mapping.geometry_summary.entity-geometry-summary-v1]
+sparse_point_threshold = 3
+connectivity_radius_m = 0.5
+
+[components.entity_resolution.retrieval.entity-candidate-retrieval-v1]
+centroid_radius_m = 20.0
+bounds_margin_m = 0.1
+
+[components.entity_resolution.resolution.conservative-staged-resolution-v1]
+use_channels = ["geometry"]
+min_supporting_channels = 1
+
+[components.entity_resolution.geometry_comparison.entity-geometry-comparison-v1]
+min_shared_support_jaccard = 0.5
+min_bounds_iou = 0.5
+min_bounds_containment = 0.9
+min_conflict_gap_m = 0.5
+min_extent_ratio = 0.3
+
+# Crença pós-resolução (C9): mínimo de 2 observações físicas distintas (hipótese de configuração).
+[components.entity_resolution.belief]
+backend = "resolved-belief-min-support-v1"
+
+[components.entity_resolution.belief.resolved-belief-min-support-v1]
+min_supporting_physical_observations = 2
+
+# --- relações --------------------------------------------------------------------------------
+
+[components.spatial_relations.frame_conventions.map-frame-conventions-v1]
+map_frame = "map"
+up_axis = "+z"
+forward_axis = "+x"
+
+# O alcance de interação é derivado do maior raio das entidades resolvidas deste run.
+[components.spatial_relations.candidate.bounds-neighborhood-candidates-v1]
+predicates = ["next_to", "touching", "within_interaction_range"]
+proximity_radius_m = 0.6
+directional_radius_m = 2.0
+derive_interaction_radius = true
+
+[components.spatial_relations.geometry_summary.entity-geometry-summary-v1]
+sparse_point_threshold = 3
+connectivity_radius_m = 0.5
+
+[components.spatial_relations.geometric_predicate]
+backend = "bounds-geometric-predicates-v1"
+
+[components.spatial_relations.geometric_predicate.bounds-geometric-predicates-v1]
+boundary_tolerance_m = 0.02
+next_to_max_gap_m = 0.5
+adjacent_penetration_m = 0.05
+containment_slack_m = 0.05
+directional_overlap_fraction = 0.5
+
+[components.spatial_relations.contact_predicate]
+backend = "point-contact-predicates-v1"
+
+[components.spatial_relations.contact_predicate.point-contact-predicates-v1]
+contact_distance_m = 0.05
+contact_tolerance_m = 0.02
+min_contact_points = 3
+support_height_tolerance_m = 0.05
+support_footprint_fraction = 0.5
+leaning_min_tilt_deg = 10.0
+leaning_max_tilt_deg = 80.0
+tilt_tolerance_deg = 2.0
+leaning_min_vertical_overlap_m = 0.3
+
+[components.spatial_relations.semantic_predicate]
+backend = "interaction-range-predicate-v1"
+
+[components.spatial_relations.semantic_predicate.interaction-range-predicate-v1]
+boundary_tolerance_m = 0.02

@@ -1,0 +1,558 @@
+"""Filtragem geométrica, merge e congelamento determinísticos de regiões 2D."""
+
+from __future__ import annotations
+
+import json
+from dataclasses import dataclass
+from enum import StrEnum
+from hashlib import sha256
+from math import ceil, floor, isfinite
+from typing import TYPE_CHECKING, assert_never
+
+from contextmap.ingestion import SourceObservationId
+from contextmap.region_perception.region_evidence import Region2D, RegionId
+from contextmap.region_perception.region_geometry import (
+    BoundingBox,
+    BoundingBox2D,
+    InlineMask,
+    RegionCandidate,
+    RegionProvenance,
+    RejectedRegionCandidate,
+    RejectionReason,
+)
+from contextmap.shared import BackendProvenance
+from contextmap.visual_perception import PreparedImage
+
+if TYPE_CHECKING:
+    import numpy as np
+    from numpy.typing import NDArray
+
+
+def _to_bounding_box2d(bounds: BoundingBox) -> BoundingBox2D:
+    """Convert a BoundingBox corner pair into the x/y/width/height form."""
+    return BoundingBox2D(
+        x=bounds.x_min,
+        y=bounds.y_min,
+        width=bounds.x_max - bounds.x_min,
+        height=bounds.y_max - bounds.y_min,
+    )
+
+
+class MergeKind(StrEnum):
+    """Backend-independent reasons for consolidating two proposals."""
+
+    IOU_DUPLICATE = "iou_duplicate"
+    CONTAINMENT = "containment"
+
+
+class MergeRepresentativePolicy(StrEnum):
+    """Versioned rules that elect whose geometry a merge group freezes into its Region2D.
+
+    ``LARGEST_AREA`` elects the member with the largest ``area_pixels`` and breaks ties by the
+    smaller ``candidate_id``. Backend scores are never a criterion: they are not comparable
+    across backends.
+    """
+
+    LARGEST_AREA = "largest_area_v1"
+
+
+@dataclass(frozen=True, slots=True)
+class NormalizationConfig:
+    """Explicit geometric policies applied before Region2D geometry freeze."""
+
+    minimum_area_pixels: float = 1.0
+    maximum_area_pixels: float | None = None
+    minimum_valid_fraction: float = 1.0
+    maximum_exclusion_fraction: float = 0.0
+    duplicate_iou_threshold: float = 0.8
+    containment_threshold: float = 0.95
+    maximum_regions: int | None = None
+    merge_representative_policy: MergeRepresentativePolicy = MergeRepresentativePolicy.LARGEST_AREA
+
+    def __post_init__(self) -> None:
+        """Validate policy ranges before any candidate is processed."""
+        if not isfinite(self.minimum_area_pixels) or self.minimum_area_pixels <= 0:
+            raise ValueError("minimum_area_pixels must be positive and finite")
+        if self.maximum_area_pixels is not None and (
+            not isfinite(self.maximum_area_pixels)
+            or self.maximum_area_pixels < self.minimum_area_pixels
+        ):
+            raise ValueError("maximum_area_pixels must be finite and at least the minimum")
+        for name, value in (
+            ("minimum_valid_fraction", self.minimum_valid_fraction),
+            ("maximum_exclusion_fraction", self.maximum_exclusion_fraction),
+            ("duplicate_iou_threshold", self.duplicate_iou_threshold),
+            ("containment_threshold", self.containment_threshold),
+        ):
+            if not isfinite(value) or not 0 <= value <= 1:
+                raise ValueError(f"{name} must be between zero and one")
+        if self.maximum_regions is not None and self.maximum_regions <= 0:
+            raise ValueError("maximum_regions must be positive when configured")
+        if not isinstance(self.merge_representative_policy, MergeRepresentativePolicy):
+            raise ValueError(
+                "merge_representative_policy must be one of "
+                f"{', '.join(policy.value for policy in MergeRepresentativePolicy)}"
+            )
+
+    @property
+    def digest(self) -> str:
+        """Return a deterministic identity for the effective geometric policy."""
+        payload = {
+            "minimum_area_pixels": self.minimum_area_pixels,
+            "maximum_area_pixels": self.maximum_area_pixels,
+            "minimum_valid_fraction": self.minimum_valid_fraction,
+            "maximum_exclusion_fraction": self.maximum_exclusion_fraction,
+            "duplicate_iou_threshold": self.duplicate_iou_threshold,
+            "containment_threshold": self.containment_threshold,
+            "maximum_regions": self.maximum_regions,
+            "merge_representative_policy": self.merge_representative_policy.value,
+        }
+        serialized = json.dumps(payload, sort_keys=True, separators=(",", ":"))
+        return f"sha256:{sha256(serialized.encode()).hexdigest()}"
+
+
+@dataclass(frozen=True, slots=True)
+class MergeDecision:
+    """Record why one proposal contributed to another canonical region.
+
+    The pair is the one compared, named after that merge's election: ``merged_candidate_id`` is
+    whichever of the two lost the representation, the incoming proposal or the previous
+    representative. The decisions of one group therefore chain to its final representative, and
+    ``iou``/``containment_fraction`` (both symmetric) always describe the recorded pair.
+    """
+
+    representative_candidate_id: str
+    merged_candidate_id: str
+    kind: MergeKind
+    iou: float
+    containment_fraction: float
+
+    def to_dict(self) -> dict[str, object]:
+        """Return a JSON-compatible merge diagnostic."""
+        return {
+            "representative_candidate_id": self.representative_candidate_id,
+            "merged_candidate_id": self.merged_candidate_id,
+            "kind": self.kind.value,
+            "iou": self.iou,
+            "containment_fraction": self.containment_fraction,
+        }
+
+
+@dataclass(frozen=True, slots=True)
+class NormalizationResult:
+    """Frozen regions plus every filtering and merge decision."""
+
+    regions: tuple[Region2D, ...]
+    rejected: tuple[RejectedRegionCandidate, ...]
+    merge_decisions: tuple[MergeDecision, ...]
+    config_digest: str
+
+
+@dataclass(frozen=True, slots=True, eq=False)
+class _Geometry:
+    """A candidate's footprint: its pixels, cropped to the tight box of pixels they occupy.
+
+    ``pixels`` covers ``[x0, x1) x [y0, y1)`` of the image and is a read-only view whenever it
+    comes from a mask, so a footprint copies no image. ``pixel_count`` is its foreground, which
+    the overlap and the constraint fractions divide by; ``area_pixels`` is the area the region
+    reports (the box area for a box-only candidate).
+    """
+
+    candidate: RegionCandidate
+    bounding_box: BoundingBox
+    x0: int
+    y0: int
+    pixels: NDArray[np.bool_]
+    pixel_count: int
+    area_pixels: float
+
+    @property
+    def x1(self) -> int:
+        """Exclusive right edge of the footprint, in pixels."""
+        return self.x0 + int(self.pixels.shape[1])
+
+    @property
+    def y1(self) -> int:
+        """Exclusive bottom edge of the footprint, in pixels."""
+        return self.y0 + int(self.pixels.shape[0])
+
+
+@dataclass(slots=True)
+class _RegionGroup:
+    """One canonical region being formed.
+
+    ``representative`` is the member the merge-representative policy has elected so far: later
+    candidates are compared against its geometry, and only its geometry is frozen. Every member,
+    the representative included, stays in ``contributors`` in processing order.
+    """
+
+    representative: _Geometry
+    contributors: list[RegionCandidate]
+
+
+def normalize_regions(
+    candidates: tuple[RegionCandidate, ...],
+    prepared_image: PreparedImage,
+    backend_provenance: BackendProvenance,
+    config: NormalizationConfig | None = None,
+) -> NormalizationResult:
+    """Validate, filter, merge, and freeze backend-neutral region proposals.
+
+    Args:
+        candidates: Globally remapped proposals from any discovery backend.
+        prepared_image: Prepared image and optional declared spatial constraints.
+        backend_provenance: Exact public provenance reported by the adapter.
+        config: Version-visible geometric normalization policy.
+
+    Returns:
+        Immutable canonical regions and complete rejection/merge diagnostics.
+
+    Raises:
+        ValueError: If candidate identities or image contexts are inconsistent.
+    """
+    if config is None:
+        config = NormalizationConfig()
+    _validate_candidate_set(candidates, prepared_image, backend_provenance)
+    rejected: list[RejectedRegionCandidate] = []
+    valid_geometry: list[_Geometry] = []
+
+    for candidate in sorted(candidates, key=lambda item: item.candidate_id):
+        geometry = _candidate_geometry(candidate)
+        if geometry is None:
+            rejected.append(
+                _reject(
+                    candidate,
+                    RejectionReason.INVALID_GEOMETRY,
+                    "candidate geometry is empty or cannot be inspected",
+                )
+            )
+            continue
+        if geometry.area_pixels < config.minimum_area_pixels:
+            rejected.append(
+                _reject(
+                    candidate,
+                    RejectionReason.AREA_BELOW_MINIMUM,
+                    f"area {geometry.area_pixels} is below configured minimum",
+                )
+            )
+            continue
+        if (
+            config.maximum_area_pixels is not None
+            and geometry.area_pixels > config.maximum_area_pixels
+        ):
+            rejected.append(
+                _reject(
+                    candidate,
+                    RejectionReason.AREA_ABOVE_MAXIMUM,
+                    f"area {geometry.area_pixels} exceeds configured maximum",
+                )
+            )
+            continue
+        if _outside_valid_region(geometry, prepared_image, config.minimum_valid_fraction):
+            rejected.append(
+                _reject(
+                    candidate,
+                    RejectionReason.OUTSIDE_VALID_REGION,
+                    "candidate does not satisfy configured valid-region coverage",
+                )
+            )
+            continue
+        if _overlaps_exclusion(geometry, prepared_image, config.maximum_exclusion_fraction):
+            rejected.append(
+                _reject(
+                    candidate,
+                    RejectionReason.EXCLUSION_OVERLAP,
+                    "candidate exceeds configured exclusion overlap",
+                )
+            )
+            continue
+        valid_geometry.append(geometry)
+
+    groups: list[_RegionGroup] = []
+    merge_decisions: list[MergeDecision] = []
+    for geometry in valid_geometry:
+        match = _find_duplicate(geometry, groups, config)
+        if match is None:
+            groups.append(_RegionGroup(representative=geometry, contributors=[geometry.candidate]))
+            continue
+        group, kind, iou, containment = match
+        group.contributors.append(geometry.candidate)
+        # A eleição vem antes do registro: quem perde a representação é o incorporado, e a
+        # decisão e a rejeição nomeiam o par já resolvido. IoU e contenção são simétricos.
+        incorporated = geometry
+        if _elects(config.merge_representative_policy, geometry, group.representative):
+            incorporated, group.representative = group.representative, geometry
+        representative_id = group.representative.candidate.candidate_id
+        merge_decisions.append(
+            MergeDecision(
+                representative_candidate_id=representative_id,
+                merged_candidate_id=incorporated.candidate.candidate_id,
+                kind=kind,
+                iou=iou,
+                containment_fraction=containment,
+            )
+        )
+        rejected.append(
+            _reject(
+                incorporated.candidate,
+                RejectionReason.MERGED_DUPLICATE,
+                f"merged into {representative_id}",
+            )
+        )
+
+    if config.maximum_regions is not None and len(groups) > config.maximum_regions:
+        for group in groups[config.maximum_regions :]:
+            rejected.append(
+                _reject(
+                    group.representative.candidate,
+                    RejectionReason.REGION_BUDGET_EXCEEDED,
+                    "canonical region exceeded configured maximum_regions budget",
+                )
+            )
+        groups = groups[: config.maximum_regions]
+
+    regions = tuple(
+        _freeze_group(group, index + 1, backend_provenance) for index, group in enumerate(groups)
+    )
+    return NormalizationResult(
+        regions=regions,
+        rejected=tuple(rejected),
+        merge_decisions=tuple(merge_decisions),
+        config_digest=config.digest,
+    )
+
+
+def _validate_candidate_set(
+    candidates: tuple[RegionCandidate, ...],
+    prepared_image: PreparedImage,
+    backend_provenance: BackendProvenance,
+) -> None:
+    if backend_provenance.capability != "region_discovery":
+        raise ValueError("normalization backend provenance must describe region_discovery")
+    identifiers = [candidate.candidate_id for candidate in candidates]
+    if len(set(identifiers)) != len(identifiers):
+        raise ValueError("candidate ids must be unique before normalization")
+    if not candidates:
+        return
+    expected_run = candidates[0].perception_run_id
+    expected_result = candidates[0].perception_result_id
+    for candidate in candidates:
+        candidate_provenance = candidate.provenance
+        if (
+            candidate_provenance.backend_id != backend_provenance.backend_id
+            or candidate_provenance.backend_version != backend_provenance.version
+            or candidate_provenance.checkpoint != backend_provenance.model
+            or (
+                backend_provenance.configuration_fingerprint is not None
+                and candidate_provenance.config_digest
+                != backend_provenance.configuration_fingerprint
+            )
+        ):
+            raise ValueError(
+                "candidate provenance does not match the region discovery backend provenance"
+            )
+        if candidate.source_observation_id != prepared_image.source_observation_id:
+            raise ValueError("candidate source observation does not match prepared image")
+        if (candidate.image_width, candidate.image_height) != (
+            prepared_image.width,
+            prepared_image.height,
+        ):
+            raise ValueError("candidate dimensions do not match prepared image")
+        if candidate.perception_run_id != expected_run:
+            raise ValueError(
+                "candidates from different perception runs cannot be normalized together"
+            )
+        if candidate.perception_result_id != expected_result:
+            raise ValueError(
+                "candidates from different perception results cannot be normalized together"
+            )
+
+
+def _candidate_geometry(candidate: RegionCandidate) -> _Geometry | None:
+    import numpy as np
+
+    if isinstance(candidate.mask, InlineMask):
+        full = candidate.mask.as_array()
+        rows = np.flatnonzero(full.any(axis=1))
+        columns = np.flatnonzero(full.any(axis=0))
+        if rows.size == 0:
+            return None
+        x0, x1 = int(columns[0]), int(columns[-1]) + 1
+        y0, y1 = int(rows[0]), int(rows[-1]) + 1
+        mask_box = BoundingBox(x0, y0, x1, y1)
+        if candidate.bounding_box is not None and not _contains_box(
+            candidate.bounding_box, mask_box
+        ):
+            return None
+        pixels = full[y0:y1, x0:x1]
+        count = int(np.count_nonzero(pixels))
+        bounding_box = candidate.bounding_box or mask_box
+        return _Geometry(candidate, bounding_box, x0, y0, pixels, count, float(count))
+
+    if candidate.bounding_box is None:
+        return None
+    box = candidate.bounding_box
+    # Um pixel pertence à caixa quando o seu centro está nela; nas duas direções isso é um
+    # intervalo, então a pegada de uma caixa é um retângulo de pixels.
+    xs = [x for x in range(floor(box.x_min), ceil(box.x_max)) if box.x_min <= x + 0.5 < box.x_max]
+    ys = [y for y in range(floor(box.y_min), ceil(box.y_max)) if box.y_min <= y + 0.5 < box.y_max]
+    if not xs or not ys:
+        return None
+    pixels = np.ones((len(ys), len(xs)), dtype=np.bool_)
+    return _Geometry(candidate, box, xs[0], ys[0], pixels, len(xs) * len(ys), box.area)
+
+
+def _contains_box(container: BoundingBox, contained: BoundingBox) -> bool:
+    return (
+        container.x_min <= contained.x_min
+        and container.y_min <= contained.y_min
+        and container.x_max >= contained.x_max
+        and container.y_max >= contained.y_max
+    )
+
+
+def _window(mask: InlineMask, geometry: _Geometry) -> NDArray[np.bool_]:
+    """Return the part of a full-image mask under a footprint."""
+    return mask.as_array()[geometry.y0 : geometry.y1, geometry.x0 : geometry.x1]
+
+
+def _outside_valid_region(
+    geometry: _Geometry, prepared_image: PreparedImage, minimum_fraction: float
+) -> bool:
+    import numpy as np
+
+    if prepared_image.valid_region is None:
+        return False
+    valid = _window(prepared_image.valid_region.mask, geometry) & geometry.pixels
+    return int(np.count_nonzero(valid)) / geometry.pixel_count < minimum_fraction
+
+
+def _overlaps_exclusion(
+    geometry: _Geometry, prepared_image: PreparedImage, maximum_fraction: float
+) -> bool:
+    import numpy as np
+
+    if not prepared_image.exclusion_regions:
+        return False
+    excluded = np.zeros_like(geometry.pixels)
+    for region in prepared_image.exclusion_regions:
+        excluded |= _window(region.mask, geometry)
+    excluded_count = int(np.count_nonzero(excluded & geometry.pixels))
+    return excluded_count / geometry.pixel_count > maximum_fraction
+
+
+def _find_duplicate(
+    geometry: _Geometry,
+    groups: list[_RegionGroup],
+    config: NormalizationConfig,
+) -> tuple[_RegionGroup, MergeKind, float, float] | None:
+    # Pegadas cujas caixas não se encontram têm IoU e contenção 0; com os dois limiares
+    # positivos elas nunca casam, e a comparação pixel a pixel pode ser evitada. Com um limiar
+    # 0 todo par casa, então nenhum par é pulado.
+    disjoint_can_match = config.duplicate_iou_threshold <= 0 or config.containment_threshold <= 0
+    for group in groups:
+        representative = group.representative
+        if not disjoint_can_match and not _boxes_meet(geometry, representative):
+            continue
+        iou, containment = _overlap(geometry, representative)
+        if iou >= config.duplicate_iou_threshold:
+            return group, MergeKind.IOU_DUPLICATE, iou, containment
+        if containment >= config.containment_threshold:
+            return group, MergeKind.CONTAINMENT, iou, containment
+    return None
+
+
+def _elects(policy: MergeRepresentativePolicy, challenger: _Geometry, incumbent: _Geometry) -> bool:
+    """Return whether ``challenger`` takes the representation of ``incumbent``'s group."""
+    if policy is MergeRepresentativePolicy.LARGEST_AREA:
+        return _largest_area_rank(challenger) < _largest_area_rank(incumbent)
+    assert_never(policy)
+
+
+def _largest_area_rank(geometry: _Geometry) -> tuple[float, str]:
+    """Order members by ``largest_area_v1``: the smallest rank represents the group."""
+    # O empate fica com o menor candidate_id: é a ordem de processamento, então um empate
+    # nunca troca o representante e o resultado não depende da ordem de entrada.
+    return -geometry.area_pixels, geometry.candidate.candidate_id
+
+
+def _boxes_meet(geometry: _Geometry, representative: _Geometry) -> bool:
+    return (
+        geometry.x0 < representative.x1
+        and representative.x0 < geometry.x1
+        and geometry.y0 < representative.y1
+        and representative.y0 < geometry.y1
+    )
+
+
+def _overlap(geometry: _Geometry, representative: _Geometry) -> tuple[float, float]:
+    """Return the IoU and the containment fraction of two candidate footprints, in pixels."""
+    import numpy as np
+
+    x0, x1 = max(geometry.x0, representative.x0), min(geometry.x1, representative.x1)
+    y0, y1 = max(geometry.y0, representative.y0), min(geometry.y1, representative.y1)
+    intersection = 0
+    if x0 < x1 and y0 < y1:
+        left = geometry.pixels[
+            y0 - geometry.y0 : y1 - geometry.y0, x0 - geometry.x0 : x1 - geometry.x0
+        ]
+        right = representative.pixels[
+            y0 - representative.y0 : y1 - representative.y0,
+            x0 - representative.x0 : x1 - representative.x0,
+        ]
+        intersection = int(np.count_nonzero(left & right))
+    union = geometry.pixel_count + representative.pixel_count - intersection
+    iou = intersection / union if union else 0.0
+    minimum_area = min(geometry.pixel_count, representative.pixel_count)
+    containment = intersection / minimum_area if minimum_area else 0.0
+    return iou, containment
+
+
+def _freeze_group(
+    group: _RegionGroup,
+    region_index: int,
+    backend_provenance: BackendProvenance,
+) -> Region2D:
+    """Freeze a region group into a canonical Region2D with full provenance.
+
+    Args:
+        group: The merged region group with representative geometry and all contributors.
+        region_index: Sequential 1-based index for this region within the normalization pass.
+        backend_provenance: Discovery backend provenance (not the candidate provenances).
+
+    Returns:
+        A validated, immutable Region2D with all discovery evidence and provenance.
+    """
+    representative = group.representative
+    candidate = representative.candidate
+    contributors = tuple(item.candidate_id for item in group.contributors)
+    discovery_provenance: tuple[RegionProvenance, ...] = tuple(
+        item.provenance for item in group.contributors
+    )
+    # NOTE: o score nativo do backend fica na auditoria de descoberta, onde foi medido, e não
+    # vira campo da região: ele não é probabilidade e não é comparável entre backends (§5).
+    return Region2D(
+        region_id=RegionId(f"region-{region_index:04d}"),
+        source_observation_id=SourceObservationId(candidate.source_observation_id),
+        bounding_box=_to_bounding_box2d(representative.bounding_box),
+        provenance=backend_provenance,
+        image_width=candidate.image_width,
+        image_height=candidate.image_height,
+        mask=candidate.mask,
+        mask_reference=(None if candidate.mask_reference is None else candidate.mask_reference.uri),
+        area_pixels=representative.area_pixels,
+        contributor_candidate_ids=contributors,
+        discovery_provenance=discovery_provenance,
+        is_accepted=True,
+    )
+
+
+def _reject(
+    candidate: RegionCandidate, reason: RejectionReason, detail: str
+) -> RejectedRegionCandidate:
+    return RejectedRegionCandidate(
+        candidate_id=candidate.candidate_id,
+        reason=reason,
+        detail=detail,
+        discovery_pass_id=candidate.provenance.discovery_pass_id,
+    )

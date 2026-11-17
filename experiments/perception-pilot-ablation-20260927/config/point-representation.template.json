@@ -1,0 +1,37 @@
+{
+  "pipeline": {"stages": {"point_representation": true}},
+  "resources": {
+    "providers": {
+      "point_representation.encoder": "REPLACE_WITH_YOUR_LOADERS_MODULE:load_ptv3"
+    }
+  },
+  "components": {
+    "point_representation": {
+      "center_selection": {"backend": "observation-support-anchor-v1"},
+      "encoder": {
+        "backend": "ptv3",
+        "ptv3": {
+          "variant": "ptv3m1-base",
+          "checkpoint": "Pointcept/PointTransformerV3:nuscenes-semseg-pt-v3m1-0-base/model_best.pth",
+          "checkpoint_hash": "sha256:e2774d2fa1dd33e640a514afe0bd1e5af94eb08be19d08d1f9402f20dfd6db94",
+          "device": "cuda",
+          "precision": "float32",
+          "grid_size_m": 0.05,
+          "output_dimension": 64,
+          "pooling": "center",
+          "normalization": "none",
+          "min_support_points": 3,
+          "padding_channels": 1,
+          "support_policy": {
+            "support_type": "neighborhood",
+            "method": "radius",
+            "radius_m": 0.5,
+            "k": null,
+            "max_neighbors": null,
+            "preparation": {"centering": "centroid", "scale_normalization": "none"}
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,73 @@
+{
+  "stage_dir": "workspace/run-frame-10_31/corridor-02/run-0006/visual_perception",
+  "prompt_templates": {
+    "region-interaction/v3": 55
+  },
+  "regions_attempted": 61,
+  "regions_interpreted": 61,
+  "abstained": 6,
+  "parse_failures": 0,
+  "parse_failure_rate": 0.0,
+  "parse_failure_kinds": {},
+  "backend_call_failures": 0,
+  "primary_claims": 55,
+  "primary_claims_per_frame": {
+    "camera_1_image_raw-000055": 55
+  },
+  "primary_claims_without_factor": 0,
+  "interaction_factor": {
+    "count": 55,
+    "distinct": [
+      0.5,
+      0.8
+    ],
+    "histogram": {
+      "0.5": 2,
+      "0.8": 53
+    },
+    "median": 0.8,
+    "min": 0.5,
+    "max": 0.8,
+    "outside_clamp_0.1_5.0": 0
+  },
+  "labels": {
+    "bar": 9,
+    "door": 7,
+    "panel": 3,
+    "blade": 3,
+    "edge": 3,
+    "handle": 2,
+    "line": 2,
+    "wall": 1,
+    "board": 1,
+    "microphone": 1,
+    "seat": 1,
+    "barrel": 1,
+    "knife": 1,
+    "spatula": 1,
+    "pole": 1,
+    "wing": 1,
+    "window": 1,
+    "screen": 1,
+    "frame": 1,
+    "pad": 1,
+    "ceiling": 1,
+    "towel rack": 1,
+    "plate": 1,
+    "object": 1,
+    "shelf": 1,
+    "button": 1,
+    "cap": 1,
+    "pen": 1,
+    "screw": 1,
+    "text": 1,
+    "sleeve": 1,
+    "skateboard": 1,
+    "leaf": 1
+  },
+  "distinct_labels": 33,
+  "outline_leak": {
+    "color_attribute_pink_or_magenta": 11,
+    "description_mentions_pink_border": 0
+  }
+}

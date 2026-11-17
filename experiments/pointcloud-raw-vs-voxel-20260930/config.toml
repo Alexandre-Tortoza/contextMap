@@ -1,0 +1,33 @@
+# Config mínimo para o teste raw-vs-voxel do corridor-02: trajetória por pose GT (external_pose)
+# e as políticas de mapeamento geométrico. Nenhum backend de percepção/semântica é composto aqui,
+# porque só rodamos state_estimation e o build de nuvem.
+[pipeline]
+preset = "canonical/2"
+
+[components.state_estimation.estimator]
+backend = "external_pose"
+
+[components.state_estimation.estimator.external_pose]
+# Frames da pose GT do corridor-02 (mapa <- corpo): parent "map", corpo "epson".
+reference_frame = "map"
+body_frame = "epson"
+
+[components.geometric_mapping.pose_lookup]
+backend = "lookup-policy-v1"
+
+[components.geometric_mapping.pose_lookup.lookup-policy-v1]
+# GT e LiDAR são sensores distintos: interpola a pose entre vizinhos, com gap máximo de 200 ms.
+mode = "interpolated"
+max_interpolation_gap_ns = 200000000
+
+[components.geometric_mapping.motion_correction]
+backend = "motion-correction-v1"
+
+[components.geometric_mapping.motion_correction.motion-correction-v1]
+# Sem correção de movimento por scan: aceita scans crus e de estado desconhecido.
+raw = "accept"
+unknown = "accept"
+
+[policies]
+# Opt-in explícito (#555) para adotar a pose de verdade de campo como trajetória.
+trajectory_mode = "allow_ground_truth"

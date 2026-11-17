@@ -1,0 +1,2720 @@
+{
+  "experiment": "C5 — validação da taxonomia de conflitos contra p5 (E0, calibração base)",
+  "provenance": {
+    "run": "workspace-old/frame-10_31-raw",
+    "image": "camera_1_image_raw-000055",
+    "perception_run_id": "ebd2f3e34ec4ec0964ae4396a74f6d37",
+    "perception_configuration_digest": "sha256:08b089586b987def4a54787f22f09be5831411b305bc2a288baf8e6d1911f653",
+    "region_discovery_backend": {
+      "backend_id": "sam2",
+      "model": "facebook/sam2.1-hiera-tiny",
+      "version": "de431c4043854a71d8101e17995dfe596bf101a5",
+      "configuration_fingerprint": "sha256:9336bb272b4474c3020ce2910755a37060bd5bde67fa8a97779d51c4a4d64f69"
+    },
+    "usable_area": {
+      "valid": {
+        "path": "examples/v0.2.0/assets/corridor-02/camera_1-valid.npy",
+        "sha256": "sha256:3fcd56880ddcca733c0cbc2fa799a8ae0582bf2bdfd5785badfea787ebd4b1eb"
+      },
+      "ego_exclusion": {
+        "path": "examples/v0.2.0/assets/corridor-02/camera_1-ego.npy",
+        "sha256": "sha256:3e100f93ee65f8a2b864bd2aa5737c4091cf4cac411ab1854ef72d54dbf40ba8"
+      }
+    },
+    "sensor_association_run_id": "c744af1bde5c2591104661f265c3e341",
+    "geometric_map_id": "corridor-02--5659900dc9d8f118d7ff41071f722453",
+    "calibration_identity": "sha256:f7d3288e82305a34960dee8b841d625c7de643a506cb5706395a9f9bbe3242d6",
+    "candidate_policy": {
+      "block_points": 1000000,
+      "fingerprint": "sha256:30a6533761f29db00fcd306dc25d6348bd992cc6057ea6f492a46c34cd72ddd7",
+      "max_range_m": null,
+      "policy_id": "camera-range-candidates-v1"
+    },
+    "visibility_policy": {
+      "cell_size_px": 4,
+      "depth_margin_m": 0.1,
+      "depth_margin_ratio": 0.02,
+      "fingerprint": "sha256:781601365351031d271df0b4a4c8f5fbfd9394cadb64fd1b23413d218923c550",
+      "neighborhood_radius_cells": 2,
+      "policy_id": "conservative-depth-support-v1"
+    },
+    "membership_policy_id": "mask-membership-v1",
+    "code": {
+      "head": "a3a175f099fd1609e710614a27753b0d0e24be3d",
+      "tracked_worktree_diff_sha256": "sha256:db4068266f391de4735beaf1aac49d18baf9182f0d7043be56243ccc6da94ea0",
+      "metric_modules": {
+        "src/contextmap/evaluation/region_structure.py": "sha256:b07fbd983960a5b0c187a17a1288ba6cbe89a1d14d4fc490c0d384e9465635b3",
+        "src/contextmap/evaluation/association_conflicts.py": "sha256:b4b4645ed59edcf453739be150e3ba298b2234acfa1467f915bc442a7ce92b07"
+      }
+    },
+    "depth": "alcance do raio (RAY_RANGE, métrica do pipeline para MEI), de assoc.py"
+  },
+  "reimplementation_membership_equals_artifact": true,
+  "comparison": [
+    {
+      "metric": "visible",
+      "p5": 23948,
+      "module": 23948,
+      "equal": true,
+      "note": ""
+    },
+    {
+      "metric": "occluded",
+      "p5": 1516151,
+      "module": 1516151,
+      "equal": true,
+      "note": ""
+    },
+    {
+      "metric": "associated_unique",
+      "p5": 21602,
+      "module": 21602,
+      "equal": true,
+      "note": ""
+    },
+    {
+      "metric": "membership_pairs",
+      "p5": 53977,
+      "module": 53977,
+      "equal": true,
+      "note": ""
+    },
+    {
+      "metric": "regions_per_associated_point_hist",
+      "p5": {
+        "1": 1656,
+        "2": 9697,
+        "3": 8546,
+        "4": 1272,
+        "5": 395,
+        "6": 26,
+        "7": 10
+      },
+      "module": {
+        "1": 1656,
+        "2": 9697,
+        "3": 8546,
+        "4": 1272,
+        "5": 395,
+        "6": 26,
+        "7": 10
+      },
+      "equal": true,
+      "note": ""
+    },
+    {
+      "metric": "multi_mask_point_rate",
+      "p5": 0.9233404314415332,
+      "module": 0.9233404314415332,
+      "equal": true,
+      "note": ""
+    },
+    {
+      "metric": "max_regions_per_point",
+      "p5": 7,
+      "module": 7,
+      "equal": true,
+      "note": ""
+    },
+    {
+      "metric": "regions_with_ge30_points",
+      "p5": 39,
+      "module": 39,
+      "equal": true,
+      "note": ""
+    },
+    {
+      "metric": "off_main_layer_fraction_weighted",
+      "p5": 0.0042,
+      "module": 0.0042,
+      "equal": true,
+      "note": "p5 grava arredondado a 4 casas; comparado depois do mesmo arredondamento"
+    },
+    {
+      "metric": "occluded_within_0p5m_of_support_fraction",
+      "p5": 0.12186648955150245,
+      "module": 0.12186648955150245,
+      "equal": true,
+      "note": ""
+    }
+  ],
+  "per_region_off_main_layer_mismatches": [],
+  "conflicts": {
+    "metric_version": "1.0.0",
+    "definition": {
+      "nested_containment_threshold": 0.9,
+      "duplicate_iou_threshold": 0.8,
+      "class_precedence": [
+        "duplicate",
+        "nested",
+        "partial"
+      ],
+      "point_severity": [
+        "partial",
+        "duplicate",
+        "nested"
+      ],
+      "depth_layers": {
+        "gap_m": 0.3,
+        "gap_ratio": 0.08,
+        "main_layer_min_share": 0.2,
+        "min_points": 30
+      }
+    },
+    "associated_point_count": 21602,
+    "membership_count": 53977,
+    "multi_mask_point_count": 19946,
+    "multi_mask_point_rate": 0.9233404314415332,
+    "mean_regions_per_point": 2.498703823720026,
+    "max_regions_per_point": 7,
+    "regions_per_point_histogram": {
+      "1": 1656,
+      "2": 9697,
+      "3": 8546,
+      "4": 1272,
+      "5": 395,
+      "6": 26,
+      "7": 10
+    },
+    "pair_count_by_class": {
+      "nested": 35,
+      "duplicate": 0,
+      "partial": 169
+    },
+    "pair_shared_points_by_class": {
+      "nested": 18611,
+      "duplicate": 0,
+      "partial": 28906
+    },
+    "multi_mask_points_by_class": {
+      "nested": 7457,
+      "duplicate": 0,
+      "partial": 12489
+    },
+    "multi_mask_point_rate_by_class": {
+      "nested": 0.345199518563096,
+      "duplicate": 0.0,
+      "partial": 0.5781409128784372
+    },
+    "depth_layer_mask_count": 39,
+    "off_main_layer_fraction_weighted": 0.0041921299746609,
+    "pairs": [
+      {
+        "region_ids": [
+          "region-0001",
+          "region-0002"
+        ],
+        "shared_point_count": 17,
+        "iou_2d": 0.10858804117231083,
+        "containment_2d": 0.2078820697954272,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0001",
+          "region-0004"
+        ],
+        "shared_point_count": 12,
+        "iou_2d": 0.0013757050488375291,
+        "containment_2d": 0.01584786053882726,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0001",
+          "region-0010"
+        ],
+        "shared_point_count": 349,
+        "iou_2d": 0.029579964504042596,
+        "containment_2d": 0.22563176895306858,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0001",
+          "region-0015"
+        ],
+        "shared_point_count": 354,
+        "iou_2d": 0.03823408059414111,
+        "containment_2d": 0.2509025270758123,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0001",
+          "region-0069"
+        ],
+        "shared_point_count": 1330,
+        "iou_2d": 0.76,
+        "containment_2d": 0.9402827918170878,
+        "conflict_class": "nested"
+      },
+      {
+        "region_ids": [
+          "region-0001",
+          "region-0070"
+        ],
+        "shared_point_count": 1347,
+        "iou_2d": 0.5556268034626483,
+        "containment_2d": 0.7820397111913358,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0002",
+          "region-0008"
+        ],
+        "shared_point_count": 5,
+        "iou_2d": 0.014625515140655796,
+        "containment_2d": 0.08752177992226243,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0002",
+          "region-0010"
+        ],
+        "shared_point_count": 74,
+        "iou_2d": 0.11554564389556289,
+        "containment_2d": 0.7360943573247554,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0002",
+          "region-0015"
+        ],
+        "shared_point_count": 93,
+        "iou_2d": 0.14831141661685596,
+        "containment_2d": 0.7981503819863289,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0002",
+          "region-0069"
+        ],
+        "shared_point_count": 34,
+        "iou_2d": 0.14097014925373133,
+        "containment_2d": 0.2531832194075861,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0003",
+          "region-0010"
+        ],
+        "shared_point_count": 29,
+        "iou_2d": 0.0011434986901742276,
+        "containment_2d": 0.021227325357005018,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0003",
+          "region-0015"
+        ],
+        "shared_point_count": 1216,
+        "iou_2d": 0.035611140410356866,
+        "containment_2d": 0.5472790428406021,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0004",
+          "region-0069"
+        ],
+        "shared_point_count": 103,
+        "iou_2d": 0.019770946353224836,
+        "containment_2d": 0.25990491283676703,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0004",
+          "region-0070"
+        ],
+        "shared_point_count": 207,
+        "iou_2d": 0.049920078691749664,
+        "containment_2d": 0.6434231378763867,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0005",
+          "region-0006"
+        ],
+        "shared_point_count": 1,
+        "iou_2d": 0.017877328867490057,
+        "containment_2d": 0.17677499482508796,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0005",
+          "region-0009"
+        ],
+        "shared_point_count": 194,
+        "iou_2d": 0.06822678583611926,
+        "containment_2d": 0.9439899307740718,
+        "conflict_class": "nested"
+      },
+      {
+        "region_ids": [
+          "region-0005",
+          "region-0011"
+        ],
+        "shared_point_count": 898,
+        "iou_2d": 0.1236808496336627,
+        "containment_2d": 0.8681975463982384,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0005",
+          "region-0016"
+        ],
+        "shared_point_count": 68,
+        "iou_2d": 0.025400644663367684,
+        "containment_2d": 0.8108695652173913,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0005",
+          "region-0017"
+        ],
+        "shared_point_count": 5225,
+        "iou_2d": 0.5490728528202343,
+        "containment_2d": 0.8080058456831001,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0005",
+          "region-0019"
+        ],
+        "shared_point_count": 121,
+        "iou_2d": 0.07236467236467237,
+        "containment_2d": 0.9748234571691741,
+        "conflict_class": "nested"
+      },
+      {
+        "region_ids": [
+          "region-0005",
+          "region-0022"
+        ],
+        "shared_point_count": 5232,
+        "iou_2d": 0.6606719006755523,
+        "containment_2d": 0.9992061026543785,
+        "conflict_class": "nested"
+      },
+      {
+        "region_ids": [
+          "region-0005",
+          "region-0024"
+        ],
+        "shared_point_count": 24,
+        "iou_2d": 0.00473944194739887,
+        "containment_2d": 0.15638766519823788,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0005",
+          "region-0026"
+        ],
+        "shared_point_count": 34,
+        "iou_2d": 0.028093560837744922,
+        "containment_2d": 0.2689822294022617,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0005",
+          "region-0028"
+        ],
+        "shared_point_count": 110,
+        "iou_2d": 0.024659534183452334,
+        "containment_2d": 0.9608888888888889,
+        "conflict_class": "nested"
+      },
+      {
+        "region_ids": [
+          "region-0005",
+          "region-0035"
+        ],
+        "shared_point_count": 14,
+        "iou_2d": 0.08840972323912726,
+        "containment_2d": 0.30825196247367415,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0005",
+          "region-0038"
+        ],
+        "shared_point_count": 48,
+        "iou_2d": 0.007834172973212898,
+        "containment_2d": 0.21803582458307597,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0005",
+          "region-0057"
+        ],
+        "shared_point_count": 2,
+        "iou_2d": 0.0018435067595247848,
+        "containment_2d": 0.3584070796460177,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0005",
+          "region-0063"
+        ],
+        "shared_point_count": 39,
+        "iou_2d": 0.012524346605064093,
+        "containment_2d": 0.6050328227571116,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0005",
+          "region-0065"
+        ],
+        "shared_point_count": 69,
+        "iou_2d": 0.018779342723004695,
+        "containment_2d": 0.7353463587921847,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0005",
+          "region-0079"
+        ],
+        "shared_point_count": 3,
+        "iou_2d": 0.004486014848709149,
+        "containment_2d": 0.20202020202020202,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0006",
+          "region-0008"
+        ],
+        "shared_point_count": 3,
+        "iou_2d": 0.005940734105000118,
+        "containment_2d": 0.05216311322707514,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0006",
+          "region-0017"
+        ],
+        "shared_point_count": 10,
+        "iou_2d": 0.07491258432522163,
+        "containment_2d": 0.8780790726557649,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0006",
+          "region-0049"
+        ],
+        "shared_point_count": 1,
+        "iou_2d": 0.03679504814305364,
+        "containment_2d": 0.17848206839032527,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0006",
+          "region-0056"
+        ],
+        "shared_point_count": 33,
+        "iou_2d": 0.04092356687898089,
+        "containment_2d": 0.15064478311840562,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0006",
+          "region-0081"
+        ],
+        "shared_point_count": 1,
+        "iou_2d": 0.13866107190539767,
+        "containment_2d": 0.6382791922739245,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0007",
+          "region-0010"
+        ],
+        "shared_point_count": 41,
+        "iou_2d": 0.005476211337947954,
+        "containment_2d": 0.7352941176470589,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0007",
+          "region-0015"
+        ],
+        "shared_point_count": 42,
+        "iou_2d": 0.005312016503352244,
+        "containment_2d": 0.6058823529411764,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0007",
+          "region-0030"
+        ],
+        "shared_point_count": 67,
+        "iou_2d": 0.2767940354147251,
+        "containment_2d": 0.8735294117647059,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0007",
+          "region-0059"
+        ],
+        "shared_point_count": 26,
+        "iou_2d": 0.14657210401891252,
+        "containment_2d": 0.36470588235294116,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0007",
+          "region-0061"
+        ],
+        "shared_point_count": 8,
+        "iou_2d": 0.02414486921529175,
+        "containment_2d": 0.1411764705882353,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0008",
+          "region-0010"
+        ],
+        "shared_point_count": 213,
+        "iou_2d": 0.1649137509602626,
+        "containment_2d": 0.3120243128964059,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0008",
+          "region-0015"
+        ],
+        "shared_point_count": 107,
+        "iou_2d": 0.05554712190005658,
+        "containment_2d": 0.10636892177589852,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0008",
+          "region-0017"
+        ],
+        "shared_point_count": 1,
+        "iou_2d": 0.0021884874882568965,
+        "containment_2d": 0.005417547568710359,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0008",
+          "region-0023"
+        ],
+        "shared_point_count": 57,
+        "iou_2d": 0.018789640591966174,
+        "containment_2d": 1.0,
+        "conflict_class": "nested"
+      },
+      {
+        "region_ids": [
+          "region-0008",
+          "region-0025"
+        ],
+        "shared_point_count": 2,
+        "iou_2d": 0.016199788583509515,
+        "containment_2d": 1.0,
+        "conflict_class": "nested"
+      },
+      {
+        "region_ids": [
+          "region-0008",
+          "region-0029"
+        ],
+        "shared_point_count": 219,
+        "iou_2d": 0.44191794364804743,
+        "containment_2d": 0.9660467497014161,
+        "conflict_class": "nested"
+      },
+      {
+        "region_ids": [
+          "region-0008",
+          "region-0031"
+        ],
+        "shared_point_count": 29,
+        "iou_2d": 0.018446088794926003,
+        "containment_2d": 1.0,
+        "conflict_class": "nested"
+      },
+      {
+        "region_ids": [
+          "region-0008",
+          "region-0032"
+        ],
+        "shared_point_count": 1,
+        "iou_2d": 0.006470526093386858,
+        "containment_2d": 0.9107806691449815,
+        "conflict_class": "nested"
+      },
+      {
+        "region_ids": [
+          "region-0008",
+          "region-0034"
+        ],
+        "shared_point_count": 2,
+        "iou_2d": 0.0015961900774544694,
+        "containment_2d": 0.13958810068649885,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0008",
+          "region-0040"
+        ],
+        "shared_point_count": 21,
+        "iou_2d": 0.038458490715549805,
+        "containment_2d": 0.9871186440677966,
+        "conflict_class": "nested"
+      },
+      {
+        "region_ids": [
+          "region-0008",
+          "region-0043"
+        ],
+        "shared_point_count": 74,
+        "iou_2d": 0.08867577509196006,
+        "containment_2d": 0.9388038942976356,
+        "conflict_class": "nested"
+      },
+      {
+        "region_ids": [
+          "region-0008",
+          "region-0045"
+        ],
+        "shared_point_count": 10,
+        "iou_2d": 0.02735931192781574,
+        "containment_2d": 0.9427272727272727,
+        "conflict_class": "nested"
+      },
+      {
+        "region_ids": [
+          "region-0008",
+          "region-0048"
+        ],
+        "shared_point_count": 1,
+        "iou_2d": 0.012077167019027484,
+        "containment_2d": 1.0,
+        "conflict_class": "nested"
+      },
+      {
+        "region_ids": [
+          "region-0008",
+          "region-0051"
+        ],
+        "shared_point_count": 6,
+        "iou_2d": 0.005281369513749772,
+        "containment_2d": 0.25375,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0008",
+          "region-0052"
+        ],
+        "shared_point_count": 64,
+        "iou_2d": 0.07242593953523732,
+        "containment_2d": 0.6380888591203394,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0008",
+          "region-0058"
+        ],
+        "shared_point_count": 7,
+        "iou_2d": 0.014734618431476103,
+        "containment_2d": 0.9489795918367347,
+        "conflict_class": "nested"
+      },
+      {
+        "region_ids": [
+          "region-0008",
+          "region-0060"
+        ],
+        "shared_point_count": 49,
+        "iou_2d": 0.056696982747700964,
+        "containment_2d": 0.5781451821234823,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0008",
+          "region-0069"
+        ],
+        "shared_point_count": 2,
+        "iou_2d": 0.004376608238580132,
+        "containment_2d": 0.02542156361778232,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0008",
+          "region-0075"
+        ],
+        "shared_point_count": 7,
+        "iou_2d": 0.01433549817836211,
+        "containment_2d": 0.9345955249569707,
+        "conflict_class": "nested"
+      },
+      {
+        "region_ids": [
+          "region-0008",
+          "region-0078"
+        ],
+        "shared_point_count": 14,
+        "iou_2d": 0.01818229590898342,
+        "containment_2d": 0.7596048298572997,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0009",
+          "region-0016"
+        ],
+        "shared_point_count": 1,
+        "iou_2d": 0.0048500881834215165,
+        "containment_2d": 0.015942028985507246,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0009",
+          "region-0017"
+        ],
+        "shared_point_count": 169,
+        "iou_2d": 0.045278022947925864,
+        "containment_2d": 0.8071113908118314,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0009",
+          "region-0022"
+        ],
+        "shared_point_count": 114,
+        "iou_2d": 0.05144557823129252,
+        "containment_2d": 0.4949653870358716,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0009",
+          "region-0028"
+        ],
+        "shared_point_count": 114,
+        "iou_2d": 0.32563154651879234,
+        "containment_2d": 0.9395555555555556,
+        "conflict_class": "nested"
+      },
+      {
+        "region_ids": [
+          "region-0010",
+          "region-0013"
+        ],
+        "shared_point_count": 1,
+        "iou_2d": 0.00026125576939824087,
+        "containment_2d": 0.031413612565445025,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0010",
+          "region-0015"
+        ],
+        "shared_point_count": 9944,
+        "iou_2d": 0.7045463746407028,
+        "containment_2d": 0.9006365471200124,
+        "conflict_class": "nested"
+      },
+      {
+        "region_ids": [
+          "region-0010",
+          "region-0017"
+        ],
+        "shared_point_count": 8,
+        "iou_2d": 0.0030605495167293586,
+        "containment_2d": 0.0068039155436548,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0010",
+          "region-0020"
+        ],
+        "shared_point_count": 2,
+        "iou_2d": 0.010295434198746643,
+        "containment_2d": 0.08332020790675697,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0010",
+          "region-0029"
+        ],
+        "shared_point_count": 130,
+        "iou_2d": 0.12303697511871521,
+        "containment_2d": 0.39344821702781096,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0010",
+          "region-0030"
+        ],
+        "shared_point_count": 93,
+        "iou_2d": 0.01636054273373762,
+        "containment_2d": 0.7281553398058253,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0010",
+          "region-0031"
+        ],
+        "shared_point_count": 3,
+        "iou_2d": 0.00283986212577771,
+        "containment_2d": 0.1876790830945559,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0010",
+          "region-0034"
+        ],
+        "shared_point_count": 4,
+        "iou_2d": 0.0010663764961915125,
+        "containment_2d": 0.11212814645308924,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0010",
+          "region-0035"
+        ],
+        "shared_point_count": 8,
+        "iou_2d": 0.003721067470985509,
+        "containment_2d": 0.014487204033441827,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0010",
+          "region-0040"
+        ],
+        "shared_point_count": 10,
+        "iou_2d": 0.017830480600696773,
+        "containment_2d": 0.5586440677966101,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0010",
+          "region-0043"
+        ],
+        "shared_point_count": 62,
+        "iou_2d": 0.056594445877396614,
+        "containment_2d": 0.7324061196105702,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0010",
+          "region-0044"
+        ],
+        "shared_point_count": 5,
+        "iou_2d": 0.0026040526937721564,
+        "containment_2d": 0.4666666666666667,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0010",
+          "region-0045"
+        ],
+        "shared_point_count": 3,
+        "iou_2d": 0.00912629757785467,
+        "containment_2d": 0.3836363636363636,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0010",
+          "region-0051"
+        ],
+        "shared_point_count": 7,
+        "iou_2d": 0.008264103344787091,
+        "containment_2d": 0.475,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0010",
+          "region-0052"
+        ],
+        "shared_point_count": 78,
+        "iou_2d": 0.08988543799276909,
+        "containment_2d": 0.9214110292475999,
+        "conflict_class": "nested"
+      },
+      {
+        "region_ids": [
+          "region-0010",
+          "region-0059"
+        ],
+        "shared_point_count": 79,
+        "iou_2d": 0.010987086889910265,
+        "containment_2d": 0.7968253968253968,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0010",
+          "region-0060"
+        ],
+        "shared_point_count": 69,
+        "iou_2d": 0.08012498361228859,
+        "containment_2d": 0.947300439163007,
+        "conflict_class": "nested"
+      },
+      {
+        "region_ids": [
+          "region-0010",
+          "region-0061"
+        ],
+        "shared_point_count": 284,
+        "iou_2d": 0.02730316073214208,
+        "containment_2d": 0.7405660377358491,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0010",
+          "region-0062"
+        ],
+        "shared_point_count": 2,
+        "iou_2d": 0.015559836568791414,
+        "containment_2d": 0.3049792531120332,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0010",
+          "region-0069"
+        ],
+        "shared_point_count": 942,
+        "iou_2d": 0.045100418901460285,
+        "containment_2d": 0.29432805314256516,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0010",
+          "region-0070"
+        ],
+        "shared_point_count": 2528,
+        "iou_2d": 0.04726090447930744,
+        "containment_2d": 0.3051340414769853,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0010",
+          "region-0072"
+        ],
+        "shared_point_count": 1,
+        "iou_2d": 0.0014854945823138763,
+        "containment_2d": 0.24113475177304963,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0010",
+          "region-0073"
+        ],
+        "shared_point_count": 1,
+        "iou_2d": 0.001350353412807258,
+        "containment_2d": 0.03373748023194518,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0011",
+          "region-0017"
+        ],
+        "shared_point_count": 745,
+        "iou_2d": 0.09248332253602508,
+        "containment_2d": 0.8307643913180245,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0011",
+          "region-0022"
+        ],
+        "shared_point_count": 523,
+        "iou_2d": 0.06734138972809668,
+        "containment_2d": 0.35058194400754955,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0011",
+          "region-0063"
+        ],
+        "shared_point_count": 33,
+        "iou_2d": 0.029153693744692896,
+        "containment_2d": 0.22538293216630198,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0013",
+          "region-0015"
+        ],
+        "shared_point_count": 3,
+        "iou_2d": 0.0015911307293537955,
+        "containment_2d": 0.16230366492146597,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0014",
+          "region-0071"
+        ],
+        "shared_point_count": 669,
+        "iou_2d": 0.09877704609595485,
+        "containment_2d": 0.7241379310344828,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0015",
+          "region-0020"
+        ],
+        "shared_point_count": 1,
+        "iou_2d": 0.004128542735996429,
+        "containment_2d": 0.029138446999527483,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0015",
+          "region-0021"
+        ],
+        "shared_point_count": 1,
+        "iou_2d": 0.0037826281042219767,
+        "containment_2d": 0.03948013732221677,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0015",
+          "region-0029"
+        ],
+        "shared_point_count": 18,
+        "iou_2d": 0.01191354580956323,
+        "containment_2d": 0.03765000284365581,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0015",
+          "region-0030"
+        ],
+        "shared_point_count": 92,
+        "iou_2d": 0.0171768445880121,
+        "containment_2d": 0.6504854368932039,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0015",
+          "region-0034"
+        ],
+        "shared_point_count": 3,
+        "iou_2d": 0.0006144550551729434,
+        "containment_2d": 0.05491990846681922,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0015",
+          "region-0043"
+        ],
+        "shared_point_count": 14,
+        "iou_2d": 0.009174092744343837,
+        "containment_2d": 0.10681502086230876,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0015",
+          "region-0044"
+        ],
+        "shared_point_count": 5,
+        "iou_2d": 0.003275390725744055,
+        "containment_2d": 0.4980392156862745,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0015",
+          "region-0045"
+        ],
+        "shared_point_count": 2,
+        "iou_2d": 0.004727116458960034,
+        "containment_2d": 0.17,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0015",
+          "region-0051"
+        ],
+        "shared_point_count": 4,
+        "iou_2d": 0.007020499859590003,
+        "containment_2d": 0.34375,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0015",
+          "region-0052"
+        ],
+        "shared_point_count": 42,
+        "iou_2d": 0.0585419734904271,
+        "containment_2d": 0.5324849296718017,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0015",
+          "region-0059"
+        ],
+        "shared_point_count": 77,
+        "iou_2d": 0.012137611132586008,
+        "containment_2d": 0.7476190476190476,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0015",
+          "region-0060"
+        ],
+        "shared_point_count": 41,
+        "iou_2d": 0.05784733280254777,
+        "containment_2d": 0.6006199948333764,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0015",
+          "region-0061"
+        ],
+        "shared_point_count": 315,
+        "iou_2d": 0.0395815080142246,
+        "containment_2d": 0.9056603773584906,
+        "conflict_class": "nested"
+      },
+      {
+        "region_ids": [
+          "region-0015",
+          "region-0069"
+        ],
+        "shared_point_count": 956,
+        "iou_2d": 0.05998540279171608,
+        "containment_2d": 0.33597342871742464,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0015",
+          "region-0070"
+        ],
+        "shared_point_count": 2529,
+        "iou_2d": 0.05581384800308439,
+        "containment_2d": 0.3112038442083966,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0015",
+          "region-0072"
+        ],
+        "shared_point_count": 1,
+        "iou_2d": 0.0022657054582904223,
+        "containment_2d": 0.3120567375886525,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0016",
+          "region-0017"
+        ],
+        "shared_point_count": 14,
+        "iou_2d": 0.00396922538905403,
+        "containment_2d": 0.1644927536231884,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0016",
+          "region-0022"
+        ],
+        "shared_point_count": 2,
+        "iou_2d": 0.0033388429752066115,
+        "containment_2d": 0.07318840579710145,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0016",
+          "region-0028"
+        ],
+        "shared_point_count": 1,
+        "iou_2d": 0.0024009603841536613,
+        "containment_2d": 0.005333333333333333,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0016",
+          "region-0065"
+        ],
+        "shared_point_count": 29,
+        "iou_2d": 0.16993464052287582,
+        "containment_2d": 0.32326820603907636,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0017",
+          "region-0019"
+        ],
+        "shared_point_count": 10,
+        "iou_2d": 0.003741133851336482,
+        "containment_2d": 0.06785385323917716,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0017",
+          "region-0022"
+        ],
+        "shared_point_count": 4726,
+        "iou_2d": 0.37063252769223326,
+        "containment_2d": 0.7934486210348279,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0017",
+          "region-0026"
+        ],
+        "shared_point_count": 111,
+        "iou_2d": 0.08519421362609206,
+        "containment_2d": 0.9668820678513732,
+        "conflict_class": "nested"
+      },
+      {
+        "region_ids": [
+          "region-0017",
+          "region-0028"
+        ],
+        "shared_point_count": 104,
+        "iou_2d": 0.01628560253173559,
+        "containment_2d": 0.8142222222222222,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0017",
+          "region-0035"
+        ],
+        "shared_point_count": 188,
+        "iou_2d": 0.2756350957091013,
+        "containment_2d": 0.9888314506350118,
+        "conflict_class": "nested"
+      },
+      {
+        "region_ids": [
+          "region-0017",
+          "region-0037"
+        ],
+        "shared_point_count": 6,
+        "iou_2d": 0.014571146662907887,
+        "containment_2d": 0.5349288486416559,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0017",
+          "region-0047"
+        ],
+        "shared_point_count": 4,
+        "iou_2d": 0.0037160385626643297,
+        "containment_2d": 0.1730612244897959,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0017",
+          "region-0057"
+        ],
+        "shared_point_count": 3,
+        "iou_2d": 0.0031558677744891774,
+        "containment_2d": 0.7831858407079646,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0017",
+          "region-0063"
+        ],
+        "shared_point_count": 42,
+        "iou_2d": 0.015422743643690047,
+        "containment_2d": 0.9463894967177243,
+        "conflict_class": "nested"
+      },
+      {
+        "region_ids": [
+          "region-0017",
+          "region-0065"
+        ],
+        "shared_point_count": 23,
+        "iou_2d": 0.004445615884730276,
+        "containment_2d": 0.2246891651865009,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0017",
+          "region-0066"
+        ],
+        "shared_point_count": 10,
+        "iou_2d": 0.01903450224246919,
+        "containment_2d": 0.6435820895522388,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0017",
+          "region-0067"
+        ],
+        "shared_point_count": 1,
+        "iou_2d": 0.002972059085246485,
+        "containment_2d": 0.521875,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0017",
+          "region-0073"
+        ],
+        "shared_point_count": 27,
+        "iou_2d": 0.029571707837213437,
+        "containment_2d": 0.8771744860305746,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0017",
+          "region-0076"
+        ],
+        "shared_point_count": 6,
+        "iou_2d": 0.006643574029665157,
+        "containment_2d": 0.5917721518987342,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0017",
+          "region-0077"
+        ],
+        "shared_point_count": 2,
+        "iou_2d": 0.002180851063829787,
+        "containment_2d": 0.25308641975308643,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0017",
+          "region-0079"
+        ],
+        "shared_point_count": 8,
+        "iou_2d": 0.015745507008888018,
+        "containment_2d": 0.8929292929292929,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0017",
+          "region-0081"
+        ],
+        "shared_point_count": 1,
+        "iou_2d": 0.013022448220265409,
+        "containment_2d": 0.6453028972783144,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0017",
+          "region-0082"
+        ],
+        "shared_point_count": 6,
+        "iou_2d": 0.006485061198311034,
+        "containment_2d": 0.7982456140350878,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0018",
+          "region-0020"
+        ],
+        "shared_point_count": 4,
+        "iou_2d": 0.13015384615384615,
+        "containment_2d": 0.8485456369107321,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0018",
+          "region-0021"
+        ],
+        "shared_point_count": 3,
+        "iou_2d": 0.09186746987951808,
+        "containment_2d": 0.4282848545636911,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0019",
+          "region-0022"
+        ],
+        "shared_point_count": 117,
+        "iou_2d": 0.10422805454670048,
+        "containment_2d": 0.933988332821615,
+        "conflict_class": "nested"
+      },
+      {
+        "region_ids": [
+          "region-0019",
+          "region-0065"
+        ],
+        "shared_point_count": 1,
+        "iou_2d": 0.012006465019625953,
+        "containment_2d": 0.046181172291296625,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0020",
+          "region-0021"
+        ],
+        "shared_point_count": 24,
+        "iou_2d": 0.6423058749409356,
+        "containment_2d": 1.0,
+        "conflict_class": "nested"
+      },
+      {
+        "region_ids": [
+          "region-0020",
+          "region-0062"
+        ],
+        "shared_point_count": 6,
+        "iou_2d": 0.2528965813188385,
+        "containment_2d": 0.733609958506224,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0020",
+          "region-0064"
+        ],
+        "shared_point_count": 2,
+        "iou_2d": 0.18267477203647417,
+        "containment_2d": 0.8387997208653175,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0020",
+          "region-0068"
+        ],
+        "shared_point_count": 1,
+        "iou_2d": 0.003090712409210323,
+        "containment_2d": 0.14084507042253522,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0021",
+          "region-0062"
+        ],
+        "shared_point_count": 1,
+        "iou_2d": 0.003247255296118757,
+        "containment_2d": 0.008713692946058092,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0022",
+          "region-0028"
+        ],
+        "shared_point_count": 76,
+        "iou_2d": 0.024509803921568627,
+        "containment_2d": 0.64,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0022",
+          "region-0038"
+        ],
+        "shared_point_count": 8,
+        "iou_2d": 0.001309328968903437,
+        "containment_2d": 0.02470660901791229,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0022",
+          "region-0063"
+        ],
+        "shared_point_count": 2,
+        "iou_2d": 0.0003682131619468434,
+        "containment_2d": 0.012035010940919038,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0022",
+          "region-0065"
+        ],
+        "shared_point_count": 26,
+        "iou_2d": 0.010068127663858778,
+        "containment_2d": 0.2664298401420959,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0024",
+          "region-0038"
+        ],
+        "shared_point_count": 92,
+        "iou_2d": 0.32077979618963226,
+        "containment_2d": 0.5315712187958884,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0026",
+          "region-0035"
+        ],
+        "shared_point_count": 5,
+        "iou_2d": 0.009200802623207556,
+        "containment_2d": 0.03796445880452343,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0026",
+          "region-0063"
+        ],
+        "shared_point_count": 5,
+        "iou_2d": 0.04526015680684248,
+        "containment_2d": 0.2778993435448578,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0026",
+          "region-0077"
+        ],
+        "shared_point_count": 1,
+        "iou_2d": 0.0018422991893883567,
+        "containment_2d": 0.0205761316872428,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0026",
+          "region-0079"
+        ],
+        "shared_point_count": 3,
+        "iou_2d": 0.1372248803827751,
+        "containment_2d": 0.7242424242424242,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0028",
+          "region-0065"
+        ],
+        "shared_point_count": 1,
+        "iou_2d": 0.018552036199095023,
+        "containment_2d": 0.036444444444444446,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0029",
+          "region-0040"
+        ],
+        "shared_point_count": 21,
+        "iou_2d": 0.0830255157129056,
+        "containment_2d": 0.9905084745762712,
+        "conflict_class": "nested"
+      },
+      {
+        "region_ids": [
+          "region-0029",
+          "region-0043"
+        ],
+        "shared_point_count": 74,
+        "iou_2d": 0.18571188623257376,
+        "containment_2d": 0.9226703755215577,
+        "conflict_class": "nested"
+      },
+      {
+        "region_ids": [
+          "region-0029",
+          "region-0045"
+        ],
+        "shared_point_count": 10,
+        "iou_2d": 0.0617150650679093,
+        "containment_2d": 0.9872727272727273,
+        "conflict_class": "nested"
+      },
+      {
+        "region_ids": [
+          "region-0029",
+          "region-0052"
+        ],
+        "shared_point_count": 50,
+        "iou_2d": 0.07893192488262911,
+        "containment_2d": 0.3603482920294709,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0029",
+          "region-0060"
+        ],
+        "shared_point_count": 32,
+        "iou_2d": 0.04699624225269631,
+        "containment_2d": 0.2487729268922759,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0030",
+          "region-0059"
+        ],
+        "shared_point_count": 107,
+        "iou_2d": 0.16327960756832516,
+        "containment_2d": 0.36984126984126986,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0030",
+          "region-0061"
+        ],
+        "shared_point_count": 108,
+        "iou_2d": 0.10230489284270117,
+        "containment_2d": 0.24563106796116504,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0030",
+          "region-0069"
+        ],
+        "shared_point_count": 1,
+        "iou_2d": 0.00011290504685559444,
+        "containment_2d": 0.000970873786407767,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0034",
+          "region-0052"
+        ],
+        "shared_point_count": 5,
+        "iou_2d": 0.02055221091965954,
+        "containment_2d": 0.22654462242562928,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0034",
+          "region-0060"
+        ],
+        "shared_point_count": 5,
+        "iou_2d": 0.02327790973871734,
+        "containment_2d": 0.2242562929061785,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0035",
+          "region-0037"
+        ],
+        "shared_point_count": 4,
+        "iou_2d": 0.03176505843572071,
+        "containment_2d": 0.3428201811125485,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0035",
+          "region-0047"
+        ],
+        "shared_point_count": 3,
+        "iou_2d": 0.0029088750371029978,
+        "containment_2d": 0.04,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0035",
+          "region-0066"
+        ],
+        "shared_point_count": 8,
+        "iou_2d": 0.046079613992762364,
+        "containment_2d": 0.45611940298507464,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0035",
+          "region-0073"
+        ],
+        "shared_point_count": 26,
+        "iou_2d": 0.10152379757948203,
+        "containment_2d": 0.8534528202424881,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0035",
+          "region-0076"
+        ],
+        "shared_point_count": 4,
+        "iou_2d": 0.02187813440320963,
+        "containment_2d": 0.5522151898734177,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0035",
+          "region-0077"
+        ],
+        "shared_point_count": 2,
+        "iou_2d": 0.0052268060481612845,
+        "containment_2d": 0.1728395061728395,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0035",
+          "region-0079"
+        ],
+        "shared_point_count": 1,
+        "iou_2d": 0.004946612776738855,
+        "containment_2d": 0.08282828282828283,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0035",
+          "region-0082"
+        ],
+        "shared_point_count": 4,
+        "iou_2d": 0.02315989847715736,
+        "containment_2d": 0.8004385964912281,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0037",
+          "region-0066"
+        ],
+        "shared_point_count": 9,
+        "iou_2d": 0.6333671399594321,
+        "containment_2d": 0.8078913324708926,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0037",
+          "region-0073"
+        ],
+        "shared_point_count": 4,
+        "iou_2d": 0.1526615333110144,
+        "containment_2d": 0.2949547218628719,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0037",
+          "region-0076"
+        ],
+        "shared_point_count": 1,
+        "iou_2d": 0.13496612819176654,
+        "containment_2d": 0.4098101265822785,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0037",
+          "region-0080"
+        ],
+        "shared_point_count": 2,
+        "iou_2d": 0.1,
+        "containment_2d": 0.8674033149171271,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0037",
+          "region-0082"
+        ],
+        "shared_point_count": 1,
+        "iou_2d": 0.15455594002306805,
+        "containment_2d": 0.5877192982456141,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0038",
+          "region-0065"
+        ],
+        "shared_point_count": 16,
+        "iou_2d": 0.047310186951545215,
+        "containment_2d": 0.11012433392539965,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0043",
+          "region-0052"
+        ],
+        "shared_point_count": 50,
+        "iou_2d": 0.3020480567650379,
+        "containment_2d": 0.5210013908205842,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0043",
+          "region-0060"
+        ],
+        "shared_point_count": 32,
+        "iou_2d": 0.19570787956438182,
+        "containment_2d": 0.3399165507649513,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0044",
+          "region-0051"
+        ],
+        "shared_point_count": 4,
+        "iou_2d": 0.29606879606879605,
+        "containment_2d": 0.9450980392156862,
+        "conflict_class": "nested"
+      },
+      {
+        "region_ids": [
+          "region-0047",
+          "region-0054"
+        ],
+        "shared_point_count": 3,
+        "iou_2d": 0.01804511278195489,
+        "containment_2d": 0.04466501240694789,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0047",
+          "region-0076"
+        ],
+        "shared_point_count": 3,
+        "iou_2d": 0.07403123192596876,
+        "containment_2d": 0.20253164556962025,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0047",
+          "region-0077"
+        ],
+        "shared_point_count": 2,
+        "iou_2d": 0.2507309941520468,
+        "containment_2d": 0.7057613168724279,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0047",
+          "region-0082"
+        ],
+        "shared_point_count": 1,
+        "iou_2d": 0.01693889897156685,
+        "containment_2d": 0.06140350877192982,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0049",
+          "region-0056"
+        ],
+        "shared_point_count": 5,
+        "iou_2d": 0.5970313358988455,
+        "containment_2d": 0.9057547956630525,
+        "conflict_class": "nested"
+      },
+      {
+        "region_ids": [
+          "region-0051",
+          "region-0060"
+        ],
+        "shared_point_count": 2,
+        "iou_2d": 0.08577405857740586,
+        "containment_2d": 0.46125,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0052",
+          "region-0060"
+        ],
+        "shared_point_count": 65,
+        "iou_2d": 0.7657009938676252,
+        "containment_2d": 0.9354172048566262,
+        "conflict_class": "nested"
+      },
+      {
+        "region_ids": [
+          "region-0054",
+          "region-0076"
+        ],
+        "shared_point_count": 4,
+        "iou_2d": 0.055025678650036686,
+        "containment_2d": 0.11867088607594936,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0054",
+          "region-0081"
+        ],
+        "shared_point_count": 4,
+        "iou_2d": 0.24519846350832267,
+        "containment_2d": 0.47518610421836227,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0054",
+          "region-0082"
+        ],
+        "shared_point_count": 2,
+        "iou_2d": 0.018563357546408393,
+        "containment_2d": 0.05043859649122807,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0056",
+          "region-0071"
+        ],
+        "shared_point_count": 33,
+        "iou_2d": 0.030459473412493547,
+        "containment_2d": 0.20344827586206896,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0057",
+          "region-0079"
+        ],
+        "shared_point_count": 4,
+        "iou_2d": 0.20276953511374876,
+        "containment_2d": 0.9070796460176991,
+        "conflict_class": "nested"
+      },
+      {
+        "region_ids": [
+          "region-0059",
+          "region-0061"
+        ],
+        "shared_point_count": 128,
+        "iou_2d": 0.2936596218020022,
+        "containment_2d": 0.8380952380952381,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0059",
+          "region-0069"
+        ],
+        "shared_point_count": 1,
+        "iou_2d": 0.00011824524062906468,
+        "containment_2d": 0.0015873015873015873,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0061",
+          "region-0069"
+        ],
+        "shared_point_count": 4,
+        "iou_2d": 0.0018935409215232485,
+        "containment_2d": 0.01061320754716981,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0062",
+          "region-0064"
+        ],
+        "shared_point_count": 2,
+        "iou_2d": 0.5946058091286307,
+        "containment_2d": 1.0,
+        "conflict_class": "nested"
+      },
+      {
+        "region_ids": [
+          "region-0066",
+          "region-0073"
+        ],
+        "shared_point_count": 3,
+        "iou_2d": 0.08935651113144251,
+        "containment_2d": 0.17492537313432835,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0066",
+          "region-0076"
+        ],
+        "shared_point_count": 1,
+        "iou_2d": 0.052463503649635035,
+        "containment_2d": 0.1819620253164557,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0066",
+          "region-0080"
+        ],
+        "shared_point_count": 1,
+        "iou_2d": 0.052750992626205334,
+        "containment_2d": 0.5138121546961326,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0066",
+          "region-0082"
+        ],
+        "shared_point_count": 1,
+        "iou_2d": 0.05756823821339951,
+        "containment_2d": 0.2543859649122807,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0067",
+          "region-0076"
+        ],
+        "shared_point_count": 1,
+        "iou_2d": 0.12662721893491125,
+        "containment_2d": 0.334375,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0067",
+          "region-0082"
+        ],
+        "shared_point_count": 1,
+        "iou_2d": 0.0644718792866941,
+        "containment_2d": 0.146875,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0069",
+          "region-0070"
+        ],
+        "shared_point_count": 1835,
+        "iou_2d": 0.5617308455736403,
+        "containment_2d": 0.7230454777721002,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0073",
+          "region-0076"
+        ],
+        "shared_point_count": 1,
+        "iou_2d": 0.09480519480519481,
+        "containment_2d": 0.34651898734177217,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0073",
+          "region-0080"
+        ],
+        "shared_point_count": 2,
+        "iou_2d": 0.04474610356963298,
+        "containment_2d": 0.49171270718232046,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0073",
+          "region-0082"
+        ],
+        "shared_point_count": 1,
+        "iou_2d": 0.10365853658536585,
+        "containment_2d": 0.48464912280701755,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0075",
+          "region-0078"
+        ],
+        "shared_point_count": 6,
+        "iou_2d": 0.5224489795918368,
+        "containment_2d": 0.8812392426850258,
+        "conflict_class": "partial"
+      },
+      {
+        "region_ids": [
+          "region-0076",
+          "region-0082"
+        ],
+        "shared_point_count": 9,
+        "iou_2d": 0.6336336336336337,
+        "containment_2d": 0.9254385964912281,
+        "conflict_class": "nested"
+      }
+    ],
+    "masks": [
+      {
+        "region_id": "region-0001",
+        "associated_point_count": 1384,
+        "off_main_layer_fraction": 0.0007225433526011349
+      },
+      {
+        "region_id": "region-0002",
+        "associated_point_count": 99,
+        "off_main_layer_fraction": 0.0
+      },
+      {
+        "region_id": "region-0003",
+        "associated_point_count": 1886,
+        "off_main_layer_fraction": 0.0
+      },
+      {
+        "region_id": "region-0004",
+        "associated_point_count": 263,
+        "off_main_layer_fraction": 0.0
+      },
+      {
+        "region_id": "region-0005",
+        "associated_point_count": 5948,
+        "off_main_layer_fraction": 0.00033624747814386957
+      },
+      {
+        "region_id": "region-0006",
+        "associated_point_count": 46,
+        "off_main_layer_fraction": 0.30434782608695654
+      },
+      {
+        "region_id": "region-0007",
+        "associated_point_count": 73,
+        "off_main_layer_fraction": 0.0
+      },
+      {
+        "region_id": "region-0008",
+        "associated_point_count": 634,
+        "off_main_layer_fraction": 0.10725552050473186
+      },
+      {
+        "region_id": "region-0009",
+        "associated_point_count": 207,
+        "off_main_layer_fraction": 0.0
+      },
+      {
+        "region_id": "region-0010",
+        "associated_point_count": 10100,
+        "off_main_layer_fraction": 0.001980198019801982
+      },
+      {
+        "region_id": "region-0011",
+        "associated_point_count": 907,
+        "off_main_layer_fraction": 0.0011025358324145973
+      },
+      {
+        "region_id": "region-0012",
+        "associated_point_count": 30,
+        "off_main_layer_fraction": 0.0
+      },
+      {
+        "region_id": "region-0013",
+        "associated_point_count": 4,
+        "off_main_layer_fraction": null
+      },
+      {
+        "region_id": "region-0014",
+        "associated_point_count": 740,
+        "off_main_layer_fraction": 0.008108108108108136
+      },
+      {
+        "region_id": "region-0015",
+        "associated_point_count": 11268,
+        "off_main_layer_fraction": 0.006922257720979763
+      },
+      {
+        "region_id": "region-0016",
+        "associated_point_count": 85,
+        "off_main_layer_fraction": 0.0
+      },
+      {
+        "region_id": "region-0017",
+        "associated_point_count": 5538,
+        "off_main_layer_fraction": 0.0012639942217407274
+      },
+      {
+        "region_id": "region-0018",
+        "associated_point_count": 4,
+        "off_main_layer_fraction": null
+      },
+      {
+        "region_id": "region-0019",
+        "associated_point_count": 126,
+        "off_main_layer_fraction": 0.0
+      },
+      {
+        "region_id": "region-0020",
+        "associated_point_count": 31,
+        "off_main_layer_fraction": 0.32258064516129037
+      },
+      {
+        "region_id": "region-0021",
+        "associated_point_count": 24,
+        "off_main_layer_fraction": null
+      },
+      {
+        "region_id": "region-0022",
+        "associated_point_count": 5238,
+        "off_main_layer_fraction": 0.0
+      },
+      {
+        "region_id": "region-0023",
+        "associated_point_count": 57,
+        "off_main_layer_fraction": 0.0
+      },
+      {
+        "region_id": "region-0024",
+        "associated_point_count": 155,
+        "off_main_layer_fraction": 0.0
+      },
+      {
+        "region_id": "region-0025",
+        "associated_point_count": 2,
+        "off_main_layer_fraction": null
+      },
+      {
+        "region_id": "region-0026",
+        "associated_point_count": 117,
+        "off_main_layer_fraction": 0.0
+      },
+      {
+        "region_id": "region-0027",
+        "associated_point_count": 1,
+        "off_main_layer_fraction": null
+      },
+      {
+        "region_id": "region-0028",
+        "associated_point_count": 118,
+        "off_main_layer_fraction": 0.0
+      },
+      {
+        "region_id": "region-0029",
+        "associated_point_count": 222,
+        "off_main_layer_fraction": 0.0
+      },
+      {
+        "region_id": "region-0030",
+        "associated_point_count": 197,
+        "off_main_layer_fraction": 0.0
+      },
+      {
+        "region_id": "region-0031",
+        "associated_point_count": 29,
+        "off_main_layer_fraction": null
+      },
+      {
+        "region_id": "region-0032",
+        "associated_point_count": 1,
+        "off_main_layer_fraction": null
+      },
+      {
+        "region_id": "region-0033",
+        "associated_point_count": 1,
+        "off_main_layer_fraction": null
+      },
+      {
+        "region_id": "region-0034",
+        "associated_point_count": 8,
+        "off_main_layer_fraction": null
+      },
+      {
+        "region_id": "region-0035",
+        "associated_point_count": 188,
+        "off_main_layer_fraction": 0.0
+      },
+      {
+        "region_id": "region-0036",
+        "associated_point_count": 0,
+        "off_main_layer_fraction": null
+      },
+      {
+        "region_id": "region-0037",
+        "associated_point_count": 10,
+        "off_main_layer_fraction": null
+      },
+      {
+        "region_id": "region-0038",
+        "associated_point_count": 211,
+        "off_main_layer_fraction": 0.0
+      },
+      {
+        "region_id": "region-0039",
+        "associated_point_count": 0,
+        "off_main_layer_fraction": null
+      },
+      {
+        "region_id": "region-0040",
+        "associated_point_count": 21,
+        "off_main_layer_fraction": null
+      },
+      {
+        "region_id": "region-0041",
+        "associated_point_count": 0,
+        "off_main_layer_fraction": null
+      },
+      {
+        "region_id": "region-0042",
+        "associated_point_count": 0,
+        "off_main_layer_fraction": null
+      },
+      {
+        "region_id": "region-0043",
+        "associated_point_count": 74,
+        "off_main_layer_fraction": 0.0
+      },
+      {
+        "region_id": "region-0044",
+        "associated_point_count": 5,
+        "off_main_layer_fraction": null
+      },
+      {
+        "region_id": "region-0045",
+        "associated_point_count": 10,
+        "off_main_layer_fraction": null
+      },
+      {
+        "region_id": "region-0046",
+        "associated_point_count": 0,
+        "off_main_layer_fraction": null
+      },
+      {
+        "region_id": "region-0047",
+        "associated_point_count": 23,
+        "off_main_layer_fraction": null
+      },
+      {
+        "region_id": "region-0048",
+        "associated_point_count": 1,
+        "off_main_layer_fraction": null
+      },
+      {
+        "region_id": "region-0049",
+        "associated_point_count": 5,
+        "off_main_layer_fraction": null
+      },
+      {
+        "region_id": "region-0050",
+        "associated_point_count": 0,
+        "off_main_layer_fraction": null
+      },
+      {
+        "region_id": "region-0051",
+        "associated_point_count": 10,
+        "off_main_layer_fraction": null
+      },
+      {
+        "region_id": "region-0052",
+        "associated_point_count": 85,
+        "off_main_layer_fraction": 0.0
+      },
+      {
+        "region_id": "region-0053",
+        "associated_point_count": 0,
+        "off_main_layer_fraction": null
+      },
+      {
+        "region_id": "region-0054",
+        "associated_point_count": 13,
+        "off_main_layer_fraction": null
+      },
+      {
+        "region_id": "region-0055",
+        "associated_point_count": 3,
+        "off_main_layer_fraction": null
+      },
+      {
+        "region_id": "region-0056",
+        "associated_point_count": 241,
+        "off_main_layer_fraction": 0.020746887966805017
+      },
+      {
+        "region_id": "region-0057",
+        "associated_point_count": 4,
+        "off_main_layer_fraction": null
+      },
+      {
+        "region_id": "region-0058",
+        "associated_point_count": 7,
+        "off_main_layer_fraction": null
+      },
+      {
+        "region_id": "region-0059",
+        "associated_point_count": 157,
+        "off_main_layer_fraction": 0.006369426751592355
+      },
+      {
+        "region_id": "region-0060",
+        "associated_point_count": 70,
+        "off_main_layer_fraction": 0.0
+      },
+      {
+        "region_id": "region-0061",
+        "associated_point_count": 388,
+        "off_main_layer_fraction": 0.002577319587628857
+      },
+      {
+        "region_id": "region-0062",
+        "associated_point_count": 7,
+        "off_main_layer_fraction": null
+      },
+      {
+        "region_id": "region-0063",
+        "associated_point_count": 45,
+        "off_main_layer_fraction": 0.0
+      },
+      {
+        "region_id": "region-0064",
+        "associated_point_count": 2,
+        "off_main_layer_fraction": null
+      },
+      {
+        "region_id": "region-0065",
+        "associated_point_count": 96,
+        "off_main_layer_fraction": 0.0
+      },
+      {
+        "region_id": "region-0066",
+        "associated_point_count": 13,
+        "off_main_layer_fraction": null
+      },
+      {
+        "region_id": "region-0067",
+        "associated_point_count": 1,
+        "off_main_layer_fraction": null
+      },
+      {
+        "region_id": "region-0068",
+        "associated_point_count": 3,
+        "off_main_layer_fraction": null
+      },
+      {
+        "region_id": "region-0069",
+        "associated_point_count": 2076,
+        "off_main_layer_fraction": 0.0014450867052022698
+      },
+      {
+        "region_id": "region-0070",
+        "associated_point_count": 3757,
+        "off_main_layer_fraction": 0.0
+      },
+      {
+        "region_id": "region-0071",
+        "associated_point_count": 770,
+        "off_main_layer_fraction": 0.0
+      },
+      {
+        "region_id": "region-0072",
+        "associated_point_count": 1,
+        "off_main_layer_fraction": null
+      },
+      {
+        "region_id": "region-0073",
+        "associated_point_count": 29,
+        "off_main_layer_fraction": null
+      },
+      {
+        "region_id": "region-0074",
+        "associated_point_count": 0,
+        "off_main_layer_fraction": null
+      },
+      {
+        "region_id": "region-0075",
+        "associated_point_count": 7,
+        "off_main_layer_fraction": null
+      },
+      {
+        "region_id": "region-0076",
+        "associated_point_count": 11,
+        "off_main_layer_fraction": null
+      },
+      {
+        "region_id": "region-0077",
+        "associated_point_count": 4,
+        "off_main_layer_fraction": null
+      },
+      {
+        "region_id": "region-0078",
+        "associated_point_count": 45,
+        "off_main_layer_fraction": 0.1777777777777778
+      },
+      {
+        "region_id": "region-0079",
+        "associated_point_count": 9,
+        "off_main_layer_fraction": null
+      },
+      {
+        "region_id": "region-0080",
+        "associated_point_count": 2,
+        "off_main_layer_fraction": null
+      },
+      {
+        "region_id": "region-0081",
+        "associated_point_count": 5,
+        "off_main_layer_fraction": null
+      },
+      {
+        "region_id": "region-0082",
+        "associated_point_count": 9,
+        "off_main_layer_fraction": null
+      },
+      {
+        "region_id": "region-0083",
+        "associated_point_count": 16,
+        "off_main_layer_fraction": null
+      }
+    ]
+  },
+  "occlusion_proximity": {
+    "metric_version": "1.0.0",
+    "proximity_m": 0.5,
+    "occluded_point_count": 1516151,
+    "near_support_point_count": 184768,
+    "near_support_fraction": 0.12186648955150245
+  },
+  "partial_class_breakdown": {
+    "shared_point_incidences": 28906,
+    "by_containment_2d": [
+      {
+        "range": [
+          0.0,
+          0.2
+        ],
+        "pairs": 55,
+        "incidences": 392,
+        "share": 0.013561198367121012
+      },
+      {
+        "range": [
+          0.2,
+          0.5
+        ],
+        "pairs": 55,
+        "incidences": 9478,
+        "share": 0.32789040337646164
+      },
+      {
+        "range": [
+          0.5,
+          0.8
+        ],
+        "pairs": 41,
+        "incidences": 11534,
+        "share": 0.3990175050162596
+      },
+      {
+        "range": [
+          0.8,
+          0.9
+        ],
+        "pairs": 18,
+        "incidences": 7502,
+        "share": 0.25953089324015777
+      }
+    ],
+    "large_mask_definition": "área ≥ 10% da área útil (236241 px)",
+    "large_masks": [
+      "region-0005",
+      "region-0008",
+      "region-0010",
+      "region-0015",
+      "region-0017",
+      "region-0022"
+    ],
+    "incidences_involving_a_large_mask": 23677,
+    "share_involving_a_large_mask": 0.8191033003528679
+  }
+}

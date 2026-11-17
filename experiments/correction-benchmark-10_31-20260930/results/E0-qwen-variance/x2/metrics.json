@@ -1,0 +1,1138 @@
+{
+  "annotation": {
+    "path": "experiments/correction-benchmark-10_31-20260930/annotations/frame-55.json",
+    "sha256": null,
+    "status": "pending_annotation"
+  },
+  "arm": {
+    "arm_id": "E0-qwen-x2",
+    "code_identity": {
+      "branch": "milestone/canonical-2",
+      "diff_bytes": 502436,
+      "diff_sha256": "sha256:4a5eed9c32d433a9ddf004155837ff51862fcb8a67a2309564f7f14f28e47f81",
+      "head": "a3a175f099fd1609e710614a27753b0d0e24be3d",
+      "relevant_untracked_files": [
+        {
+          "path": "src/contextmap/runtime/image_masks.py",
+          "sha256": "sha256:b8f7ddb5da3bc71f229deba021b5adda0b04e7e784e6869959d938ab703f0bfc"
+        },
+        {
+          "path": "src/contextmap/spatial_relations/semantic_predicates.py",
+          "sha256": "sha256:2a779e0fe9a017a7ebd48ae4e003e32df9b1739f71c7d8bba5053dc4915ee11e"
+        },
+        {
+          "path": "src/contextmap/spatial_support/__init__.py",
+          "sha256": "sha256:27eb3be41fb7c9ca1c5ebbfc6319e4464f0c8cec272f5bed2ff62da4605f7485"
+        },
+        {
+          "path": "src/contextmap/spatial_support/artifact.py",
+          "sha256": "sha256:39ec0191da9d1ab8a19c596dbaa21e6a4d2df1e3e1362c44cd07cd37a300c560"
+        },
+        {
+          "path": "src/contextmap/spatial_support/docs/README.md",
+          "sha256": "sha256:f7b9f125a3e84a99e1fd2ec283c3f3267a7ca41f90bba49dcbc95c9dab963387"
+        },
+        {
+          "path": "src/contextmap/spatial_support/models.py",
+          "sha256": "sha256:7f1268af9d6f20d37223838e558e682ce7711b439d99832eb4d636a28e5e14c0"
+        },
+        {
+          "path": "src/contextmap/spatial_support/service.py",
+          "sha256": "sha256:4141ea68d3e36ca7cda75e91d9708a965c788cbda341b4a96977309c358b84c8"
+        },
+        {
+          "path": "experiments/frame-10_31-raw-vs-voxel-20260930/run_two_arms.py",
+          "sha256": "sha256:abba9f7a128c635d7126af559a65874f3b7a266b152f9684a74dae4077f35e1e"
+        },
+        {
+          "path": "experiments/frame-10_31-raw-vs-voxel-20260930/providers.toml",
+          "sha256": "sha256:27a010af8ab7e030aa837a5b14a54139cc4725683036439173b4ecd4e63daac5"
+        },
+        {
+          "path": "experiments/frame-10_31-raw-vs-voxel-20260930/region-label.toml",
+          "sha256": "sha256:92ead669be237389a77fdbde73399ade005ee4c43e19b56504e879cbda9e9757"
+        },
+        {
+          "path": "experiments/semantic-geometry-investigation-20260930/scripts/assoc.py",
+          "sha256": "sha256:d43541e1130e46fd1013eb769cf414f1fb500ac093928190e40d8f0feb9256cc"
+        },
+        {
+          "path": "experiments/semantic-geometry-investigation-20260930/scripts/common.py",
+          "sha256": "sha256:b02aeaaee7abbae8c824a63ffd01b29632d9fcdc11d9427c5a690032238957fc"
+        },
+        {
+          "path": "experiments/semantic-geometry-investigation-20260930/scripts/p10_entity_overlap.py",
+          "sha256": "sha256:dbbca36d082e21e0e60d8bb51b55712b313833edc419f7adec16c67ce26570c9"
+        },
+        {
+          "path": "experiments/semantic-geometry-investigation-20260930/scripts/p2_geometry_snapshots.py",
+          "sha256": "sha256:1246dc7116016cfe6458ee22e5775154cf13ab1d6c4d58a1a88cf8b5152ed734"
+        },
+        {
+          "path": "experiments/semantic-geometry-investigation-20260930/scripts/p2_render_viewer_effect.py",
+          "sha256": "sha256:8a5295d828a3e3615cc0b5709367d061ce2033714bd7047105e96d31697217ea"
+        },
+        {
+          "path": "experiments/semantic-geometry-investigation-20260930/scripts/p2_test_e_semantics_off.py",
+          "sha256": "sha256:088834a003d3f964ba1cb58c7c95c6d38f32ff188e275272a064411fb1b89e00"
+        },
+        {
+          "path": "experiments/semantic-geometry-investigation-20260930/scripts/p3_extrinsic_direction.py",
+          "sha256": "sha256:7f8e98a6bdf78c848d28a2129362343004c52d22f51c8f6bccccdeca07ff8f56"
+        },
+        {
+          "path": "experiments/semantic-geometry-investigation-20260930/scripts/p3_map_consistency.py",
+          "sha256": "sha256:624b007680bb9e65d0a6ba2cf778c394b1e297422bd82f6f9369f0a72248a700"
+        },
+        {
+          "path": "experiments/semantic-geometry-investigation-20260930/scripts/p3_time_offset_deskew.py",
+          "sha256": "sha256:bf1365da980cb82b0a9fe1026d5194af59b22d503100aa859e7f3e67beec58a7"
+        },
+        {
+          "path": "experiments/semantic-geometry-investigation-20260930/scripts/p4_calibration_photometric.py",
+          "sha256": "sha256:2b0015ce7fe25d2b0ffbea16b9bfc25f0543bcbb11c05aeee050fb4ac774ded2"
+        },
+        {
+          "path": "experiments/semantic-geometry-investigation-20260930/scripts/p4_overlays.py",
+          "sha256": "sha256:c4dbf0ec58c862714fef5f6c5a0467b5dbba1a070218e20788314602dbfadb3d"
+        },
+        {
+          "path": "experiments/semantic-geometry-investigation-20260930/scripts/p4_validate_reimpl.py",
+          "sha256": "sha256:61bd344af2bfdb06b3a2f66df4d1e57b648d735efe0ca112dd54badd3de91673"
+        },
+        {
+          "path": "experiments/semantic-geometry-investigation-20260930/scripts/p5_association_ablation.py",
+          "sha256": "sha256:4c3c5400dd13fe84c9091a61c9e42df60be07141a5cb995b2857eddfcb78dedc"
+        },
+        {
+          "path": "experiments/semantic-geometry-investigation-20260930/scripts/p5_occlusion_anatomy.py",
+          "sha256": "sha256:d38ecf3cac2b3ebc78295302d6342f7c515e396c2327a6fa8d6df05ae64f251e"
+        },
+        {
+          "path": "experiments/semantic-geometry-investigation-20260930/scripts/p6_mask_quality.py",
+          "sha256": "sha256:7fa40512a79c35141b38c456dc391efb9b1289c81f6b24bbb72ad452443db580"
+        },
+        {
+          "path": "experiments/semantic-geometry-investigation-20260930/scripts/p6_sam2_rerun.py",
+          "sha256": "sha256:205445812e16e12440df1e0667bafa6ddff0ca512783c970636060caaed270c6"
+        },
+        {
+          "path": "experiments/semantic-geometry-investigation-20260930/scripts/p7_label_provenance.py",
+          "sha256": "sha256:430d26cd09fc90a0aabed9ec14fc553ec3bae9f6baaa1c8153306c8e5a8b140c"
+        },
+        {
+          "path": "experiments/semantic-geometry-investigation-20260930/scripts/p9_label_redundancy.py",
+          "sha256": "sha256:2e8fcb2fc85da1d2209d68b99a1b7ee7e313fc833719960d7f61aed680b333b2"
+        }
+      ],
+      "tracked_files_changed": [
+        "CHANGELOG.md",
+        "docs/ARTIFACTS.md",
+        "docs/CONTRACTS.md",
+        "docs/runtime-composition.md",
+        "examples/v0.2.0/assets/corridor-02/camera_1-ego.npy",
+        "examples/v0.2.0/assets/corridor-02/camera_1-valid.npy",
+        "examples/v0.2.0/canonical-config.toml",
+        "examples/v0.2.0/corridor-02-image-masks.toml",
+        "pyproject.toml",
+        "src/contextmap/artifact/__init__.py",
+        "src/contextmap/artifact/_lineage_checks.py",
+        "src/contextmap/artifact/composition.py",
+        "src/contextmap/artifact/docs/README.md",
+        "src/contextmap/artifact/docs/assembly.md",
+        "src/contextmap/artifact/docs/composition.md",
+        "src/contextmap/artifact/docs/versioning.md",
+        "src/contextmap/artifact/records.py",
+        "src/contextmap/artifact/serialization/assembly.py",
+        "src/contextmap/artifact/versioning.py",
+        "src/contextmap/entity_resolution/__init__.py",
+        "src/contextmap/entity_resolution/_codec.py",
+        "src/contextmap/entity_resolution/docs/README.md",
+        "src/contextmap/entity_resolution/docs/artifact.md",
+        "src/contextmap/entity_resolution/docs/resolved-entities.md",
+        "src/contextmap/entity_resolution/docs/semantic-temporal-comparison.md",
+        "src/contextmap/entity_resolution/materialization.py",
+        "src/contextmap/entity_resolution/resolved_entity.py",
+        "src/contextmap/entity_resolution/run_artifact.py",
+        "src/contextmap/entity_resolution/semantic_comparison.py",
+        "src/contextmap/evaluation/__init__.py",
+        "src/contextmap/evaluation/capability_matrix.py",
+        "src/contextmap/evaluation/docs/README.md",
+        "src/contextmap/evaluation/docs/geometric_mapping.md",
+        "src/contextmap/evaluation/geometric_mapping.py",
+        "src/contextmap/evaluation/incremental_context.py",
+        "src/contextmap/geometric_mapping/__init__.py",
+        "src/contextmap/geometric_mapping/docs/README.md",
+        "src/contextmap/geometric_mapping/docs/inputs.md",
+        "src/contextmap/geometric_mapping/docs/motion-correction.md",
+        "src/contextmap/geometric_mapping/inputs.py",
+        "src/contextmap/geometric_mapping/motion_correction.py",
+        "src/contextmap/geometric_mapping/run_artifact.py",
+        "src/contextmap/ingestion/__init__.py",
+        "src/contextmap/ingestion/calibration.py",
+        "src/contextmap/ingestion/docs/calibration.md",
+        "src/contextmap/runtime/__init__.py",
+        "src/contextmap/runtime/catalog.py",
+        "src/contextmap/runtime/cli.py",
+        "src/contextmap/runtime/composition.py",
+        "src/contextmap/runtime/config.py",
+        "src/contextmap/runtime/context_branch.py",
+        "src/contextmap/runtime/context_build.py",
+        "src/contextmap/runtime/docs/cli.md",
+        "src/contextmap/runtime/docs/composition.md",
+        "src/contextmap/runtime/docs/configuration.md",
+        "src/contextmap/runtime/docs/executors.md",
+        "src/contextmap/runtime/executors.py",
+        "src/contextmap/runtime/ingestion_service.py",
+        "src/contextmap/runtime/pipeline.py",
+        "src/contextmap/semantic_fusion/__init__.py",
+        "src/contextmap/semantic_fusion/accumulation.py",
+        "src/contextmap/semantic_fusion/docs/README.md",
+        "src/contextmap/semantic_fusion/docs/accumulation.md",
+        "src/contextmap/semantic_fusion/docs/artifact.md",
+        "src/contextmap/semantic_fusion/docs/contracts.md",
+        "src/contextmap/semantic_fusion/models.py",
+        "src/contextmap/semantic_fusion/serialization.py",
+        "src/contextmap/semantic_mapping/__init__.py",
+        "src/contextmap/semantic_mapping/docs/README.md",
+        "src/contextmap/semantic_mapping/docs/contracts.md",
+        "src/contextmap/semantic_mapping/docs/primary-hypothesis-policy.md",
+        "src/contextmap/semantic_mapping/docs/semantic-state.md",
+        "src/contextmap/semantic_mapping/materialization.py",
+        "src/contextmap/semantic_mapping/semantic_state.py",
+        "src/contextmap/semantic_mapping/serialization.py",
+        "src/contextmap/semantic_mapping/state_mapping.py",
+        "src/contextmap/spatial_relations/__init__.py",
+        "src/contextmap/spatial_relations/candidates.py",
+        "src/contextmap/spatial_relations/decision.py",
+        "src/contextmap/spatial_relations/evidence.py",
+        "src/contextmap/spatial_relations/run_artifact.py",
+        "src/contextmap/spatial_relations/taxonomy.py",
+        "src/contextmap/state_estimation/preflight.py",
+        "src/contextmap/visual_perception/__init__.py",
+        "src/contextmap/visual_perception/docs/region-grounding.md",
+        "src/contextmap/visual_perception/docs/run_artifact.md",
+        "src/contextmap/visual_perception/docs/semantic-interpretation.md",
+        "src/contextmap/visual_perception/semantic_prompt.py",
+        "src/contextmap/visual_perception/semantic_requests.py",
+        "src/contextmap/visual_perception/semantic_views.py",
+        "tests/architecture/test_boundaries.py",
+        "tests/architecture/test_runtime_boundaries.py",
+        "tests/artifact/test_context_map_contract.py",
+        "tests/artifact/test_context_map_invariants.py",
+        "tests/artifact/test_context_map_serialization_roundtrip.py",
+        "tests/artifact/test_context_map_versioning.py",
+        "tests/evaluation/test_geometric_mapping_evaluation.py",
+        "tests/runtime/runtime_context.py",
+        "tests/runtime/test_runtime_catalog.py",
+        "tests/runtime/test_runtime_cli.py",
+        "tests/runtime/test_runtime_composition.py",
+        "tests/runtime/test_runtime_context_branch.py",
+        "tests/runtime/test_runtime_region_grounding.py",
+        "tests/runtime/test_state_estimation_pose_bridge.py",
+        "tests/semantic_fusion/evidence_builders.py",
+        "tests/spatial_relations/test_relation_taxonomy.py",
+        "tests/visual_perception/test_semantic_prompt.py",
+        "tests/visual_perception/test_semantic_view_policy.py"
+      ]
+    },
+    "config_stack": [
+      "examples/v0.2.0/canonical-config.toml",
+      "experiments/canonical-2-empirical-validation-20260929/config/base.template.toml",
+      "experiments/frame-10_31-raw-vs-voxel-20260930/providers.toml",
+      "examples/v0.2.0/corridor-02-image-masks.toml",
+      "experiments/frame-10_31-raw-vs-voxel-20260930/region-label.toml"
+    ],
+    "cuda_max_memory_allocated_bytes": 3547084800,
+    "e0_region_count": 83,
+    "effective_config_digest": "sha256:7ffa378c640b6c0529ae243b05c66de84661e767791f4f576e6b6f3f6690d706",
+    "elapsed_s": 248.8,
+    "input_workspace": "workspace-old/frame-10_31-raw",
+    "perception_dir": "outputs/correction-benchmark-10_31-20260930/qwen-n3/x2/visual_perception",
+    "perception_run_id": "ebd2f3e34ec4ec0964ae4396a74f6d37",
+    "preset": "canonical/1-labels-no-scene-no-features",
+    "region_discovery_backend": {
+      "backend_id": "sam2",
+      "capability": "region_discovery",
+      "configuration_fingerprint": "sha256:9336bb272b4474c3020ce2910755a37060bd5bde67fa8a97779d51c4a4d64f69",
+      "model": "facebook/sam2.1-hiera-tiny",
+      "provider": "facebook",
+      "version": "de431c4043854a71d8101e17995dfe596bf101a5"
+    },
+    "regions_identical_to_e0": true,
+    "replicates_e0_run_identity": true,
+    "request_config_digest": "perc",
+    "request_sequence_content_hash": "sha256:driven",
+    "rerun_region_count": 83,
+    "semantic_request_policy": {
+      "prompts": {
+        "region": {
+          "output_schema": "semantic-response/1",
+          "template_id": "region-label/v1"
+        },
+        "scene": {
+          "output_schema": "semantic-response/1",
+          "template_id": "scene/v1"
+        }
+      },
+      "region_scene_context": false,
+      "version": "semantic-request-policy/1",
+      "views": {
+        "context_boundary": null,
+        "context_margin_ratio": null,
+        "crop_rounding": "outward-floor-ceil/clamped-to-image",
+        "encoding": "png/rgb8/filter-0/zlib-9",
+        "mask_fill_rgb": null,
+        "region_views": [
+          "tight_crop"
+        ],
+        "resize": "none",
+        "scene_views": [
+          "full_frame"
+        ],
+        "version": "semantic-views/1"
+      }
+    },
+    "torch": "2.8.0+cu126",
+    "variable": "nenhuma (rerun do Qwen com a mesma configura\u00e7\u00e3o do E0)"
+  },
+  "arm_id": "E0-qwen-x2",
+  "benchmark": "B1",
+  "image_id": "camera_1_image_raw-000055",
+  "layers": {
+    "association": {
+      "status": "not_in_run"
+    },
+    "calibration": {
+      "status": "not_in_run"
+    },
+    "entities": {
+      "status": "not_in_run"
+    },
+    "geometry": {
+      "status": "not_in_run"
+    },
+    "regions": {
+      "accepted_mask_ratio": 0.1925754060324826,
+      "accepted_region_count": 83,
+      "area_px_median": 1100.0,
+      "area_px_p10": 270.6,
+      "area_px_p90": 7892.0,
+      "contained_pair_count": 56,
+      "covered_pixel_count": 168168,
+      "definition": {
+        "area_quantile_method": "linear",
+        "connectivity": 4,
+        "containment_threshold": 0.8,
+        "duplicate_iou_threshold": 0.8
+      },
+      "definitions": {
+        "containment_threshold": 0.8,
+        "duplicate_iou_threshold": 0.8,
+        "proposal_count": "SAM2 raw proposals minus those filtered by the backend thresholds",
+        "usable_area": "camera_1-valid.npy AND NOT camera_1-ego.npy"
+      },
+      "discovery_backend": {
+        "backend_id": "sam2",
+        "capability": "region_discovery",
+        "configuration_fingerprint": "sha256:9336bb272b4474c3020ce2910755a37060bd5bde67fa8a97779d51c4a4d64f69",
+        "model": "facebook/sam2.1-hiera-tiny",
+        "provider": "facebook",
+        "version": "de431c4043854a71d8101e17995dfe596bf101a5"
+      },
+      "discovery_identity": {
+        "border_truncation_policy_id": "internal_edge_contact_v1",
+        "mask_remap_policy_id": "nearest_pixel_center_v1",
+        "normalization_config_digest": "sha256:c2a42c0da8c7138fbdea886f92088d7a816d041c7cdbb71702b99a4efdf09faa",
+        "pass_config_digest": "sha256:f1c08c0821b7243c23463304f1f5d8be5a2b3c7a328a6d83f6573e1dc1262aae",
+        "pass_planning_policy_id": "row_major_edge_aligned_v1"
+      },
+      "duplicate_pair_count": 0,
+      "fragmentation_rate": 0.6867469879518072,
+      "fragmented_mask_count": 57,
+      "implementation": "contextmap.evaluation.region_structure 1.0.0",
+      "known_object_recall": "pending_annotation",
+      "mask_count": 83,
+      "mask_sha256_by_region": {
+        "region-0001": "sha256:decfd3c7ac802b956689f5e8beef9f1848dd4f9aceb0db9dfe9172ebcf4cc244",
+        "region-0002": "sha256:c0963fa7a187ed1c5f84be9e849053ffe2102710a3088888d660c54fcdaade08",
+        "region-0003": "sha256:44e3b2c7a8e65f8aa1af084c4e48e2d9b585a4a9c02188847cbc828af3e7b033",
+        "region-0004": "sha256:5f41b9aed3beeb279901bc5bc39e01f60a441f987b5d375470d9df49d88300e3",
+        "region-0005": "sha256:12998e04ebc1ca1879b8c0d29a0640e850d6f4f3da950aece71ae9187384fb8f",
+        "region-0006": "sha256:c1da1d1134a762e004920adea826f6654968a02d8dd24b76e54c9fd9281d5b35",
+        "region-0007": "sha256:df8091308d2bacb6193bc1a26d0479450744e1fbb6c4a84205ef8ba2f9ca226d",
+        "region-0008": "sha256:1f2aaca726cb2434bebac7587b72928e8227eb683d20e5fe0a9ead0ace714e0a",
+        "region-0009": "sha256:300603432479db9bc3a6ecdb55a10baf66eb61649089227c55700c3cc59030fd",
+        "region-0010": "sha256:d648eb9c22e020b3d60687aed638b039d04133007efdd326949156e550dae2d1",
+        "region-0011": "sha256:b7774878ff637703d649e489af43c3c72701202e6f59f00edc9426e3e8f3222c",
+        "region-0012": "sha256:72ba6b605d1aaa488eebdfcd2486d7e8e7762b3f08c70cd6db6f48b1c30dbd9f",
+        "region-0013": "sha256:6b3b1352f0efa5f255addf2375bd51e5db5bcc2a32fe6f503d20ac42de55adac",
+        "region-0014": "sha256:b4eb1e73d4913b2fe1a4e1f8dca4fd02b1963a5e37a871522a47cd2733cf2fc7",
+        "region-0015": "sha256:df2c1ba82ba8a7cfcd0b073f3b56b0e07150f75bf390f8b15640a1e7c40a562b",
+        "region-0016": "sha256:5eab78588a91dbfacee07205963c421573e82b711fe67a287f2436bbd72e83a2",
+        "region-0017": "sha256:6bd8c5c0b5fd4f47644745f5ce29dc341cc2ec93b741d945e5b443b687fb67fd",
+        "region-0018": "sha256:6eec2ef9e2298b2248ce55ae6068c93f447f7c0d65211f30f5a330dd31ab3b62",
+        "region-0019": "sha256:d6467da77a258c4b4d916e4ed5dd62498a41dfb4c8ae04b9fc97ae52f845ed41",
+        "region-0020": "sha256:ea0f80bfbec5df36188b7c0402cee33c9def0642f625cb333a8d434a51a6dd7b",
+        "region-0021": "sha256:d1c2a6434243e579a8c03af5885e36a2148751871b377e50a048ba0ee4a19b31",
+        "region-0022": "sha256:6f8ee741b3016b0c3cdb4a8f1553dc510000e5a67f8c5752c96171e00b7d0cee",
+        "region-0023": "sha256:c781a58bac6bfbff6ba299142dcc034f95afa32ef27c0c334e2be36d00ebd47b",
+        "region-0024": "sha256:423d507c038b0cfe408b0303f787fd026a3b9d0d010163d89edf3f77f2b174a7",
+        "region-0025": "sha256:1669a138b87690ff3588e4fc77c23d3e82a7a256cd57a27b6580c4cd278cf573",
+        "region-0026": "sha256:3b0246d31abeb1fb2ffb104bc6f83748d796a542bbae3da32c0322eaf8599cef",
+        "region-0027": "sha256:6e4f221a77ec6aa4ff577372e5cf76dca8c48ab4ad478758884774fe7a19724c",
+        "region-0028": "sha256:e5f91292a6e687879a43d663bbf4b6ac8f7b6323c31463f74e3edb8872902d2e",
+        "region-0029": "sha256:abe29407fe000335a52595305d0e2a944ca6888fd1d163ef69033b0707b50e94",
+        "region-0030": "sha256:1d6523df3cea9dd7adc4ab4fc43c148739781ea89c00b9600cdb1a89a050bcff",
+        "region-0031": "sha256:4f3114a0cd2c32f91325f58189a2236ef40748dfb16b8c95cbdbef415f144aee",
+        "region-0032": "sha256:794b1cb621834aa88cd19c3b86d2b43da9d908b2a067642d189be06978d19a48",
+        "region-0033": "sha256:db468257ee747c1df26f438e42e3a9e71a442721b92f638f62d788418bd5566b",
+        "region-0034": "sha256:000f1f9b255f8683a83dd8fdaed7ece0897ad0e4156927fa17cc23a16df91315",
+        "region-0035": "sha256:4ec9a6831d72c21785c95b1b511d9ad3760f0e82b14bce075cf25a435a315fa6",
+        "region-0036": "sha256:25807ba062039cabfa569cb86d1e77207222ced8a97a176a617bf98a788ad18b",
+        "region-0037": "sha256:039093006eaad093c01a16361a17b87a80b9f2f63fe8e478d5d7d762e1ee900b",
+        "region-0038": "sha256:e9538328369e1bc2925737011f05efe7ad309e10620e925b5fc1155205cb8601",
+        "region-0039": "sha256:6e82ac0033e6bd1228e2d5762ecf47ee3d6603cda2058b2f8f1462e8a2f83c71",
+        "region-0040": "sha256:8c13b6c17469993e5a36c79f061e6ff0f3a9ffe71ab76b0a2d8bec006ee4e9e9",
+        "region-0041": "sha256:2144a1dbd8e56a90c19dcc59c44c97087a1028ca9f3b4b053fd5f146ffa901f5",
+        "region-0042": "sha256:c72347b477a65380e7a5d01847d0af581093dc13e65d2576bc7398aea6dabb51",
+        "region-0043": "sha256:cae0d5a2b7f193b55e05ca3e4e12a95a59b319c7a2188305b6afc1882b892eb8",
+        "region-0044": "sha256:f5b0d633e2c07432ad90765f5ddd1c14be554c9d00db30f95926530534be3703",
+        "region-0045": "sha256:697ee40590ad3eb35f57edea630d8bc5d216b31e22219da7d3a84615ec3ed79b",
+        "region-0046": "sha256:a12c564513d9fa28b3ddd03162d52a859dfcfd3a05f38c33ea0ff5f747000c2f",
+        "region-0047": "sha256:c3633d2dba508299a5b879ea379fc820c48f6d91d427248823075b2a553db996",
+        "region-0048": "sha256:9ceffa3d545d763b2789d6db27cb68bad61d8e2404e9a6aa2f0e1796e5162c6d",
+        "region-0049": "sha256:9e4cc8f652d51c70d28b2d88b3122102137760c1c7c29f46bd97d69e980afc5d",
+        "region-0050": "sha256:2c5121559cdac488a4b33d15ea29c9ba6b78f7f48ed3c8056f338137eb5e9cad",
+        "region-0051": "sha256:058acc40eb1d2247229c8b70a05016b3ec2c14d56d3ffa19b79a84735ea8d8f7",
+        "region-0052": "sha256:a0a1003c2b149ce4dba120528bce6efeb50d26fe939ffe5299239ae3c9483add",
+        "region-0053": "sha256:a934b849d1d2d62c2982e5b1c21d19e7912377dccad7f95e125d75d0ca4a8d0b",
+        "region-0054": "sha256:66a071e57b7606c78e09eb7dc4ec9ba111e6af62e587acf6120c454a14ca4dee",
+        "region-0055": "sha256:28f174eeb162f635ae8ac2b12de135bbf58ccc9030246b26973ad3ed263be23b",
+        "region-0056": "sha256:f396e7ccbb13486e7183e3811b5a0c420c6fe51a7febbd0926e1efd7d4c8b902",
+        "region-0057": "sha256:022f28ffc79da74aefb3ab345ca106a0949b639cc45a8614d68a39a3a8abd47c",
+        "region-0058": "sha256:df94a41b98909e3c2e38960d3f1a222fbbbe991086cc2479d41191df21fd9a05",
+        "region-0059": "sha256:6ae977ffacb8a496f3613f45f12f623e8fb4fd29ec5a7ed109be6d006c210eaa",
+        "region-0060": "sha256:a6cc37eac5e4172617e82bb4c333aa141b8c3e367696b37a3da7ce6ad131ee9f",
+        "region-0061": "sha256:ef5b23c7b9eda21759b7ddf6689832f743036323104723f8b796b854703d4e2b",
+        "region-0062": "sha256:3968530646fd9a912798b5e980ba1482f48ed7a7775b0bf5e79ebd12f33a5f0c",
+        "region-0063": "sha256:554428f63ab857e1b9d41c6553d5945fac5b17fff9090754f2c04c9325a75d76",
+        "region-0064": "sha256:b3a6ae1869772215635d1853e0e438e1ee43cffe008acb7981d87f6fd109c865",
+        "region-0065": "sha256:3dc9ca43cf4aeb6bb410440c4524fc071d7e008a028c28206b2f7c565c70b958",
+        "region-0066": "sha256:4857ba9b0ee2df7e28c2c0972517163687755318f5a59dd34ee9a810859f9b44",
+        "region-0067": "sha256:c811ff6a311ae279c53f7ad8e735aa8d585a24703a221f76e9f0885f4d6afb19",
+        "region-0068": "sha256:2a2bcc242c02867d6a6e919a70337107b1e3e5f946a356d1d5affb08fa701850",
+        "region-0069": "sha256:b1f4b808fdd3c40a5ac2596a6ac69d25b064c4fb593a7c0fcd1e3ecf8460922c",
+        "region-0070": "sha256:64727d3ac9c3ff8d5a12045d43587929591b901a35228001a7c86851d730d672",
+        "region-0071": "sha256:b51bb7789cd5373c6b5b1a8613a48b318c74cb0327a4ee050e394e5a2d54b95c",
+        "region-0072": "sha256:34238cc3d3e2fd839bfd8e54c428d45b01096f61afd99f2b9728a267f83ae995",
+        "region-0073": "sha256:b8406960c0acefd4f8d4fc34e249d68790e4199225b42ad98ff31d45931fbea2",
+        "region-0074": "sha256:e39a32bb0010e9eae93b088b967354c3c8ff2647acae3fd4059174261a3cc286",
+        "region-0075": "sha256:b1f79c839299fff0a67dc602be7fe757c9548d70c14eb8997c9380a4e56e9f93",
+        "region-0076": "sha256:a2256a694ec50e6804efb2fa6442c8438cc6571f3c22499049034807a91c41d5",
+        "region-0077": "sha256:02567f851dcd1118a37d9caae37ee30dcce8691a9e69d29f734497adf240ad1f",
+        "region-0078": "sha256:4622a3101b09855c0ef5f779ebb5015e5331f912bab05f3e4b532ed2189a1839",
+        "region-0079": "sha256:fb5298c9cb7e07759447915209d6dd9ecf43b46b5873519ba5c01f181621dc99",
+        "region-0080": "sha256:dc687ecdbd5e12a7fa6ab7e946f2f1e238794e6189d1aee12c2463a474ab175a",
+        "region-0081": "sha256:a67cc20b7f40dc711c4ee4457c8e0a585ab9a865eeb2ce37e9f3443cf5783a43",
+        "region-0082": "sha256:3a1935bd1c243ee64537f514c8c26799607085be1dc4c2bbbcd29b1bd9ea5f2c",
+        "region-0083": "sha256:f816fa3dc175aad8adbde3805168387bac42280055ce4c98b74f82c4a32c1aa4"
+      },
+      "masks_below_500px": 23,
+      "masks_contained_in_another": 43,
+      "masks_measured": 83,
+      "masks_with_gt_10_components": 20,
+      "max_nesting_depth": 7,
+      "median_components": 3.0,
+      "merge_decisions_by_kind": {
+        "containment": 99,
+        "iou_duplicate": 14
+      },
+      "metric_version": "1.0.0",
+      "multiple_mask_pixel_fraction": 0.848633509347795,
+      "nesting_depth_histogram": {
+        "1": 25455,
+        "2": 66005,
+        "3": 60180,
+        "4": 11240,
+        "5": 4041,
+        "6": 1021,
+        "7": 226
+      },
+      "normalization_rejections_by_reason": {
+        "exclusion_overlap": 44,
+        "merged_duplicate": 113,
+        "outside_valid_region": 16
+      },
+      "overlapping_pair_count": 323,
+      "pass_rejections_by_reason": {
+        "region_budget_exceeded": 175
+      },
+      "pixels_with_multiple_masks": 142713,
+      "proposal_count": 431,
+      "region_count_total": 83,
+      "sam2_filtered_by_threshold_count": 0,
+      "sam2_raw_proposal_count": 431,
+      "status": "measured",
+      "usable_area_coverage": 0.7081200976968435,
+      "usable_pixel_count": 236241
+    },
+    "relations": {
+      "status": "not_in_run"
+    },
+    "semantics": {
+      "accepted_regions_without_claims": 6,
+      "alternative_claim_count": 0,
+      "backend_call_failures": 0,
+      "claim_count": 77,
+      "claims_with_structured_attributes": 77,
+      "color_or_material_prefix_fraction": 0.5454545454545454,
+      "hallucination_rate": "pending_annotation",
+      "label_counts": {
+        "baseboard": 1,
+        "blue door": 3,
+        "blue surface": 1,
+        "blue trim": 1,
+        "blue vertical bar": 1,
+        "blue wall": 1,
+        "blurry image": 1,
+        "ceiling panel": 4,
+        "ceiling tile": 4,
+        "curved edge": 2,
+        "dark horizontal bar": 1,
+        "dark surface": 4,
+        "door": 7,
+        "door handle": 1,
+        "doorway": 1,
+        "flooded hallway": 1,
+        "floor tile": 1,
+        "metal bracket": 2,
+        "metal door": 2,
+        "metal edge": 1,
+        "metal handle": 1,
+        "metal hook": 2,
+        "metal latch": 4,
+        "metal pole": 5,
+        "metal rail": 2,
+        "metal railing": 2,
+        "metal rod": 5,
+        "metal towel rack": 1,
+        "metallic object": 1,
+        "orange peel": 1,
+        "peeling paint": 1,
+        "spacecraft": 1,
+        "text": 1,
+        "vertical surface": 1,
+        "window": 5,
+        "window frame": 2,
+        "wooden plank": 1,
+        "yellow paint": 1
+      },
+      "label_entropy_bits": 4.900094418878315,
+      "label_entropy_max_bits": 5.247927513443585,
+      "labels_with_color_or_material_prefix": 42,
+      "lexicon": {
+        "colors": [
+          "black",
+          "blue",
+          "brown",
+          "dark",
+          "gray",
+          "green",
+          "grey",
+          "metallic",
+          "red",
+          "white",
+          "wooden",
+          "yellow"
+        ],
+        "materials": [
+          "concrete",
+          "glass",
+          "metal",
+          "metallic",
+          "plastic",
+          "wood",
+          "wooden"
+        ],
+        "rule": "label has >1 word and its first word is in COLORS | MATERIALS (evaluation only)",
+        "source": "experiments/semantic-geometry-investigation-20260930/scripts/p7_label_provenance.py"
+      },
+      "model": {
+        "configuration_fingerprint": "sha256:024d27abd33b28546b906725d2ffe5f9ebf802fee450b05d8c0040ad7e6460a8",
+        "model": "Qwen/Qwen3-VL-4B-Instruct",
+        "prompt_template_id": "region-label/v1",
+        "quantization": "4bit",
+        "rendered_prompts_digest": "sha256:a8be2e1993c845dce5a329af4f69174fedbc4ab27f6d67fca577c7b7f6301d2b",
+        "revision": "ebb281ec70b05090aa6165b016eac8ec08e71b17",
+        "temperature": 0.0,
+        "view_kinds": [
+          "tight_crop"
+        ],
+        "visual_views_digest": "sha256:a48047deab3273946410efa88b16d5b17c848d46f783c5685245adf0df2d1696"
+      },
+      "parse_failures": 6,
+      "prefix_value_also_in_attributes": 2,
+      "primary_by_region": {
+        "region-0001": {
+          "attributes": {
+            "color": "blue",
+            "handle": "metal bar",
+            "material": "metal"
+          },
+          "category": "door",
+          "label": "door"
+        },
+        "region-0002": {
+          "attributes": {
+            "description": "peeling paint on a wall"
+          },
+          "category": "surface",
+          "label": "peeling paint"
+        },
+        "region-0003": {
+          "attributes": {
+            "description": "a dark brown wooden plank with a yellowish edge, possibly part of a construction or display setup"
+          },
+          "category": "thing",
+          "label": "wooden plank"
+        },
+        "region-0004": {
+          "attributes": {
+            "description": "a dark, textured surface with indistinct features"
+          },
+          "category": "surface",
+          "label": "dark surface"
+        },
+        "region-0005": {
+          "attributes": {
+            "description": "a long, empty hallway with water on the floor, peeling paint, and blue doors"
+          },
+          "category": "structure",
+          "label": "flooded hallway"
+        },
+        "region-0006": {
+          "attributes": {
+            "description": "a metallic handrail mounted on a blue wall, extending along a hallway"
+          },
+          "category": "thing",
+          "label": "metal railing"
+        },
+        "region-0007": {
+          "attributes": {
+            "description": "a metallic rod mounted on a wall"
+          },
+          "category": "thing",
+          "label": "metal rod"
+        },
+        "region-0008": {
+          "attributes": {
+            "description": "blue door with metal handle and lock mechanism"
+          },
+          "category": "thing",
+          "label": "door"
+        },
+        "region-0009": {
+          "attributes": {
+            "description": "a metallic handle attached to a surface with a textured pattern"
+          },
+          "category": "thing",
+          "label": "metal handle"
+        },
+        "region-0010": {
+          "attributes": {
+            "description": "a blue painted door with a metal handle and a small window"
+          },
+          "category": "door",
+          "label": "blue door"
+        },
+        "region-0011": {
+          "attributes": {
+            "description": "a small metallic object on the floor near a wall"
+          },
+          "category": "thing",
+          "label": "metallic object"
+        },
+        "region-0012": {
+          "attributes": {
+            "description": "a long, yellowish strip of paint on a surface"
+          },
+          "category": "surface",
+          "label": "yellow paint"
+        },
+        "region-0013": {
+          "attributes": {
+            "description": "a dark, horizontal bar-like structure in the upper portion of the image"
+          },
+          "category": "structure",
+          "label": "dark horizontal bar"
+        },
+        "region-0014": {
+          "attributes": {
+            "description": "a dark green door with a vertical rectangular window, partially open, revealing a hallway with a pinkish light in the distance"
+          },
+          "category": "structure",
+          "label": "door"
+        },
+        "region-0015": {
+          "attributes": {
+            "color": "blue",
+            "location": "hallway",
+            "material": "metal"
+          },
+          "category": "door",
+          "label": "blue door"
+        },
+        "region-0016": {
+          "attributes": {
+            "description": "a long, slender metal rod with a handle-like end, possibly part of a tool or equipment"
+          },
+          "category": "tool",
+          "label": "metal rod"
+        },
+        "region-0017": {
+          "attributes": {
+            "description": "blue door with metal handle and lock, set in a hallway with tiled ceiling and wall-mounted fixtures"
+          },
+          "category": "thing",
+          "label": "door"
+        },
+        "region-0018": {
+          "attributes": {
+            "description": "a narrow vertical window with a dark frame"
+          },
+          "category": "structure",
+          "label": "window"
+        },
+        "region-0019": {
+          "attributes": {
+            "description": "curved edge of a spacecraft with visible structural lines and a dark background"
+          },
+          "category": "thing",
+          "label": "spacecraft"
+        },
+        "region-0020": {
+          "attributes": {
+            "description": "a window with dark frames and a visible interior view"
+          },
+          "category": "structure",
+          "label": "window"
+        },
+        "region-0021": {
+          "attributes": {
+            "description": "a window with vertical panes"
+          },
+          "category": "structure",
+          "label": "window"
+        },
+        "region-0022": {
+          "attributes": {
+            "description": "a vertical metal pole, possibly part of a railing or support structure, with a curved top and visible wear or discoloration"
+          },
+          "category": "structure",
+          "label": "metal pole"
+        },
+        "region-0024": {
+          "attributes": {
+            "description": "a vertical surface with a gradient from dark to light, possibly a wall or pillar"
+          },
+          "category": "wall",
+          "label": "vertical surface"
+        },
+        "region-0025": {
+          "attributes": {
+            "description": "a blurry, low-resolution image of a ceiling tile with visible grid lines"
+          },
+          "category": "structure",
+          "label": "ceiling tile"
+        },
+        "region-0026": {
+          "attributes": {
+            "description": "blue painted metal door with visible hinges and a vertical handle"
+          },
+          "category": "door",
+          "label": "metal door"
+        },
+        "region-0028": {
+          "attributes": {
+            "description": "a dark, rectangular window with visible vertical lines"
+          },
+          "category": "structure",
+          "label": "window"
+        },
+        "region-0029": {
+          "attributes": {
+            "description": "a white ceiling tile with grid lines and a blue structural element below"
+          },
+          "category": "structure",
+          "label": "ceiling tile"
+        },
+        "region-0030": {
+          "attributes": {
+            "description": "a metallic towel rack mounted on a blue wall"
+          },
+          "category": "fixture",
+          "label": "metal towel rack"
+        },
+        "region-0031": {
+          "attributes": {
+            "description": "a gray, rectangular ceiling panel with visible edges and a slightly textured surface"
+          },
+          "category": "structure",
+          "label": "ceiling panel"
+        },
+        "region-0032": {
+          "attributes": {
+            "description": "blurry text on a dark background"
+          },
+          "category": "text",
+          "label": "text"
+        },
+        "region-0034": {
+          "attributes": {
+            "description": "a dark metallic bracket attached to a wall or structure, with a diagonal arm extending from it"
+          },
+          "category": "hardware",
+          "label": "metal bracket"
+        },
+        "region-0035": {
+          "attributes": {
+            "description": "a metallic handrail mounted on a blue wall, with a vertical pipe running alongside it"
+          },
+          "category": "structure",
+          "label": "metal railing"
+        },
+        "region-0036": {
+          "attributes": {
+            "description": "a blurry orange peel on a dark surface"
+          },
+          "category": "food",
+          "label": "orange peel"
+        },
+        "region-0037": {
+          "attributes": {
+            "description": "a metallic hook attached to a blue surface"
+          },
+          "category": "hardware",
+          "label": "metal hook"
+        },
+        "region-0038": {
+          "attributes": {
+            "description": "a smooth, curved surface with a gradient from dark to light"
+          },
+          "category": "surface",
+          "label": "curved edge"
+        },
+        "region-0039": {
+          "attributes": {
+            "description": "dark-colored baseboard along the bottom of a wall"
+          },
+          "category": "structure",
+          "label": "baseboard"
+        },
+        "region-0040": {
+          "attributes": {
+            "description": "a light-colored, possibly beige or off-white, ceiling tile with a visible seam or edge"
+          },
+          "category": "structure",
+          "label": "ceiling tile"
+        },
+        "region-0041": {
+          "attributes": {
+            "description": "dark gray, slightly textured surface with faint lines suggesting grout or seams"
+          },
+          "category": "surface",
+          "label": "floor tile"
+        },
+        "region-0042": {
+          "attributes": {
+            "description": "dark vertical opening with a lighter vertical strip inside, possibly a door frame or doorway"
+          },
+          "category": "structure",
+          "label": "door"
+        },
+        "region-0043": {
+          "attributes": {
+            "description": "a curved blue trim along a white wall"
+          },
+          "category": "structure",
+          "label": "blue trim"
+        },
+        "region-0044": {
+          "attributes": {
+            "description": "blurry metallic edge of an object"
+          },
+          "category": "object",
+          "label": "metal edge"
+        },
+        "region-0046": {
+          "attributes": {
+            "description": "a section of a ceiling with visible grid lines and a dark rectangular area in the upper left"
+          },
+          "category": "structure",
+          "label": "ceiling tile"
+        },
+        "region-0047": {
+          "attributes": {
+            "description": "a vertical metal rod with a clamp near the top and a base at the bottom, set against a blue wall"
+          },
+          "category": "thing",
+          "label": "metal rod"
+        },
+        "region-0048": {
+          "attributes": {
+            "description": "indistinct dark area with faint diagonal lines"
+          },
+          "category": "surface",
+          "label": "dark surface"
+        },
+        "region-0049": {
+          "attributes": {
+            "description": "vertical metallic pole with reflective surface"
+          },
+          "category": "structure",
+          "label": "metal pole"
+        },
+        "region-0050": {
+          "attributes": {
+            "description": "blurry vertical structure with indistinct details"
+          },
+          "category": "structure",
+          "label": "door"
+        },
+        "region-0051": {
+          "attributes": {
+            "description": "a blue metallic rail with a dark gray end cap, mounted on a tiled floor"
+          },
+          "category": "structure",
+          "label": "metal rail"
+        },
+        "region-0052": {
+          "attributes": {
+            "description": "a curved ceiling panel with a blue trim and visible mounting hardware"
+          },
+          "category": "structure",
+          "label": "ceiling panel"
+        },
+        "region-0054": {
+          "attributes": {
+            "description": "a metallic latch attached to a blue surface"
+          },
+          "category": "hardware",
+          "label": "metal latch"
+        },
+        "region-0055": {
+          "attributes": {
+            "description": "dark vertical surface with reflective highlights"
+          },
+          "category": "door",
+          "label": "metal door"
+        },
+        "region-0056": {
+          "attributes": {
+            "description": "vertical metallic object with reflective surface"
+          },
+          "category": "structure",
+          "label": "metal pole"
+        },
+        "region-0057": {
+          "attributes": {
+            "description": "indistinct visual content"
+          },
+          "category": "image",
+          "label": "blurry image"
+        },
+        "region-0058": {
+          "attributes": {
+            "description": "a section of ceiling with visible grid lines and a blue trim along the edge"
+          },
+          "category": "structure",
+          "label": "ceiling panel"
+        },
+        "region-0059": {
+          "attributes": {
+            "description": "a metallic latch with a reflective surface, mounted on a light-colored surface"
+          },
+          "category": "hardware",
+          "label": "metal latch"
+        },
+        "region-0060": {
+          "attributes": {
+            "description": "a blue metal bracket attached to a white tiled surface"
+          },
+          "category": "thing",
+          "label": "metal bracket"
+        },
+        "region-0061": {
+          "attributes": {
+            "description": "a metallic rod with a reflective surface, lying horizontally on a textured blue surface"
+          },
+          "category": "tool",
+          "label": "metal rod"
+        },
+        "region-0062": {
+          "attributes": {
+            "description": "dark vertical frame with vertical slats, possibly part of a window or door"
+          },
+          "category": "structure",
+          "label": "window frame"
+        },
+        "region-0063": {
+          "attributes": {
+            "description": "a vertical blue surface with some wear and tear visible at the bottom"
+          },
+          "category": "wall",
+          "label": "blue wall"
+        },
+        "region-0064": {
+          "attributes": {
+            "description": "dark vertical frame with light-colored glass panes"
+          },
+          "category": "structure",
+          "label": "window frame"
+        },
+        "region-0065": {
+          "attributes": {
+            "description": "a window with a greenish tint and a white frame, partially visible on a curved surface"
+          },
+          "category": "structure",
+          "label": "window"
+        },
+        "region-0066": {
+          "attributes": {
+            "description": "a curved metallic rail against a blue wall"
+          },
+          "category": "structure",
+          "label": "metal rail"
+        },
+        "region-0067": {
+          "attributes": {
+            "description": "blurry blue area with indistinct edges"
+          },
+          "category": "surface",
+          "label": "blue surface"
+        },
+        "region-0069": {
+          "attributes": {
+            "color": "blue",
+            "material": "metal",
+            "state": "weathered"
+          },
+          "category": "door",
+          "label": "blue door"
+        },
+        "region-0070": {
+          "attributes": {
+            "description": "metal handle mounted on a blue door"
+          },
+          "category": "door",
+          "label": "door handle"
+        },
+        "region-0071": {
+          "attributes": {
+            "description": "dark-colored door with a handle and lock, partially visible in a dimly lit environment"
+          },
+          "category": "door",
+          "label": "door"
+        },
+        "region-0072": {
+          "attributes": {
+            "description": "a smooth, curved boundary between two contrasting colors"
+          },
+          "category": "surface",
+          "label": "curved edge"
+        },
+        "region-0073": {
+          "attributes": {
+            "description": "a metallic latch attached to a blue surface, possibly a door or panel"
+          },
+          "category": "mechanism",
+          "label": "metal latch"
+        },
+        "region-0074": {
+          "attributes": {
+            "description": "blurry dark area with indistinct edges"
+          },
+          "category": "surface",
+          "label": "dark surface"
+        },
+        "region-0075": {
+          "attributes": {
+            "description": "a ceiling panel with visible grid lines and a recessed light fixture below"
+          },
+          "category": "structure",
+          "label": "ceiling panel"
+        },
+        "region-0076": {
+          "attributes": {
+            "description": "a metallic hook with a curved end and a flat base, mounted on a blue surface"
+          },
+          "category": "hardware",
+          "label": "metal hook"
+        },
+        "region-0077": {
+          "attributes": {
+            "description": "a vertical blue bar on the left side of the image"
+          },
+          "category": "structure",
+          "label": "blue vertical bar"
+        },
+        "region-0078": {
+          "attributes": {
+            "description": "a narrow opening between two walls, leading to a darker space beyond"
+          },
+          "category": "structure",
+          "label": "doorway"
+        },
+        "region-0079": {
+          "attributes": {
+            "description": "a close-up view of a metallic latch or locking mechanism on a blue surface"
+          },
+          "category": "mechanical component",
+          "label": "metal latch"
+        },
+        "region-0080": {
+          "attributes": {
+            "description": "a vertical metallic pole with a blurred background"
+          },
+          "category": "structure",
+          "label": "metal pole"
+        },
+        "region-0081": {
+          "attributes": {
+            "description": "a metallic rod with a reflective surface, mounted on a wall or structure"
+          },
+          "category": "thing",
+          "label": "metal rod"
+        },
+        "region-0082": {
+          "attributes": {
+            "description": "blurry vertical metallic object"
+          },
+          "category": "structure",
+          "label": "metal pole"
+        },
+        "region-0083": {
+          "attributes": {
+            "description": "a dark, curved surface with a slight gradient from dark to lighter tone on the left edge"
+          },
+          "category": "surface",
+          "label": "dark surface"
+        }
+      },
+      "primary_claim_count": 77,
+      "region_kind_counts": {
+        "None": 1,
+        "thing": 76
+      },
+      "regions_with_claims": 77,
+      "scene_label_rate": "pending_annotation",
+      "status": "measured",
+      "unique_categories": 14,
+      "unique_labels": 38
+    }
+  },
+  "notes": "rerun do Qwen (#556)",
+  "run_dir": "outputs/correction-benchmark-10_31-20260930/qwen-n3/x2",
+  "schema": "correction-benchmark/metrics/v1"
+}

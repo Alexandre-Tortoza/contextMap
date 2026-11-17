@@ -1,0 +1,199 @@
+{
+  "groups": 7,
+  "fit_groups": 4,
+  "held_out_groups": 3,
+  "best_fit": {
+    "yaw_deg": 4.0,
+    "pitch_deg": -1.75,
+    "roll_deg": 0.0
+  },
+  "inconsistency": {
+    "fit_base": 0.20405,
+    "fit_v1_correction": 0.13648,
+    "fit_best": 0.13588,
+    "held_out_base": 0.19177,
+    "held_out_v1_correction": 0.13214,
+    "held_out_best_fit": 0.13293
+  },
+  "per_group": [
+    {
+      "first_frame": "camera_1_image_raw-000000",
+      "points": 60000,
+      "yaw_deg": 3.0,
+      "pitch_deg": -0.25,
+      "cost_base": 0.13802,
+      "cost_best": 0.11579,
+      "cost_v1": 0.13053
+    },
+    {
+      "first_frame": "camera_1_image_raw-000027",
+      "points": 60000,
+      "yaw_deg": 3.0,
+      "pitch_deg": -2.25,
+      "cost_base": 0.20089,
+      "cost_best": 0.16825,
+      "cost_v1": 0.18414
+    },
+    {
+      "first_frame": "camera_1_image_raw-000054",
+      "points": 60000,
+      "yaw_deg": 4.5,
+      "pitch_deg": -1.25,
+      "cost_base": 0.23041,
+      "cost_best": 0.13038,
+      "cost_v1": 0.14616
+    },
+    {
+      "first_frame": "camera_1_image_raw-000081",
+      "points": 60000,
+      "yaw_deg": 3.5,
+      "pitch_deg": -2.5,
+      "cost_base": 0.19021,
+      "cost_best": 0.12877,
+      "cost_v1": 0.13586
+    },
+    {
+      "first_frame": "camera_1_image_raw-000108",
+      "points": 60000,
+      "yaw_deg": 3.75,
+      "pitch_deg": -2.75,
+      "cost_base": 0.20983,
+      "cost_best": 0.10266,
+      "cost_v1": 0.11242
+    },
+    {
+      "first_frame": "camera_1_image_raw-000162",
+      "points": 60000,
+      "yaw_deg": 4.0,
+      "pitch_deg": -2.25,
+      "cost_base": 0.18422,
+      "cost_best": 0.0776,
+      "cost_v1": 0.07796
+    },
+    {
+      "first_frame": "camera_1_image_raw-000189",
+      "points": 60000,
+      "yaw_deg": 4.25,
+      "pitch_deg": -2.5,
+      "cost_base": 0.23793,
+      "cost_best": 0.15648,
+      "cost_v1": 0.15684
+    }
+  ],
+  "yaw_profile_at_best_pitch": [
+    {
+      "yaw": -6.0,
+      "cost": 0.22891
+    },
+    {
+      "yaw": -5.0,
+      "cost": 0.22584
+    },
+    {
+      "yaw": -4.0,
+      "cost": 0.22388
+    },
+    {
+      "yaw": -3.0,
+      "cost": 0.21849
+    },
+    {
+      "yaw": -2.0,
+      "cost": 0.21073
+    },
+    {
+      "yaw": -1.0,
+      "cost": 0.20116
+    },
+    {
+      "yaw": 0.0,
+      "cost": 0.19144
+    },
+    {
+      "yaw": 1.0,
+      "cost": 0.17927
+    },
+    {
+      "yaw": 2.0,
+      "cost": 0.16336
+    },
+    {
+      "yaw": 3.0,
+      "cost": 0.1448
+    },
+    {
+      "yaw": 4.0,
+      "cost": 0.13588
+    },
+    {
+      "yaw": 5.0,
+      "cost": 0.14347
+    },
+    {
+      "yaw": 6.0,
+      "cost": 0.15724
+    },
+    {
+      "yaw": 7.0,
+      "cost": 0.1711
+    },
+    {
+      "yaw": 8.0,
+      "cost": 0.18198
+    }
+  ],
+  "pitch_profile_at_best_yaw": [
+    {
+      "pitch": -6.0,
+      "cost": 0.19446
+    },
+    {
+      "pitch": -5.0,
+      "cost": 0.17313
+    },
+    {
+      "pitch": -4.0,
+      "cost": 0.1529
+    },
+    {
+      "pitch": -3.0,
+      "cost": 0.13839
+    },
+    {
+      "pitch": -2.0,
+      "cost": 0.13598
+    },
+    {
+      "pitch": -1.0,
+      "cost": 0.14185
+    },
+    {
+      "pitch": 0.0,
+      "cost": 0.153
+    },
+    {
+      "pitch": 1.0,
+      "cost": 0.16789
+    },
+    {
+      "pitch": 2.0,
+      "cost": 0.17771
+    },
+    {
+      "pitch": 3.0,
+      "cost": 0.18469
+    },
+    {
+      "pitch": 4.0,
+      "cost": 0.18704
+    },
+    {
+      "pitch": 5.0,
+      "cost": 0.18623
+    },
+    {
+      "pitch": 6.0,
+      "cost": 0.18568
+    }
+  ]
+}

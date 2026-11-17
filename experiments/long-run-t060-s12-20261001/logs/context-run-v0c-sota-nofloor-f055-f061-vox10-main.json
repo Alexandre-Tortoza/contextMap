@@ -1,0 +1,76 @@
+{
+  "branch": {
+    "name": "v0c-sota-nofloor-f055-f061-vox10",
+    "revision": 1
+  },
+  "context_run": {
+    "artifacts": [
+      {
+        "artifact_id": "87e455cfd6f601d0a8003170f696b2b9",
+        "content_hash": "sha256:27ec700bf0acc9704c02e4ab85211d2617155fea3bb2065ac4eebddb96291880",
+        "contract": "PointRepresentationRunArtifact",
+        "disposition": "produced",
+        "location": "corridor-02/run-0044/point_representation",
+        "stage_id": "point_representation"
+      },
+      {
+        "artifact_id": "2e48b3a7ee5d7bb993c05915f0e9b9b3",
+        "content_hash": "sha256:fdc2abd64f5b5850c4b614ab1633f23993f089a9661366be292598b632a25ab1",
+        "contract": "SensorAssociationRunArtifact",
+        "disposition": "produced",
+        "location": "corridor-02/run-0044/sensor_association",
+        "stage_id": "sensor_association"
+      },
+      {
+        "artifact_id": "5a137c79029f509a4c53346166ff605b",
+        "content_hash": "sha256:06cb3630b460f61901d0525b16a43e7c619de611c276a9f31d715d75375869ca",
+        "contract": "PerceptionRunArtifact",
+        "disposition": "produced",
+        "location": "corridor-02/run-0044/visual_perception",
+        "stage_id": "visual_perception"
+      }
+    ],
+    "context_run_id": "sha256:bdcfba6aae338d9bd1314d2fe6cce6b65578cfe0805296ec6a3e632287e937e6",
+    "foundation": {
+      "geometry": {
+        "artifact_id": "8e0d9b1194c264e7e648e73cc6e2944c",
+        "content_hash": "sha256:781b46918b9ce5ff855636bccc2c3cffe6cfcde5e33174a457594a7f9e8658de",
+        "contract": "GeometricMapArtifact",
+        "location": "corridor-02/run-0003/geometric_mapping",
+        "stage_id": "geometric_mapping"
+      },
+      "identity": "sha256:eb299e02fe667515223342c14b5077213586b4db0d8360fedc2fbf9e07bb9cb4",
+      "sequence": {
+        "artifact_id": "4a4d895e0e4e4731ad91326114607296",
+        "content_hash": "sha256:a5aedeec06003aa335a26dd071bce5de5de1a38b46d0c791ecdcc6cf442f9f41",
+        "contract": "SequenceArtifact",
+        "location": "sequences/corridor-02/frame-10_31-refined",
+        "stage_id": "ingestion"
+      },
+      "state_estimation": {
+        "artifact_id": "656b7e023842c4e0d1b2759644634026",
+        "content_hash": "sha256:1de9434ff4cfa527b5bc652629776b0a5febea5fe76f96c2a236525b6f8d5cfe",
+        "contract": "StateEstimationRunArtifact",
+        "location": "corridor-02/run-0001/state_estimation",
+        "stage_id": "state_estimation"
+      }
+    },
+    "observation_selection": {
+      "kind": "explicit_ids",
+      "observation_ids": [
+        "camera_1_image_raw-000055",
+        "camera_1_image_raw-000061"
+      ]
+    },
+    "plan_digest": "sha256:415a88b927e3ccb1a300b650277a193fa8dec9ca8596ea91fd391890b2a20f03",
+    "run": "corridor-02/run-0044",
+    "schema_version": "0.1.0"
+  },
+  "ok": true,
+  "run_directory": "workspace/run-frame-10_31/corridor-02/run-0044",
+  "stages": {
+    "point_representation": "produced",
+    "sensor_association": "produced",
+    "visual_perception": "produced"
+  }
+}

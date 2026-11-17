@@ -1,0 +1,59 @@
+name: Branch policy
+
+on:
+  pull_request:
+    branches:
+      - main
+      - "milestone/**"
+    types: [opened, synchronize, reopened, edited]
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Validate promotion path
+        shell: bash
+        env:
+          BASE: ${{ github.base_ref }}
+          HEAD: ${{ github.head_ref }}
+          ACTOR: ${{ github.actor }}
+        run: |
+          set -euo pipefail
+
+          echo "Validating ${HEAD} -> ${BASE} (actor: ${ACTOR})"
+
+          if [[ "${BASE}" == "main" ]]; then
+            if [[ "${HEAD}" != "dev" ]]; then
+              echo "Pull requests to main must come from dev."
+              exit 1
+            fi
+            exit 0
+          fi
+
+          if [[ "${BASE}" == "dev" ]]; then
+            if [[ "${HEAD}" =~ ^milestone/[a-z0-9][a-z0-9-]*$ ]]; then
+              exit 0
+            fi
+
+            if [[ "${ACTOR}" == "dependabot[bot]" && "${HEAD}" =~ ^dependabot/ ]]; then
+              echo "Allowing Dependabot maintenance PR directly to dev."
+              exit 0
+            fi
+
+            echo "Pull requests to dev must come from milestone/<milestone-slug>, except Dependabot maintenance PRs."
+            exit 1
+          fi
+
+          if [[ "${BASE}" =~ ^milestone/[a-z0-9][a-z0-9-]*$ ]]; then
+            if [[ ! "${HEAD}" =~ ^(feat|fix|research|experiment|refactor|test|docs|ci|chore)/[0-9]+-[a-z0-9][a-z0-9-]*$ ]]; then
+              echo "Pull requests to milestone branches must use <type>/<issue-number>-<slug>."
+              exit 1
+            fi
+            exit 0
+          fi
+
+          echo "Unsupported pull request promotion path: ${HEAD} -> ${BASE}."
+          exit 1

@@ -1,0 +1,132 @@
+{
+  "execution": {
+    "order": [
+      "state_estimation",
+      "geometric_mapping"
+    ],
+    "plan_digest": "sha256:08a40a755c80cffd13dd0dbc2997858284d6b743792d8639f151249ab0d01cd9",
+    "resume": null,
+    "reused": {
+      "ingestion": [
+        {
+          "artifact_id": "4a89e7314a37415c8443f6fd71a8c8bc",
+          "content_hash": "sha256:89b476397082ab14a6e0084273f927ce3516a467aef554f4e6e8f914895f24ab",
+          "contract": "SequenceArtifact",
+          "location": "sequences/corridor-02/t057-t363-refined",
+          "stage_id": "ingestion"
+        }
+      ],
+      "pose_ingestion": [
+        {
+          "artifact_id": "b916f8dc57a24fd190995baeb1caf14f",
+          "content_hash": "sha256:de4240654afbbb9cf8e956a16927456524c61062ed7d0c88083540597276ad4d",
+          "contract": "SequenceArtifact",
+          "location": "sequences/corridor-02-pose/gt",
+          "stage_id": "pose_ingestion"
+        }
+      ]
+    },
+    "schema_version": "0.1.0",
+    "selections": {
+      "sequence": "corridor-02",
+      "stages": {
+        "ingestion": [
+          {
+            "artifact_id": "4a89e7314a37415c8443f6fd71a8c8bc",
+            "content_hash": "sha256:89b476397082ab14a6e0084273f927ce3516a467aef554f4e6e8f914895f24ab",
+            "lineage": {
+              "calibration": null,
+              "schema_version": null,
+              "selection": null,
+              "sequence": null,
+              "upstream": {}
+            },
+            "origin": "exact",
+            "run_index": 1
+          }
+        ],
+        "pose_ingestion": [
+          {
+            "artifact_id": "b916f8dc57a24fd190995baeb1caf14f",
+            "content_hash": "sha256:de4240654afbbb9cf8e956a16927456524c61062ed7d0c88083540597276ad4d",
+            "lineage": {
+              "calibration": null,
+              "schema_version": null,
+              "selection": null,
+              "sequence": null,
+              "upstream": {}
+            },
+            "origin": "exact",
+            "run_index": 1
+          }
+        ]
+      }
+    },
+    "stages": [
+      {
+        "decision": null,
+        "inputs": {
+          "pose_sequence": [
+            {
+              "artifact_id": "b916f8dc57a24fd190995baeb1caf14f",
+              "content_hash": "sha256:de4240654afbbb9cf8e956a16927456524c61062ed7d0c88083540597276ad4d",
+              "contract": "SequenceArtifact",
+              "location": "sequences/corridor-02-pose/gt",
+              "stage_id": "pose_ingestion"
+            }
+          ],
+          "sequence": [
+            {
+              "artifact_id": "4a89e7314a37415c8443f6fd71a8c8bc",
+              "content_hash": "sha256:89b476397082ab14a6e0084273f927ce3516a467aef554f4e6e8f914895f24ab",
+              "contract": "SequenceArtifact",
+              "location": "sequences/corridor-02/t057-t363-refined",
+              "stage_id": "ingestion"
+            }
+          ]
+        },
+        "output": {
+          "artifact_id": "72f31914768b22f3fa8a74148dd71586",
+          "content_hash": "sha256:96fd4f090adc386e7de2412afac40072e93aa7551c65e1246408bdde6ecc347c",
+          "contract": "StateEstimationRunArtifact",
+          "location": "corridor-02/run-0001/state_estimation",
+          "stage_id": "state_estimation"
+        },
+        "stage_id": "state_estimation"
+      },
+      {
+        "decision": null,
+        "inputs": {
+          "sequence": [
+            {
+              "artifact_id": "4a89e7314a37415c8443f6fd71a8c8bc",
+              "content_hash": "sha256:89b476397082ab14a6e0084273f927ce3516a467aef554f4e6e8f914895f24ab",
+              "contract": "SequenceArtifact",
+              "location": "sequences/corridor-02/t057-t363-refined",
+              "stage_id": "ingestion"
+            }
+          ],
+          "trajectory": [
+            {
+              "artifact_id": "72f31914768b22f3fa8a74148dd71586",
+              "content_hash": "sha256:96fd4f090adc386e7de2412afac40072e93aa7551c65e1246408bdde6ecc347c",
+              "contract": "StateEstimationRunArtifact",
+              "location": "corridor-02/run-0001/state_estimation",
+              "stage_id": "state_estimation"
+            }
+          ]
+        },
+        "output": {
+          "artifact_id": "bd6fe4fdb106f0425cfdc62a4b08cfdb",
+          "content_hash": "sha256:3975364441497fa8d3f00910822652ec68dd6a7aac5f5d0cc22152ecccd66e8d",
+          "contract": "GeometricMapArtifact",
+          "location": "corridor-02/run-0001/geometric_mapping",
+          "stage_id": "geometric_mapping"
+        },
+        "stage_id": "geometric_mapping"
+      }
+    ]
+  },
+  "ok": true,
+  "run_directory": "workspace/run-t060-s12/corridor-02/run-0001"
+}

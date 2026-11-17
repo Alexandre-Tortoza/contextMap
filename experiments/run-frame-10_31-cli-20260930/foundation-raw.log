@@ -1,0 +1,4 @@
+run completed: workspace/run-frame-10_31/corridor-02/run-0001
+  order: state_estimation -> geometric_mapping
+  state_estimation: 656b7e023842c4e0d1b2759644634026
+  geometric_mapping: 1ee700b9bedfe887767f1b0206acf674

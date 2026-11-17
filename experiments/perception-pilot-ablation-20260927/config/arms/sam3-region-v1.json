@@ -1,0 +1,33 @@
+{
+  "resources": {
+    "providers": {
+      "region_perception.discovery": "REPLACE_WITH_YOUR_LOADERS_MODULE:load_sam3"
+    }
+  },
+  "components": {
+    "region_perception": {
+      "discovery": {
+        "backend": "sam3",
+        "sam3": {
+          "checkpoint": "facebook/sam3",
+          "model_version": "REPLACE-WITH-THE-SAM3-MODEL-VERSION",
+          "device": "cuda",
+          "precision": "bfloat16",
+          "strategy": "text_prompt",
+          "prompts": [
+            "REPLACE-WITH-THE-CONCEPT-SET"
+          ]
+        }
+      }
+    },
+    "semantic_interpretation": {
+      "interpreter": {
+        "qwen": {
+          "prompt_policy": {
+            "region": "region/v1"
+          }
+        }
+      }
+    }
+  }
+}

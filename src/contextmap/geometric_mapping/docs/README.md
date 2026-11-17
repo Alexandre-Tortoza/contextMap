@@ -1,0 +1,113 @@
+# Geometric Mapping
+
+## Responsabilidade
+
+Produzir a **geometria 3D persistente** no frame global do mapa: a coordenada autoritativa de cada ponto, uma referência estável para ele e a linhagem que explica como cada coordenada foi produzida (fonte, pose, extrínseco, cadeia de transforms, configuração e código). É a fundação espacial autoritativa do restante do pipeline.
+
+```mermaid
+flowchart LR
+    SEQ["SequenceArtifact<br/>(observações LiDAR/depth)"] --> GM["Geometric Mapping"]
+    TRAJ["Trajectory<br/>(State Estimation)"] --> GM
+    CAL["Calibração estática<br/>(Ingestion)"] --> GM
+    GM --> MAP["GeometricMap +<br/>GeometryPoint / GeometryReference"]
+    MAP --> DOWN["Sensor Association /<br/>Point Representation / ..."]
+```
+
+Geometria é **onde** algo está. Evidência visual, semântica e identidade de objeto são anexadas depois, por outras capabilities, através de `GeometryReference`; nunca dentro do ponto.
+
+## O que este módulo explicitamente não possui
+
+- labels, `SemanticClaim`, embeddings, entidades ou relações: nenhum campo semântico existe em `GeometryPoint` nem em `GeometricMap`;
+- projeção RGB↔LiDAR e associação com imagens: Sensor Association;
+- pose e trajetória: State Estimation;
+- calibração: Ingestion.
+
+## Estado implementado
+
+Estão implementados os **contratos**, a fronteira de leitura
+`GeometrySource`, o **estado explícito de correção de movimento** com a política
+de scans não corrigidos (ver
+[`motion-correction.md`](motion-correction.md)), a **montagem dos inputs de
+geometria** com **validação explícita e precoce** (ver [`inputs.md`](inputs.md)), o **deskew por interpolação de pose**
+`pose-interpolation-deskew-v1`, opcional (ver [`motion-correction.md`](motion-correction.md)),
+a **transformação fonte→mapa** com
+traces auditáveis e verificação de validade (ver [`transformation.md`](transformation.md)), a
+**acumulação do mapa** com referências estáveis e índice de origem (ver
+[`accumulation.md`](accumulation.md)), o **acesso espacial** com índice derivado
+e verificável (ver [`spatial-access.md`](spatial-access.md)), o
+**`GeometricMapArtifact`** persistido, imutável e com linhagem, agora estruturado como
+manifest + reader + writer (ver [`artifact.md`](artifact.md)).
+
+Como representação **derivada, opcional e não-canônica** que nenhum estágio
+canônico consome, a **agregação voxel inter-scan** reside em `voxel_aggregation/`
+com lineage preservado para o mapa bruto (ver [`inter-scan-aggregation.md`](inter-scan-aggregation.md)).
+
+A **validação** do mapa (numérica, concordância entre scans, referência declarada
+e reprodutibilidade) vive em `evaluation` e está documentada em
+[`evaluation/docs/geometric_mapping.md`](../../evaluation/docs/geometric_mapping.md).
+
+## Estrutura refatorada
+
+O módulo agora organiza-se por responsabilidade, com separação clara entre:
+
+- **Core**: modelos, validação, transformação, acumulação, armazenamento (11 módulos)
+- **Derived**: agregação voxel inter-scan (opcional, não-canônico, em `voxel_aggregation/`)
+- **Artifact**: persistência do mapa (manifest, reader, writer, split em 4 módulos)
+- **Ports**: boundary de leitura (`GeometrySource`)
+
+Ver [`code-map.md`](code-map.md) para mapeamento detalhado de arquivo→responsabilidade.
+
+### Mudanças principais
+
+- **Voxel aggregation**: Representação derivada, opcional, em `voxel_aggregation/` (não-canônica, pode ser desabilitada)
+- **run_artifact split**: Separação clara entre persistência (manifest), I/O (reader/writer), orquestração
+- **Validação precoce**: Erros descobertos cedo, nunca persistem estado inválido
+- **Imports explícitos**: Dependências NumPy declaradas no topo, não escondidas em funções
+- **Contrato GeometryMappingPlan**: Fontes e política separadas explicitamente, elimina camada intermediária
+
+## Contratos públicos
+
+- `GeometryPoint`, `GeometryPointProvenance`, `PointOrigin` — um ponto persistente com coordenada autoritativa no frame do mapa, coordenada original no frame do sensor e proveniência.
+- `GeometryReference`, `GeometryId`, `MapId`, `geometry_id_for()` — referência compacta `(map_id, geometry_id)`, local ao mapa imutável.
+- `TransformLineage`, `TransformStep`, `TransformKind` — a cadeia `T_map_body(t) · T_body_sensor` que produziu a coordenada.
+- `GeometricMap`, `GeometricMapProvenance`, `SpatialIndexMetadata` — identidade, frame, limites, observações de origem e proveniência de um mapa.
+- `Bounds3D` — caixa alinhada aos eixos que declara o frame em que está expressa.
+- `MotionCorrectionState`, `MotionCorrectionRecord`, `MotionCorrectionEvidence`, `MotionCorrectionPolicy`, `ScanDisposition`, `MotionCorrectionVerdict` — se um scan foi corrigido para o movimento da plataforma (`RAW`/`CORRECTED`/`UNKNOWN`), com a evidência que sustenta a afirmação e a política aplicada.
+- `PoseInterpolationDeskewPolicy`, `PointTimeUnit`, `PointTimeReference` — a política do corretor `pose-interpolation-deskew-v1`, passada à montagem por `build_geometry_mapping_plan(..., deskew=)`: o corretor reexpressa cada ponto no frame do sensor no timestamp do scan com a pose interpolada do seu próprio instante, e marca o scan `CORRECTED` com evidência (produtor, trajetória, hash do payload corrigido e fingerprint).
+- `GeometryMappingPlan`, `GeometryMappingSources`, `GeometryMappingPolicy`, `PreparedGeometryScan`, `RejectedGeometryScan`, `InputRejectionReason`, `PointCloudLayout`, `build_geometry_mapping_plan()`, `build_geometry_mapping_plan_from_artifacts()` — os scans de um trecho selecionado pareados com pose, extrínseco, layout e estado de correção, com os scans recusados e o motivo.
+- `MapFrameScan`, `TransformTrace`, `transform_scan_to_map_frame()`, `transform_scans_to_map_frame()`, `verify_transform_trace()`, `GeometryTransformError` — os pontos de um scan no frame do mapa junto das coordenadas originais, a cadeia aplicada e o trace de auditoria de um ponto.
+- `MapAccumulator`, `accumulate_plan()`, `GeometryBuildSummary`, `ScanVoxelPolicy`, `ScanRecord`, `PackedGeometry`, `geometry_index_of()`, `AccumulationError` — acumulação em fluxo dos scans transformados em um mapa, com agregação opcional explícita, índice de origem e a leitura do payload por referência.
+- `GeometricMapArtifactWriter`, `GeometricMapArtifactReader`, `GeometricMapArtifactManifest`, `GeometricMapRunId`, `MapDebugLevel`, `MapArtifactError`, `IncompleteMapArtifactError`, `mapping_configuration_fingerprint()` — o artefato de mapa persistido, com linhagem, métricas e evidência de debug.
+- `VoxelGridSpec`, `InterScanVoxelPolicy`, `InterScanVoxelAggregator`, `aggregate_geometry()`, `VoxelAggregation`, `VoxelAggregate`, `VoxelContribution`, `centroid_tolerance_m()`, `AggregatedGeometry`, `VoxelAggregationError` — agregação voxel **entre scans**, derivada de um mapa bruto sem modificá-lo: grade como identidade (com `VoxelGridSpec.fingerprint()`, o hash da grade e só dela, distinto do fingerprint da política), contagens de pontos, scans e observações separadas, lineage por scan recuperável e invariância a ordem e chunking; os centróides são lidos como `GeometryBlockSource`.
+- `VoxelAggregationArtifactWriter`, `VoxelAggregationArtifactReader`, `VoxelAggregationManifest`, `VoxelAggregationRunId` — o artifact derivado e separado dessa agregação, com a identidade exata do artifact bruto.
+- `GeometrySource` — fronteira de leitura (`get`, `iter_geometry`, `query_bounds`) que Sensor Association e demais consumidores usam sem depender de como o mapa é armazenado ou indexado.
+
+Ver [`contracts.md`](contracts.md) para a referência de campos, as convenções e as invariantes.
+
+## Módulos consumidos
+
+- `contextmap.ingestion`: `FrameId`, `SequenceArtifactId`, `SourceObservationId`, `LidarObservation`, `SequenceSelection`, `CalibrationSet`, `encode_selection`.
+- `contextmap.state_estimation`: `TrajectoryId`, `StateEstimationRunId`, `PoseEstimateId`, `LookupPolicy`, `TimeBounds`, `Trajectory`, `TrajectoryLookup`, `StaticFrameGraph`, `summarize_lookups`.
+- `contextmap.shared`: `SourceTimestamp`, `Vector3`, `Quaternion`, `compose_rigid`, `quaternion_to_rotation_matrix`, `rotate_vector`.
+- `contextmap.shared` (run directory): `AtomicRunDirectory`, `FileEntry`, `check_file_inventory`.
+
+## Módulos que consomem este
+
+Hoje, `sensor_association`, `point_representation`, `semantic_fusion`,
+`semantic_mapping` e `evaluation` consomem esta capability, sempre através de
+`contextmap.geometric_mapping`. Os módulos planejados `entity_resolution`,
+`spatial_relations` e `artifact` também deverão consumir essa API pública quando
+forem materializados.
+
+## Onde estão os documentos detalhados
+
+- [`contracts.md`](contracts.md) — contratos, convenções de coordenada, identidade e serialização.
+- [`motion-correction.md`](motion-correction.md) — estado de correção de movimento, evidência e política de scans não corrigidos.
+- [`inputs.md`](inputs.md) — seleção, montagem dos inputs, layout do payload e scans recusados.
+- [`transformation.md`](transformation.md) — cadeia `T_map_body · T_body_source`, linhagem, validação, precisão e traces.
+- [`accumulation.md`](accumulation.md) — acumulação, formato do payload, referências estáveis, índice de origem e agregação.
+- [`spatial-access.md`](spatial-access.md) — `GeometrySource`, semântica dos limites, índice `scan_bounds`, reconstrução e linha de base de desempenho.
+- [`inter-scan-aggregation.md`](inter-scan-aggregation.md) — agregação voxel inter-scan derivada: baseline, distinção de `ScanVoxelPolicy`, contrato, lineage, invariância, artifact derivado e a decisão da #623.
+- [`artifact.md`](artifact.md) — layout, manifesto, linhagem, configuração, métricas, debug, leitura e integridade do `GeometricMapArtifact`.
+- [`docs/architecture.md`](../../../../docs/architecture.md) — ownership e direção de dependências.
+- [`docs/CONTRACTS.md`](../../../../docs/CONTRACTS.md) — `GeometryPoint`, `GeometryReference` e `GeometricMap` no contexto global de contratos.

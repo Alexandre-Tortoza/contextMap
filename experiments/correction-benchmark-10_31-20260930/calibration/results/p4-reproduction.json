@@ -1,0 +1,302 @@
+{
+  "groups": 7,
+  "fit_groups": 4,
+  "held_out_groups": 3,
+  "fit_ids": [
+    "camera_1_image_raw-000000",
+    "camera_1_image_raw-000003",
+    "camera_1_image_raw-000006",
+    "camera_1_image_raw-000009",
+    "camera_1_image_raw-000012",
+    "camera_1_image_raw-000015",
+    "camera_1_image_raw-000018",
+    "camera_1_image_raw-000021",
+    "camera_1_image_raw-000054",
+    "camera_1_image_raw-000057",
+    "camera_1_image_raw-000060",
+    "camera_1_image_raw-000063",
+    "camera_1_image_raw-000066",
+    "camera_1_image_raw-000069",
+    "camera_1_image_raw-000072",
+    "camera_1_image_raw-000075",
+    "camera_1_image_raw-000108",
+    "camera_1_image_raw-000111",
+    "camera_1_image_raw-000114",
+    "camera_1_image_raw-000117",
+    "camera_1_image_raw-000120",
+    "camera_1_image_raw-000123",
+    "camera_1_image_raw-000126",
+    "camera_1_image_raw-000129",
+    "camera_1_image_raw-000189",
+    "camera_1_image_raw-000192",
+    "camera_1_image_raw-000195",
+    "camera_1_image_raw-000198",
+    "camera_1_image_raw-000201",
+    "camera_1_image_raw-000204",
+    "camera_1_image_raw-000207",
+    "camera_1_image_raw-000210"
+  ],
+  "held_out_ids": [
+    "camera_1_image_raw-000027",
+    "camera_1_image_raw-000030",
+    "camera_1_image_raw-000033",
+    "camera_1_image_raw-000036",
+    "camera_1_image_raw-000039",
+    "camera_1_image_raw-000042",
+    "camera_1_image_raw-000045",
+    "camera_1_image_raw-000048",
+    "camera_1_image_raw-000081",
+    "camera_1_image_raw-000084",
+    "camera_1_image_raw-000087",
+    "camera_1_image_raw-000090",
+    "camera_1_image_raw-000093",
+    "camera_1_image_raw-000096",
+    "camera_1_image_raw-000099",
+    "camera_1_image_raw-000102",
+    "camera_1_image_raw-000162",
+    "camera_1_image_raw-000165",
+    "camera_1_image_raw-000168",
+    "camera_1_image_raw-000171",
+    "camera_1_image_raw-000174",
+    "camera_1_image_raw-000177",
+    "camera_1_image_raw-000180",
+    "camera_1_image_raw-000183"
+  ],
+  "best_fit": {
+    "yaw_deg": 4.0,
+    "pitch_deg": -1.75,
+    "roll_deg": 0.0
+  },
+  "inconsistency": {
+    "fit_base": 0.20405,
+    "fit_v1_correction": 0.13648,
+    "fit_best": 0.13588,
+    "held_out_base": 0.19177,
+    "held_out_v1_correction": 0.13214,
+    "held_out_best_fit": 0.13293
+  },
+  "inconsistency_unrounded": {
+    "fit_base": 0.204047713172326,
+    "fit_v1_correction": 0.13647549930663627,
+    "fit_best": 0.13588134096650079,
+    "held_out_base": 0.1917693537437873,
+    "held_out_v1_correction": 0.1321370422574114,
+    "held_out_best_fit": 0.1329256697054567
+  },
+  "point_counts": {
+    "fit_base": 240000,
+    "fit_v1_correction": 237325,
+    "fit_best": 237922,
+    "held_out_base": 180000,
+    "held_out_v1_correction": 176247,
+    "held_out_best_fit": 176855
+  },
+  "relative_improvement": {
+    "held_out_best_fit": 0.30684612994497806,
+    "held_out_v1_correction": 0.310958504694381,
+    "fit_best_fit": 0.3340707481894499
+  },
+  "per_group": [
+    {
+      "first_frame": "camera_1_image_raw-000000",
+      "points": 60000,
+      "yaw_deg": 3.0,
+      "pitch_deg": -0.25,
+      "cost_base": 0.13802,
+      "cost_best": 0.11579,
+      "cost_v1": 0.13053
+    },
+    {
+      "first_frame": "camera_1_image_raw-000027",
+      "points": 60000,
+      "yaw_deg": 3.0,
+      "pitch_deg": -2.25,
+      "cost_base": 0.20089,
+      "cost_best": 0.16825,
+      "cost_v1": 0.18414
+    },
+    {
+      "first_frame": "camera_1_image_raw-000054",
+      "points": 60000,
+      "yaw_deg": 4.5,
+      "pitch_deg": -1.25,
+      "cost_base": 0.23041,
+      "cost_best": 0.13038,
+      "cost_v1": 0.14616
+    },
+    {
+      "first_frame": "camera_1_image_raw-000081",
+      "points": 60000,
+      "yaw_deg": 3.5,
+      "pitch_deg": -2.5,
+      "cost_base": 0.19021,
+      "cost_best": 0.12877,
+      "cost_v1": 0.13586
+    },
+    {
+      "first_frame": "camera_1_image_raw-000108",
+      "points": 60000,
+      "yaw_deg": 3.75,
+      "pitch_deg": -2.75,
+      "cost_base": 0.20983,
+      "cost_best": 0.10266,
+      "cost_v1": 0.11242
+    },
+    {
+      "first_frame": "camera_1_image_raw-000162",
+      "points": 60000,
+      "yaw_deg": 4.0,
+      "pitch_deg": -2.25,
+      "cost_base": 0.18422,
+      "cost_best": 0.0776,
+      "cost_v1": 0.07796
+    },
+    {
+      "first_frame": "camera_1_image_raw-000189",
+      "points": 60000,
+      "yaw_deg": 4.25,
+      "pitch_deg": -2.5,
+      "cost_base": 0.23793,
+      "cost_best": 0.15648,
+      "cost_v1": 0.15684
+    }
+  ],
+  "yaw_profile_at_best_pitch": [
+    {
+      "yaw": -6.0,
+      "cost": 0.22891
+    },
+    {
+      "yaw": -5.0,
+      "cost": 0.22584
+    },
+    {
+      "yaw": -4.0,
+      "cost": 0.22388
+    },
+    {
+      "yaw": -3.0,
+      "cost": 0.21849
+    },
+    {
+      "yaw": -2.0,
+      "cost": 0.21073
+    },
+    {
+      "yaw": -1.0,
+      "cost": 0.20116
+    },
+    {
+      "yaw": 0.0,
+      "cost": 0.19144
+    },
+    {
+      "yaw": 1.0,
+      "cost": 0.17927
+    },
+    {
+      "yaw": 2.0,
+      "cost": 0.16336
+    },
+    {
+      "yaw": 3.0,
+      "cost": 0.1448
+    },
+    {
+      "yaw": 4.0,
+      "cost": 0.13588
+    },
+    {
+      "yaw": 5.0,
+      "cost": 0.14347
+    },
+    {
+      "yaw": 6.0,
+      "cost": 0.15724
+    },
+    {
+      "yaw": 7.0,
+      "cost": 0.1711
+    },
+    {
+      "yaw": 8.0,
+      "cost": 0.18198
+    }
+  ],
+  "pitch_profile_at_best_yaw": [
+    {
+      "pitch": -6.0,
+      "cost": 0.19446
+    },
+    {
+      "pitch": -5.0,
+      "cost": 0.17313
+    },
+    {
+      "pitch": -4.0,
+      "cost": 0.1529
+    },
+    {
+      "pitch": -3.0,
+      "cost": 0.13839
+    },
+    {
+      "pitch": -2.0,
+      "cost": 0.13598
+    },
+    {
+      "pitch": -1.0,
+      "cost": 0.14185
+    },
+    {
+      "pitch": 0.0,
+      "cost": 0.153
+    },
+    {
+      "pitch": 1.0,
+      "cost": 0.16789
+    },
+    {
+      "pitch": 2.0,
+      "cost": 0.17771
+    },
+    {
+      "pitch": 3.0,
+      "cost": 0.18469
+    },
+    {
+      "pitch": 4.0,
+      "cost": 0.18704
+    },
+    {
+      "pitch": 5.0,
+      "cost": 0.18623
+    },
+    {
+      "pitch": 6.0,
+      "cost": 0.18568
+    }
+  ],
+  "reproduction": {
+    "reference": "experiments/semantic-geometry-investigation-20260930/results/p4_calibration_photometric.json",
+    "tolerance": 0.0001,
+    "same_best_fit": true,
+    "max_abs_deviation": 0.0,
+    "max_abs_deviation_at": "inconsistency.fit_base",
+    "reproduced": true
+  },
+  "arm": "p4-reproduction",
+  "code_identity": "git:a3a175f099fd1609e710614a27753b0d0e24be3d;files:sha256:2d9e4fe0ca93d185257aa191ab6d328292b20fabf5916fe785cfd2ed88cca118",
+  "code_files": {
+    "experiments/correction-benchmark-10_31-20260930/calibration/estimate_refinement.py": "sha256:8254adfc531ebf664733316d7ab98084aa4b03f93f6a3e8e94c1134a0eb84968",
+    "src/contextmap/evaluation/camera_body_calibration.py": "sha256:9d496aec19bc480331bfa2953a1365502c400c0b67aa1c829f0fe8b0a44a4fdf",
+    "src/contextmap/ingestion/calibration.py": "sha256:3e4efe33e028a58d3ff02aa9c00deb0c1cf8decd88528f30c00565ad35f44ea5",
+    "src/contextmap/sensor_association/camera_models.py": "sha256:284de09005cecdb86d43f43df2dbd1433c5e24391d6047c489d89781c5be4c2a",
+    "experiments/semantic-geometry-investigation-20260930/scripts/common.py": "sha256:b02aeaaee7abbae8c824a63ffd01b29632d9fcdc11d9427c5a690032238957fc",
+    "experiments/semantic-geometry-investigation-20260930/scripts/assoc.py": "sha256:d43541e1130e46fd1013eb769cf414f1fb500ac093928190e40d8f0feb9256cc",
+    "experiments/semantic-geometry-investigation-20260930/scripts/p3_map_consistency.py": "sha256:624b007680bb9e65d0a6ba2cf778c394b1e297422bd82f6f9369f0a72248a700",
+    "experiments/semantic-geometry-investigation-20260930/scripts/p3_time_offset_deskew.py": "sha256:bf1365da980cb82b0a9fe1026d5194af59b22d503100aa859e7f3e67beec58a7",
+    "experiments/semantic-geometry-investigation-20260930/scripts/p4_calibration_photometric.py": "sha256:2b0015ce7fe25d2b0ffbea16b9bfc25f0543bcbb11c05aeee050fb4ac774ded2"
+  },
+  "elapsed_s": 346.7
+}

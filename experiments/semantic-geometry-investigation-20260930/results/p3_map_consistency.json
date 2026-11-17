@@ -1,0 +1,733 @@
+{
+  "reference_scan": "velodyne_points-000022",
+  "max_range_m": 12.0,
+  "planarity_max": 0.02,
+  "per_scan_residual_delta0": [
+    {
+      "observation_id": "velodyne_points-000000",
+      "dt_s": -2.219,
+      "matched": 15498,
+      "median_m": 0.0494,
+      "p90_m": 0.1338
+    },
+    {
+      "observation_id": "velodyne_points-000001",
+      "dt_s": -2.118,
+      "matched": 16471,
+      "median_m": 0.0395,
+      "p90_m": 0.1303
+    },
+    {
+      "observation_id": "velodyne_points-000002",
+      "dt_s": -2.017,
+      "matched": 17233,
+      "median_m": 0.0416,
+      "p90_m": 0.1335
+    },
+    {
+      "observation_id": "velodyne_points-000003",
+      "dt_s": -1.916,
+      "matched": 18055,
+      "median_m": 0.0362,
+      "p90_m": 0.117
+    },
+    {
+      "observation_id": "velodyne_points-000004",
+      "dt_s": -1.815,
+      "matched": 18581,
+      "median_m": 0.0322,
+      "p90_m": 0.1066
+    },
+    {
+      "observation_id": "velodyne_points-000005",
+      "dt_s": -1.715,
+      "matched": 19295,
+      "median_m": 0.035,
+      "p90_m": 0.0832
+    },
+    {
+      "observation_id": "velodyne_points-000006",
+      "dt_s": -1.614,
+      "matched": 19885,
+      "median_m": 0.0429,
+      "p90_m": 0.084
+    },
+    {
+      "observation_id": "velodyne_points-000007",
+      "dt_s": -1.513,
+      "matched": 20096,
+      "median_m": 0.0453,
+      "p90_m": 0.101
+    },
+    {
+      "observation_id": "velodyne_points-000008",
+      "dt_s": -1.412,
+      "matched": 20608,
+      "median_m": 0.0428,
+      "p90_m": 0.1029
+    },
+    {
+      "observation_id": "velodyne_points-000009",
+      "dt_s": -1.311,
+      "matched": 20850,
+      "median_m": 0.0542,
+      "p90_m": 0.1185
+    },
+    {
+      "observation_id": "velodyne_points-000010",
+      "dt_s": -1.21,
+      "matched": 21247,
+      "median_m": 0.0582,
+      "p90_m": 0.1228
+    },
+    {
+      "observation_id": "velodyne_points-000011",
+      "dt_s": -1.109,
+      "matched": 21742,
+      "median_m": 0.0502,
+      "p90_m": 0.1002
+    },
+    {
+      "observation_id": "velodyne_points-000012",
+      "dt_s": -1.009,
+      "matched": 22384,
+      "median_m": 0.0444,
+      "p90_m": 0.0906
+    },
+    {
+      "observation_id": "velodyne_points-000013",
+      "dt_s": -0.908,
+      "matched": 22405,
+      "median_m": 0.0337,
+      "p90_m": 0.0928
+    },
+    {
+      "observation_id": "velodyne_points-000014",
+      "dt_s": -0.807,
+      "matched": 22449,
+      "median_m": 0.0355,
+      "p90_m": 0.1052
+    },
+    {
+      "observation_id": "velodyne_points-000015",
+      "dt_s": -0.706,
+      "matched": 22718,
+      "median_m": 0.0277,
+      "p90_m": 0.09
+    },
+    {
+      "observation_id": "velodyne_points-000016",
+      "dt_s": -0.605,
+      "matched": 22912,
+      "median_m": 0.0213,
+      "p90_m": 0.092
+    },
+    {
+      "observation_id": "velodyne_points-000017",
+      "dt_s": -0.504,
+      "matched": 22866,
+      "median_m": 0.0283,
+      "p90_m": 0.0879
+    },
+    {
+      "observation_id": "velodyne_points-000018",
+      "dt_s": -0.403,
+      "matched": 22760,
+      "median_m": 0.0294,
+      "p90_m": 0.1054
+    },
+    {
+      "observation_id": "velodyne_points-000019",
+      "dt_s": -0.303,
+      "matched": 22853,
+      "median_m": 0.0236,
+      "p90_m": 0.1005
+    },
+    {
+      "observation_id": "velodyne_points-000020",
+      "dt_s": -0.202,
+      "matched": 23873,
+      "median_m": 0.0247,
+      "p90_m": 0.0868
+    },
+    {
+      "observation_id": "velodyne_points-000021",
+      "dt_s": -0.101,
+      "matched": 25775,
+      "median_m": 0.0165,
+      "p90_m": 0.0509
+    },
+    {
+      "observation_id": "velodyne_points-000023",
+      "dt_s": 0.101,
+      "matched": 25195,
+      "median_m": 0.0097,
+      "p90_m": 0.0324
+    },
+    {
+      "observation_id": "velodyne_points-000024",
+      "dt_s": 0.202,
+      "matched": 24241,
+      "median_m": 0.0141,
+      "p90_m": 0.0365
+    },
+    {
+      "observation_id": "velodyne_points-000025",
+      "dt_s": 0.303,
+      "matched": 23100,
+      "median_m": 0.018,
+      "p90_m": 0.0419
+    },
+    {
+      "observation_id": "velodyne_points-000026",
+      "dt_s": 0.403,
+      "matched": 22260,
+      "median_m": 0.0158,
+      "p90_m": 0.0623
+    },
+    {
+      "observation_id": "velodyne_points-000027",
+      "dt_s": 0.504,
+      "matched": 22323,
+      "median_m": 0.0232,
+      "p90_m": 0.0788
+    },
+    {
+      "observation_id": "velodyne_points-000028",
+      "dt_s": 0.605,
+      "matched": 22174,
+      "median_m": 0.0185,
+      "p90_m": 0.0678
+    },
+    {
+      "observation_id": "velodyne_points-000029",
+      "dt_s": 0.706,
+      "matched": 22307,
+      "median_m": 0.0193,
+      "p90_m": 0.0621
+    },
+    {
+      "observation_id": "velodyne_points-000030",
+      "dt_s": 0.807,
+      "matched": 22209,
+      "median_m": 0.0208,
+      "p90_m": 0.0621
+    },
+    {
+      "observation_id": "velodyne_points-000031",
+      "dt_s": 0.908,
+      "matched": 22664,
+      "median_m": 0.0224,
+      "p90_m": 0.0681
+    },
+    {
+      "observation_id": "velodyne_points-000032",
+      "dt_s": 1.009,
+      "matched": 22259,
+      "median_m": 0.0244,
+      "p90_m": 0.0794
+    },
+    {
+      "observation_id": "velodyne_points-000033",
+      "dt_s": 1.109,
+      "matched": 22219,
+      "median_m": 0.0209,
+      "p90_m": 0.0597
+    },
+    {
+      "observation_id": "velodyne_points-000034",
+      "dt_s": 1.21,
+      "matched": 21996,
+      "median_m": 0.0171,
+      "p90_m": 0.054
+    },
+    {
+      "observation_id": "velodyne_points-000035",
+      "dt_s": 1.311,
+      "matched": 21825,
+      "median_m": 0.0196,
+      "p90_m": 0.0558
+    },
+    {
+      "observation_id": "velodyne_points-000036",
+      "dt_s": 1.412,
+      "matched": 21815,
+      "median_m": 0.0267,
+      "p90_m": 0.0669
+    },
+    {
+      "observation_id": "velodyne_points-000037",
+      "dt_s": 1.513,
+      "matched": 21875,
+      "median_m": 0.0321,
+      "p90_m": 0.0746
+    },
+    {
+      "observation_id": "velodyne_points-000038",
+      "dt_s": 1.614,
+      "matched": 21881,
+      "median_m": 0.0392,
+      "p90_m": 0.0787
+    },
+    {
+      "observation_id": "velodyne_points-000039",
+      "dt_s": 1.715,
+      "matched": 21764,
+      "median_m": 0.0446,
+      "p90_m": 0.0902
+    },
+    {
+      "observation_id": "velodyne_points-000040",
+      "dt_s": 1.815,
+      "matched": 21487,
+      "median_m": 0.0463,
+      "p90_m": 0.1154
+    },
+    {
+      "observation_id": "velodyne_points-000041",
+      "dt_s": 1.916,
+      "matched": 20749,
+      "median_m": 0.0583,
+      "p90_m": 0.1432
+    },
+    {
+      "observation_id": "velodyne_points-000042",
+      "dt_s": 2.017,
+      "matched": 21534,
+      "median_m": 0.0501,
+      "p90_m": 0.1078
+    },
+    {
+      "observation_id": "velodyne_points-000043",
+      "dt_s": 2.118,
+      "matched": 21493,
+      "median_m": 0.0521,
+      "p90_m": 0.1001
+    },
+    {
+      "observation_id": "velodyne_points-000044",
+      "dt_s": 2.219,
+      "matched": 21142,
+      "median_m": 0.0556,
+      "p90_m": 0.1199
+    },
+    {
+      "observation_id": "velodyne_points-000045",
+      "dt_s": 2.32,
+      "matched": 20370,
+      "median_m": 0.0591,
+      "p90_m": 0.1353
+    },
+    {
+      "observation_id": "velodyne_points-000046",
+      "dt_s": 2.421,
+      "matched": 19494,
+      "median_m": 0.0632,
+      "p90_m": 0.1357
+    },
+    {
+      "observation_id": "velodyne_points-000047",
+      "dt_s": 2.521,
+      "matched": 18917,
+      "median_m": 0.069,
+      "p90_m": 0.1327
+    },
+    {
+      "observation_id": "velodyne_points-000048",
+      "dt_s": 2.622,
+      "matched": 18606,
+      "median_m": 0.0761,
+      "p90_m": 0.1168
+    },
+    {
+      "observation_id": "velodyne_points-000049",
+      "dt_s": 2.723,
+      "matched": 18231,
+      "median_m": 0.0718,
+      "p90_m": 0.1012
+    },
+    {
+      "observation_id": "velodyne_points-000050",
+      "dt_s": 2.824,
+      "matched": 17979,
+      "median_m": 0.0774,
+      "p90_m": 0.1037
+    },
+    {
+      "observation_id": "velodyne_points-000051",
+      "dt_s": 2.925,
+      "matched": 17791,
+      "median_m": 0.0804,
+      "p90_m": 0.1064
+    },
+    {
+      "observation_id": "velodyne_points-000052",
+      "dt_s": 3.026,
+      "matched": 17768,
+      "median_m": 0.0753,
+      "p90_m": 0.1026
+    },
+    {
+      "observation_id": "velodyne_points-000053",
+      "dt_s": 3.127,
+      "matched": 17357,
+      "median_m": 0.0827,
+      "p90_m": 0.109
+    },
+    {
+      "observation_id": "velodyne_points-000054",
+      "dt_s": 3.227,
+      "matched": 17134,
+      "median_m": 0.0811,
+      "p90_m": 0.1104
+    },
+    {
+      "observation_id": "velodyne_points-000060",
+      "dt_s": 3.832,
+      "matched": 17927,
+      "median_m": 0.0849,
+      "p90_m": 0.1151
+    },
+    {
+      "observation_id": "velodyne_points-000061",
+      "dt_s": 3.933,
+      "matched": 17822,
+      "median_m": 0.0845,
+      "p90_m": 0.1149
+    },
+    {
+      "observation_id": "velodyne_points-000062",
+      "dt_s": 4.034,
+      "matched": 17804,
+      "median_m": 0.086,
+      "p90_m": 0.1182
+    },
+    {
+      "observation_id": "velodyne_points-000063",
+      "dt_s": 4.135,
+      "matched": 17696,
+      "median_m": 0.084,
+      "p90_m": 0.1249
+    },
+    {
+      "observation_id": "velodyne_points-000064",
+      "dt_s": 4.236,
+      "matched": 17496,
+      "median_m": 0.0803,
+      "p90_m": 0.1199
+    },
+    {
+      "observation_id": "velodyne_points-000065",
+      "dt_s": 4.337,
+      "matched": 16518,
+      "median_m": 0.0703,
+      "p90_m": 0.1082
+    },
+    {
+      "observation_id": "velodyne_points-000066",
+      "dt_s": 4.438,
+      "matched": 15715,
+      "median_m": 0.0773,
+      "p90_m": 0.1199
+    },
+    {
+      "observation_id": "velodyne_points-000067",
+      "dt_s": 4.538,
+      "matched": 14784,
+      "median_m": 0.0851,
+      "p90_m": 0.1235
+    },
+    {
+      "observation_id": "velodyne_points-000068",
+      "dt_s": 4.639,
+      "matched": 14263,
+      "median_m": 0.0865,
+      "p90_m": 0.1289
+    },
+    {
+      "observation_id": "velodyne_points-000069",
+      "dt_s": 4.74,
+      "matched": 13393,
+      "median_m": 0.0925,
+      "p90_m": 0.139
+    },
+    {
+      "observation_id": "velodyne_points-000070",
+      "dt_s": 4.841,
+      "matched": 13309,
+      "median_m": 0.0849,
+      "p90_m": 0.1322
+    },
+    {
+      "observation_id": "velodyne_points-000071",
+      "dt_s": 4.942,
+      "matched": 13119,
+      "median_m": 0.0914,
+      "p90_m": 0.1415
+    },
+    {
+      "observation_id": "velodyne_points-000072",
+      "dt_s": 5.043,
+      "matched": 13016,
+      "median_m": 0.093,
+      "p90_m": 0.1437
+    },
+    {
+      "observation_id": "velodyne_points-000073",
+      "dt_s": 5.144,
+      "matched": 12864,
+      "median_m": 0.095,
+      "p90_m": 0.142
+    },
+    {
+      "observation_id": "velodyne_points-000074",
+      "dt_s": 5.244,
+      "matched": 12586,
+      "median_m": 0.1009,
+      "p90_m": 0.1436
+    },
+    {
+      "observation_id": "velodyne_points-000075",
+      "dt_s": 5.345,
+      "matched": 12423,
+      "median_m": 0.0998,
+      "p90_m": 0.1416
+    },
+    {
+      "observation_id": "velodyne_points-000079",
+      "dt_s": 5.749,
+      "matched": 9654,
+      "median_m": 0.1144,
+      "p90_m": 0.1437
+    },
+    {
+      "observation_id": "velodyne_points-000080",
+      "dt_s": 5.85,
+      "matched": 8668,
+      "median_m": 0.1174,
+      "p90_m": 0.1449
+    },
+    {
+      "observation_id": "velodyne_points-000081",
+      "dt_s": 5.95,
+      "matched": 7696,
+      "median_m": 0.1195,
+      "p90_m": 0.146
+    },
+    {
+      "observation_id": "velodyne_points-000082",
+      "dt_s": 6.051,
+      "matched": 6745,
+      "median_m": 0.1188,
+      "p90_m": 0.144
+    },
+    {
+      "observation_id": "velodyne_points-000083",
+      "dt_s": 6.152,
+      "matched": 5915,
+      "median_m": 0.1161,
+      "p90_m": 0.1424
+    },
+    {
+      "observation_id": "velodyne_points-000084",
+      "dt_s": 6.253,
+      "matched": 5212,
+      "median_m": 0.1146,
+      "p90_m": 0.141
+    },
+    {
+      "observation_id": "velodyne_points-000085",
+      "dt_s": 6.354,
+      "matched": 4953,
+      "median_m": 0.0977,
+      "p90_m": 0.1361
+    },
+    {
+      "observation_id": "velodyne_points-000086",
+      "dt_s": 6.455,
+      "matched": 3808,
+      "median_m": 0.0688,
+      "p90_m": 0.1256
+    },
+    {
+      "observation_id": "velodyne_points-000087",
+      "dt_s": 6.556,
+      "matched": 3616,
+      "median_m": 0.0758,
+      "p90_m": 0.1151
+    },
+    {
+      "observation_id": "velodyne_points-000088",
+      "dt_s": 6.656,
+      "matched": 3415,
+      "median_m": 0.0538,
+      "p90_m": 0.1195
+    }
+  ],
+  "time_offset_sweep": [
+    {
+      "delta_ms": -300,
+      "matched": 832179,
+      "median_m": 0.04557,
+      "p90_m": 0.17501
+    },
+    {
+      "delta_ms": -275,
+      "matched": 853681,
+      "median_m": 0.04374,
+      "p90_m": 0.17159
+    },
+    {
+      "delta_ms": -250,
+      "matched": 879384,
+      "median_m": 0.04256,
+      "p90_m": 0.16941
+    },
+    {
+      "delta_ms": -225,
+      "matched": 906459,
+      "median_m": 0.0415,
+      "p90_m": 0.16921
+    },
+    {
+      "delta_ms": -200,
+      "matched": 937360,
+      "median_m": 0.04047,
+      "p90_m": 0.17063
+    },
+    {
+      "delta_ms": -175,
+      "matched": 968872,
+      "median_m": 0.04086,
+      "p90_m": 0.17254
+    },
+    {
+      "delta_ms": -150,
+      "matched": 995844,
+      "median_m": 0.04081,
+      "p90_m": 0.1708
+    },
+    {
+      "delta_ms": -125,
+      "matched": 1015625,
+      "median_m": 0.04012,
+      "p90_m": 0.16388
+    },
+    {
+      "delta_ms": -100,
+      "matched": 1028015,
+      "median_m": 0.03965,
+      "p90_m": 0.1534
+    },
+    {
+      "delta_ms": -75,
+      "matched": 1049000,
+      "median_m": 0.03904,
+      "p90_m": 0.14046
+    },
+    {
+      "delta_ms": -50,
+      "matched": 1063879,
+      "median_m": 0.03777,
+      "p90_m": 0.12585
+    },
+    {
+      "delta_ms": -25,
+      "matched": 1073498,
+      "median_m": 0.03567,
+      "p90_m": 0.11195
+    },
+    {
+      "delta_ms": 0,
+      "matched": 1080456,
+      "median_m": 0.03282,
+      "p90_m": 0.10048
+    },
+    {
+      "delta_ms": 25,
+      "matched": 1086383,
+      "median_m": 0.02966,
+      "p90_m": 0.08742
+    },
+    {
+      "delta_ms": 50,
+      "matched": 1088917,
+      "median_m": 0.02646,
+      "p90_m": 0.07986
+    },
+    {
+      "delta_ms": 75,
+      "matched": 1089543,
+      "median_m": 0.02403,
+      "p90_m": 0.07863
+    },
+    {
+      "delta_ms": 100,
+      "matched": 1084530,
+      "median_m": 0.02339,
+      "p90_m": 0.08495
+    },
+    {
+      "delta_ms": 125,
+      "matched": 1073196,
+      "median_m": 0.02332,
+      "p90_m": 0.09338
+    },
+    {
+      "delta_ms": 150,
+      "matched": 1061679,
+      "median_m": 0.02486,
+      "p90_m": 0.10497
+    },
+    {
+      "delta_ms": 175,
+      "matched": 1050249,
+      "median_m": 0.02758,
+      "p90_m": 0.11445
+    },
+    {
+      "delta_ms": 200,
+      "matched": 1038051,
+      "median_m": 0.03083,
+      "p90_m": 0.12311
+    },
+    {
+      "delta_ms": 225,
+      "matched": 1024830,
+      "median_m": 0.03286,
+      "p90_m": 0.12668
+    },
+    {
+      "delta_ms": 250,
+      "matched": 1004775,
+      "median_m": 0.03398,
+      "p90_m": 0.12574
+    },
+    {
+      "delta_ms": 275,
+      "matched": 984088,
+      "median_m": 0.03481,
+      "p90_m": 0.12767
+    },
+    {
+      "delta_ms": 300,
+      "matched": 966318,
+      "median_m": 0.03584,
+      "p90_m": 0.13394
+    }
+  ],
+  "platform_speed_at_image": {
+    "linear_m_s": 2.112,
+    "angular_deg_s": 4.2
+  },
+  "gt_sample_gaps_ms_around_image": {
+    "values_hist": {
+      "101": 66,
+      "202": 47,
+      "303": 3,
+      "403": 1,
+      "504": 1,
+      "605": 1
+    }
+  }
+}

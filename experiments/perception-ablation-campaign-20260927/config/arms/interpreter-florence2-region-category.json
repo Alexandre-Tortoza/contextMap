@@ -1,0 +1,31 @@
+{
+  "resources": {
+    "providers": {
+      "semantic_interpretation.interpreter": "REPLACE_WITH_YOUR_LOADERS_MODULE:load_florence2_semantic"
+    }
+  },
+  "components": {
+    "semantic_interpretation": {
+      "interpreter": {
+        "backend": "florence2",
+        "florence2": {
+          "checkpoint": "florence-community/Florence-2-large",
+          "revision": "REPLACE-WITH-THE-40-HEX-FLORENCE2-REVISION",
+          "task": "<REGION_TO_CATEGORY>",
+          "supported_modes": [
+            "region"
+          ],
+          "device": "cuda",
+          "precision": "REPLACE-WITH-THE-FLORENCE2-PRECISION",
+          "max_new_tokens": "REPLACE-WITH-THE-FLORENCE2-TOKEN-BUDGET",
+          "temperature": 0.0,
+          "view_policy": {
+            "region_views": [
+              "tight_crop"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,147 @@
+{
+  "artifact_type": "context_map",
+  "code_version": "a3a175f+local.04d61c01a05c",
+  "configuration_fingerprint": "sha256:1bcd38d63c29c9bdcb5e61d1e55f42697b1c8bdf978eabd92bacb73fb42fc103",
+  "content_identity": "sha256:2c0d165f7ba66c97cd14b9c3dde6441cae32d8810f4225ce49e608068e440be6",
+  "context_map_id": "71613c69963db1f61eb8a1e2ecff0a90",
+  "dependencies": [
+    {
+      "artifact_id": "ed1c4409a4382b6cd1ab3582119c97f5",
+      "artifact_type": "entity_resolution_run",
+      "content_identity": "sha256:e49b84c50447b860596d3a770e2f5e81c700c8b3fbc2bbbb589df944c3a22a80",
+      "locator": "../../run-frame-10_31/corridor-02/run-0013/entity_resolution",
+      "requirement": "required"
+    },
+    {
+      "artifact_id": "corridor-02--8e0d9b1194c264e7e648e73cc6e2944c",
+      "artifact_type": "geometric_map",
+      "content_identity": "sha256:a07c1c41a43a0729c7db6e2af16a39a4bfe70579c04d26ec655c8220f0287b60",
+      "locator": "../../run-frame-10_31/corridor-02/run-0003/geometric_mapping",
+      "requirement": "required"
+    },
+    {
+      "artifact_id": "8777688f7b6cb6ac74b2ccac79cb996e",
+      "artifact_type": "semantic_fusion_run",
+      "content_identity": "sha256:f2920fc8eb6c5e1998034351a8b3bbbe08bf55e419ec9b09cbe771c06f6325fc",
+      "locator": null,
+      "requirement": "optional"
+    },
+    {
+      "artifact_id": "semantic-map-corridor-02",
+      "artifact_type": "semantic_map",
+      "content_identity": "sha256:ba30a96aabeea705382a9e6899fc61ad8366b8940adb9ce3e3a3635790392616",
+      "locator": null,
+      "requirement": "optional"
+    },
+    {
+      "artifact_id": "4a4d895e0e4e4731ad91326114607296",
+      "artifact_type": "sequence",
+      "content_identity": "sha256:c77f91dc6bccf939c2da541ced242756141435cb6664684e228cc6d11576e1d7",
+      "locator": null,
+      "requirement": "optional"
+    },
+    {
+      "artifact_id": "da082684ea402364ba7d2afd202748da",
+      "artifact_type": "spatial_relations_run",
+      "content_identity": "sha256:967439d62d5d1784ee035fdaa161c61682c16b74cb25f2926fb963267476e874",
+      "locator": "../../run-frame-10_31/corridor-02/run-0013/spatial_relations",
+      "requirement": "required"
+    }
+  ],
+  "entity_count": 51,
+  "file_inventory": [
+    {
+      "content_hash": "sha256:456867411fd1f34c0ebc6e7281dd304f41fe2e8444ce7c0475587b40f8eafb37",
+      "path": "entities/entities.jsonl",
+      "size_bytes": 1303168
+    },
+    {
+      "content_hash": "sha256:82a5cc393bb9d17782aaf7ade01d5c6aaee302c42930f7aaba666401351cb8d1",
+      "path": "geometry/geometry-reference.json",
+      "size_bytes": 89
+    },
+    {
+      "content_hash": "sha256:931b8645a7e4062329d493c62cc70452d053cec0f9dbafbe0a9447f885880ad1",
+      "path": "indexes/entity-index.jsonl",
+      "size_bytes": 2664
+    },
+    {
+      "content_hash": "sha256:4ec29e3c80136786aedf7ce7e578c9d45a2deee72b117d636f862d32e94ed077",
+      "path": "indexes/entity-relation-index.jsonl",
+      "size_bytes": 115433
+    },
+    {
+      "content_hash": "sha256:d5453e87dbd2e0fcb2fe2e75afb4f8bb634ad0f1873512bab203ba45c773de91",
+      "path": "indexes/relation-index.jsonl",
+      "size_bytes": 189472
+    },
+    {
+      "content_hash": "sha256:7ee6fe9c35c4b8449398aa0554a0a11de6272f677c6ee12679f9b61e05fecd20",
+      "path": "lineage/lineage.json",
+      "size_bytes": 1995
+    },
+    {
+      "content_hash": "sha256:20ea16019331d4f37d11eff1e3b6a51aa00e332324552a6f671896069af32564",
+      "path": "map-metadata.json",
+      "size_bytes": 1535
+    },
+    {
+      "content_hash": "sha256:9b9bb30d6909af286ae3713f9c1f172dad849a8b3c75f6c53918e831a28fe3b7",
+      "path": "relations/relations.jsonl",
+      "size_bytes": 3353019
+    }
+  ],
+  "format_version": "0.1.0",
+  "payloads": [
+    {
+      "derived_from": [],
+      "encoding": "jsonl",
+      "path": "entities/entities.jsonl",
+      "record_count": 51,
+      "role": "authoritative",
+      "semantics": "One entity per line as {key, record}, ordered by key; record is the schema's canonical entity record."
+    },
+    {
+      "derived_from": [
+        "entities/entities.jsonl"
+      ],
+      "encoding": "jsonl",
+      "path": "indexes/entity-index.jsonl",
+      "record_count": 51,
+      "role": "derived_index",
+      "semantics": "Entity key to byte offset and length of its line in entities.jsonl."
+    },
+    {
+      "derived_from": [
+        "entities/entities.jsonl",
+        "relations/relations.jsonl"
+      ],
+      "encoding": "jsonl",
+      "path": "indexes/entity-relation-index.jsonl",
+      "record_count": 51,
+      "role": "derived_index",
+      "semantics": "Per entity, the keys of the relations where it is the subject and where it is the object."
+    },
+    {
+      "derived_from": [
+        "relations/relations.jsonl"
+      ],
+      "encoding": "jsonl",
+      "path": "indexes/relation-index.jsonl",
+      "record_count": 3526,
+      "role": "derived_index",
+      "semantics": "Relation key to byte offset and length of its line in relations.jsonl."
+    },
+    {
+      "derived_from": [],
+      "encoding": "jsonl",
+      "path": "relations/relations.jsonl",
+      "record_count": 3526,
+      "role": "authoritative",
+      "semantics": "One relation per line as {key, subject, object, record}, ordered by key; subject and object are entity ids and record is the schema's canonical relation record."
+    }
+  ],
+  "relation_count": 3526,
+  "schema_version": "0.2.0",
+  "written_at": "2026-09-30T20:34:18.480473+00:00"
+}

@@ -1,0 +1,49 @@
+{
+  "stage_dir": "workspace/run-frame-10_31/corridor-02/run-0004/visual_perception",
+  "prompt_templates": {
+    "region-interaction/v1": 28
+  },
+  "regions_attempted": 61,
+  "regions_interpreted": 28,
+  "abstained": 0,
+  "parse_failures": 33,
+  "parse_failure_rate": 0.541,
+  "parse_failure_kinds": {
+    "claim[i] contains unexpected fields: ['interaction_factor']": 31,
+    "claim[i] is missing required fields: ['region_kind']": 1,
+    "claim[i] is missing required fields: ['role']": 1
+  },
+  "backend_call_failures": 0,
+  "primary_claims": 28,
+  "primary_claims_per_frame": {
+    "camera_1_image_raw-000055": 28
+  },
+  "primary_claims_without_factor": 28,
+  "interaction_factor": {
+    "count": 0,
+    "distinct": [],
+    "histogram": {},
+    "median": null,
+    "min": null,
+    "max": null,
+    "outside_clamp_0.1_5.0": 0
+  },
+  "labels": {
+    "door": 15,
+    "edge": 3,
+    "bar": 2,
+    "seat": 1,
+    "pole": 1,
+    "hand": 1,
+    "ceiling": 1,
+    "object": 1,
+    "propeller": 1,
+    "cap": 1,
+    "leaf": 1
+  },
+  "distinct_labels": 11,
+  "outline_leak": {
+    "color_attribute_pink_or_magenta": 0,
+    "description_mentions_pink_border": 10
+  }
+}

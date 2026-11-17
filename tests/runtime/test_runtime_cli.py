@@ -1,0 +1,2290 @@
+"""Tests for the command-line adapter: it parses, calls runtime services and reports."""
+
+from __future__ import annotations
+
+import io
+import json
+import os
+import shutil
+import subprocess
+import sys
+from pathlib import Path
+from typing import Any
+
+import pytest
+from runtime_context import Located
+from runtime_context_maps import written_context_map
+from runtime_documents import selected_document
+from runtime_fixtures import unavailable_future_stage  # noqa: F401
+from runtime_foundation import (
+    SyntheticIngestion,
+    geometric_mapping_executor,
+    state_estimation_executor,
+)
+from runtime_ingestion import factory as fake_factory
+from runtime_worlds import World
+
+from contextmap.artifact import Severity, ValidationLevel, validate_context_map_artifact
+from contextmap.runtime import (
+    ArtifactRef,
+    CatalogEntry,
+    Lineage,
+    StageRequest,
+    load_catalog,
+)
+from contextmap.runtime.cli import _apply_dotenv, main
+from contextmap.runtime.components import COMPONENTS
+
+
+def _ready(_name: str) -> bool:
+    return True
+
+
+def _document(**overrides: Any) -> dict[str, Any]:
+    document = selected_document()
+    document["pipeline"]["stages"]["point_representation"] = False
+    document.update(overrides)
+    return document
+
+
+def _config(tmp_path: Path, document: dict[str, Any] | None = None) -> Path:
+    path = tmp_path / "experiment.json"
+    path.write_text(json.dumps(document or _document()), encoding="utf-8")
+    return path
+
+
+class Stage:
+    """A lightweight stage executor: an artifact per call, content from its request."""
+
+    def __init__(self, stage: str, contract: str, log: list[str]) -> None:
+        self.stage, self.contract, self.log = stage, contract, log
+
+    def execute(self, request: StageRequest) -> ArtifactRef:
+        self.log.append(self.stage)
+        return ArtifactRef(
+            stage_id=self.stage,
+            contract=self.contract,
+            artifact_id=f"{self.stage}#1",
+            content_hash=f"sha256:{self.stage}",
+        )
+
+
+def _executors(log: list[str]) -> dict[str, Stage]:
+    from contextmap.runtime.components import CANONICAL_PRESET
+
+    return {s.stage_id: Stage(s.stage_id, s.output or "", log) for s in CANONICAL_PRESET.stages}
+
+
+def cli(*argv: str, **options: Any) -> tuple[int, str, str]:
+    out, err = io.StringIO(), io.StringIO()
+    options.setdefault("module_available", _ready)
+    options.setdefault("environ", {})
+    code = main(list(argv), stdout=out, stderr=err, **options)
+    return code, out.getvalue(), err.getvalue()
+
+
+def _status(run_dir: Path) -> dict[str, Any]:
+    document: dict[str, Any] = json.loads((run_dir / "status.json").read_text("utf-8"))
+    return document
+
+
+def _json(text: str) -> dict[str, Any]:
+    result: dict[str, Any] = json.loads(text)
+    return result
+
+
+class TestDryRun:
+    def test_shows_the_resolved_dag_inputs_outputs_and_effective_config(
+        self, tmp_path: Path
+    ) -> None:
+        code, out, _ = cli(
+            "run", "-c", str(_config(tmp_path)), "--stage", "geometric_mapping", "--dry-run"
+        )
+
+        assert code == 0
+        assert "sha256:" in out
+        for stage in ("ingestion", "state_estimation", "geometric_mapping"):
+            assert stage in out
+        assert "SequenceArtifact" in out and "GeometricMapArtifact" in out
+        assert "ros1_bag" in out
+
+    def test_json_output_is_machine_readable_and_complete(self, tmp_path: Path) -> None:
+        code, out, _ = cli(
+            "run",
+            "-c",
+            str(_config(tmp_path)),
+            "--stage",
+            "geometric_mapping",
+            "--dry-run",
+            "--json",
+        )
+
+        document = _json(out)
+        assert code == 0
+        assert document["preflight"]["ok"] is True
+        assert document["scope"]["run"] == ["ingestion", "state_estimation", "geometric_mapping"]
+        assert document["effective_config"]["digest"].startswith("sha256:")
+        assert [s["stage_id"] for s in document["plan"]["stages"]][:3] == [
+            "ingestion",
+            "region_perception",
+            "visual_perception",
+        ]
+
+    def test_loads_no_model_and_needs_no_executor(self, tmp_path: Path) -> None:
+        code, out, _ = cli(
+            "run", "-c", str(_config(tmp_path)), "--stage", "semantic_fusion", "--dry-run", "--json"
+        )
+
+        assert code == 0
+        assert _json(out)["executors"]["missing"]
+
+    def test_the_installed_entrypoint_composes_real_executors_with_no_python_injection(
+        self, tmp_path: Path
+    ) -> None:
+        """Blocker #1 of the PR #387 review, reproduced exactly: no ``executors=`` at all.
+
+        ``main()`` used to default to ``executors=executors or {}``, so every capability-backed
+        stage was unconditionally reported as missing an executor -- the installed
+        ``contextmap`` binary could never run the DAG without a Python wrapper injecting
+        executors by hand. With ``compose_executors`` wired into the CLI, the stages a
+        configuration alone can build (``state_estimation``, ``geometric_mapping``,
+        ``sensor_association``, ``semantic_fusion``) are no longer missing; ``ingestion`` (needs
+        a concrete ``IngestionRequest``, not part of any configuration), ``region_perception``
+        and ``semantic_interpretation`` honestly remain so. All perception stages have a
+        real executor; what this
+        fixture lacks is a model runtime for the backends it selects -- ``sam3`` for
+        ``region_perception.discovery`` and ``qwen`` for
+        ``semantic_interpretation.interpreter`` have no bundled loader, so neither stage
+        composes without a provider (see
+        ``test_supplying_providers_composes_visual_perception_through_the_cli``).
+        """
+        code, out, err = cli(
+            "run",
+            "-c",
+            str(_config(tmp_path)),
+            "--stage",
+            "semantic_fusion",
+            "--code-identity",
+            "c1",
+            "--dry-run",
+            "--json",
+        )
+
+        assert code == 0, out + err
+        executors = _json(out)["executors"]
+        assert set(executors["missing"]) == {
+            "ingestion",
+            "region_perception",
+            "semantic_interpretation",
+        }
+        assert {
+            "visual_perception",
+            "state_estimation",
+            "geometric_mapping",
+            "sensor_association",
+            "semantic_fusion",
+        }.issubset(executors["registered"])
+
+    def test_supplying_providers_composes_visual_perception_through_the_cli(
+        self, tmp_path: Path
+    ) -> None:
+        """Blocker #1 of the PR #535 review: ``providers=`` now reaches the CLI's own path.
+
+        ``sam3`` (region discovery) and ``qwen`` (semantic interpretation) -- the default
+        fixture's backends -- have no bundled model loader (``composition.py``): without a
+        ``RuntimeProvider`` for each, ``compose_executors`` honestly leaves
+        ``visual_perception`` out, and the installed binary could never compose it, even
+        through a Python embedder, because ``main()`` had nowhere to receive one. ``main()``
+        now accepts ``providers=`` in the exact shape ``compose_executors(providers=...)`` (and
+        every other ``RuntimeProvider`` caller) already expects, so real backend selection
+        composes through the CLI's own ``_executors_for()``, not a hand-built executor
+        standing in for the whole stage.
+        """
+        providers = {
+            "region_perception.discovery": lambda _config, _secrets: object(),
+            "semantic_interpretation.interpreter": lambda _config, _secrets: object(),
+        }
+
+        code, out, err = cli(
+            "run",
+            "-c",
+            str(_config(tmp_path)),
+            "--stage",
+            "visual_perception",
+            "--dry-run",
+            "--json",
+            providers=providers,
+        )
+
+        assert code == 0, out + err
+        executors = _json(out)["executors"]
+        assert "visual_perception" in executors["registered"]
+        assert "visual_perception" not in executors["missing"]
+
+    def test_a_declared_provider_target_composes_visual_perception_with_no_python_providers(
+        self, tmp_path: Path
+    ) -> None:
+        """The decisive proof that #507's real gap is closed.
+
+        The acceptance criterion of #507 is that ``visual_perception`` runs through the
+        *installed* ``contextmap run``/``contextmap stage`` binary with no Python wrapper.
+        ``test_supplying_providers_composes_visual_perception_through_the_cli`` above only
+        proves Python embedding: it still calls ``main(providers=...)`` by hand, which the
+        installed console script (``contextmap = contextmap.runtime.cli:main``) never does --
+        it calls ``main(argv)`` with no ``providers`` keyword at all. This test simulates
+        exactly that call: ``sam3`` (region discovery) and ``qwen`` (semantic interpretation)
+        -- the two backends with no bundled model loader -- instead get their runtime from a
+        ``resources.providers`` target declared in the configuration file itself, resolved by
+        ``contextmap.runtime.composition.resolve_provider`` from a real importable module
+        (``runtime_provider_fixtures``, a sibling test module).
+        """
+        document = _document()
+        document["resources"]["providers"] = {
+            "region_perception.discovery": ("runtime_provider_fixtures:load_region_discovery"),
+            "semantic_interpretation.interpreter": (
+                "runtime_provider_fixtures:load_semantic_interpretation"
+            ),
+        }
+
+        code, out, err = cli(
+            "run",
+            "-c",
+            str(_config(tmp_path, document)),
+            "--stage",
+            "visual_perception",
+            "--dry-run",
+            "--json",
+            # Nenhum `providers=` é passado: exatamente a chamada que o binário instalado faz.
+        )
+
+        assert code == 0, out + err
+        executors = _json(out)["executors"]
+        assert "visual_perception" in executors["registered"]
+        assert "visual_perception" not in executors["missing"]
+
+    def test_a_declared_provider_frees_its_component_from_the_bundled_modules(
+        self, tmp_path: Path
+    ) -> None:
+        """Issue #659: the modules of a bundled loader are not required when a provider replaces it.
+
+        DINOv3 and CLIP bundle a loader that needs torch, transformers and Pillow; a
+        ``resources.providers`` target for them supplies the runtime instead, so the
+        composition never imports those modules, and the preflight must not demand them either.
+        """
+        document = _document()
+        document["resources"]["providers"] = {
+            "region_perception.discovery": "runtime_provider_fixtures:load_region_discovery",
+            "visual_features.dense": "runtime_provider_fixtures:load_dense_features",
+            "visual_features.region": "runtime_provider_fixtures:load_region_features",
+            "semantic_interpretation.interpreter": (
+                "runtime_provider_fixtures:load_semantic_interpretation"
+            ),
+        }
+
+        code, out, err = cli(
+            "run",
+            "-c",
+            str(_config(tmp_path, document)),
+            "--stage",
+            "visual_perception",
+            "--dry-run",
+            "--json",
+            module_available=lambda name: name not in {"torch", "transformers", "PIL"},
+        )
+
+        assert code == 0, out + err
+        dry_run = _json(out)
+        assert dry_run["preflight"] == {"ok": True, "problems": []}
+        assert "visual_perception" in dry_run["executors"]["registered"]
+
+    def test_a_provider_given_to_main_reaches_an_optional_entity_resolution_channel(
+        self, tmp_path: Path
+    ) -> None:
+        """P2 #2 of the PR #540 review: ``main(providers=...)`` must reach ``compose_executors``.
+
+        Before this fix, the CLI had no provider-injection path at all, so a configuration
+        that legitimately selected ``entity_resolution.appearance`` (it needs a
+        ``FeatureVectorSource``, the same ``RuntimeProvider`` mechanism sam3/qwen/gemini
+        already use) silently lost the whole ``entity_resolution`` executor.
+        """
+        document = selected_document()
+        document["components"]["entity_resolution"]["appearance"] = {
+            "backend": "entity-appearance-comparison-v1",
+            "entity-appearance-comparison-v1": {
+                "embedding_space_id": "clip-vit-b32",
+                "min_supporting_similarity": 0.8,
+            },
+        }
+
+        def provide(config: Any, secrets: Any) -> object:
+            return object()  # um FeatureVectorSource real não importa aqui, só a propagação
+
+        code, out, err = cli(
+            "run",
+            "-c",
+            str(_config(tmp_path, document)),
+            "--stage",
+            "entity_resolution",
+            "--code-identity",
+            "c1",
+            "--dry-run",
+            "--json",
+            providers={"entity_resolution.appearance": provide},
+        )
+
+        assert code == 0, out + err
+        assert "entity_resolution" in _json(out)["executors"]["registered"]
+
+    def test_an_injected_executor_overrides_the_one_composed_from_configuration(
+        self, tmp_path: Path
+    ) -> None:
+        """A caller-supplied executor always wins over the automatically composed one.
+
+        ``state_estimation`` is fully selected in the configuration, so ``compose_executors``
+        would build a real ``StateEstimationExecutor`` for it -- one that reads a real
+        ``SequenceArtifact`` and would fail against the lightweight fake ``ingestion`` output
+        below. That the run succeeds and the fake stage is the one that actually executed
+        proves the injected override, not the composed executor, ran.
+        """
+        log: list[str] = []
+        executors = {
+            "ingestion": Stage("ingestion", "SequenceArtifact", log),
+            "state_estimation": Stage("state_estimation", "StateEstimationRunArtifact", log),
+        }
+
+        code, out, err = cli(
+            "run",
+            "-c",
+            str(_config(tmp_path)),
+            "--stage",
+            "state_estimation",
+            "--workspace",
+            str(tmp_path / "ws"),
+            executors=executors,
+        )
+
+        assert code == 0, out + err
+        assert log == ["ingestion", "state_estimation"]
+
+    @pytest.mark.usefixtures("unavailable_future_stage")
+    def test_the_complete_pipeline_is_blocked_with_the_reason_per_stage(
+        self, tmp_path: Path
+    ) -> None:
+        code, out, err = cli("run", "-c", str(_config(tmp_path)), "--dry-run")
+
+        assert code == 1
+        text = out + err
+        assert "scene_graph" in text and "milestone" in text
+
+    def test_a_missing_optional_module_is_explained_with_an_install_hint(
+        self, tmp_path: Path
+    ) -> None:
+        code, out, err = cli(
+            "run",
+            "-c",
+            str(_config(tmp_path)),
+            "--stage",
+            "visual_perception",
+            "--dry-run",
+            module_available=lambda name: name != "torch",
+        )
+
+        assert code == 1
+        assert "torch" in out + err
+
+    def test_a_missing_secret_is_reported_by_name(self, tmp_path: Path) -> None:
+        document = _document()
+        document["components"]["semantic_interpretation"]["interpreter"] = {
+            "backend": "gemini",
+            "gemini": {
+                "model": "g",
+                "timeout_s": 1,
+                "max_retries": 1,
+                "temperature": 0.0,
+                "prompt_policy": {"scene": "scene/v1", "region": "region/v1"},
+                "view_policy": {"region_views": ["tight_crop"]},
+            },
+        }
+
+        visual_code, visual_out, visual_err = cli(
+            "run",
+            "-c",
+            str(_config(tmp_path, document)),
+            "--stage",
+            "visual_perception",
+            "--dry-run",
+        )
+
+        assert visual_code == 0, visual_out + visual_err
+        assert "GEMINI_API_KEY" not in visual_out + visual_err
+
+        code, out, err = cli(
+            "run",
+            "-c",
+            str(_config(tmp_path, document)),
+            "--stage",
+            "semantic_interpretation",
+            "--dry-run",
+        )
+
+        assert code == 1
+        assert "GEMINI_API_KEY" in out + err
+
+    def test_writes_nothing(self, tmp_path: Path) -> None:
+        workspace = tmp_path / "ws"
+
+        cli(
+            "run",
+            "-c",
+            str(_config(tmp_path)),
+            "--stage",
+            "state_estimation",
+            "--dry-run",
+            "--workspace",
+            str(workspace),
+        )
+
+        assert not workspace.exists()
+
+
+class TestConfigurationFlags:
+    def test_set_and_flags_are_translated_into_overrides(self, tmp_path: Path) -> None:
+        code, out, _ = cli(
+            "inspect",
+            "config",
+            "-c",
+            str(_config(tmp_path)),
+            "--set",
+            "policies.debug_level=standard",
+            "--device",
+            "cuda",
+            "--workspace",
+            "ws",
+            "--sequence",
+            "S1",
+            "--debug-level",
+            "full",
+            "--json",
+        )
+
+        config = _json(out)["config"]
+        assert code == 0
+        assert config["policies"]["debug_level"] == "full"  # a flag vence o --set
+        assert config["resources"] == {
+            "device": "cuda",
+            "workspace": "ws",
+            "maps_root": None,
+            "providers": {},
+        }
+        assert config["inputs"]["sequence"] == "S1"
+
+    def test_a_numeric_looking_sequence_stays_a_string(self, tmp_path: Path) -> None:
+        code, out, _ = cli(
+            "inspect", "config", "-c", str(_config(tmp_path)), "--sequence", "123", "--json"
+        )
+
+        assert code == 0
+        assert _json(out)["config"]["inputs"]["sequence"] == "123"
+
+    def test_an_unknown_profile_lists_the_known_ones(self, tmp_path: Path) -> None:
+        code, out, err = cli("inspect", "config", "--profile", "canonical/99")
+
+        assert code == 1
+        assert "canonical/1" in out + err
+
+    def test_an_invalid_configuration_reports_every_problem_with_its_path(
+        self, tmp_path: Path
+    ) -> None:
+        document = _document(resources={"device": 1}, policies={"debug_level": "loud"})
+
+        code, out, err = cli("inspect", "config", "-c", str(_config(tmp_path, document)))
+
+        assert code == 1
+        assert "resources.device" in out + err and "policies.debug_level" in out + err
+
+    def test_a_failure_is_machine_readable_with_json(self, tmp_path: Path) -> None:
+        code, out, _ = cli("inspect", "config", "--profile", "nope", "--json")
+
+        document = _json(out)
+        assert code == 1
+        assert document["ok"] is False
+        assert document["problems"]
+
+    def test_a_malformed_override_is_a_usage_error(self, tmp_path: Path) -> None:
+        code, out, err = cli("inspect", "config", "--set", "no-equals")
+
+        assert code == 1
+        assert "override" in out + err
+
+
+class TestInspectPlan:
+    def test_prints_the_topology_without_executing_anything(self, tmp_path: Path) -> None:
+        code, out, _ = cli("inspect", "plan", "-c", str(_config(tmp_path)), "--json")
+
+        document = _json(out)
+        assert code == 0
+        assert [s["stage_id"] for s in document["plan"]["stages"]] == [
+            "ingestion",
+            # `region_perception` é obrigatório: a percepção consome o artefato de regiões.
+            "region_perception",
+            "visual_perception",
+            "semantic_interpretation",
+            "state_estimation",
+            "geometric_mapping",
+            "sensor_association",
+            "semantic_fusion",
+            "semantic_mapping",
+            "entity_resolution",
+            "spatial_relations",
+            "context_map",
+        ]
+        assert document["plan_digest"].startswith("sha256:")
+
+    def test_the_optional_stage_enters_the_plan_by_configuration_only(self, tmp_path: Path) -> None:
+        code, out, _ = cli(
+            "inspect",
+            "plan",
+            "-c",
+            str(_config(tmp_path)),
+            "--set",
+            "pipeline.stages.point_representation=true",
+            "--json",
+        )
+
+        stages = [s["stage_id"] for s in _json(out)["plan"]["stages"]]
+        assert code == 0 and "point_representation" in stages
+
+
+class TestRun:
+    def test_executes_a_subgraph_and_persists_the_run_records(self, tmp_path: Path) -> None:
+        log: list[str] = []
+        workspace = tmp_path / "ws"
+
+        code, out, err = cli(
+            "run",
+            "-c",
+            str(_config(tmp_path)),
+            "--stage",
+            "geometric_mapping",
+            "--workspace",
+            str(workspace),
+            executors=_executors(log),
+        )
+
+        assert code == 0, out + err
+        assert log == ["ingestion", "state_estimation", "geometric_mapping"]
+        run_dir = workspace / "S1" / "run-0001"
+        assert sorted(p.name for p in run_dir.iterdir()) == [
+            "effective_config.json",
+            "events.jsonl",
+            "execution.json",
+            "plan.json",
+            "status.json",
+        ]
+        execution = json.loads((run_dir / "execution.json").read_text("utf-8"))["document"]
+        assert execution["order"] == ["ingestion", "state_estimation", "geometric_mapping"]
+        assert "run-0001" in out
+
+    def test_a_provider_override_is_recorded_in_the_runs_own_trail(self, tmp_path: Path) -> None:
+        """Item 4 of the #507 fix: a caller-supplied provider that wins over a declared
+        ``resources.providers`` target for the same component is visible in the run's own
+        record, not just silently applied. This only ever happens through a Python embedder
+        that passes ``providers=`` -- an ordinary CLI invocation never does, so it never
+        triggers this branch (see ``test_a_declared_provider_target_composes_...`` above)."""
+        document = _document()
+        document["resources"]["providers"] = {
+            "region_perception.discovery": ("runtime_provider_fixtures:load_region_discovery"),
+            "semantic_interpretation.interpreter": (
+                "runtime_provider_fixtures:load_semantic_interpretation"
+            ),
+        }
+        log: list[str] = []
+        workspace = tmp_path / "ws"
+        executors = {
+            "ingestion": Stage("ingestion", "SequenceArtifact", log),
+            # Alcançar `visual_perception` passa por `region_perception`, que publica as regiões.
+            "region_perception": Stage("region_perception", "RegionPerceptionRunArtifact", log),
+            "visual_perception": Stage("visual_perception", "VisualEvidenceArtifact", log),
+        }
+        # Provider explícito só para region_discovery: vence o alvo declarado *apenas* para
+        # esse componente; semantic_interpretation continua resolvido pelo alvo declarado.
+        explicit_providers = {
+            "region_perception.discovery": lambda _config, _secrets: object(),
+        }
+
+        code, out, err = cli(
+            "run",
+            "-c",
+            str(_config(tmp_path, document)),
+            "--stage",
+            "visual_perception",
+            "--workspace",
+            str(workspace),
+            executors=executors,
+            providers=explicit_providers,
+        )
+
+        assert code == 0, out + err
+        run_dir = workspace / "S1" / "run-0001"
+        first_event = json.loads((run_dir / "events.jsonl").read_text("utf-8").splitlines()[0])
+        assert first_event["kind"] == "run_planned"
+        assert first_event["data"]["provider_overrides"] == ["region_perception.discovery"]
+
+    def test_every_run_gets_its_own_directory_and_never_overwrites_a_previous_one(
+        self, tmp_path: Path
+    ) -> None:
+        options = ["--stage", "ingestion", "--workspace", str(tmp_path / "ws")]
+
+        for _ in range(2):
+            code, _, _ = cli(
+                "run", "-c", str(_config(tmp_path)), *options, executors=_executors([])
+            )
+            assert code == 0
+
+        assert sorted(p.name for p in (tmp_path / "ws" / "S1").iterdir()) == [
+            "run-0001",
+            "run-0002",
+        ]
+
+    def test_json_output_carries_the_execution_and_the_run_directory(self, tmp_path: Path) -> None:
+        code, out, _ = cli(
+            "run",
+            "-c",
+            str(_config(tmp_path)),
+            "--stage",
+            "ingestion",
+            "--workspace",
+            str(tmp_path / "ws"),
+            "--json",
+            executors=_executors([]),
+        )
+
+        document = _json(out)
+        assert code == 0
+        assert document["execution"]["order"] == ["ingestion"]
+        assert document["run_directory"].endswith("run-0001")
+
+    def test_a_real_run_needs_a_workspace(self, tmp_path: Path) -> None:
+        log: list[str] = []
+
+        code, out, err = cli(
+            "run",
+            "-c",
+            str(_config(tmp_path)),
+            "--stage",
+            "ingestion",
+            executors=_executors(log),
+        )
+
+        assert code == 2
+        assert "workspace" in out + err
+        assert log == []
+
+    def test_a_stage_without_an_executor_blocks_the_run_and_records_it(
+        self, tmp_path: Path
+    ) -> None:
+        code, out, err = cli(
+            "run",
+            "-c",
+            str(_config(tmp_path)),
+            "--stage",
+            "ingestion",
+            "--workspace",
+            str(tmp_path / "ws"),
+        )
+
+        assert code == 1
+        assert "executor" in out + err and "ingestion" in out + err
+        assert "run record" in err
+        status = _status(tmp_path / "ws" / "S1" / "run-0001")
+        assert status["status"] == "blocked"
+        assert not (tmp_path / "ws" / "S1" / "run-0001" / "execution.json").exists()
+
+    def test_a_run_blocked_by_a_composition_failure_reports_its_cause(self, tmp_path: Path) -> None:
+        # Issue #602: o motivo real, não só "no executor is registered for it".
+        document = _document()
+        document["components"]["sensor_association"]["tolerances"]["diagnostic-tolerances-v1"][
+            "max_reprojection_invalid_rate"
+        ] = 2.0
+
+        code, out, err = cli(
+            "run",
+            "-c",
+            str(_config(tmp_path, document)),
+            "--stage",
+            "sensor_association",
+            "--workspace",
+            str(tmp_path / "ws"),
+        )
+
+        assert code == 1
+        text = out + err
+        assert "components.sensor_association.tolerances" in text
+        assert "max_reprojection_invalid_rate" in text
+        assert "stages.sensor_association" not in text
+
+    def test_a_failing_stage_reports_what_completed_and_leaves_a_failure_record(
+        self, tmp_path: Path
+    ) -> None:
+        executors: dict[str, Any] = _executors([])
+
+        class Boom:
+            def execute(self, request: StageRequest) -> ArtifactRef:
+                raise RuntimeError("out of memory")
+
+        executors["state_estimation"] = Boom()
+
+        code, out, err = cli(
+            "run",
+            "-c",
+            str(_config(tmp_path)),
+            "--stage",
+            "geometric_mapping",
+            "--workspace",
+            str(tmp_path / "ws"),
+            executors=executors,
+        )
+
+        assert code == 1
+        text = out + err
+        assert "state_estimation" in text and "out of memory" in text and "ingestion" in text
+        run_dir = tmp_path / "ws" / "S1" / "run-0001"
+        assert str(run_dir) in err
+        status = _status(run_dir)
+        assert status["status"] == "failed"
+        assert status["failure"]["stage_id"] == "state_estimation"
+        assert not (run_dir / "execution.json").exists()
+
+    def test_the_stage_command_targets_exactly_one_stage(self, tmp_path: Path) -> None:
+        log: list[str] = []
+
+        code, out, err = cli(
+            "stage",
+            "state_estimation",
+            "-c",
+            str(_config(tmp_path)),
+            "--workspace",
+            str(tmp_path / "ws"),
+            executors=_executors(log),
+        )
+
+        assert code == 0, out + err
+        assert log == ["ingestion", "state_estimation"]
+
+    def test_an_unknown_stage_is_reported(self, tmp_path: Path) -> None:
+        code, out, err = cli("stage", "nope", "-c", str(_config(tmp_path)), "--dry-run")
+
+        assert code == 1
+        assert "nope" in out + err
+
+
+class TestSelections:
+    def _catalog(self, tmp_path: Path) -> Path:
+        def entry(stage: str, contract: str, artifact_id: str, index: int, sequence: str) -> Any:
+            return CatalogEntry(
+                ref=ArtifactRef(
+                    stage_id=stage,
+                    contract=contract,
+                    artifact_id=artifact_id,
+                    content_hash=f"sha256:{artifact_id}",
+                ),
+                lineage=Lineage(sequence=sequence),
+                run_index=index,
+            ).to_document()
+
+        path = tmp_path / "catalog.json"
+        path.write_text(
+            json.dumps(
+                {
+                    "schema_version": "0.1.0",
+                    "entries": [
+                        entry("ingestion", "SequenceArtifact", "seq-1", 1, "S1"),
+                        entry("ingestion", "SequenceArtifact", "seq-2", 2, "S2"),
+                        entry("state_estimation", "StateEstimationRunArtifact", "traj-1", 1, "S1"),
+                    ],
+                }
+            ),
+            encoding="utf-8",
+        )
+        return path
+
+    def test_selected_runs_feed_the_execution_and_are_recorded(self, tmp_path: Path) -> None:
+        log: list[str] = []
+
+        code, out, err = cli(
+            "run",
+            "-c",
+            str(_config(tmp_path)),
+            "--stage",
+            "geometric_mapping",
+            "--select",
+            "ingestion=seq-1",
+            "--select",
+            "state_estimation=traj-1",
+            "--catalog",
+            str(self._catalog(tmp_path)),
+            "--workspace",
+            str(tmp_path / "ws"),
+            executors=_executors(log),
+        )
+
+        assert code == 0, out + err
+        assert log == ["geometric_mapping"]
+        record = json.loads(
+            (tmp_path / "ws" / "S1" / "run-0001" / "execution.json").read_text("utf-8")
+        )["document"]
+        assert record["selections"]["stages"]["ingestion"][0]["artifact_id"] == "seq-1"
+
+    def test_an_incompatible_selection_fails_before_any_stage_runs(self, tmp_path: Path) -> None:
+        log: list[str] = []
+
+        code, out, err = cli(
+            "run",
+            "-c",
+            str(_config(tmp_path)),
+            "--stage",
+            "geometric_mapping",
+            "--select",
+            "ingestion=seq-2",
+            "--select",
+            "state_estimation=traj-1",
+            "--catalog",
+            str(self._catalog(tmp_path)),
+            "--workspace",
+            str(tmp_path / "ws"),
+            executors=_executors(log),
+        )
+
+        assert code == 1
+        assert "sequence" in out + err and "seq-2" in out + err
+        assert log == []
+
+    def test_selections_need_an_explicit_catalog(self, tmp_path: Path) -> None:
+        code, out, err = cli(
+            "run",
+            "-c",
+            str(_config(tmp_path)),
+            "--stage",
+            "geometric_mapping",
+            "--select",
+            "ingestion=seq-1",
+            "--dry-run",
+        )
+
+        assert code == 2
+        assert "--catalog" in out + err
+
+    def test_a_list_and_latest_are_expressed_on_the_command_line(self, tmp_path: Path) -> None:
+        code, out, _ = cli(
+            "inspect",
+            "config",
+            "-c",
+            str(_config(tmp_path)),
+            "--select",
+            "visual_perception=perc-1,perc-2",
+            "--select",
+            "state_estimation=latest",
+            "--json",
+        )
+
+        selections = _json(out)["config"]["inputs"]["selections"]
+        assert code == 0
+        assert selections == {
+            "visual_perception": ["perc-1", "perc-2"],
+            "state_estimation": ["latest"],
+        }
+
+    def test_a_malformed_select_is_a_usage_error(self, tmp_path: Path) -> None:
+        code, out, err = cli("inspect", "config", "--select", "ingestion")
+
+        assert code == 2
+        assert "STAGE=REF" in out + err
+
+    def test_load_catalog_rejects_a_bad_document(self, tmp_path: Path) -> None:
+        bad = tmp_path / "bad.json"
+        bad.write_text(json.dumps({"schema_version": "9", "entries": []}), encoding="utf-8")
+
+        with pytest.raises(ValueError, match="schema_version"):
+            load_catalog(bad)
+        bad.write_text(json.dumps({"schema_version": "0.1.0", "entries": [{}]}), encoding="utf-8")
+        with pytest.raises(ValueError, match="entry"):
+            load_catalog(bad)
+        with pytest.raises(ValueError, match="cannot read"):
+            load_catalog(tmp_path / "missing.json")
+
+
+class TestArtifactInspectionAndValidation:
+    def _artifact(self, tmp_path: Path) -> Path:
+        import hashlib
+
+        root = tmp_path / "artifact"
+        (root / "outputs").mkdir(parents=True)
+        payload = b"hello"
+        (root / "outputs" / "data.bin").write_bytes(payload)
+        (root / "manifest.json").write_text(
+            json.dumps(
+                {
+                    "artifact_id": "seq-1",
+                    "schema_version": "0.1.0",
+                    "created_at": "2026-01-01T00:00:00+00:00",
+                    "file_inventory": [
+                        {
+                            "path": "outputs/data.bin",
+                            "size_bytes": len(payload),
+                            "content_hash": "sha256:" + hashlib.sha256(payload).hexdigest(),
+                        }
+                    ],
+                }
+            ),
+            encoding="utf-8",
+        )
+        return root
+
+    def test_inspect_summarises_a_manifest_and_its_integrity(self, tmp_path: Path) -> None:
+        code, out, _ = cli("inspect", "artifact", str(self._artifact(tmp_path)), "--json")
+
+        document = _json(out)
+        assert code == 0
+        assert document["kind"] == "artifact"
+        assert document["summary"]["artifact_id"] == "seq-1"
+        assert document["summary"]["files"] == 1
+        assert document["integrity"] == {"ok": True, "problems": []}
+
+    def test_validate_passes_an_intact_artifact_and_names_a_corrupted_file(
+        self, tmp_path: Path
+    ) -> None:
+        root = self._artifact(tmp_path)
+        assert cli("validate", str(root))[0] == 0
+
+        (root / "outputs" / "data.bin").write_bytes(b"HELLO")
+        code, out, err = cli("validate", str(root))
+
+        assert code == 1
+        assert "data.bin" in out + err
+
+    def test_validate_reports_a_missing_manifest(self, tmp_path: Path) -> None:
+        empty = tmp_path / "empty"
+        empty.mkdir()
+
+        code, out, err = cli("validate", str(empty))
+
+        assert code == 1
+        assert "manifest.json" in out + err
+
+    def test_runtime_documents_are_verified_by_digest(self, tmp_path: Path) -> None:
+        run = tmp_path / "ws" / "S1" / "run-0001"
+        cli(
+            "run",
+            "-c",
+            str(_config(tmp_path)),
+            "--stage",
+            "ingestion",
+            "--workspace",
+            str(tmp_path / "ws"),
+            executors=_executors([]),
+        )
+        for name in ("effective_config.json", "plan.json", "execution.json"):
+            assert cli("validate", str(run / name))[0] == 0, name
+
+        path = run / "plan.json"
+        document = json.loads(path.read_text("utf-8"))
+        document["document"]["stages"][0]["capability"] = "other"
+        path.write_text(json.dumps(document), encoding="utf-8")
+
+        code, out, err = cli("validate", str(path))
+        assert code == 1
+        assert "digest" in out + err
+
+    def test_an_unrecognised_file_is_explained(self, tmp_path: Path) -> None:
+        stray = tmp_path / "stray.json"
+        stray.write_text("{}", encoding="utf-8")
+
+        code, out, err = cli("validate", str(stray))
+
+        assert code == 1
+        assert "manifest.json" in out + err
+
+    def test_a_missing_path_is_reported(self, tmp_path: Path) -> None:
+        code, out, err = cli("inspect", "artifact", str(tmp_path / "nowhere"))
+
+        assert code == 1
+        assert "nowhere" in out + err
+
+
+class TestContextMapValidation:
+    """``validate`` delegates a ContextMapArtifact to the artifact capability's validator."""
+
+    def test_a_hand_edited_manifest_with_a_coherent_inventory_is_refused(
+        self, tmp_path: Path
+    ) -> None:
+        _, root = written_context_map(tmp_path)
+        assert cli("validate", str(root))[0] == 0
+
+        manifest = root / "manifest.json"
+        record = json.loads(manifest.read_text("utf-8"))
+        identity = record["content_identity"]
+        record["content_identity"] = identity[:-1] + ("1" if identity[-1] == "0" else "0")
+        manifest.write_text(json.dumps(record), encoding="utf-8")
+        code, out, err = cli("validate", str(root))
+
+        assert code == 1
+        assert "manifest.identity_mismatch" in out + err
+
+    def test_the_summary_names_the_map_and_its_content_identity(self, tmp_path: Path) -> None:
+        _, root = written_context_map(tmp_path)
+        manifest = json.loads((root / "manifest.json").read_text("utf-8"))
+
+        code, out, _ = cli("inspect", "artifact", str(root))
+        assert code == 0
+        assert f"context_map_id: {manifest['context_map_id']}" in out
+        assert f"content_identity: {manifest['content_identity']}" in out
+
+        code, out, _ = cli("validate", str(root), "--json")
+        summary = _json(out)["summary"]
+        assert code == 0
+        assert summary["context_map_id"] == manifest["context_map_id"]
+        assert summary["content_identity"] == manifest["content_identity"]
+
+    def test_full_verification_is_opt_in_and_finds_what_the_structural_level_cannot(
+        self, tmp_path: Path
+    ) -> None:
+        world, root = written_context_map(tmp_path)
+        # O dano fica num arquivo do mapa geométrico a montante: o inventário do próprio mapa
+        # continua íntegro e o nível estrutural só localiza a dependência, sem ler seus arquivos.
+        payload = world.geometry_dir / "outputs" / "geometry.bin"
+        data = bytearray(payload.read_bytes())
+        data[10] ^= 0xFF
+        payload.write_bytes(bytes(data))
+
+        assert cli("validate", str(root))[0] == 0
+        code, out, err = cli("validate", str(root), "--full")
+
+        assert code == 1
+        assert "dependency.upstream_damaged" in out + err
+
+    def test_the_warnings_of_the_validator_are_reported_without_failing_the_map(
+        self, tmp_path: Path
+    ) -> None:
+        # #635: todo mapa escrito tem avisos (evidência opcional sem hint gravado); a CLI os mostra
+        # à parte dos problemas, e eles não mudam o exit code.
+        _, root = written_context_map(tmp_path)
+
+        for flags, level in (((), ValidationLevel.STRUCTURAL), (("--full",), ValidationLevel.FULL)):
+            warnings = _validator_warnings(root, level)
+            code, out, _ = cli("validate", str(root), *flags, "--json")
+            text_code, text, _ = cli("validate", str(root), *flags)
+
+            assert warnings, "the written map is expected to carry optional-evidence warnings"
+            assert (code, text_code) == (0, 0), flags
+            assert _json(out)["integrity"] == {"ok": True, "problems": [], "warnings": warnings}
+            assert text.splitlines()[0].endswith(": ok")
+            assert [line.strip() for line in text.splitlines()[1:]] == [
+                f"warning: {warning}" for warning in warnings
+            ]
+
+    def test_missing_optional_evidence_is_one_more_warning_not_a_failure(
+        self, tmp_path: Path
+    ) -> None:
+        world, root = written_context_map(tmp_path)
+        before = _validator_warnings(root, ValidationLevel.STRUCTURAL)
+        shutil.rmtree(world.fusion_dir)
+
+        code, out, _ = cli("validate", str(root), "--json")
+
+        integrity = _json(out)["integrity"]
+        assert code == 0
+        assert integrity["problems"] == []
+        assert integrity["warnings"] == _validator_warnings(root, ValidationLevel.STRUCTURAL)
+        assert len(integrity["warnings"]) == len(before) + 1
+
+    def test_inspect_lists_the_warnings_of_the_validator(self, tmp_path: Path) -> None:
+        _, root = written_context_map(tmp_path)
+
+        code, out, _ = cli("inspect", "artifact", str(root), "--json")
+        text_code, text, _ = cli("inspect", "artifact", str(root))
+
+        warnings = _validator_warnings(root, ValidationLevel.STRUCTURAL)
+        assert (code, text_code) == (0, 0)
+        assert _json(out)["integrity"]["warnings"] == warnings
+        assert "  integrity: ok" in text.splitlines()
+        assert all(f"    warning: {warning}" in text.splitlines() for warning in warnings)
+
+    def test_a_map_with_an_error_still_fails_and_reports_its_warnings(self, tmp_path: Path) -> None:
+        world, root = written_context_map(tmp_path)
+        payload = world.geometry_dir / "outputs" / "geometry.bin"
+        data = bytearray(payload.read_bytes())
+        data[10] ^= 0xFF
+        payload.write_bytes(bytes(data))
+
+        code, out, _ = cli("validate", str(root), "--full", "--json")
+        text_code, text, _ = cli("validate", str(root), "--full")
+
+        integrity = _json(out)["integrity"]
+        warnings = _validator_warnings(root, ValidationLevel.FULL)
+        assert (code, text_code) == (1, 1)
+        assert integrity["ok"] is False
+        assert [item.split(":")[0] for item in integrity["problems"]] == [
+            "dependency.upstream_damaged"
+        ]
+        assert warnings and integrity["warnings"] == warnings
+        assert all(f"    warning: {warning}" in text.splitlines() for warning in warnings)
+
+
+def _validator_warnings(root: Path, level: ValidationLevel) -> list[str]:
+    """The warnings the artifact capability's own validator reports, as the CLI formats them."""
+    report = validate_context_map_artifact(root, level=level)
+    return [
+        f"{finding.code}: {finding.message}"
+        for finding in report.findings
+        if finding.severity is Severity.WARNING
+    ]
+
+
+class TestThinness:
+    def test_the_cli_names_no_backend(self) -> None:
+        source = Path(sys.modules["contextmap.runtime.cli"].__file__ or "").read_text("utf-8")
+        backend_ids = {b for spec in COMPONENTS.values() for b in spec.backends}
+
+        named = [backend for backend in backend_ids if f'"{backend}"' in source]
+        assert named == []
+
+    def test_importing_the_cli_loads_no_heavy_sdk(self) -> None:
+        code = (
+            "import sys; import contextmap.runtime.cli; "
+            "heavy = [m for m in ('torch','transformers','rosbags','numpy') if m in sys.modules]; "
+            "print(','.join(heavy))"
+        )
+        src = Path(__file__).resolve().parents[2] / "src"
+
+        result = subprocess.run(
+            [sys.executable, "-c", code],
+            capture_output=True,
+            text=True,
+            check=True,
+            env={"PYTHONPATH": str(src), "PATH": ""},
+        )
+
+        assert result.stdout.strip() == ""
+
+    def test_the_module_entry_point_runs(self) -> None:
+        src = Path(__file__).resolve().parents[2] / "src"
+
+        result = subprocess.run(
+            [sys.executable, "-m", "contextmap", "inspect", "plan", "--json"],
+            capture_output=True,
+            text=True,
+            check=False,
+            env={"PYTHONPATH": str(src), "PATH": ""},
+        )
+
+        assert result.returncode == 0, result.stderr
+        assert json.loads(result.stdout)["plan"]["preset"] == "canonical/1"
+
+    def test_help_documents_every_command(self) -> None:
+        code, text, _ = cli("--help")
+
+        assert code == 0
+        for command in ("run", "stage", "inspect", "validate"):
+            assert command in text
+
+
+class TestLifecycleCommands:
+    def _world_executors(self, world: World) -> dict[str, Any]:
+        from contextmap.runtime.components import CANONICAL_PRESET
+
+        return {
+            s.stage_id: world.executor(s.stage_id, s.output or "", source=not s.inputs)
+            for s in CANONICAL_PRESET.stages
+        }
+
+    def _resumable(
+        self, tmp_path: Path, *, fail_at: str = "geometric_mapping"
+    ) -> tuple[World, list[str]]:
+        world = World()
+        world.fail_at = fail_at
+        args = [
+            "run",
+            "-c",
+            str(_config(tmp_path)),
+            "--stage",
+            "semantic_fusion",
+            "--workspace",
+            str(tmp_path / "ws"),
+            "--reuse-index",
+            str(tmp_path / "index"),
+            "--code-identity",
+            "code-1",
+        ]
+        code, _, _ = cli(
+            *args,
+            executors=self._world_executors(world),
+            verifier=lambda ref: ref.artifact_id in world.existing,
+            module_available=_ready,
+        )
+        assert code == 1
+        world.fail_at = None
+        world.runs.clear()
+        return world, args
+
+    def test_inspect_run_shows_the_failure_record_and_the_trail(self, tmp_path: Path) -> None:
+        self._resumable(tmp_path)
+        run_dir = str(tmp_path / "ws" / "S1" / "run-0001")
+
+        code, out, _ = cli("inspect", "run", run_dir, "--events")
+
+        assert code == 0
+        assert "failed" in out and "geometric_mapping" in out and "execution" in out
+        assert "stage_failed" in out and "run_failed" in out and "code-1" in out
+
+    def test_inspect_run_json_carries_every_event_and_the_environment(self, tmp_path: Path) -> None:
+        self._resumable(tmp_path)
+
+        code, out, _ = cli("inspect", "run", str(tmp_path / "ws" / "S1" / "run-0001"), "--json")
+
+        document = _json(out)
+        assert code == 0
+        assert document["status"] == "failed"
+        assert document["failure"]["category"] == "execution"
+        assert [e["kind"] for e in document["events"]][:2] == ["run_planned", "run_started"]
+        assert "python" in document["environment"]
+
+    def test_inspect_run_reports_a_blocked_run_with_its_problems(self, tmp_path: Path) -> None:
+        cli(
+            "run",
+            "-c",
+            str(_config(tmp_path)),
+            "--stage",
+            "ingestion",
+            "--workspace",
+            str(tmp_path / "ws"),
+        )
+
+        code, out, _ = cli("inspect", "run", str(tmp_path / "ws" / "S1" / "run-0001"))
+
+        assert code == 0
+        assert "blocked" in out and "executor" in out
+
+    def test_validate_checks_a_run_record_and_catches_a_corrupt_event_log(
+        self, tmp_path: Path
+    ) -> None:
+        self._resumable(tmp_path)
+        run_dir = tmp_path / "ws" / "S1" / "run-0001"
+        assert cli("validate", str(run_dir))[0] == 0
+
+        events = run_dir / "events.jsonl"
+        lines = events.read_text("utf-8").splitlines()
+        lines[1] = "{broken"
+        events.write_text("\n".join(lines) + "\n", encoding="utf-8")
+        code, out, err = cli("validate", str(run_dir))
+
+        assert code == 1
+        assert "line 2" in out + err
+
+    def test_resume_continues_from_the_failed_stage_as_a_new_run(self, tmp_path: Path) -> None:
+        world, args = self._resumable(tmp_path)
+
+        code, out, err = cli(
+            *args,
+            "--resume",
+            "run-0001",
+            executors=self._world_executors(world),
+            verifier=lambda ref: ref.artifact_id in world.existing,
+            module_available=_ready,
+        )
+
+        assert code == 0, out + err
+        assert world.runs == ["geometric_mapping", "sensor_association", "semantic_fusion"]
+        assert "resumed run-0001" in out
+        new = tmp_path / "ws" / "S1" / "run-0002"
+        assert _status(new)["resumed_from"] == "run-0001"
+        assert _status(tmp_path / "ws" / "S1" / "run-0001")["status"] == "failed"
+
+    def test_resuming_a_completed_run_is_refused_and_creates_no_run(self, tmp_path: Path) -> None:
+        world, args = self._resumable(tmp_path)
+        options: dict[str, Any] = {
+            "executors": self._world_executors(world),
+            "verifier": lambda ref: ref.artifact_id in world.existing,
+            "module_available": _ready,
+        }
+        assert cli(*args, "--resume", "run-0001", **options)[0] == 0
+
+        code, out, err = cli(*args, "--resume", "run-0002", **options)
+
+        assert code == 1
+        assert "nothing to resume" in out + err
+        assert not (tmp_path / "ws" / "S1" / "run-0003").exists()
+
+    def test_resume_and_reuse_flags_have_explicit_requirements(self, tmp_path: Path) -> None:
+        base = [
+            "run",
+            "-c",
+            str(_config(tmp_path)),
+            "--stage",
+            "ingestion",
+            "--workspace",
+            str(tmp_path / "ws"),
+        ]
+
+        no_index = cli(*base, "--resume", "run-0001", executors=_executors([]))
+        no_verifier = cli(*base, "--reuse-index", str(tmp_path / "i"), "--code-identity", "c")
+        no_identity = cli(*base, "--reuse-index", str(tmp_path / "i"), verifier=lambda ref: True)
+        force_alone = cli(*base, "--force", "ingestion")
+
+        for code, out, err in (no_index, no_verifier, no_identity, force_alone):
+            assert code == 2, out + err
+        assert "--reuse-index" in no_index[1] + no_index[2]
+        assert "verifier" in no_verifier[1] + no_verifier[2]
+        assert "--code-identity" in no_identity[1] + no_identity[2]
+        assert "--reuse-index" in force_alone[1] + force_alone[2]
+
+    def test_an_unknown_run_to_resume_is_reported(self, tmp_path: Path) -> None:
+        world = World()
+
+        code, out, err = cli(
+            "run",
+            "-c",
+            str(_config(tmp_path)),
+            "--stage",
+            "ingestion",
+            "--workspace",
+            str(tmp_path / "ws"),
+            "--reuse-index",
+            str(tmp_path / "i"),
+            "--code-identity",
+            "c",
+            "--resume",
+            "run-0009",
+            verifier=lambda ref: ref.artifact_id in world.existing,
+            executors=self._world_executors(world),
+        )
+
+        assert code == 1
+        assert "run-0009" in out + err
+
+    def test_an_interrupt_is_a_cancelled_run_with_the_conventional_exit_code(
+        self, tmp_path: Path
+    ) -> None:
+        world = World()
+        world.fail_at = "state_estimation"
+        world.fail_with = KeyboardInterrupt()
+
+        code, out, err = cli(
+            "run",
+            "-c",
+            str(_config(tmp_path)),
+            "--stage",
+            "geometric_mapping",
+            "--workspace",
+            str(tmp_path / "ws"),
+            executors=self._world_executors(world),
+        )
+
+        assert code == 130
+        assert "cancelled" in out + err
+        assert _status(tmp_path / "ws" / "S1" / "run-0001")["status"] == "cancelled"
+
+    def test_a_secret_never_reaches_the_output_or_the_run_record(self, tmp_path: Path) -> None:
+        secret = "s3cr3t-token-value"
+        document = _document()
+        document["components"]["semantic_interpretation"]["interpreter"] = {
+            "backend": "gemini",
+            "gemini": {
+                "model": "g",
+                "timeout_s": 1,
+                "max_retries": 1,
+                "temperature": 0.0,
+                "prompt_policy": {"scene": "scene/v1", "region": "region/v1"},
+                "view_policy": {"region_views": ["tight_crop"]},
+            },
+        }
+        world = World()
+        world.fail_at = "visual_perception"
+        world.fail_with = RuntimeError(f"401 for key {secret}")
+
+        code, out, err = cli(
+            "run",
+            "-c",
+            str(_config(tmp_path, document)),
+            "--stage",
+            "visual_perception",
+            "--workspace",
+            str(tmp_path / "ws"),
+            executors=self._world_executors(world),
+            environ={"GEMINI_API_KEY": secret},
+        )
+
+        assert code == 1
+        assert secret not in out + err
+        for path in (tmp_path / "ws" / "S1" / "run-0001").iterdir():
+            assert secret not in path.read_text("utf-8"), path.name
+
+    def test_the_dry_run_predicts_what_reuse_would_do(self, tmp_path: Path) -> None:
+        world, _ = self._resumable(tmp_path)
+
+        code, out, _ = cli(
+            "run",
+            "-c",
+            str(_config(tmp_path)),
+            "--stage",
+            "semantic_fusion",
+            "--dry-run",
+            "--reuse-index",
+            str(tmp_path / "index"),
+            "--code-identity",
+            "code-1",
+            "--json",
+            # O executor de ingestion nomeia a fonte: sem ele a previsão não saberia qual bag.
+            executors=self._world_executors(world),
+            verifier=lambda ref: ref.artifact_id in world.existing,
+            module_available=_ready,
+        )
+
+        reuse = _json(out)["reuse"]
+        assert code == 0
+        assert reuse["ingestion"]["kind"] == "reused"
+        assert reuse["geometric_mapping"]["kind"] == "recomputed"
+
+
+class TestIngestCommand:
+    def _args(self, tmp_path: Path, *extra: str) -> list[str]:
+        source = tmp_path / "recording.bag"
+        source.write_bytes(b"raw-source-bytes")
+        return [
+            "ingest",
+            "-c",
+            str(_config(tmp_path)),
+            "--source",
+            str(source),
+            "--sequence-name",
+            "corridor-02",
+            "--topic",
+            "rgb=/camera",
+            "--topic",
+            "imu=/imu",
+            "--clock-id",
+            "fake:header",
+            "--sync-reference",
+            "image",
+            "--sync-tolerance-ns",
+            "100000000",
+            "--workspace",
+            str(tmp_path / "ws"),
+            *extra,
+        ]
+
+    def _published(self, tmp_path: Path) -> list[Path]:
+        root = tmp_path / "ws" / "artifacts" / "ingestion-corridor-02"
+        return [root] if (root / "manifest.json").is_file() else []
+
+    def test_the_preflight_reports_readiness_without_reading_or_writing(
+        self, tmp_path: Path
+    ) -> None:
+        code, out, _ = cli(
+            *self._args(tmp_path, "--preflight", "--json"), adapter_factory=fake_factory()
+        )
+
+        document = _json(out)
+        assert code == 0 and document["ok"] is True
+        assert document["capabilities"]["rgb"] is True
+        assert not (tmp_path / "ws").exists()
+
+    def test_a_blocked_preflight_lists_the_problems_and_exits_non_zero(
+        self, tmp_path: Path
+    ) -> None:
+        args = self._args(tmp_path, "--preflight", "--required", "lidar")
+
+        code, out, err = cli(*args, adapter_factory=fake_factory())
+
+        assert code == 1
+        assert "lidar" in out + err and "BLOCKED" in out
+
+    def test_it_publishes_a_sequence_artifact_and_reports_progress(self, tmp_path: Path) -> None:
+        code, out, err = cli(*self._args(tmp_path), adapter_factory=fake_factory())
+
+        assert code == 0, out + err
+        assert "ingestion completed: corridor-02" in out
+        assert "observations:" in out and "artifact:" in out
+        assert "ingestion.reading-source" in err and "ingestion.completed" in err
+        published = self._published(tmp_path)
+        assert len(published) == 1 and (published[0] / "manifest.json").is_file()
+        manifest = json.loads((published[0] / "manifest.json").read_text(encoding="utf-8"))
+        assert manifest["artifact_id"].startswith("ingestion-")
+
+    def test_the_json_result_carries_the_events_and_the_identity(self, tmp_path: Path) -> None:
+        code, out, err = cli(*self._args(tmp_path, "--json"), adapter_factory=fake_factory())
+
+        document = _json(out)
+        assert code == 0, out + err
+        assert document["status"] == "completed"
+        assert document["request_identity"].startswith("sha256:")
+        assert document["events"][0]["kind"] == "ingestion.planned"
+        assert document["metrics"]["observations_read"] == 6
+
+    def test_an_equivalent_ingestion_replaces_its_existing_artifact(self, tmp_path: Path) -> None:
+        first_code, first_out, first_err = cli(
+            *self._args(tmp_path, "--json"), adapter_factory=fake_factory()
+        )
+        built: list[Any] = []
+        second_code, second_out, second_err = cli(
+            *self._args(tmp_path, "--json"), adapter_factory=fake_factory(built=built)
+        )
+
+        first, second = _json(first_out), _json(second_out)
+        assert first_code == second_code == 0, first_err + second_err
+        assert second["reused"] is False
+        assert second["artifact_id"] == first["artifact_id"]
+        assert second["artifact_path"] == first["artifact_path"]
+        assert any(adapter.read_calls for adapter in built)
+        assert len(self._published(tmp_path)) == 1
+
+    def test_a_failed_replacement_keeps_the_previous_artifact_intact(self, tmp_path: Path) -> None:
+        first_code, _first_out, first_err = cli(
+            *self._args(tmp_path, "--json"), adapter_factory=fake_factory()
+        )
+        artifact = self._published(tmp_path)[0]
+        previous_manifest = (artifact / "manifest.json").read_bytes()
+
+        second_code, second_out, second_err = cli(
+            *self._args(tmp_path, "--json"), adapter_factory=fake_factory(fail_after=2)
+        )
+
+        assert first_code == 0, first_err
+        assert second_code == 1, second_out + second_err
+        assert (artifact / "manifest.json").read_bytes() == previous_manifest
+        assert self._published(tmp_path) == [artifact]
+        assert not list(artifact.parent.glob(".replacement-*"))
+
+    def test_a_cancelled_replacement_keeps_the_previous_artifact_intact(
+        self, tmp_path: Path
+    ) -> None:
+        first_code, _first_out, first_err = cli(
+            *self._args(tmp_path, "--json"), adapter_factory=fake_factory()
+        )
+        artifact = self._published(tmp_path)[0]
+        previous_manifest = (artifact / "manifest.json").read_bytes()
+
+        def interrupt(index: int) -> None:
+            if index == 1:
+                raise KeyboardInterrupt
+
+        second_code, second_out, second_err = cli(
+            *self._args(tmp_path), adapter_factory=fake_factory(on_observation=interrupt)
+        )
+
+        assert first_code == 0, first_err
+        assert second_code == 130, second_out + second_err
+        assert (artifact / "manifest.json").read_bytes() == previous_manifest
+        assert self._published(tmp_path) == [artifact]
+
+    def test_a_failure_names_the_category_and_the_phase_and_publishes_nothing(
+        self, tmp_path: Path
+    ) -> None:
+        code, out, _ = cli(*self._args(tmp_path), adapter_factory=fake_factory(fail_after=2))
+
+        assert code == 1
+        assert "source during reading-source" in out and "bag corrupt" in out
+        assert self._published(tmp_path) == []
+
+    def test_an_interrupt_exits_with_the_conventional_code_and_publishes_nothing(
+        self, tmp_path: Path
+    ) -> None:
+        def interrupt(index: int) -> None:
+            if index == 1:
+                raise KeyboardInterrupt
+
+        code, out, err = cli(
+            *self._args(tmp_path), adapter_factory=fake_factory(on_observation=interrupt)
+        )
+
+        assert code == 130 and "cancelled" in out + err
+        assert self._published(tmp_path) == []
+
+    def test_a_workspace_is_required(self, tmp_path: Path) -> None:
+        args = self._args(tmp_path)
+        position = args.index("--workspace")
+        without = args[:position] + args[position + 2 :]
+
+        code, out, err = cli(*without, adapter_factory=fake_factory())
+
+        assert code == 2 and "workspace" in out + err
+
+    def test_a_selected_adapter_is_required(self, tmp_path: Path) -> None:
+        document = _document()
+        del document["components"]["ingestion"]
+        bare = tmp_path / "bare.json"
+        bare.write_text(json.dumps(document), encoding="utf-8")
+        args = self._args(tmp_path)
+        args[args.index("-c") + 1] = str(bare)
+
+        code, out, err = cli(*args, adapter_factory=fake_factory())
+
+        assert code == 2
+        assert "components.ingestion.source_adapter.backend" in out + err
+
+    def test_an_unknown_topic_key_lists_the_known_ones(self, tmp_path: Path) -> None:
+        code, out, err = cli(
+            *self._args(tmp_path, "--topic", "thermal=/cam"), adapter_factory=fake_factory()
+        )
+
+        assert code == 1
+        assert "thermal" in out + err and "lidar" in out + err
+
+    def test_a_missing_optional_module_is_explained_with_its_install_hint(
+        self, tmp_path: Path
+    ) -> None:
+        code, out, err = cli(*self._args(tmp_path), module_available=lambda name: name != "rosbags")
+
+        assert code == 1
+        assert "rosbags" in out + err and "contextmap[ros1]" in out + err
+        assert self._published(tmp_path) == []
+
+    def test_the_adapter_family_is_not_a_command_line_choice(self) -> None:
+        # Sem `adapter_factory`, a CLI compõe o backend selecionado na configuração.
+        source = Path(sys.modules["contextmap.runtime.cli"].__file__ or "").read_text("utf-8")
+
+        assert "--source-type" not in source and "--adapter" not in source
+
+    def test_a_malformed_topic_flag_is_a_usage_error(self, tmp_path: Path) -> None:
+        code, out, err = cli(
+            *self._args(tmp_path, "--topic", "rgb"), adapter_factory=fake_factory()
+        )
+
+        assert code == 2 and "KEY=TOPIC" in out + err
+
+
+class TestContextCommands:
+    """Issue #502: the incremental lifecycle through the installed CLI, over the runtime APIs."""
+
+    FRAMES = '{"kind": "frame_range", "start_frame_index": 0, "end_frame_index": 10}'
+    LATER = '{"kind": "frame_range", "start_frame_index": 10, "end_frame_index": 20}'
+
+    @staticmethod
+    def _executors(world: World) -> dict[str, Any]:
+        from contextmap.runtime.components import CANONICAL_PRESET
+
+        fakes = {
+            s.stage_id: Located(world.executor(s.stage_id, s.output or ""))
+            for s in CANONICAL_PRESET.stages
+        }
+        return {
+            **fakes,
+            "ingestion": SyntheticIngestion(),
+            "state_estimation": state_estimation_executor(),
+            "geometric_mapping": geometric_mapping_executor(),
+        }
+
+    def _cli(
+        self, tmp_path: Path, world: World, *argv: str, maps_root: bool = True
+    ) -> tuple[int, dict[str, Any], str]:
+        maps = ["--maps-root", str(tmp_path / "maps")] if maps_root else []
+        code, out, err = cli(
+            *argv,
+            "-c",
+            str(_config(tmp_path)),
+            "--workspace",
+            str(tmp_path / "ws"),
+            *maps,
+            "--json",
+            executors=self._executors(world),
+        )
+        return code, (_json(out) if out.strip() else {}), out + err
+
+    def _branch(
+        self,
+        tmp_path: Path,
+        world: World,
+        target: str = "geometric_mapping",
+        *,
+        maps_root: bool = True,
+    ) -> int:
+        self._cli(tmp_path, world, "run", "--stage", target, maps_root=maps_root)
+        code, _, _ = self._cli(
+            tmp_path,
+            world,
+            "context",
+            "branch",
+            "create",
+            "corridor",
+            "--from-run",
+            "run-0001",
+            maps_root=maps_root,
+        )
+        return code
+
+    def _context_run(
+        self, tmp_path: Path, world: World, selection: str, *, maps_root: bool = True
+    ) -> dict[str, Any]:
+        code, document, text = self._cli(
+            tmp_path,
+            world,
+            "context",
+            "run",
+            "--branch",
+            "corridor",
+            "--set",
+            f"inputs.observation_selection={selection}",
+            maps_root=maps_root,
+        )
+        assert code == 0, text
+        return document
+
+    def test_a_branch_is_created_over_the_foundation_of_a_run(self, tmp_path: Path) -> None:
+        world = World()
+        self._cli(tmp_path, world, "run", "--stage", "geometric_mapping")
+
+        code, document, text = self._cli(
+            tmp_path, world, "context", "branch", "create", "corridor", "--from-run", "run-0001"
+        )
+
+        assert code == 0, text
+        assert document["branch"] == {"name": "corridor", "dataset": "S1", "revision": 0}
+        assert document["foundation"]["identity"].startswith("sha256:")
+        assert (tmp_path / "ws" / "S1" / "branches" / "corridor" / "branch.json").is_file()
+
+    def test_a_run_without_a_map_cannot_found_a_branch(self, tmp_path: Path) -> None:
+        code = self._branch(tmp_path, World(), target="state_estimation")
+
+        assert code == 1
+
+    def test_context_runs_append_to_the_branch_and_report_each_stage(self, tmp_path: Path) -> None:
+        world = World()
+        assert self._branch(tmp_path, world) == 0
+
+        first = self._context_run(tmp_path, world, self.FRAMES)
+        second = self._context_run(tmp_path, world, self.LATER)
+
+        assert first["branch"] == {"name": "corridor", "revision": 1}
+        assert second["branch"] == {"name": "corridor", "revision": 2}
+        assert first["stages"] == {
+            # Sem percepção selecionada, a descoberta de regiões também executa.
+            "region_perception": "produced",
+            "visual_perception": "produced",
+            "semantic_interpretation": "produced",
+            "semantic_scoring": "not selected",
+            "sensor_association": "produced",
+            "point_representation": "not selected",
+        }
+        assert first["context_run"]["context_run_id"] != second["context_run"]["context_run_id"]
+        assert (
+            first["context_run"]["foundation"]["identity"]
+            == (second["context_run"]["foundation"]["identity"])
+        )
+
+    def test_a_build_materializes_a_revision_and_names_its_map(self, tmp_path: Path) -> None:
+        world = World()
+        self._branch(tmp_path, world)
+        self._context_run(tmp_path, world, self.FRAMES)
+        self._context_run(tmp_path, world, self.LATER)
+
+        code, latest, text = self._cli(
+            tmp_path, world, "context", "build", "--branch", "corridor", "--code-identity", "c1"
+        )
+        _, earlier, _ = self._cli(
+            tmp_path,
+            world,
+            "context",
+            "build",
+            "--branch",
+            "corridor",
+            "--revision",
+            "1",
+            "--code-identity",
+            "c1",
+        )
+
+        assert code == 0, text
+        assert len(latest["context_build"]["context_run_ids"]) == 2
+        assert latest["context_map_id"].startswith("context_map-")
+        assert Path(latest["run_directory"], "context_build.json").is_file()
+        assert earlier["context_build"]["revision"] == 1
+        assert (
+            earlier["context_build"]["context_build_id"]
+            != (latest["context_build"]["context_build_id"])
+        )
+
+    def test_each_build_publishes_an_isolated_map_under_the_maps_root(self, tmp_path: Path) -> None:
+        world = World()
+        self._branch(tmp_path, world)
+        self._context_run(tmp_path, world, self.FRAMES)
+
+        _, first, text = self._cli(
+            tmp_path, world, "context", "build", "--branch", "corridor", "--code-identity", "c1"
+        )
+        self._context_run(tmp_path, world, self.LATER)
+        _, second, _ = self._cli(
+            tmp_path, world, "context", "build", "--branch", "corridor", "--code-identity", "c1"
+        )
+
+        maps = tmp_path / "maps"
+        assert first["map"] == {"index": 1, "location": str(maps / "corridor" / "000001")}, text
+        assert second["map"] == {"index": 2, "location": str(maps / "corridor" / "000002")}
+        assert (maps / "corridor" / "000001").is_dir()
+        assert (maps / "corridor" / "000002").is_dir()
+        # O maps root só contém o mapa; nada do run store vaza para lá.
+        assert sorted(p.name for p in maps.iterdir()) == ["corridor"]
+        assert sorted(p.name for p in (maps / "corridor").iterdir()) == ["000001", "000002"]
+
+    def test_a_build_publishes_by_map_id_without_an_explicit_maps_root(
+        self, tmp_path: Path
+    ) -> None:
+        # Sem --maps-root, o build resolve um maps root default (irmão do run store, `maps/`) e
+        # ainda publica por map_id, em vez de manter o context_map sob o run.
+        world = World()
+        assert self._branch(tmp_path, world, maps_root=False) == 0
+        self._context_run(tmp_path, world, self.FRAMES, maps_root=False)
+
+        _, document, text = self._cli(
+            tmp_path,
+            world,
+            "context",
+            "build",
+            "--branch",
+            "corridor",
+            "--code-identity",
+            "c1",
+            maps_root=False,
+        )
+
+        maps = tmp_path / "maps"  # <workspace>.parent/maps, com workspace = tmp_path/ws
+        assert document["map"] == {"index": 1, "location": str(maps / "corridor" / "000001")}, text
+        assert (maps / "corridor" / "000001").is_dir()
+
+    def test_branch_create_reserves_the_map_id_without_an_explicit_maps_root(
+        self, tmp_path: Path
+    ) -> None:
+        world = World()
+
+        assert self._branch(tmp_path, world, maps_root=False) == 0
+
+        assert (tmp_path / "maps" / "corridor").is_dir()
+
+    def test_inspect_branch_lists_the_builds_of_a_map(self, tmp_path: Path) -> None:
+        world = World()
+        self._branch(tmp_path, world)
+        self._context_run(tmp_path, world, self.FRAMES)
+        self._cli(
+            tmp_path, world, "context", "build", "--branch", "corridor", "--code-identity", "c1"
+        )
+
+        _, document, text = self._cli(tmp_path, world, "context", "inspect", "branch", "corridor")
+
+        assert [entry["index"] for entry in document["builds"]] == [1], text
+        assert document["builds"][0]["context_map"]["location"] == "corridor/000001"
+
+    def test_a_build_records_the_code_that_materializes_it(self, tmp_path: Path) -> None:
+        world = World()
+        self._branch(tmp_path, world)
+        self._context_run(tmp_path, world, self.FRAMES)
+
+        code, _, text = self._cli(tmp_path, world, "context", "build", "--branch", "corridor")
+
+        assert code == 2
+        assert "--code-identity" in text
+
+    def test_an_unknown_branch_is_reported(self, tmp_path: Path) -> None:
+        world = World()
+        self._branch(tmp_path, world)
+
+        code, _, text = self._cli(tmp_path, world, "context", "run", "--branch", "nope")
+
+        assert code == 1
+        assert "nope" in text
+
+    def test_a_context_run_blocked_by_a_composition_failure_reports_its_cause(
+        self, tmp_path: Path
+    ) -> None:
+        # Issue #602 também nos comandos de contexto: sem provider, a semântica não é composta, e
+        # o bloqueio nomeia o componente e o motivo, não o genérico "no executor is registered".
+        world = World()
+        self._branch(tmp_path, world)
+        executors = self._executors(world)
+        del executors["semantic_interpretation"]
+
+        code, out, err = cli(
+            "context",
+            "run",
+            "--branch",
+            "corridor",
+            "-c",
+            str(_config(tmp_path)),
+            "--workspace",
+            str(tmp_path / "ws"),
+            executors=executors,
+        )
+
+        assert code == 1
+        text = out + err
+        # O intérprete é o componente de `semantic_interpretation` sem loader empacotado;
+        # a descoberta de regiões pertence agora a `region_perception`, outro estágio.
+        assert "components.semantic_interpretation.interpreter" in text
+        assert "no bundled model loader" in text
+        assert "stages.semantic_interpretation" not in text
+
+    def _selected_perception(self, tmp_path: Path, sequence_id: str) -> tuple[dict[str, str], Path]:
+        """Catalog independent regional, visual and semantic producers over FRAMES."""
+        from runtime_perception import publish_selected_evidence
+
+        selected = publish_selected_evidence(
+            tmp_path / "ws",
+            sequence_id=sequence_id,
+            selection=json.loads(self.FRAMES),
+            run_index=9,
+        )
+        entries = []
+        producer_ids = {}
+        for stage, (ref,) in selected.items():
+            producer_ids[stage] = ref.artifact_id
+            upstream = {"ingestion": [sequence_id]}
+            if stage != "region_perception":
+                upstream["region_perception"] = [selected["region_perception"][0].artifact_id]
+            entries.append(
+                {
+                    "stage_id": stage,
+                    "contract": ref.contract,
+                    "artifact_id": ref.artifact_id,
+                    "content_hash": ref.content_hash,
+                    "location": ref.location,
+                    "run_index": 9,
+                    "lineage": {"upstream": upstream},
+                }
+            )
+        catalog = tmp_path / "catalog.json"
+        catalog.write_text(json.dumps({"schema_version": "0.1.0", "entries": entries}))
+        return producer_ids, catalog
+
+    def test_a_context_run_over_selected_producers_only_associates(self, tmp_path: Path) -> None:
+        # Os braços reusam os três produtores sem repetir a inferência estocástica.
+        world = World()
+        self._branch(tmp_path, world)
+        branch = json.loads(
+            (tmp_path / "ws" / "S1" / "branches" / "corridor" / "branch.json").read_text()
+        )
+        producers, catalog = self._selected_perception(
+            tmp_path, branch["foundation"]["sequence"]["artifact_id"]
+        )
+        executors = self._executors(world)
+        selected_arguments: list[str] = []
+        for stage, producer_id in producers.items():
+            del executors[stage]
+            selected_arguments.extend(("--select", f"{stage}={producer_id}"))
+        code, out, err = cli(
+            "context",
+            "run",
+            "--branch",
+            "corridor",
+            "-c",
+            str(_config(tmp_path)),
+            "--workspace",
+            str(tmp_path / "ws"),
+            "--set",
+            f"inputs.observation_selection={self.FRAMES}",
+            *selected_arguments,
+            "--catalog",
+            str(catalog),
+            "--json",
+            executors=executors,
+        )
+        assert code == 0, out + err
+        document = _json(out)
+        assert document["stages"] == {
+            "region_perception": "reused",
+            "visual_perception": "reused",
+            "semantic_interpretation": "reused",
+            "semantic_scoring": "not selected",
+            "sensor_association": "produced",
+            "point_representation": "not selected",
+        }
+        reused = {
+            item["stage_id"]: item["artifact_id"]
+            for item in document["context_run"]["artifacts"]
+            if item["disposition"] == "reused"
+        }
+        assert reused == producers
+        assert document["context_run"]["observation_selection"] == json.loads(self.FRAMES)
+
+    def test_a_context_run_refuses_to_select_a_stage_it_always_runs(self, tmp_path: Path) -> None:
+        world = World()
+        self._branch(tmp_path, world)
+
+        code, _, text = self._cli(
+            tmp_path,
+            world,
+            "context",
+            "run",
+            "--branch",
+            "corridor",
+            "--select",
+            "sensor_association=anything",
+            "--catalog",
+            str(tmp_path / "catalog.json"),
+        )
+
+        assert code == 2
+        assert "may select only" in text
+        assert not (tmp_path / "ws" / "S1" / "run-0002").exists()
+
+    def test_a_context_run_selection_needs_a_catalog(self, tmp_path: Path) -> None:
+        world = World()
+        self._branch(tmp_path, world)
+
+        code, _, text = self._cli(
+            tmp_path,
+            world,
+            "context",
+            "run",
+            "--branch",
+            "corridor",
+            "--select",
+            "visual_perception=anything",
+        )
+
+        assert code == 2
+        assert "--catalog" in text
+
+    def test_a_context_run_does_not_require_the_modules_a_declared_provider_replaces(
+        self, tmp_path: Path
+    ) -> None:
+        # Issue #659: o preflight do run real respeita os runtimes providos, como a composição.
+        world = World()
+        self._branch(tmp_path, world)
+        document = _document()
+        document["resources"]["providers"] = {
+            "visual_features.dense": "runtime_provider_fixtures:load_dense_features",
+            "visual_features.region": "runtime_provider_fixtures:load_region_features",
+        }
+
+        code, out, err = cli(
+            "context",
+            "run",
+            "--branch",
+            "corridor",
+            "-c",
+            str(_config(tmp_path, document)),
+            "--workspace",
+            str(tmp_path / "ws"),
+            "--set",
+            f"inputs.observation_selection={self.FRAMES}",
+            executors=self._executors(world),
+            module_available=lambda name: name not in {"torch", "transformers", "PIL"},
+        )
+
+        assert code == 0, out + err
+
+    def test_a_build_blocked_by_a_composition_failure_reports_its_cause(
+        self, tmp_path: Path
+    ) -> None:
+        world = World()
+        self._branch(tmp_path, world)
+        self._context_run(tmp_path, world, self.FRAMES)
+        document = _document()
+        support = document["components"]["semantic_fusion"]["support"]
+        support["geometry-jaccard-support-v1"]["min_overlap"] = 2.0
+        executors = self._executors(world)
+        del executors["semantic_fusion"]
+
+        code, out, err = cli(
+            "context",
+            "build",
+            "--branch",
+            "corridor",
+            "--code-identity",
+            "c1",
+            "-c",
+            str(_config(tmp_path, document)),
+            "--workspace",
+            str(tmp_path / "ws"),
+            "--maps-root",
+            str(tmp_path / "maps"),
+            executors=executors,
+        )
+
+        assert code == 1
+        text = out + err
+        assert "components.semantic_fusion.support" in text
+        assert "min_overlap" in text
+        assert "stages.semantic_fusion" not in text
+
+    def test_inspection_reads_records_only(self, tmp_path: Path) -> None:
+        world = World()
+        self._branch(tmp_path, world)
+        run = self._context_run(tmp_path, world, self.FRAMES)
+        _, build, _ = self._cli(
+            tmp_path, world, "context", "build", "--branch", "corridor", "--code-identity", "c1"
+        )
+        workspace = str(tmp_path / "ws")
+        config = str(_config(tmp_path))
+
+        branch_code, branch_out, _ = cli(
+            "context",
+            "inspect",
+            "branch",
+            "corridor",
+            "-c",
+            config,
+            "--workspace",
+            workspace,
+            "--json",
+        )
+        run_code, run_out, _ = cli(
+            "context", "inspect", "run", run["run_directory"], "--workspace", workspace, "--json"
+        )
+        build_code, build_out, _ = cli(
+            "context",
+            "inspect",
+            "run",
+            build["run_directory"],
+            "--workspace",
+            workspace,
+            "--json",
+        )
+
+        assert (branch_code, run_code, build_code) == (0, 0, 0)
+        assert [m["context_run_id"] for m in _json(branch_out)["members"]] == [
+            run["context_run"]["context_run_id"]
+        ]
+        assert _json(run_out)["context_run"] == run["context_run"]
+        assert _json(build_out)["context_build"] == build["context_build"]
+        assert _json(build_out)["context_map_id"] == build["context_map_id"]
+
+
+class TestDotenvLoading:
+    """`.env` is a local convenience for secrets; it only fills what the real environment
+    does not already provide, and it never affects a caller who passes its own `environ`."""
+
+    def test_fills_a_missing_key_from_the_file(self, tmp_path: Path) -> None:
+        path = tmp_path / ".env"
+        path.write_text("GEMINI_API_KEY=abc123\n", encoding="utf-8")
+        environ: dict[str, str] = {}
+
+        _apply_dotenv(path, environ=environ)
+
+        assert environ == {"GEMINI_API_KEY": "abc123"}
+
+    def test_does_not_overwrite_a_key_already_present(self, tmp_path: Path) -> None:
+        path = tmp_path / ".env"
+        path.write_text("GEMINI_API_KEY=from-file\n", encoding="utf-8")
+        environ = {"GEMINI_API_KEY": "from-real-environment"}
+
+        _apply_dotenv(path, environ=environ)
+
+        assert environ == {"GEMINI_API_KEY": "from-real-environment"}
+
+    def test_ignores_blank_lines_comments_and_strips_quotes(self, tmp_path: Path) -> None:
+        path = tmp_path / ".env"
+        path.write_text(
+            "\n# a comment\nGEMINI_API_KEY='quoted value'\nMALFORMED_LINE\n",
+            encoding="utf-8",
+        )
+        environ: dict[str, str] = {}
+
+        _apply_dotenv(path, environ=environ)
+
+        assert environ == {"GEMINI_API_KEY": "quoted value"}
+
+    def test_a_missing_file_is_a_silent_no_op(self, tmp_path: Path) -> None:
+        environ: dict[str, str] = {}
+
+        _apply_dotenv(tmp_path / "does-not-exist.env", environ=environ)
+
+        assert environ == {}
+
+    def test_main_reads_dotenv_from_the_working_directory_when_no_environ_is_given(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        """The end-to-end wiring: no explicit `environ=` means `main()` consults the real
+        process environment, which a `.env` in the current directory may fill first."""
+        monkeypatch.chdir(tmp_path)
+        (tmp_path / ".env").write_text("GEMINI_API_KEY=from-dotenv\n", encoding="utf-8")
+        monkeypatch.delenv("GEMINI_API_KEY", raising=False)
+        document = _document()
+        document["components"]["semantic_interpretation"]["interpreter"] = {
+            "backend": "gemini",
+            "gemini": {"model": "g", "timeout_s": 1, "max_retries": 1, "temperature": 0.0},
+        }
+        out, err = io.StringIO(), io.StringIO()
+
+        code = main(
+            ["inspect", "config", "-c", str(_config(tmp_path, document)), "--json"],
+            module_available=_ready,
+            environ=None,
+            stdout=out,
+            stderr=err,
+        )
+
+        assert code == 0, out.getvalue() + err.getvalue()
+        assert "from-dotenv" not in out.getvalue()  # segredo nunca aparece na saída
+
+    def test_main_does_not_mutate_the_real_os_environ_when_environ_is_none(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        """Regression: leaving `environ=None` must read the `.env` into a private copy,
+        never into the real process environment -- otherwise this call would contaminate
+        every later one that also leaves `environ` unset, including from a different
+        working directory."""
+        monkeypatch.chdir(tmp_path)
+        (tmp_path / ".env").write_text("GEMINI_API_KEY=from-dotenv\n", encoding="utf-8")
+        monkeypatch.delenv("GEMINI_API_KEY", raising=False)
+        out, err = io.StringIO(), io.StringIO()
+
+        code = main(
+            ["inspect", "config", "-c", str(_config(tmp_path)), "--json"],
+            module_available=_ready,
+            environ=None,
+            stdout=out,
+            stderr=err,
+        )
+
+        assert code == 0, out.getvalue() + err.getvalue()
+        assert "GEMINI_API_KEY" not in os.environ
+
+    def test_dotenv_from_one_cwd_never_leaks_into_a_call_from_another(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        """Two `environ=None` calls from different working directories stay isolated: the
+        first call's `.env` must not survive, via a mutated `os.environ`, into the
+        second call's secret resolution."""
+        first_cwd, second_cwd = tmp_path / "first", tmp_path / "second"
+        first_cwd.mkdir()
+        second_cwd.mkdir()
+        (first_cwd / ".env").write_text("GEMINI_API_KEY=from-first-cwd\n", encoding="utf-8")
+        monkeypatch.delenv("GEMINI_API_KEY", raising=False)
+
+        monkeypatch.chdir(first_cwd)
+        first_code = main(
+            ["inspect", "config", "-c", str(_config(first_cwd)), "--json"],
+            module_available=_ready,
+            environ=None,
+            stdout=io.StringIO(),
+            stderr=io.StringIO(),
+        )
+
+        assert first_code == 0
+        assert "GEMINI_API_KEY" not in os.environ  # a primeira chamada já não pode vazar
+
+        monkeypatch.chdir(second_cwd)
+        second_out = io.StringIO()
+        second_code = main(
+            ["inspect", "config", "-c", str(_config(second_cwd)), "--json"],
+            module_available=_ready,
+            environ=None,
+            stdout=second_out,
+            stderr=io.StringIO(),
+        )
+
+        assert second_code == 0
+        assert "from-first-cwd" not in second_out.getvalue()
+        assert "GEMINI_API_KEY" not in os.environ
+
+    def test_main_does_not_touch_os_environ_when_an_explicit_environ_is_given(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        """A caller supplying its own `environ=` (every existing test, and any Python
+        embedder) keeps full control: the real `os.environ` is left exactly as it was."""
+        monkeypatch.chdir(tmp_path)
+        (tmp_path / ".env").write_text("SOME_OTHER_SECRET=leaked\n", encoding="utf-8")
+        monkeypatch.delenv("SOME_OTHER_SECRET", raising=False)
+
+        code, _, _ = cli("inspect", "config", "-c", str(_config(tmp_path)), environ={})
+
+        assert code == 0
+        assert "SOME_OTHER_SECRET" not in os.environ

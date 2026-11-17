@@ -1,0 +1,28 @@
+# Human Search: canal paralelo, só percepção (não muda nenhum mapa). SAM3 text_prompt com frases de
+# evidência direta (pessoa) e de indício (objetos que sugerem presença). A frase de cada máscara fica
+# em RegionProvenance.query; a classificação direta/indício é do relatório, não do modelo. Labels por
+# Florence-2 semântico (barato), só para inspeção. Limiar de score 0,5, o mesmo da investigação do SAM3.
+schema_version = "0.1.0"
+
+[pipeline]
+preset = "canonical/1"
+
+[resources.providers]
+"visual_perception.region_discovery" = "ablation_providers:load_sam3"
+
+[components.region_perception.discovery]
+backend = "sam3"
+
+[components.region_perception.discovery.sam3]
+checkpoint = "facebook/sam3"
+model_version = "3c879f39826c281e95690f02c7821c4de09afae7"
+device = "cuda"
+precision = "bfloat16"
+strategy = "text_prompt"
+score_threshold = 0.5
+mask_threshold = 0.5
+prompts = ["person", "human body", "face", "hand", "backpack", "helmet", "shoe", "glove"]
+
+[components.region_perception.discovery.sam3.normalization_config]
+minimum_valid_fraction = 0.5
+maximum_exclusion_fraction = 0.0
