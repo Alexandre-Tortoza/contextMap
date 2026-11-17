@@ -1,0 +1,648 @@
+{
+  "baseline_runs": {
+    "raw": {
+      "geometry_bin_sha256": "sha256:d4e4b03ead3ce667bbf747fc6895cad5fe2bba3a71fe0b2fce8f17ac7b06c4e6",
+      "pose_sequence_artifact_id": "d422227f15f14d0cb8e071652c5c20b5",
+      "run_dir": "workspace-old/frame-10_31-raw",
+      "sequence_artifact_id": "aa0551d92f7b4a7aa3508dbaa1ee8ea3",
+      "stages": {
+        "context_map": {
+          "code_version": "frame-10_31",
+          "configuration_fingerprint": "sha256:6940f37c2f1ac3eb58295d3a334bcda54c25c21fbc66ab6aa3cbf131162b85a0",
+          "content_identity": "sha256:6f57d268b60cb3e445d3b4cec1fc560fb104923eb63a3c05e4d4cda9c474c955",
+          "context_map_id": "c4040a9eed6ab3b23bdf257ccab7ef83",
+          "schema_version": "0.1.0",
+          "written_at": "2026-09-30T16:14:29.256828+00:00"
+        },
+        "entity_resolution": {
+          "code_version": "frame-10_31",
+          "created_at": "2026-09-30T15:51:49.923240+00:00",
+          "run_id": "11254db545f96daa1651f85cd274e311",
+          "schema_version": "0.1.0"
+        },
+        "geometric_mapping": {
+          "calibration_identity": "sha256:f7d3288e82305a34960dee8b841d625c7de643a506cb5706395a9f9bbe3242d6",
+          "code_version": "frame-10_31",
+          "configuration_fingerprint": "sha256:b2ad955240a49ea9f2c90f6da544a724afe7f2058f710ac25bb3b74c31e22b88",
+          "created_at": "2026-09-30T15:15:57.947402+00:00",
+          "map_id": "corridor-02--5659900dc9d8f118d7ff41071f722453",
+          "run_id": "5659900dc9d8f118d7ff41071f722453",
+          "schema_version": "0.1.0",
+          "trajectory_id": "d1aa1eae316d547a89494f517b971ea2--trajectory"
+        },
+        "semantic_fusion": {
+          "code_version": "frame-10_31",
+          "created_at": "2026-09-30T15:51:25.073784+00:00",
+          "run_id": "7e541d2fb4f648d92f4f10ae32758327",
+          "schema_version": "0.3.0"
+        },
+        "semantic_mapping": {
+          "code_version": "frame-10_31",
+          "created_at": "2026-09-30T15:51:49.154617+00:00",
+          "run_id": "ea35b5f9c1fb0ecfe23d2cbe0756db1c",
+          "schema_version": "0.1.0",
+          "semantic_map_id": "semantic-map-corridor-02-frame-10_31"
+        },
+        "semantic_scoring": {
+          "code_version": "frame-10_31",
+          "created_at": "2026-09-30T15:50:48.939900+00:00",
+          "run_id": "7e74117cbf2e99ed1626696e9df11758",
+          "schema_version": "0.1.0"
+        },
+        "sensor_association": {
+          "calibration_identity": "sha256:f7d3288e82305a34960dee8b841d625c7de643a506cb5706395a9f9bbe3242d6",
+          "code_version": "frame-10_31",
+          "configuration_fingerprint": "sha256:a6ff8f5636df61517deae7a620ea7e648043f3806a4daf3253df80344de3f8cd",
+          "created_at": "2026-09-30T15:51:24.403662+00:00",
+          "run_id": "c744af1bde5c2591104661f265c3e341",
+          "schema_version": "0.2.0",
+          "trajectory_id": "d1aa1eae316d547a89494f517b971ea2--trajectory"
+        },
+        "spatial_relations": {
+          "code_version": "frame-10_31",
+          "created_at": "2026-09-30T15:52:16.795108+00:00",
+          "run_id": "90caeb93ffe0761be5bb7ed50c4cc9f7",
+          "schema_version": "0.2.0"
+        },
+        "state_estimation": {
+          "calibration_identity": null,
+          "code_version": "0.1.1.dev440+ga3a175f09.d20260930",
+          "created_at": "2026-09-30T15:15:57.217401+00:00",
+          "run_id": "d1aa1eae316d547a89494f517b971ea2",
+          "schema_version": "0.2.0",
+          "trajectory_id": "d1aa1eae316d547a89494f517b971ea2--trajectory"
+        },
+        "visual_perception": {
+          "configuration_digest": "sha256:08b089586b987def4a54787f22f09be5831411b305bc2a288baf8e6d1911f653",
+          "created_at": "2026-09-30T15:50:47.781495+00:00",
+          "run_id": "ebd2f3e34ec4ec0964ae4396a74f6d37",
+          "schema_version": "0.6.0"
+        }
+      }
+    },
+    "voxel": {
+      "geometry_bin_sha256": "sha256:b243d2276829a27590c1190dbf69e330f808e30f7029bbdf88fd76dfec0be12d",
+      "pose_sequence_artifact_id": "d422227f15f14d0cb8e071652c5c20b5",
+      "run_dir": "workspace-old/frame-10_31-voxel",
+      "sequence_artifact_id": "aa0551d92f7b4a7aa3508dbaa1ee8ea3",
+      "stages": {
+        "context_map": {
+          "code_version": "frame-10_31",
+          "configuration_fingerprint": "sha256:6940f37c2f1ac3eb58295d3a334bcda54c25c21fbc66ab6aa3cbf131162b85a0",
+          "content_identity": "sha256:4ba420176eb3e477fbcb8ecd381a0053892e5d74938c4e53f7cf7a6fc167f8b1",
+          "context_map_id": "66fb6e8ecde047e694a3a58ee4d9007a",
+          "schema_version": "0.1.0",
+          "written_at": "2026-09-30T16:14:32.153535+00:00"
+        },
+        "entity_resolution": {
+          "code_version": "frame-10_31",
+          "created_at": "2026-09-30T15:52:25.768345+00:00",
+          "run_id": "1be1c9ecbab4e7ae7654cd36022b9bd1",
+          "schema_version": "0.1.0"
+        },
+        "geometric_mapping": {
+          "calibration_identity": "sha256:f7d3288e82305a34960dee8b841d625c7de643a506cb5706395a9f9bbe3242d6",
+          "code_version": "frame-10_31",
+          "configuration_fingerprint": "sha256:4cf91b52d5a84adc5e76950c86486de7278466e3dda954be9143a19dfce86ff7",
+          "created_at": "2026-09-30T15:15:58.653163+00:00",
+          "map_id": "corridor-02--e28185e4c6e82d60f7e5ba3108fa9e50",
+          "run_id": "e28185e4c6e82d60f7e5ba3108fa9e50",
+          "schema_version": "0.1.0",
+          "trajectory_id": "d1aa1eae316d547a89494f517b971ea2--trajectory"
+        },
+        "semantic_fusion": {
+          "code_version": "frame-10_31",
+          "created_at": "2026-09-30T15:52:23.647927+00:00",
+          "run_id": "1bf66e0ea96df526114420eea7d1775a",
+          "schema_version": "0.3.0"
+        },
+        "semantic_mapping": {
+          "code_version": "frame-10_31",
+          "created_at": "2026-09-30T15:52:25.558220+00:00",
+          "run_id": "e38d13a4c8c64e0d4421fdb7694faa2c",
+          "schema_version": "0.1.0",
+          "semantic_map_id": "semantic-map-corridor-02-frame-10_31"
+        },
+        "semantic_scoring": {
+          "code_version": "frame-10_31",
+          "created_at": "2026-09-30T15:50:48.939900+00:00",
+          "run_id": "7e74117cbf2e99ed1626696e9df11758",
+          "schema_version": "0.1.0"
+        },
+        "sensor_association": {
+          "calibration_identity": "sha256:f7d3288e82305a34960dee8b841d625c7de643a506cb5706395a9f9bbe3242d6",
+          "code_version": "frame-10_31",
+          "configuration_fingerprint": "sha256:a6ff8f5636df61517deae7a620ea7e648043f3806a4daf3253df80344de3f8cd",
+          "created_at": "2026-09-30T15:52:23.230308+00:00",
+          "run_id": "205dea15bfa221e31f190e86ba1da9e3",
+          "schema_version": "0.2.0",
+          "trajectory_id": "d1aa1eae316d547a89494f517b971ea2--trajectory"
+        },
+        "spatial_relations": {
+          "code_version": "frame-10_31",
+          "created_at": "2026-09-30T15:52:28.022462+00:00",
+          "run_id": "dc5cf78c5bcd33119b878f156b74f0b8",
+          "schema_version": "0.2.0"
+        },
+        "state_estimation": {
+          "calibration_identity": null,
+          "code_version": "0.1.1.dev440+ga3a175f09.d20260930",
+          "created_at": "2026-09-30T15:15:57.217401+00:00",
+          "run_id": "d1aa1eae316d547a89494f517b971ea2",
+          "schema_version": "0.2.0",
+          "trajectory_id": "d1aa1eae316d547a89494f517b971ea2--trajectory"
+        },
+        "visual_perception": {
+          "configuration_digest": "sha256:08b089586b987def4a54787f22f09be5831411b305bc2a288baf8e6d1911f653",
+          "created_at": "2026-09-30T15:50:47.781495+00:00",
+          "run_id": "ebd2f3e34ec4ec0964ae4396a74f6d37",
+          "schema_version": "0.6.0"
+        }
+      }
+    }
+  },
+  "benchmark_id": "B1",
+  "calibration": {
+    "T_epson_d": {
+      "rotation_xyzw": [
+        0.5026385421736821,
+        -0.5028457380724255,
+        0.5050125794996385,
+        -0.4893495214782934
+      ],
+      "translation_m": [
+        0.17313616,
+        0.0476788,
+        -0.01933398
+      ]
+    },
+    "calibration_identity": "sha256:f7d3288e82305a34960dee8b841d625c7de643a506cb5706395a9f9bbe3242d6",
+    "calibration_json_sha256": "sha256:1016aea67d0d438ff495d5a1dc076d1ecc55407539e76a4d9eb77d50d8729570",
+    "calibration_source_hash": "sha256:4fe08c293d66def337da052c6742d63f669b23ce851ca62afa339b820fcfae48",
+    "camera_calibration_id": "camera_1_image_raw-calib",
+    "camera_entry_content_hash": "sha256:48840f61617fb425d509eaad88c364ec45b1e5d31549a05b0b52d4f80764c057",
+    "camera_model": "mei",
+    "note": "calibra\u00e7\u00e3o BASE do dataset (sem corre\u00e7\u00e3o yaw/pitch); o C2 cria identidade nova",
+    "refinement": null
+  },
+  "code_identity": {
+    "baseline_runs_code_version": "0.1.1.dev440+ga3a175f09.d20260930",
+    "baseline_runs_note": "o E0 rodou numa \u00e1rvore suja sobre a3a175f09 (sufixo .d20260930); o diff daquele momento n\u00e3o foi registrado",
+    "now": {
+      "branch": "milestone/canonical-2",
+      "diff_bytes": 525735,
+      "diff_sha256": "sha256:d899602005ebfe47f36fa5a767414ea94b5586fcd21f6a9bc924a20820b06cda",
+      "head": "a3a175f099fd1609e710614a27753b0d0e24be3d",
+      "relevant_untracked_files": [
+        {
+          "path": "src/contextmap/runtime/image_masks.py",
+          "sha256": "sha256:b8f7ddb5da3bc71f229deba021b5adda0b04e7e784e6869959d938ab703f0bfc"
+        },
+        {
+          "path": "src/contextmap/spatial_relations/semantic_predicates.py",
+          "sha256": "sha256:2a779e0fe9a017a7ebd48ae4e003e32df9b1739f71c7d8bba5053dc4915ee11e"
+        },
+        {
+          "path": "src/contextmap/spatial_support/__init__.py",
+          "sha256": "sha256:27eb3be41fb7c9ca1c5ebbfc6319e4464f0c8cec272f5bed2ff62da4605f7485"
+        },
+        {
+          "path": "src/contextmap/spatial_support/artifact.py",
+          "sha256": "sha256:39ec0191da9d1ab8a19c596dbaa21e6a4d2df1e3e1362c44cd07cd37a300c560"
+        },
+        {
+          "path": "src/contextmap/spatial_support/docs/README.md",
+          "sha256": "sha256:f7b9f125a3e84a99e1fd2ec283c3f3267a7ca41f90bba49dcbc95c9dab963387"
+        },
+        {
+          "path": "src/contextmap/spatial_support/models.py",
+          "sha256": "sha256:7f1268af9d6f20d37223838e558e682ce7711b439d99832eb4d636a28e5e14c0"
+        },
+        {
+          "path": "src/contextmap/spatial_support/service.py",
+          "sha256": "sha256:4141ea68d3e36ca7cda75e91d9708a965c788cbda341b4a96977309c358b84c8"
+        },
+        {
+          "path": "experiments/frame-10_31-raw-vs-voxel-20260930/run_two_arms.py",
+          "sha256": "sha256:abba9f7a128c635d7126af559a65874f3b7a266b152f9684a74dae4077f35e1e"
+        },
+        {
+          "path": "experiments/frame-10_31-raw-vs-voxel-20260930/providers.toml",
+          "sha256": "sha256:27a010af8ab7e030aa837a5b14a54139cc4725683036439173b4ecd4e63daac5"
+        },
+        {
+          "path": "experiments/frame-10_31-raw-vs-voxel-20260930/region-label.toml",
+          "sha256": "sha256:92ead669be237389a77fdbde73399ade005ee4c43e19b56504e879cbda9e9757"
+        },
+        {
+          "path": "experiments/semantic-geometry-investigation-20260930/scripts/assoc.py",
+          "sha256": "sha256:d43541e1130e46fd1013eb769cf414f1fb500ac093928190e40d8f0feb9256cc"
+        },
+        {
+          "path": "experiments/semantic-geometry-investigation-20260930/scripts/common.py",
+          "sha256": "sha256:b02aeaaee7abbae8c824a63ffd01b29632d9fcdc11d9427c5a690032238957fc"
+        },
+        {
+          "path": "experiments/semantic-geometry-investigation-20260930/scripts/p10_entity_overlap.py",
+          "sha256": "sha256:dbbca36d082e21e0e60d8bb51b55712b313833edc419f7adec16c67ce26570c9"
+        },
+        {
+          "path": "experiments/semantic-geometry-investigation-20260930/scripts/p2_geometry_snapshots.py",
+          "sha256": "sha256:1246dc7116016cfe6458ee22e5775154cf13ab1d6c4d58a1a88cf8b5152ed734"
+        },
+        {
+          "path": "experiments/semantic-geometry-investigation-20260930/scripts/p2_render_viewer_effect.py",
+          "sha256": "sha256:8a5295d828a3e3615cc0b5709367d061ce2033714bd7047105e96d31697217ea"
+        },
+        {
+          "path": "experiments/semantic-geometry-investigation-20260930/scripts/p2_test_e_semantics_off.py",
+          "sha256": "sha256:088834a003d3f964ba1cb58c7c95c6d38f32ff188e275272a064411fb1b89e00"
+        },
+        {
+          "path": "experiments/semantic-geometry-investigation-20260930/scripts/p3_extrinsic_direction.py",
+          "sha256": "sha256:7f8e98a6bdf78c848d28a2129362343004c52d22f51c8f6bccccdeca07ff8f56"
+        },
+        {
+          "path": "experiments/semantic-geometry-investigation-20260930/scripts/p3_map_consistency.py",
+          "sha256": "sha256:624b007680bb9e65d0a6ba2cf778c394b1e297422bd82f6f9369f0a72248a700"
+        },
+        {
+          "path": "experiments/semantic-geometry-investigation-20260930/scripts/p3_time_offset_deskew.py",
+          "sha256": "sha256:bf1365da980cb82b0a9fe1026d5194af59b22d503100aa859e7f3e67beec58a7"
+        },
+        {
+          "path": "experiments/semantic-geometry-investigation-20260930/scripts/p4_calibration_photometric.py",
+          "sha256": "sha256:2b0015ce7fe25d2b0ffbea16b9bfc25f0543bcbb11c05aeee050fb4ac774ded2"
+        },
+        {
+          "path": "experiments/semantic-geometry-investigation-20260930/scripts/p4_overlays.py",
+          "sha256": "sha256:c4dbf0ec58c862714fef5f6c5a0467b5dbba1a070218e20788314602dbfadb3d"
+        },
+        {
+          "path": "experiments/semantic-geometry-investigation-20260930/scripts/p4_validate_reimpl.py",
+          "sha256": "sha256:61bd344af2bfdb06b3a2f66df4d1e57b648d735efe0ca112dd54badd3de91673"
+        },
+        {
+          "path": "experiments/semantic-geometry-investigation-20260930/scripts/p5_association_ablation.py",
+          "sha256": "sha256:4c3c5400dd13fe84c9091a61c9e42df60be07141a5cb995b2857eddfcb78dedc"
+        },
+        {
+          "path": "experiments/semantic-geometry-investigation-20260930/scripts/p5_occlusion_anatomy.py",
+          "sha256": "sha256:d38ecf3cac2b3ebc78295302d6342f7c515e396c2327a6fa8d6df05ae64f251e"
+        },
+        {
+          "path": "experiments/semantic-geometry-investigation-20260930/scripts/p6_mask_quality.py",
+          "sha256": "sha256:7fa40512a79c35141b38c456dc391efb9b1289c81f6b24bbb72ad452443db580"
+        },
+        {
+          "path": "experiments/semantic-geometry-investigation-20260930/scripts/p6_sam2_rerun.py",
+          "sha256": "sha256:205445812e16e12440df1e0667bafa6ddff0ca512783c970636060caaed270c6"
+        },
+        {
+          "path": "experiments/semantic-geometry-investigation-20260930/scripts/p7_label_provenance.py",
+          "sha256": "sha256:430d26cd09fc90a0aabed9ec14fc553ec3bae9f6baaa1c8153306c8e5a8b140c"
+        },
+        {
+          "path": "experiments/semantic-geometry-investigation-20260930/scripts/p9_label_redundancy.py",
+          "sha256": "sha256:2e8fcb2fc85da1d2209d68b99a1b7ee7e313fc833719960d7f61aed680b333b2"
+        }
+      ],
+      "tracked_files_changed": [
+        "CHANGELOG.md",
+        "docs/ARTIFACTS.md",
+        "docs/CONTRACTS.md",
+        "docs/runtime-composition.md",
+        "examples/v0.2.0/assets/corridor-02/camera_1-ego.npy",
+        "examples/v0.2.0/assets/corridor-02/camera_1-valid.npy",
+        "examples/v0.2.0/canonical-config.toml",
+        "examples/v0.2.0/corridor-02-image-masks.toml",
+        "pyproject.toml",
+        "src/contextmap/artifact/__init__.py",
+        "src/contextmap/artifact/_lineage_checks.py",
+        "src/contextmap/artifact/composition.py",
+        "src/contextmap/artifact/docs/README.md",
+        "src/contextmap/artifact/docs/assembly.md",
+        "src/contextmap/artifact/docs/composition.md",
+        "src/contextmap/artifact/docs/versioning.md",
+        "src/contextmap/artifact/records.py",
+        "src/contextmap/artifact/serialization/assembly.py",
+        "src/contextmap/artifact/versioning.py",
+        "src/contextmap/entity_resolution/__init__.py",
+        "src/contextmap/entity_resolution/_codec.py",
+        "src/contextmap/entity_resolution/docs/README.md",
+        "src/contextmap/entity_resolution/docs/artifact.md",
+        "src/contextmap/entity_resolution/docs/resolved-entities.md",
+        "src/contextmap/entity_resolution/docs/semantic-temporal-comparison.md",
+        "src/contextmap/entity_resolution/materialization.py",
+        "src/contextmap/entity_resolution/resolved_entity.py",
+        "src/contextmap/entity_resolution/run_artifact.py",
+        "src/contextmap/entity_resolution/semantic_comparison.py",
+        "src/contextmap/evaluation/__init__.py",
+        "src/contextmap/evaluation/capability_matrix.py",
+        "src/contextmap/evaluation/docs/README.md",
+        "src/contextmap/evaluation/docs/geometric_mapping.md",
+        "src/contextmap/evaluation/entity_resolution.py",
+        "src/contextmap/evaluation/geometric_mapping.py",
+        "src/contextmap/evaluation/incremental_context.py",
+        "src/contextmap/geometric_mapping/__init__.py",
+        "src/contextmap/geometric_mapping/docs/README.md",
+        "src/contextmap/geometric_mapping/docs/inputs.md",
+        "src/contextmap/geometric_mapping/docs/motion-correction.md",
+        "src/contextmap/geometric_mapping/inputs.py",
+        "src/contextmap/geometric_mapping/motion_correction.py",
+        "src/contextmap/geometric_mapping/run_artifact.py",
+        "src/contextmap/ingestion/__init__.py",
+        "src/contextmap/ingestion/calibration.py",
+        "src/contextmap/ingestion/docs/calibration.md",
+        "src/contextmap/runtime/__init__.py",
+        "src/contextmap/runtime/catalog.py",
+        "src/contextmap/runtime/cli.py",
+        "src/contextmap/runtime/composition.py",
+        "src/contextmap/runtime/config.py",
+        "src/contextmap/runtime/context_branch.py",
+        "src/contextmap/runtime/context_build.py",
+        "src/contextmap/runtime/docs/cli.md",
+        "src/contextmap/runtime/docs/composition.md",
+        "src/contextmap/runtime/docs/configuration.md",
+        "src/contextmap/runtime/docs/executors.md",
+        "src/contextmap/runtime/executors.py",
+        "src/contextmap/runtime/ingestion_service.py",
+        "src/contextmap/runtime/pipeline.py",
+        "src/contextmap/semantic_fusion/__init__.py",
+        "src/contextmap/semantic_fusion/accumulation.py",
+        "src/contextmap/semantic_fusion/docs/README.md",
+        "src/contextmap/semantic_fusion/docs/accumulation.md",
+        "src/contextmap/semantic_fusion/docs/artifact.md",
+        "src/contextmap/semantic_fusion/docs/contracts.md",
+        "src/contextmap/semantic_fusion/models.py",
+        "src/contextmap/semantic_fusion/serialization.py",
+        "src/contextmap/semantic_mapping/__init__.py",
+        "src/contextmap/semantic_mapping/docs/README.md",
+        "src/contextmap/semantic_mapping/docs/contracts.md",
+        "src/contextmap/semantic_mapping/docs/primary-hypothesis-policy.md",
+        "src/contextmap/semantic_mapping/docs/semantic-state.md",
+        "src/contextmap/semantic_mapping/materialization.py",
+        "src/contextmap/semantic_mapping/semantic_state.py",
+        "src/contextmap/semantic_mapping/serialization.py",
+        "src/contextmap/semantic_mapping/state_mapping.py",
+        "src/contextmap/spatial_relations/__init__.py",
+        "src/contextmap/spatial_relations/candidates.py",
+        "src/contextmap/spatial_relations/decision.py",
+        "src/contextmap/spatial_relations/evidence.py",
+        "src/contextmap/spatial_relations/run_artifact.py",
+        "src/contextmap/spatial_relations/taxonomy.py",
+        "src/contextmap/state_estimation/preflight.py",
+        "src/contextmap/visual_perception/__init__.py",
+        "src/contextmap/visual_perception/docs/region-grounding.md",
+        "src/contextmap/visual_perception/docs/run_artifact.md",
+        "src/contextmap/visual_perception/docs/semantic-interpretation.md",
+        "src/contextmap/visual_perception/semantic_prompt.py",
+        "src/contextmap/visual_perception/semantic_requests.py",
+        "src/contextmap/visual_perception/semantic_views.py",
+        "tests/architecture/test_boundaries.py",
+        "tests/architecture/test_runtime_boundaries.py",
+        "tests/artifact/test_context_map_contract.py",
+        "tests/artifact/test_context_map_invariants.py",
+        "tests/artifact/test_context_map_serialization_roundtrip.py",
+        "tests/artifact/test_context_map_versioning.py",
+        "tests/evaluation/test_entity_resolution_evaluation.py",
+        "tests/evaluation/test_geometric_mapping_evaluation.py",
+        "tests/runtime/runtime_context.py",
+        "tests/runtime/test_runtime_catalog.py",
+        "tests/runtime/test_runtime_cli.py",
+        "tests/runtime/test_runtime_composition.py",
+        "tests/runtime/test_runtime_context_branch.py",
+        "tests/runtime/test_runtime_region_grounding.py",
+        "tests/runtime/test_state_estimation_pose_bridge.py",
+        "tests/semantic_fusion/evidence_builders.py",
+        "tests/spatial_relations/test_relation_taxonomy.py",
+        "tests/visual_perception/test_semantic_prompt.py",
+        "tests/visual_perception/test_semantic_view_policy.py"
+      ]
+    }
+  },
+  "configuration": {
+    "config_stack": [
+      {
+        "path": "examples/v0.2.0/canonical-config.toml",
+        "sha256": "sha256:c4803e6fb9355d157217f9675daa8cdf657af7bd333ed5c5d0855b75b5e5392b"
+      },
+      {
+        "path": "experiments/canonical-2-empirical-validation-20260929/config/base.template.toml",
+        "sha256": "sha256:22416bcc27be610a696213808348eb9bfe3d985e22a431939078bb3771472f4b"
+      },
+      {
+        "path": "experiments/frame-10_31-raw-vs-voxel-20260930/providers.toml",
+        "sha256": "sha256:27a010af8ab7e030aa837a5b14a54139cc4725683036439173b4ecd4e63daac5"
+      },
+      {
+        "path": "examples/v0.2.0/corridor-02-image-masks.toml",
+        "sha256": "sha256:3db7731c21a5542d0160aba7b88344aba5e3b10ced0cde20957b7cbbfcd8552f"
+      },
+      {
+        "path": "experiments/frame-10_31-raw-vs-voxel-20260930/region-label.toml",
+        "sha256": "sha256:92ead669be237389a77fdbde73399ade005ee4c43e19b56504e879cbda9e9757"
+      }
+    ],
+    "driver": {
+      "path": "experiments/frame-10_31-raw-vs-voxel-20260930/run_two_arms.py",
+      "preset": "canonical/1 sem scene_interpretation (canonical/1-labels-no-scene)",
+      "sha256": "sha256:abba9f7a128c635d7126af559a65874f3b7a266b152f9684a74dae4077f35e1e",
+      "stage_config_digests": "o driver passa config_digest literal por est\u00e1gio ('perc', 'geo-raw', ...), n\u00e3o o digest efetivo",
+      "tail_stages": "semantic_mapping/entity_resolution/spatial_relations constru\u00eddos no driver com os valores can\u00f4nicos do e2e-real-canonical-run"
+    },
+    "effective_config_digest_now": "ver results/C4-sam2-grid/<arm>/metrics.json: arm.effective_config_digest (E0-sam2 = pilha sem override)",
+    "reproduced_component_fingerprints": {
+      "evidence": "a pilha atual recomp\u00f5e exatamente estes fingerprints do E0 (bra\u00e7o E0-sam2 do C4)",
+      "normalization_config_digest": "sha256:c2a42c0da8c7138fbdea886f92088d7a816d041c7cdbb71702b99a4efdf09faa",
+      "pass_config_digest": "sha256:f1c08c0821b7243c23463304f1f5d8be5a2b3c7a328a6d83f6573e1dc1262aae",
+      "sam2": "sha256:9336bb272b4474c3020ce2910755a37060bd5bde67fa8a97779d51c4a4d64f69"
+    }
+  },
+  "dataset": {
+    "bag": {
+      "path": "datasets/corridor-02/corridor-02/corridor02.bag",
+      "sha256_recorded": "sha256:aaf76a75c2cbfae80ded6a974ea45312c7b563efe13181355b0024ba28b7cd11",
+      "sha256_source": "provenance da SequenceArtifact aa0551d92f7b4a7aa3508dbaa1ee8ea3 (ingest\u00e3o com hash_source=true); n\u00e3o re-calculado aqui",
+      "size_bytes": 24494797838
+    },
+    "extrinsics_yaml": {
+      "path": "datasets/corridor-02/corridor-02-extrinsics.yaml",
+      "sha256": "sha256:892bf743dc0f51eabfe9d8ae71dc98663753f174910ae9cc40ee244c77a9e217"
+    },
+    "ground_truth": {
+      "matches_pose_sequence_provenance": true,
+      "path": "datasets/corridor-02/corridor-02-gt.txt",
+      "sha256": "sha256:cddb6739230ded86c57412e768e071e5cd6d62a5de5ff310618032ca2e38be0a"
+    },
+    "image_masks": {
+      "ego_exclusion": {
+        "path": "examples/v0.2.0/assets/corridor-02/camera_1-ego.npy",
+        "sha256": "sha256:3e100f93ee65f8a2b864bd2aa5737c4091cf4cac411ab1854ef72d54dbf40ba8"
+      },
+      "overlay": {
+        "path": "examples/v0.2.0/corridor-02-image-masks.toml",
+        "sha256": "sha256:3db7731c21a5542d0160aba7b88344aba5e3b10ced0cde20957b7cbbfcd8552f"
+      },
+      "valid_region": {
+        "path": "examples/v0.2.0/assets/corridor-02/camera_1-valid.npy",
+        "sha256": "sha256:3fcd56880ddcca733c0cbc2fa799a8ae0582bf2bdfd5785badfea787ebd4b1eb"
+      }
+    },
+    "intrinsics_yaml": {
+      "path": "datasets/corridor-02/corridor-02-Intrinsics.yaml",
+      "sha256": "sha256:8d47e98aed48cf941c8ee642136514b50ea7e6dd0bd26de9266081bd8693fe12"
+    },
+    "zip": {
+      "note": "nenhum manifesto existente registra o hash do zip; n\u00e3o re-hasheado (15 GB)",
+      "path": "datasets/corridor-02/corridor-02.zip",
+      "sha256_recorded": null,
+      "size_bytes": 15589213681
+    }
+  },
+  "description": "Um frame: 10:31 = camera_1_image_raw-000055, janela de ingest\u00e3o 628-637 s, mapa de 81 scans; bra\u00e7o raw principal, voxel secund\u00e1rio.",
+  "environment": {
+    "ablation_venv": "~/.cache/contextmap2-ablation/venv (torch 2.8.0+cu126, sam2)",
+    "gpu": "NVIDIA RTX 3060 8 GB (1 frame por processo, workaround #689)",
+    "hf_offline": true,
+    "providers": "~/.cache/contextmap2-ablation/providers/ablation_providers.py (fora do repo)",
+    "python_metrics": "3.12.14"
+  },
+  "frame": {
+    "clock_id": "corridor-02-header",
+    "encoding": "bgr8",
+    "frame_index_in_window": 55,
+    "image_id": "camera_1_image_raw-000055",
+    "image_size": [
+      640,
+      480
+    ],
+    "nearest_scan": {
+      "scan_header_minus_image_ms": -50.26,
+      "scan_id": "velodyne_points-000022"
+    },
+    "pose_bracket": {
+      "bracket_gap_ms": 302.6,
+      "nearest_pose_delta_ms": 50.26,
+      "within_association_pose_gap_450ms": true,
+      "within_mapping_pose_gap_400ms": true
+    },
+    "recording_second": 630.985,
+    "rgb_payload_sha256": "sha256:6e4f7e98892e444b632c0f5535aff624da5337d9dcb73e2f3be7b468275014f3",
+    "timestamp": "1724621714.984856033",
+    "timestamp_ns": 1724621714984856033
+  },
+  "map": {
+    "raw": {
+      "aggregation_rule": null,
+      "map_id": "corridor-02--5659900dc9d8f118d7ff41071f722453",
+      "point_count": 2322324,
+      "rejected_scan_count": 8,
+      "scan_count": 81,
+      "time_bounds_ns": [
+        1724621712715761126,
+        1724621721591008128
+      ]
+    },
+    "voxel": {
+      "aggregation_rule": "scan-voxel-centroid-0.1m",
+      "map_id": "corridor-02--e28185e4c6e82d60f7e5ba3108fa9e50",
+      "point_count": 402626,
+      "rejected_scan_count": 8,
+      "scan_count": 81,
+      "time_bounds_ns": [
+        1724621712715761126,
+        1724621721591008128
+      ]
+    }
+  },
+  "models": {
+    "features": {
+      "clip_visual_huggingface": {
+        "model": "openai/clip-vit-large-patch14",
+        "revision": "32bd64288804d66eefd0ccbe215aa642df71cc41"
+      },
+      "dinov2_huggingface": {
+        "model": "facebook/dinov2-base",
+        "revision": "f9e44c814b77203eaa57a6bdbbd535f21ede1415"
+      }
+    },
+    "region_discovery": {
+      "backend": "sam2",
+      "configuration_fingerprint": "sha256:9336bb272b4474c3020ce2910755a37060bd5bde67fa8a97779d51c4a4d64f69",
+      "model": "facebook/sam2.1-hiera-tiny",
+      "note": "limiares = default do Sam2Config (0/0); nenhum config os sobrescreve (REPORT \u00a77)",
+      "revision": "de431c4043854a71d8101e17995dfe596bf101a5",
+      "thresholds": {
+        "predicted_iou_threshold": 0.0,
+        "stability_threshold": 0.0
+      }
+    },
+    "semantic_interpretation": {
+      "configuration_fingerprint": "sha256:024d27abd33b28546b906725d2ffe5f9ebf802fee450b05d8c0040ad7e6460a8",
+      "device": "cuda",
+      "max_new_tokens": 1024,
+      "model": "Qwen/Qwen3-VL-4B-Instruct",
+      "precision": "bfloat16",
+      "prompt_template_id": "region-label/v1",
+      "quantization": "4bit",
+      "revision": "ebb281ec70b05090aa6165b016eac8ec08e71b17",
+      "scene_interpretation": "desligada (est\u00e1gio removido do preset pelo driver)",
+      "temperature": 0.0,
+      "view_kinds": [
+        "tight_crop"
+      ]
+    },
+    "semantic_scoring": {
+      "embedding_space_id": "sha256:70a72c65213800ad3fbf47c2b8b3d2504038f99af2994a885caab49a8fec26e3",
+      "scorer": {
+        "backend_id": "clip_region_scorer",
+        "capability": "semantic_scorer",
+        "configuration_fingerprint": "sha256:cf230bc62b849a6b5b6100fd9136493556e9957747b2ce1312c4fd1e329a3026",
+        "model": "openai/clip-vit-large-patch14",
+        "provider": "huggingface",
+        "version": "32bd64288804d66eefd0ccbe215aa642df71cc41"
+      },
+      "text_template": "a photo of a {hypothesis}"
+    }
+  },
+  "schema": "correction-benchmark/benchmark-manifest/v1",
+  "window": {
+    "clock_id": "ros1_bag:datasets/corridor-02/corridor-02/corridor02.bag:recording_time",
+    "driver_parameters": {
+      "end_offset_s": 634,
+      "padding_s": 3,
+      "start_offset_s": 631
+    },
+    "observations": {
+      "image": 216,
+      "imu": 1798,
+      "lidar": 89
+    },
+    "recording_epoch_s": 1724621084,
+    "recording_time_end_s": 1724621721.6603158,
+    "recording_time_start_s": 1724621712.6603158,
+    "seconds_from_recording_epoch": [
+      628.66,
+      637.66
+    ],
+    "timestamp_policy": {
+      "correction": {
+        "anchor_reference_time": {
+          "clock_id": "corridor-02-recording-time",
+          "nanoseconds": 410417577,
+          "seconds": 1724621416
+        },
+        "anchor_source_time": {
+          "clock_id": "corridor-02-header",
+          "nanoseconds": 997985442,
+          "seconds": 1646000057
+        },
+        "offset_nanoseconds": 78621358412432135,
+        "type": "constant_offset"
+      },
+      "event_clock": "header_stamp",
+      "window_clock": "recording_time"
+    }
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "components": {
+    "semantic_fusion": {
+      "accumulation": {
+        "backend": "quality-aware-evidence-accumulation-v1",
+        "quality-aware-evidence-accumulation-v1": {
+          "definitions_version": "observation-quality-v3",
+          "ramps": [
+            {"quality_input": "support_depth_median_m", "good": 4.0, "bad": 30.0},
+            {"quality_input": "border_distance_median_px", "good": 60.0, "bad": 10.0}
+          ],
+          "neutral_factor": 0.5
+        }
+      }
+    }
+  }
+}

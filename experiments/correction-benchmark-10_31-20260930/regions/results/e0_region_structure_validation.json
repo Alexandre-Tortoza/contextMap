@@ -1,0 +1,1421 @@
+{
+  "experiment": "C4 — validação das métricas estruturais de região contra p6",
+  "provenance": {
+    "run": "workspace-old/frame-10_31-raw",
+    "image": "camera_1_image_raw-000055",
+    "perception_run_id": "ebd2f3e34ec4ec0964ae4396a74f6d37",
+    "perception_configuration_digest": "sha256:08b089586b987def4a54787f22f09be5831411b305bc2a288baf8e6d1911f653",
+    "region_discovery_backend": {
+      "backend_id": "sam2",
+      "model": "facebook/sam2.1-hiera-tiny",
+      "version": "de431c4043854a71d8101e17995dfe596bf101a5",
+      "configuration_fingerprint": "sha256:9336bb272b4474c3020ce2910755a37060bd5bde67fa8a97779d51c4a4d64f69"
+    },
+    "usable_area": {
+      "valid": {
+        "path": "examples/v0.2.0/assets/corridor-02/camera_1-valid.npy",
+        "sha256": "sha256:3fcd56880ddcca733c0cbc2fa799a8ae0582bf2bdfd5785badfea787ebd4b1eb"
+      },
+      "ego_exclusion": {
+        "path": "examples/v0.2.0/assets/corridor-02/camera_1-ego.npy",
+        "sha256": "sha256:3e100f93ee65f8a2b864bd2aa5737c4091cf4cac411ab1854ef72d54dbf40ba8"
+      }
+    },
+    "code": {
+      "head": "a3a175f099fd1609e710614a27753b0d0e24be3d",
+      "tracked_worktree_diff_sha256": "sha256:db4068266f391de4735beaf1aac49d18baf9182f0d7043be56243ccc6da94ea0",
+      "metric_modules": {
+        "src/contextmap/evaluation/region_structure.py": "sha256:b07fbd983960a5b0c187a17a1288ba6cbe89a1d14d4fc490c0d384e9465635b3",
+        "src/contextmap/evaluation/association_conflicts.py": "sha256:b4b4645ed59edcf453739be150e3ba298b2234acfa1467f915bc442a7ce92b07"
+      }
+    },
+    "connectivity": 4
+  },
+  "comparison": [
+    {
+      "metric": "masks",
+      "p6": 83,
+      "module": 83,
+      "equal": true,
+      "note": ""
+    },
+    {
+      "metric": "median_area_px",
+      "p6": 1100.0,
+      "module": 1100.0,
+      "equal": true,
+      "note": ""
+    },
+    {
+      "metric": "area_px_p10",
+      "p6": 270.6,
+      "module": 270.6,
+      "equal": true,
+      "note": ""
+    },
+    {
+      "metric": "area_px_p90",
+      "p6": 7892.0,
+      "module": 7892.0,
+      "equal": true,
+      "note": ""
+    },
+    {
+      "metric": "fragmentation_rate",
+      "p6": 0.6867469879518072,
+      "module": 0.6867469879518072,
+      "equal": true,
+      "note": ""
+    },
+    {
+      "metric": "masks_with_gt_10_components",
+      "p6": 20,
+      "module": 20,
+      "equal": true,
+      "note": ""
+    },
+    {
+      "metric": "median_components",
+      "p6": 3.0,
+      "module": 3.0,
+      "equal": true,
+      "note": ""
+    },
+    {
+      "metric": "masks_contained_in_another_ge_0p8",
+      "p6": 43,
+      "module": 43,
+      "equal": true,
+      "note": ""
+    },
+    {
+      "metric": "pairs_iou_ge_0p5",
+      "p6": 13,
+      "module": 13,
+      "equal": true,
+      "note": ""
+    },
+    {
+      "metric": "overlap_rate_pairs_iou_gt_0",
+      "p6": 0.09491625036732294,
+      "module": 0.09491625036732294,
+      "equal": true,
+      "note": ""
+    },
+    {
+      "metric": "pairs_containment_ge_0p8",
+      "p6": 57,
+      "module": 56,
+      "equal": false,
+      "note": "p6 conta pares ORDENADOS (A em B e B em A): 57 ordenados = 56 não ordenados + 1 pares com as duas direções ≥ 0,8; o módulo conta pares não ordenados"
+    },
+    {
+      "metric": "pixel_nesting_depth_hist",
+      "p6": {
+        "1": 25455,
+        "2": 66005,
+        "3": 60180,
+        "4": 11240,
+        "5": 4041,
+        "6": 1021,
+        "7": 226
+      },
+      "module": {
+        "1": 25455,
+        "2": 66005,
+        "3": 60180,
+        "4": 11240,
+        "5": 4041,
+        "6": 1021,
+        "7": 226
+      },
+      "equal": true,
+      "note": ""
+    },
+    {
+      "metric": "single_mask_pixel_fraction",
+      "p6": 0.15136649065220495,
+      "module": 0.15136649065220498,
+      "equal": true,
+      "note": ""
+    },
+    {
+      "metric": "max_nesting_depth",
+      "p6": 7,
+      "module": 7,
+      "equal": true,
+      "note": ""
+    },
+    {
+      "metric": "usable_area_coverage",
+      "p6": 0.7081200976968435,
+      "module": 0.7081200976968435,
+      "equal": true,
+      "note": ""
+    }
+  ],
+  "per_mask_mismatches": [],
+  "per_mask_container_undefined_in_module_argmax_of_zeros_in_p6": [
+    "region-0027",
+    "region-0033",
+    "region-0053"
+  ],
+  "component_oracle": {
+    "oracle": "scipy.ndimage.label (default 2D structure = 4-connectivity)",
+    "real_masks": 83,
+    "real_mismatches": [],
+    "random_masks": 400,
+    "random_shape": [
+      48,
+      64
+    ],
+    "random_density_range": [
+      0.2,
+      0.8
+    ],
+    "random_mismatches": 0
+  },
+  "contained_pairs_reconciliation": {
+    "ordered": 57,
+    "both_directions": 1,
+    "unordered": 56
+  },
+  "report_duplicate_iou_0p5": {
+    "metric_version": "1.0.0",
+    "definition": {
+      "connectivity": 4,
+      "containment_threshold": 0.8,
+      "duplicate_iou_threshold": 0.5,
+      "area_quantile_method": "linear"
+    },
+    "mask_count": 83,
+    "proposal_count": 431,
+    "accepted_mask_ratio": 0.1925754060324826,
+    "area_px_p10": 270.6,
+    "area_px_median": 1100.0,
+    "area_px_p90": 7892.0,
+    "fragmented_mask_count": 57,
+    "fragmentation_rate": 0.6867469879518072,
+    "masks_contained_in_another": 43,
+    "overlapping_pair_count": 323,
+    "contained_pair_count": 56,
+    "duplicate_pair_count": 13,
+    "covered_pixel_count": 168168,
+    "pixels_with_multiple_masks": 142713,
+    "multiple_mask_pixel_fraction": 0.848633509347795,
+    "nesting_depth_histogram": {
+      "1": 25455,
+      "2": 66005,
+      "3": 60180,
+      "4": 11240,
+      "5": 4041,
+      "6": 1021,
+      "7": 226
+    },
+    "max_nesting_depth": 7,
+    "usable_pixel_count": 236241,
+    "usable_area_coverage": 0.7081200976968435,
+    "masks": [
+      {
+        "region_id": "region-0001",
+        "area_px": 6648,
+        "component_count": 171,
+        "max_fraction_inside_other": 0.9402827918170878,
+        "most_containing_region_id": "region-0069"
+      },
+      {
+        "region_id": "region-0002",
+        "area_px": 7461,
+        "component_count": 17,
+        "max_fraction_inside_other": 0.7981503819863289,
+        "most_containing_region_id": "region-0015"
+      },
+      {
+        "region_id": "region-0003",
+        "area_px": 2591,
+        "component_count": 1,
+        "max_fraction_inside_other": 0.5472790428406021,
+        "most_containing_region_id": "region-0015"
+      },
+      {
+        "region_id": "region-0004",
+        "area_px": 631,
+        "component_count": 1,
+        "max_fraction_inside_other": 0.6434231378763867,
+        "most_containing_region_id": "region-0070"
+      },
+      {
+        "region_id": "region-0005",
+        "area_px": 43793,
+        "component_count": 129,
+        "max_fraction_inside_other": 0.8080058456831001,
+        "most_containing_region_id": "region-0017"
+      },
+      {
+        "region_id": "region-0006",
+        "area_px": 4831,
+        "component_count": 24,
+        "max_fraction_inside_other": 0.8780790726557649,
+        "most_containing_region_id": "region-0017"
+      },
+      {
+        "region_id": "region-0007",
+        "area_px": 340,
+        "component_count": 6,
+        "max_fraction_inside_other": 0.8735294117647059,
+        "most_containing_region_id": "region-0030"
+      },
+      {
+        "region_id": "region-0008",
+        "area_px": 37840,
+        "component_count": 35,
+        "max_fraction_inside_other": 0.44889006342494714,
+        "most_containing_region_id": "region-0029"
+      },
+      {
+        "region_id": "region-0009",
+        "area_px": 3178,
+        "component_count": 2,
+        "max_fraction_inside_other": 0.9439899307740718,
+        "most_containing_region_id": "region-0005"
+      },
+      {
+        "region_id": "region-0010",
+        "area_px": 45562,
+        "component_count": 394,
+        "max_fraction_inside_other": 0.7639260787498354,
+        "most_containing_region_id": "region-0015"
+      },
+      {
+        "region_id": "region-0011",
+        "area_px": 6358,
+        "component_count": 8,
+        "max_fraction_inside_other": 0.8681975463982384,
+        "most_containing_region_id": "region-0005"
+      },
+      {
+        "region_id": "region-0012",
+        "area_px": 967,
+        "component_count": 1,
+        "max_fraction_inside_other": 0.005170630816959669,
+        "most_containing_region_id": "region-0013"
+      },
+      {
+        "region_id": "region-0013",
+        "area_px": 382,
+        "component_count": 1,
+        "max_fraction_inside_other": 0.34293193717277487,
+        "most_containing_region_id": "region-0039"
+      },
+      {
+        "region_id": "region-0014",
+        "area_px": 2046,
+        "component_count": 1,
+        "max_fraction_inside_other": 0.10263929618768329,
+        "most_containing_region_id": "region-0071"
+      },
+      {
+        "region_id": "region-0015",
+        "area_px": 38646,
+        "component_count": 239,
+        "max_fraction_inside_other": 0.9006365471200124,
+        "most_containing_region_id": "region-0010"
+      },
+      {
+        "region_id": "region-0016",
+        "area_px": 1380,
+        "component_count": 3,
+        "max_fraction_inside_other": 0.8108695652173913,
+        "most_containing_region_id": "region-0005"
+      },
+      {
+        "region_id": "region-0017",
+        "area_px": 56037,
+        "component_count": 97,
+        "max_fraction_inside_other": 0.6314577868194229,
+        "most_containing_region_id": "region-0005"
+      },
+      {
+        "region_id": "region-0018",
+        "area_px": 997,
+        "component_count": 3,
+        "max_fraction_inside_other": 0.8485456369107321,
+        "most_containing_region_id": "region-0020"
+      },
+      {
+        "region_id": "region-0019",
+        "area_px": 3257,
+        "component_count": 1,
+        "max_fraction_inside_other": 0.9748234571691741,
+        "most_containing_region_id": "region-0005"
+      },
+      {
+        "region_id": "region-0020",
+        "area_px": 6349,
+        "component_count": 4,
+        "max_fraction_inside_other": 0.6423058749409356,
+        "most_containing_region_id": "region-0021"
+      },
+      {
+        "region_id": "region-0021",
+        "area_px": 4078,
+        "component_count": 5,
+        "max_fraction_inside_other": 1.0,
+        "most_containing_region_id": "region-0020"
+      },
+      {
+        "region_id": "region-0022",
+        "area_px": 28971,
+        "component_count": 31,
+        "max_fraction_inside_other": 0.9992061026543785,
+        "most_containing_region_id": "region-0005"
+      },
+      {
+        "region_id": "region-0023",
+        "area_px": 711,
+        "component_count": 1,
+        "max_fraction_inside_other": 1.0,
+        "most_containing_region_id": "region-0008"
+      },
+      {
+        "region_id": "region-0024",
+        "area_px": 1362,
+        "component_count": 5,
+        "max_fraction_inside_other": 0.5315712187958884,
+        "most_containing_region_id": "region-0038"
+      },
+      {
+        "region_id": "region-0025",
+        "area_px": 613,
+        "component_count": 5,
+        "max_fraction_inside_other": 1.0,
+        "most_containing_region_id": "region-0008"
+      },
+      {
+        "region_id": "region-0026",
+        "area_px": 4952,
+        "component_count": 13,
+        "max_fraction_inside_other": 0.9668820678513732,
+        "most_containing_region_id": "region-0017"
+      },
+      {
+        "region_id": "region-0027",
+        "area_px": 70,
+        "component_count": 1,
+        "max_fraction_inside_other": 0.0,
+        "most_containing_region_id": null
+      },
+      {
+        "region_id": "region-0028",
+        "area_px": 1125,
+        "component_count": 2,
+        "max_fraction_inside_other": 0.9608888888888889,
+        "most_containing_region_id": "region-0005"
+      },
+      {
+        "region_id": "region-0029",
+        "area_px": 17583,
+        "component_count": 1,
+        "max_fraction_inside_other": 0.9660467497014161,
+        "most_containing_region_id": "region-0008"
+      },
+      {
+        "region_id": "region-0030",
+        "area_px": 1030,
+        "component_count": 5,
+        "max_fraction_inside_other": 0.7281553398058253,
+        "most_containing_region_id": "region-0010"
+      },
+      {
+        "region_id": "region-0031",
+        "area_px": 698,
+        "component_count": 2,
+        "max_fraction_inside_other": 1.0,
+        "most_containing_region_id": "region-0008"
+      },
+      {
+        "region_id": "region-0032",
+        "area_px": 269,
+        "component_count": 1,
+        "max_fraction_inside_other": 0.9107806691449815,
+        "most_containing_region_id": "region-0008"
+      },
+      {
+        "region_id": "region-0033",
+        "area_px": 38,
+        "component_count": 1,
+        "max_fraction_inside_other": 0.0,
+        "most_containing_region_id": null
+      },
+      {
+        "region_id": "region-0034",
+        "area_px": 437,
+        "component_count": 1,
+        "max_fraction_inside_other": 0.22654462242562928,
+        "most_containing_region_id": "region-0052"
+      },
+      {
+        "region_id": "region-0035",
+        "area_px": 15669,
+        "component_count": 14,
+        "max_fraction_inside_other": 0.9888314506350118,
+        "most_containing_region_id": "region-0017"
+      },
+      {
+        "region_id": "region-0036",
+        "area_px": 277,
+        "component_count": 1,
+        "max_fraction_inside_other": 0.0036101083032490976,
+        "most_containing_region_id": "region-0011"
+      },
+      {
+        "region_id": "region-0037",
+        "area_px": 1546,
+        "component_count": 2,
+        "max_fraction_inside_other": 0.8078913324708926,
+        "most_containing_region_id": "region-0066"
+      },
+      {
+        "region_id": "region-0038",
+        "area_px": 1619,
+        "component_count": 2,
+        "max_fraction_inside_other": 0.44718962322421246,
+        "most_containing_region_id": "region-0024"
+      },
+      {
+        "region_id": "region-0039",
+        "area_px": 467,
+        "component_count": 8,
+        "max_fraction_inside_other": 0.28051391862955033,
+        "most_containing_region_id": "region-0013"
+      },
+      {
+        "region_id": "region-0040",
+        "area_px": 1475,
+        "component_count": 1,
+        "max_fraction_inside_other": 0.9905084745762712,
+        "most_containing_region_id": "region-0029"
+      },
+      {
+        "region_id": "region-0041",
+        "area_px": 336,
+        "component_count": 2,
+        "max_fraction_inside_other": 1.0,
+        "most_containing_region_id": "region-0008"
+      },
+      {
+        "region_id": "region-0042",
+        "area_px": 315,
+        "component_count": 1,
+        "max_fraction_inside_other": 0.044444444444444446,
+        "most_containing_region_id": "region-0055"
+      },
+      {
+        "region_id": "region-0043",
+        "area_px": 3595,
+        "component_count": 2,
+        "max_fraction_inside_other": 0.9388038942976356,
+        "most_containing_region_id": "region-0008"
+      },
+      {
+        "region_id": "region-0044",
+        "area_px": 255,
+        "component_count": 1,
+        "max_fraction_inside_other": 0.9450980392156862,
+        "most_containing_region_id": "region-0051"
+      },
+      {
+        "region_id": "region-0045",
+        "area_px": 1100,
+        "component_count": 2,
+        "max_fraction_inside_other": 0.9872727272727273,
+        "most_containing_region_id": "region-0029"
+      },
+      {
+        "region_id": "region-0046",
+        "area_px": 912,
+        "component_count": 2,
+        "max_fraction_inside_other": 1.0,
+        "most_containing_region_id": "region-0008"
+      },
+      {
+        "region_id": "region-0047",
+        "area_px": 1225,
+        "component_count": 5,
+        "max_fraction_inside_other": 0.28,
+        "most_containing_region_id": "region-0077"
+      },
+      {
+        "region_id": "region-0048",
+        "area_px": 457,
+        "component_count": 5,
+        "max_fraction_inside_other": 1.0,
+        "most_containing_region_id": "region-0008"
+      },
+      {
+        "region_id": "region-0049",
+        "area_px": 1199,
+        "component_count": 2,
+        "max_fraction_inside_other": 0.9057547956630525,
+        "most_containing_region_id": "region-0056"
+      },
+      {
+        "region_id": "region-0050",
+        "area_px": 126,
+        "component_count": 3,
+        "max_fraction_inside_other": 1.0,
+        "most_containing_region_id": "region-0014"
+      },
+      {
+        "region_id": "region-0051",
+        "area_px": 800,
+        "component_count": 3,
+        "max_fraction_inside_other": 0.475,
+        "most_containing_region_id": "region-0010"
+      },
+      {
+        "region_id": "region-0052",
+        "area_px": 4479,
+        "component_count": 8,
+        "max_fraction_inside_other": 0.9214110292475999,
+        "most_containing_region_id": "region-0010"
+      },
+      {
+        "region_id": "region-0053",
+        "area_px": 51,
+        "component_count": 1,
+        "max_fraction_inside_other": 0.0,
+        "most_containing_region_id": null
+      },
+      {
+        "region_id": "region-0054",
+        "area_px": 806,
+        "component_count": 1,
+        "max_fraction_inside_other": 0.47518610421836227,
+        "most_containing_region_id": "region-0081"
+      },
+      {
+        "region_id": "region-0055",
+        "area_px": 587,
+        "component_count": 1,
+        "max_fraction_inside_other": 0.11073253833049404,
+        "most_containing_region_id": "region-0018"
+      },
+      {
+        "region_id": "region-0056",
+        "area_px": 1706,
+        "component_count": 1,
+        "max_fraction_inside_other": 0.6365767878077374,
+        "most_containing_region_id": "region-0049"
+      },
+      {
+        "region_id": "region-0057",
+        "area_px": 226,
+        "component_count": 1,
+        "max_fraction_inside_other": 0.9070796460176991,
+        "most_containing_region_id": "region-0079"
+      },
+      {
+        "region_id": "region-0058",
+        "area_px": 588,
+        "component_count": 5,
+        "max_fraction_inside_other": 0.9489795918367347,
+        "most_containing_region_id": "region-0008"
+      },
+      {
+        "region_id": "region-0059",
+        "area_px": 630,
+        "component_count": 2,
+        "max_fraction_inside_other": 0.8380952380952381,
+        "most_containing_region_id": "region-0061"
+      },
+      {
+        "region_id": "region-0060",
+        "area_px": 3871,
+        "component_count": 18,
+        "max_fraction_inside_other": 0.947300439163007,
+        "most_containing_region_id": "region-0010"
+      },
+      {
+        "region_id": "region-0061",
+        "area_px": 1696,
+        "component_count": 12,
+        "max_fraction_inside_other": 0.9056603773584906,
+        "most_containing_region_id": "region-0015"
+      },
+      {
+        "region_id": "region-0062",
+        "area_px": 2410,
+        "component_count": 1,
+        "max_fraction_inside_other": 0.733609958506224,
+        "most_containing_region_id": "region-0020"
+      },
+      {
+        "region_id": "region-0063",
+        "area_px": 914,
+        "component_count": 48,
+        "max_fraction_inside_other": 0.9463894967177243,
+        "most_containing_region_id": "region-0017"
+      },
+      {
+        "region_id": "region-0064",
+        "area_px": 1433,
+        "component_count": 2,
+        "max_fraction_inside_other": 1.0,
+        "most_containing_region_id": "region-0062"
+      },
+      {
+        "region_id": "region-0065",
+        "area_px": 1126,
+        "component_count": 16,
+        "max_fraction_inside_other": 0.7353463587921847,
+        "most_containing_region_id": "region-0005"
+      },
+      {
+        "region_id": "region-0066",
+        "area_px": 1675,
+        "component_count": 10,
+        "max_fraction_inside_other": 0.7456716417910447,
+        "most_containing_region_id": "region-0037"
+      },
+      {
+        "region_id": "region-0067",
+        "area_px": 320,
+        "component_count": 1,
+        "max_fraction_inside_other": 0.521875,
+        "most_containing_region_id": "region-0017"
+      },
+      {
+        "region_id": "region-0068",
+        "area_px": 142,
+        "component_count": 1,
+        "max_fraction_inside_other": 0.14084507042253522,
+        "most_containing_region_id": "region-0020"
+      },
+      {
+        "region_id": "region-0069",
+        "area_px": 7828,
+        "component_count": 195,
+        "max_fraction_inside_other": 0.7985436893203883,
+        "most_containing_region_id": "region-0001"
+      },
+      {
+        "region_id": "region-0070",
+        "area_px": 7908,
+        "component_count": 158,
+        "max_fraction_inside_other": 0.7157309054122407,
+        "most_containing_region_id": "region-0069"
+      },
+      {
+        "region_id": "region-0071",
+        "area_px": 290,
+        "component_count": 7,
+        "max_fraction_inside_other": 0.7241379310344828,
+        "most_containing_region_id": "region-0014"
+      },
+      {
+        "region_id": "region-0072",
+        "area_px": 282,
+        "component_count": 1,
+        "max_fraction_inside_other": 0.3120567375886525,
+        "most_containing_region_id": "region-0015"
+      },
+      {
+        "region_id": "region-0073",
+        "area_px": 1897,
+        "component_count": 13,
+        "max_fraction_inside_other": 0.8771744860305746,
+        "most_containing_region_id": "region-0017"
+      },
+      {
+        "region_id": "region-0074",
+        "area_px": 340,
+        "component_count": 1,
+        "max_fraction_inside_other": 0.7911764705882353,
+        "most_containing_region_id": "region-0011"
+      },
+      {
+        "region_id": "region-0075",
+        "area_px": 581,
+        "component_count": 2,
+        "max_fraction_inside_other": 0.9345955249569707,
+        "most_containing_region_id": "region-0008"
+      },
+      {
+        "region_id": "region-0076",
+        "area_px": 632,
+        "component_count": 7,
+        "max_fraction_inside_other": 0.6677215189873418,
+        "most_containing_region_id": "region-0082"
+      },
+      {
+        "region_id": "region-0077",
+        "area_px": 486,
+        "component_count": 4,
+        "max_fraction_inside_other": 0.7057613168724279,
+        "most_containing_region_id": "region-0047"
+      },
+      {
+        "region_id": "region-0078",
+        "area_px": 911,
+        "component_count": 2,
+        "max_fraction_inside_other": 0.7596048298572997,
+        "most_containing_region_id": "region-0008"
+      },
+      {
+        "region_id": "region-0079",
+        "area_px": 990,
+        "component_count": 17,
+        "max_fraction_inside_other": 0.8929292929292929,
+        "most_containing_region_id": "region-0017"
+      },
+      {
+        "region_id": "region-0080",
+        "area_px": 181,
+        "component_count": 4,
+        "max_fraction_inside_other": 0.8674033149171271,
+        "most_containing_region_id": "region-0037"
+      },
+      {
+        "region_id": "region-0081",
+        "area_px": 1139,
+        "component_count": 14,
+        "max_fraction_inside_other": 0.6453028972783144,
+        "most_containing_region_id": "region-0017"
+      },
+      {
+        "region_id": "region-0082",
+        "area_px": 456,
+        "component_count": 5,
+        "max_fraction_inside_other": 0.9254385964912281,
+        "most_containing_region_id": "region-0076"
+      },
+      {
+        "region_id": "region-0083",
+        "area_px": 1693,
+        "component_count": 3,
+        "max_fraction_inside_other": 0.04016538688718252,
+        "most_containing_region_id": "region-0072"
+      }
+    ]
+  },
+  "report_duplicate_iou_0p8": {
+    "metric_version": "1.0.0",
+    "definition": {
+      "connectivity": 4,
+      "containment_threshold": 0.8,
+      "duplicate_iou_threshold": 0.8,
+      "area_quantile_method": "linear"
+    },
+    "mask_count": 83,
+    "proposal_count": 431,
+    "accepted_mask_ratio": 0.1925754060324826,
+    "area_px_p10": 270.6,
+    "area_px_median": 1100.0,
+    "area_px_p90": 7892.0,
+    "fragmented_mask_count": 57,
+    "fragmentation_rate": 0.6867469879518072,
+    "masks_contained_in_another": 43,
+    "overlapping_pair_count": 323,
+    "contained_pair_count": 56,
+    "duplicate_pair_count": 0,
+    "covered_pixel_count": 168168,
+    "pixels_with_multiple_masks": 142713,
+    "multiple_mask_pixel_fraction": 0.848633509347795,
+    "nesting_depth_histogram": {
+      "1": 25455,
+      "2": 66005,
+      "3": 60180,
+      "4": 11240,
+      "5": 4041,
+      "6": 1021,
+      "7": 226
+    },
+    "max_nesting_depth": 7,
+    "usable_pixel_count": 236241,
+    "usable_area_coverage": 0.7081200976968435,
+    "masks": [
+      {
+        "region_id": "region-0001",
+        "area_px": 6648,
+        "component_count": 171,
+        "max_fraction_inside_other": 0.9402827918170878,
+        "most_containing_region_id": "region-0069"
+      },
+      {
+        "region_id": "region-0002",
+        "area_px": 7461,
+        "component_count": 17,
+        "max_fraction_inside_other": 0.7981503819863289,
+        "most_containing_region_id": "region-0015"
+      },
+      {
+        "region_id": "region-0003",
+        "area_px": 2591,
+        "component_count": 1,
+        "max_fraction_inside_other": 0.5472790428406021,
+        "most_containing_region_id": "region-0015"
+      },
+      {
+        "region_id": "region-0004",
+        "area_px": 631,
+        "component_count": 1,
+        "max_fraction_inside_other": 0.6434231378763867,
+        "most_containing_region_id": "region-0070"
+      },
+      {
+        "region_id": "region-0005",
+        "area_px": 43793,
+        "component_count": 129,
+        "max_fraction_inside_other": 0.8080058456831001,
+        "most_containing_region_id": "region-0017"
+      },
+      {
+        "region_id": "region-0006",
+        "area_px": 4831,
+        "component_count": 24,
+        "max_fraction_inside_other": 0.8780790726557649,
+        "most_containing_region_id": "region-0017"
+      },
+      {
+        "region_id": "region-0007",
+        "area_px": 340,
+        "component_count": 6,
+        "max_fraction_inside_other": 0.8735294117647059,
+        "most_containing_region_id": "region-0030"
+      },
+      {
+        "region_id": "region-0008",
+        "area_px": 37840,
+        "component_count": 35,
+        "max_fraction_inside_other": 0.44889006342494714,
+        "most_containing_region_id": "region-0029"
+      },
+      {
+        "region_id": "region-0009",
+        "area_px": 3178,
+        "component_count": 2,
+        "max_fraction_inside_other": 0.9439899307740718,
+        "most_containing_region_id": "region-0005"
+      },
+      {
+        "region_id": "region-0010",
+        "area_px": 45562,
+        "component_count": 394,
+        "max_fraction_inside_other": 0.7639260787498354,
+        "most_containing_region_id": "region-0015"
+      },
+      {
+        "region_id": "region-0011",
+        "area_px": 6358,
+        "component_count": 8,
+        "max_fraction_inside_other": 0.8681975463982384,
+        "most_containing_region_id": "region-0005"
+      },
+      {
+        "region_id": "region-0012",
+        "area_px": 967,
+        "component_count": 1,
+        "max_fraction_inside_other": 0.005170630816959669,
+        "most_containing_region_id": "region-0013"
+      },
+      {
+        "region_id": "region-0013",
+        "area_px": 382,
+        "component_count": 1,
+        "max_fraction_inside_other": 0.34293193717277487,
+        "most_containing_region_id": "region-0039"
+      },
+      {
+        "region_id": "region-0014",
+        "area_px": 2046,
+        "component_count": 1,
+        "max_fraction_inside_other": 0.10263929618768329,
+        "most_containing_region_id": "region-0071"
+      },
+      {
+        "region_id": "region-0015",
+        "area_px": 38646,
+        "component_count": 239,
+        "max_fraction_inside_other": 0.9006365471200124,
+        "most_containing_region_id": "region-0010"
+      },
+      {
+        "region_id": "region-0016",
+        "area_px": 1380,
+        "component_count": 3,
+        "max_fraction_inside_other": 0.8108695652173913,
+        "most_containing_region_id": "region-0005"
+      },
+      {
+        "region_id": "region-0017",
+        "area_px": 56037,
+        "component_count": 97,
+        "max_fraction_inside_other": 0.6314577868194229,
+        "most_containing_region_id": "region-0005"
+      },
+      {
+        "region_id": "region-0018",
+        "area_px": 997,
+        "component_count": 3,
+        "max_fraction_inside_other": 0.8485456369107321,
+        "most_containing_region_id": "region-0020"
+      },
+      {
+        "region_id": "region-0019",
+        "area_px": 3257,
+        "component_count": 1,
+        "max_fraction_inside_other": 0.9748234571691741,
+        "most_containing_region_id": "region-0005"
+      },
+      {
+        "region_id": "region-0020",
+        "area_px": 6349,
+        "component_count": 4,
+        "max_fraction_inside_other": 0.6423058749409356,
+        "most_containing_region_id": "region-0021"
+      },
+      {
+        "region_id": "region-0021",
+        "area_px": 4078,
+        "component_count": 5,
+        "max_fraction_inside_other": 1.0,
+        "most_containing_region_id": "region-0020"
+      },
+      {
+        "region_id": "region-0022",
+        "area_px": 28971,
+        "component_count": 31,
+        "max_fraction_inside_other": 0.9992061026543785,
+        "most_containing_region_id": "region-0005"
+      },
+      {
+        "region_id": "region-0023",
+        "area_px": 711,
+        "component_count": 1,
+        "max_fraction_inside_other": 1.0,
+        "most_containing_region_id": "region-0008"
+      },
+      {
+        "region_id": "region-0024",
+        "area_px": 1362,
+        "component_count": 5,
+        "max_fraction_inside_other": 0.5315712187958884,
+        "most_containing_region_id": "region-0038"
+      },
+      {
+        "region_id": "region-0025",
+        "area_px": 613,
+        "component_count": 5,
+        "max_fraction_inside_other": 1.0,
+        "most_containing_region_id": "region-0008"
+      },
+      {
+        "region_id": "region-0026",
+        "area_px": 4952,
+        "component_count": 13,
+        "max_fraction_inside_other": 0.9668820678513732,
+        "most_containing_region_id": "region-0017"
+      },
+      {
+        "region_id": "region-0027",
+        "area_px": 70,
+        "component_count": 1,
+        "max_fraction_inside_other": 0.0,
+        "most_containing_region_id": null
+      },
+      {
+        "region_id": "region-0028",
+        "area_px": 1125,
+        "component_count": 2,
+        "max_fraction_inside_other": 0.9608888888888889,
+        "most_containing_region_id": "region-0005"
+      },
+      {
+        "region_id": "region-0029",
+        "area_px": 17583,
+        "component_count": 1,
+        "max_fraction_inside_other": 0.9660467497014161,
+        "most_containing_region_id": "region-0008"
+      },
+      {
+        "region_id": "region-0030",
+        "area_px": 1030,
+        "component_count": 5,
+        "max_fraction_inside_other": 0.7281553398058253,
+        "most_containing_region_id": "region-0010"
+      },
+      {
+        "region_id": "region-0031",
+        "area_px": 698,
+        "component_count": 2,
+        "max_fraction_inside_other": 1.0,
+        "most_containing_region_id": "region-0008"
+      },
+      {
+        "region_id": "region-0032",
+        "area_px": 269,
+        "component_count": 1,
+        "max_fraction_inside_other": 0.9107806691449815,
+        "most_containing_region_id": "region-0008"
+      },
+      {
+        "region_id": "region-0033",
+        "area_px": 38,
+        "component_count": 1,
+        "max_fraction_inside_other": 0.0,
+        "most_containing_region_id": null
+      },
+      {
+        "region_id": "region-0034",
+        "area_px": 437,
+        "component_count": 1,
+        "max_fraction_inside_other": 0.22654462242562928,
+        "most_containing_region_id": "region-0052"
+      },
+      {
+        "region_id": "region-0035",
+        "area_px": 15669,
+        "component_count": 14,
+        "max_fraction_inside_other": 0.9888314506350118,
+        "most_containing_region_id": "region-0017"
+      },
+      {
+        "region_id": "region-0036",
+        "area_px": 277,
+        "component_count": 1,
+        "max_fraction_inside_other": 0.0036101083032490976,
+        "most_containing_region_id": "region-0011"
+      },
+      {
+        "region_id": "region-0037",
+        "area_px": 1546,
+        "component_count": 2,
+        "max_fraction_inside_other": 0.8078913324708926,
+        "most_containing_region_id": "region-0066"
+      },
+      {
+        "region_id": "region-0038",
+        "area_px": 1619,
+        "component_count": 2,
+        "max_fraction_inside_other": 0.44718962322421246,
+        "most_containing_region_id": "region-0024"
+      },
+      {
+        "region_id": "region-0039",
+        "area_px": 467,
+        "component_count": 8,
+        "max_fraction_inside_other": 0.28051391862955033,
+        "most_containing_region_id": "region-0013"
+      },
+      {
+        "region_id": "region-0040",
+        "area_px": 1475,
+        "component_count": 1,
+        "max_fraction_inside_other": 0.9905084745762712,
+        "most_containing_region_id": "region-0029"
+      },
+      {
+        "region_id": "region-0041",
+        "area_px": 336,
+        "component_count": 2,
+        "max_fraction_inside_other": 1.0,
+        "most_containing_region_id": "region-0008"
+      },
+      {
+        "region_id": "region-0042",
+        "area_px": 315,
+        "component_count": 1,
+        "max_fraction_inside_other": 0.044444444444444446,
+        "most_containing_region_id": "region-0055"
+      },
+      {
+        "region_id": "region-0043",
+        "area_px": 3595,
+        "component_count": 2,
+        "max_fraction_inside_other": 0.9388038942976356,
+        "most_containing_region_id": "region-0008"
+      },
+      {
+        "region_id": "region-0044",
+        "area_px": 255,
+        "component_count": 1,
+        "max_fraction_inside_other": 0.9450980392156862,
+        "most_containing_region_id": "region-0051"
+      },
+      {
+        "region_id": "region-0045",
+        "area_px": 1100,
+        "component_count": 2,
+        "max_fraction_inside_other": 0.9872727272727273,
+        "most_containing_region_id": "region-0029"
+      },
+      {
+        "region_id": "region-0046",
+        "area_px": 912,
+        "component_count": 2,
+        "max_fraction_inside_other": 1.0,
+        "most_containing_region_id": "region-0008"
+      },
+      {
+        "region_id": "region-0047",
+        "area_px": 1225,
+        "component_count": 5,
+        "max_fraction_inside_other": 0.28,
+        "most_containing_region_id": "region-0077"
+      },
+      {
+        "region_id": "region-0048",
+        "area_px": 457,
+        "component_count": 5,
+        "max_fraction_inside_other": 1.0,
+        "most_containing_region_id": "region-0008"
+      },
+      {
+        "region_id": "region-0049",
+        "area_px": 1199,
+        "component_count": 2,
+        "max_fraction_inside_other": 0.9057547956630525,
+        "most_containing_region_id": "region-0056"
+      },
+      {
+        "region_id": "region-0050",
+        "area_px": 126,
+        "component_count": 3,
+        "max_fraction_inside_other": 1.0,
+        "most_containing_region_id": "region-0014"
+      },
+      {
+        "region_id": "region-0051",
+        "area_px": 800,
+        "component_count": 3,
+        "max_fraction_inside_other": 0.475,
+        "most_containing_region_id": "region-0010"
+      },
+      {
+        "region_id": "region-0052",
+        "area_px": 4479,
+        "component_count": 8,
+        "max_fraction_inside_other": 0.9214110292475999,
+        "most_containing_region_id": "region-0010"
+      },
+      {
+        "region_id": "region-0053",
+        "area_px": 51,
+        "component_count": 1,
+        "max_fraction_inside_other": 0.0,
+        "most_containing_region_id": null
+      },
+      {
+        "region_id": "region-0054",
+        "area_px": 806,
+        "component_count": 1,
+        "max_fraction_inside_other": 0.47518610421836227,
+        "most_containing_region_id": "region-0081"
+      },
+      {
+        "region_id": "region-0055",
+        "area_px": 587,
+        "component_count": 1,
+        "max_fraction_inside_other": 0.11073253833049404,
+        "most_containing_region_id": "region-0018"
+      },
+      {
+        "region_id": "region-0056",
+        "area_px": 1706,
+        "component_count": 1,
+        "max_fraction_inside_other": 0.6365767878077374,
+        "most_containing_region_id": "region-0049"
+      },
+      {
+        "region_id": "region-0057",
+        "area_px": 226,
+        "component_count": 1,
+        "max_fraction_inside_other": 0.9070796460176991,
+        "most_containing_region_id": "region-0079"
+      },
+      {
+        "region_id": "region-0058",
+        "area_px": 588,
+        "component_count": 5,
+        "max_fraction_inside_other": 0.9489795918367347,
+        "most_containing_region_id": "region-0008"
+      },
+      {
+        "region_id": "region-0059",
+        "area_px": 630,
+        "component_count": 2,
+        "max_fraction_inside_other": 0.8380952380952381,
+        "most_containing_region_id": "region-0061"
+      },
+      {
+        "region_id": "region-0060",
+        "area_px": 3871,
+        "component_count": 18,
+        "max_fraction_inside_other": 0.947300439163007,
+        "most_containing_region_id": "region-0010"
+      },
+      {
+        "region_id": "region-0061",
+        "area_px": 1696,
+        "component_count": 12,
+        "max_fraction_inside_other": 0.9056603773584906,
+        "most_containing_region_id": "region-0015"
+      },
+      {
+        "region_id": "region-0062",
+        "area_px": 2410,
+        "component_count": 1,
+        "max_fraction_inside_other": 0.733609958506224,
+        "most_containing_region_id": "region-0020"
+      },
+      {
+        "region_id": "region-0063",
+        "area_px": 914,
+        "component_count": 48,
+        "max_fraction_inside_other": 0.9463894967177243,
+        "most_containing_region_id": "region-0017"
+      },
+      {
+        "region_id": "region-0064",
+        "area_px": 1433,
+        "component_count": 2,
+        "max_fraction_inside_other": 1.0,
+        "most_containing_region_id": "region-0062"
+      },
+      {
+        "region_id": "region-0065",
+        "area_px": 1126,
+        "component_count": 16,
+        "max_fraction_inside_other": 0.7353463587921847,
+        "most_containing_region_id": "region-0005"
+      },
+      {
+        "region_id": "region-0066",
+        "area_px": 1675,
+        "component_count": 10,
+        "max_fraction_inside_other": 0.7456716417910447,
+        "most_containing_region_id": "region-0037"
+      },
+      {
+        "region_id": "region-0067",
+        "area_px": 320,
+        "component_count": 1,
+        "max_fraction_inside_other": 0.521875,
+        "most_containing_region_id": "region-0017"
+      },
+      {
+        "region_id": "region-0068",
+        "area_px": 142,
+        "component_count": 1,
+        "max_fraction_inside_other": 0.14084507042253522,
+        "most_containing_region_id": "region-0020"
+      },
+      {
+        "region_id": "region-0069",
+        "area_px": 7828,
+        "component_count": 195,
+        "max_fraction_inside_other": 0.7985436893203883,
+        "most_containing_region_id": "region-0001"
+      },
+      {
+        "region_id": "region-0070",
+        "area_px": 7908,
+        "component_count": 158,
+        "max_fraction_inside_other": 0.7157309054122407,
+        "most_containing_region_id": "region-0069"
+      },
+      {
+        "region_id": "region-0071",
+        "area_px": 290,
+        "component_count": 7,
+        "max_fraction_inside_other": 0.7241379310344828,
+        "most_containing_region_id": "region-0014"
+      },
+      {
+        "region_id": "region-0072",
+        "area_px": 282,
+        "component_count": 1,
+        "max_fraction_inside_other": 0.3120567375886525,
+        "most_containing_region_id": "region-0015"
+      },
+      {
+        "region_id": "region-0073",
+        "area_px": 1897,
+        "component_count": 13,
+        "max_fraction_inside_other": 0.8771744860305746,
+        "most_containing_region_id": "region-0017"
+      },
+      {
+        "region_id": "region-0074",
+        "area_px": 340,
+        "component_count": 1,
+        "max_fraction_inside_other": 0.7911764705882353,
+        "most_containing_region_id": "region-0011"
+      },
+      {
+        "region_id": "region-0075",
+        "area_px": 581,
+        "component_count": 2,
+        "max_fraction_inside_other": 0.9345955249569707,
+        "most_containing_region_id": "region-0008"
+      },
+      {
+        "region_id": "region-0076",
+        "area_px": 632,
+        "component_count": 7,
+        "max_fraction_inside_other": 0.6677215189873418,
+        "most_containing_region_id": "region-0082"
+      },
+      {
+        "region_id": "region-0077",
+        "area_px": 486,
+        "component_count": 4,
+        "max_fraction_inside_other": 0.7057613168724279,
+        "most_containing_region_id": "region-0047"
+      },
+      {
+        "region_id": "region-0078",
+        "area_px": 911,
+        "component_count": 2,
+        "max_fraction_inside_other": 0.7596048298572997,
+        "most_containing_region_id": "region-0008"
+      },
+      {
+        "region_id": "region-0079",
+        "area_px": 990,
+        "component_count": 17,
+        "max_fraction_inside_other": 0.8929292929292929,
+        "most_containing_region_id": "region-0017"
+      },
+      {
+        "region_id": "region-0080",
+        "area_px": 181,
+        "component_count": 4,
+        "max_fraction_inside_other": 0.8674033149171271,
+        "most_containing_region_id": "region-0037"
+      },
+      {
+        "region_id": "region-0081",
+        "area_px": 1139,
+        "component_count": 14,
+        "max_fraction_inside_other": 0.6453028972783144,
+        "most_containing_region_id": "region-0017"
+      },
+      {
+        "region_id": "region-0082",
+        "area_px": 456,
+        "component_count": 5,
+        "max_fraction_inside_other": 0.9254385964912281,
+        "most_containing_region_id": "region-0076"
+      },
+      {
+        "region_id": "region-0083",
+        "area_px": 1693,
+        "component_count": 3,
+        "max_fraction_inside_other": 0.04016538688718252,
+        "most_containing_region_id": "region-0072"
+      }
+    ]
+  }
+}

@@ -1,0 +1,245 @@
+{
+  "config": {
+    "components": {
+      "entity_resolution": {
+        "appearance": {
+          "backend": null
+        },
+        "belief": {
+          "backend": null
+        },
+        "geometry_comparison": {
+          "backend": "entity-geometry-comparison-v1",
+          "entity-geometry-comparison-v1": {}
+        },
+        "representation": {
+          "backend": null
+        },
+        "resolution": {
+          "backend": "conservative-staged-resolution-v1",
+          "conservative-staged-resolution-v1": {}
+        },
+        "retrieval": {
+          "backend": "entity-candidate-retrieval-v1",
+          "entity-candidate-retrieval-v1": {}
+        },
+        "semantic_compatibility": {
+          "backend": null
+        },
+        "temporal_compatibility": {
+          "backend": null
+        }
+      },
+      "geometric_mapping": {
+        "aggregation": {
+          "backend": null
+        },
+        "deskew": {
+          "backend": null
+        },
+        "motion_correction": {
+          "backend": "motion-correction-v1",
+          "motion-correction-v1": {}
+        },
+        "pose_lookup": {
+          "backend": "lookup-policy-v1",
+          "lookup-policy-v1": {}
+        }
+      },
+      "ingestion": {
+        "source_adapter": {
+          "backend": "ros1_bag",
+          "ros1_bag": {}
+        }
+      },
+      "region_perception": {
+        "discovery": {
+          "backend": "sam2",
+          "sam2": {
+            "checkpoint": "facebook/sam2.1-hiera-tiny",
+            "device": "cuda",
+            "model_version": {
+              "PLACEHOLDER": "SAM2_MODEL_VERSION"
+            },
+            "precision": "float32"
+          }
+        },
+        "grounding": {
+          "backend": null
+        },
+        "refinement": {
+          "backend": null
+        }
+      },
+      "semantic_fusion": {
+        "accumulation": {
+          "backend": "baseline-evidence-accumulation-v1",
+          "baseline-evidence-accumulation-v1": {}
+        },
+        "support": {
+          "backend": "geometry-jaccard-support-v1",
+          "geometry-jaccard-support-v1": {}
+        }
+      },
+      "semantic_interpretation": {
+        "interpreter": {
+          "backend": "qwen",
+          "qwen": {
+            "device": "cuda",
+            "max_new_tokens": {
+              "PLACEHOLDER": "QWEN_MAX_NEW_TOKENS"
+            },
+            "model": "Qwen/Qwen3-VL-4B-Instruct",
+            "precision": {
+              "PLACEHOLDER": "QWEN_PRECISION"
+            },
+            "prompt_policy": {
+              "region": "region/v1",
+              "scene": "scene/v1"
+            },
+            "quantization": "4bit",
+            "revision": {
+              "PLACEHOLDER": "QWEN_REVISION"
+            },
+            "temperature": 0.0,
+            "view_policy": {
+              "region_views": [
+                "tight_crop"
+              ]
+            }
+          }
+        }
+      },
+      "semantic_mapping": {
+        "geometry_summary": {
+          "backend": "entity-geometry-summary-v1",
+          "entity-geometry-summary-v1": {}
+        }
+      },
+      "sensor_association": {
+        "dense_sampling": {
+          "backend": null
+        },
+        "membership": {
+          "backend": null
+        },
+        "occlusion": {
+          "backend": "conservative-depth-support-v1",
+          "conservative-depth-support-v1": {}
+        },
+        "pose_policy": {
+          "backend": "lookup-policy-v1",
+          "lookup-policy-v1": {}
+        },
+        "tolerances": {
+          "backend": "diagnostic-tolerances-v1",
+          "diagnostic-tolerances-v1": {}
+        }
+      },
+      "spatial_relations": {
+        "candidate": {
+          "backend": "bounds-neighborhood-candidates-v1",
+          "bounds-neighborhood-candidates-v1": {}
+        },
+        "contact_predicate": {
+          "backend": null
+        },
+        "frame_conventions": {
+          "backend": "map-frame-conventions-v1",
+          "map-frame-conventions-v1": {}
+        },
+        "geometric_predicate": {
+          "backend": null
+        },
+        "geometry_summary": {
+          "backend": "entity-geometry-summary-v1",
+          "entity-geometry-summary-v1": {}
+        },
+        "semantic_predicate": {
+          "backend": null
+        }
+      },
+      "state_estimation": {
+        "estimator": {
+          "backend": "external_pose",
+          "external_pose": {}
+        }
+      },
+      "visual_features": {
+        "dense": {
+          "backend": "dinov2",
+          "dinov2": {
+            "checkpoint": "facebook/dinov2-base",
+            "device": "cuda",
+            "precision": "float32",
+            "revision": {
+              "PLACEHOLDER": "DINOV2_REVISION"
+            }
+          }
+        },
+        "region": {
+          "backend": "clip",
+          "clip": {
+            "checkpoint": "openai/clip-vit-large-patch14",
+            "device": "cuda",
+            "precision": "float32",
+            "revision": {
+              "PLACEHOLDER": "CLIP_REVISION"
+            }
+          }
+        }
+      }
+    },
+    "inputs": {
+      "named": {},
+      "selections": {},
+      "sequence": "REPLACE-WITH-YOUR-SEQUENCE-ARTIFACT-ID"
+    },
+    "pipeline": {
+      "preset": "canonical/1",
+      "stages": {
+        "context_map": true,
+        "entity_resolution": true,
+        "geometric_mapping": true,
+        "ingestion": true,
+        "point_representation": false,
+        "pose_ingestion": false,
+        "region_perception": true,
+        "semantic_fusion": true,
+        "semantic_mapping": true,
+        "semantic_scoring": false,
+        "sensor_association": true,
+        "spatial_relations": true,
+        "state_estimation": true,
+        "visual_perception": true
+      }
+    },
+    "policies": {
+      "association_max_range_m": null,
+      "debug_level": "standard",
+      "perception_schedule": "frame_major",
+      "trajectory_mode": "operational_only"
+    },
+    "resources": {
+      "device": "cuda",
+      "maps_root": "outputs/maps",
+      "providers": {},
+      "workspace": "outputs/runstore"
+    },
+    "schema_version": "0.1.0"
+  },
+  "digest": "sha256:bf54da6607a5969f8a16d066cd7f337aa51b77e6bdef11bdc2ae445b23d866de",
+  "schema_version": "0.1.0",
+  "sources": [
+    {
+      "content_hash": null,
+      "identity": "canonical/1",
+      "kind": "profile"
+    },
+    {
+      "content_hash": "sha256:5e432b8f5f83499b0ec2593c3bdb531045fd590fd30d1513a8041f5a69fa42bc",
+      "identity": "examples/v0.2.0/canonical-config.toml",
+      "kind": "file"
+    }
+  ]
+}

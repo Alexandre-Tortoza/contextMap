@@ -1,0 +1,2049 @@
+"""Command-line interface: a thin adapter over the runtime services.
+
+The CLI parses arguments, calls the runtime and prints what came back. It holds no
+backend-specific branch and no scientific rule: configuration is resolved by
+:func:`~contextmap.runtime.configuration.resolve_effective_config`, the topology by
+:func:`~contextmap.runtime.pipeline.resolve_plan`, selections by
+:func:`~contextmap.runtime.selection.resolve_selections` and execution by
+:func:`~contextmap.runtime.pipeline.run_plan`. Every flag is translated into a
+configuration override, so the CLI never becomes a second place that decides what runs.
+
+Stage executors: for every command that runs or previews a plan, the executors that
+:func:`~contextmap.runtime.composition.compose_executors` can build from the resolved
+configuration (``state_estimation``, ``geometric_mapping``, ``sensor_association`` and
+``context_map`` whenever the configuration enables and fully selects them;
+``semantic_fusion`` (with either accumulation policy, #655), ``semantic_mapping``,
+``entity_resolution`` and ``spatial_relations`` once the command has a ``--code-identity``,
+the code their runs record; ``visual_perception`` once its four variation points are
+selected and a runtime is available for every one of its selected backends that has no
+bundled loader -- SAM2, SAM3, Qwen, Gemini and Florence-2 today; the optional
+``semantic_scoring`` once enabled, with the AlphaCLIP scorer's text tower supplied the same
+way) are composed automatically, so the installed ``contextmap`` binary executes them with
+**no Python wrapper**: a runtime provider can be supplied either through
+``main(providers=...)`` (a Python embedder only) or, for the installed binary itself, declared
+in configuration as a ``resources.providers`` target (a ``"module:attribute"`` string,
+resolved by
+:func:`~contextmap.runtime.composition.resolve_provider`; see ``docs/composition.md`` and
+``docs/configuration.md``). The same mechanism covers any other optional component that
+needs a model runtime or client the repository does not load itself (for example
+``entity_resolution.appearance``), keyed by component identity (``"<capability>.<slot>"``).
+Executors supplied by the caller of :func:`main` (tests, or a future embedder) are merged
+on top and always win, so an explicit injection can override or extend what was composed --
+including ``ingestion``, whose
+:class:`~contextmap.runtime.ingestion_service.IngestionStageExecutor` needs a concrete
+request that is never part of a configuration (see ``contextmap ingest``).
+What those runs record and no configuration carries comes from the command itself, through
+:func:`~contextmap.runtime.composition.executor_identities`: the code version is
+``--code-identity``, the code digest its SHA-256 and the semantic map
+``semantic-map-<dataset>``. Without ``--code-identity``, a plan that reaches those stages is
+blocked by preflight naming the missing identity, before any stage runs; nothing records an
+empty code version. A component whose runtime a provider supplies (explicitly or declared) is
+also a ``provided_runtimes`` entry of the preflight, which then does not require the modules
+of the bundled loader the provider replaces.
+The optional ``point_representation`` stage (#663) is composed once enabled and with
+``--code-identity``, the PTv3 encoder's ``PTv3Runtime`` supplied the same way as any other model
+runtime; nothing consumes its run (#657).
+
+Exit codes: ``0`` success, ``1`` the request was understood but cannot be satisfied
+(invalid configuration, blocked preflight, failed stage, failed integrity check), ``2``
+misuse of the command line.
+"""
+
+from __future__ import annotations
+
+import argparse
+import contextlib
+import json
+import os
+import shutil
+import sys
+from collections.abc import Callable, Mapping, MutableMapping, Sequence
+from dataclasses import dataclass, replace
+from pathlib import Path, PurePosixPath
+from typing import Any, TextIO
+from uuid import uuid4
+
+from contextmap import __version__
+from contextmap.runtime.artifacts import ArtifactRef
+from contextmap.runtime.components import CANONICAL_PROFILE_ID
+from contextmap.runtime.composition import (
+    RuntimeProvider,
+    compose,
+    compose_executors,
+    executor_identities,
+    provided_runtimes,
+)
+from contextmap.runtime.configuration import (
+    DEBUG_LEVELS,
+    ConfigProblem,
+    ConfigurationError,
+    EffectiveConfig,
+    read_effective_config,
+    resolve_effective_config,
+    resolve_secrets,
+)
+from contextmap.runtime.contextual_mapping import (
+    CONTEXT_BUILD_FILENAME,
+    CONTEXT_STAGES,
+    MATERIALIZATION_TARGET,
+    SELECTABLE_CONTEXT_STAGES,
+    ClaimedContextBuild,
+    ContextBranch,
+    ContextBranchError,
+    ContextBuildError,
+    ContextRunError,
+    PlannedContextBuild,
+    SpatialFoundationError,
+    append_to_branch,
+    check_context_selection,
+    claim_context_build,
+    context_scope,
+    create_branch,
+    effective_maps_root,
+    foundation_of_run,
+    open_branch,
+    plan_context_build,
+    publish_context_build,
+    publish_context_run,
+    read_context_build,
+    read_context_builds,
+    read_context_run,
+    record_context_build,
+    resolve_map_artifact,
+)
+from contextmap.runtime.errors import (
+    BackendUnavailableError,
+    CompositionError,
+    PipelineError,
+    PreflightError,
+    RunRecordError,
+)
+from contextmap.runtime.ingestion_service import (
+    IngestionRequest,
+    IngestionResult,
+    IngestionService,
+    SourceAdapterFactory,
+    calibration_from_file,
+)
+from contextmap.runtime.lifecycle import ExecutionEvent
+from contextmap.runtime.pipeline import (
+    EXECUTION_FILENAME,
+    ExecutionPlan,
+    ExecutionRecord,
+    PipelinePlan,
+    PreflightReport,
+    StageExecutor,
+    StageOutputTarget,
+    predict_reuse,
+    preflight,
+    read_plan_document,
+    resolve_plan,
+    run_plan,
+    with_executor_identities,
+)
+from contextmap.runtime.reuse import FileArtifactStore, ReusePolicy
+from contextmap.runtime.runs import (
+    RunJournal,
+    RunSummary,
+    check_resumable,
+    dataset_directory,
+    read_run,
+    resume_plan,
+)
+from contextmap.runtime.selection import ResolvedSelections, load_catalog, resolve_selections
+from contextmap.shared import FileEntry, check_file_inventory
+
+EXIT_OK = 0
+EXIT_FAILED = 1
+EXIT_USAGE = 2
+EXIT_INTERRUPTED = 130
+
+_MANIFEST = "manifest.json"
+_SUMMARY_KEYS = (
+    "artifact_id",
+    "run_id",
+    "sequence_name",
+    "schema_version",
+    "created_at",
+    "debug_level",
+    "code_version",
+)
+# Literal, e não `contextmap.artifact.ARTIFACT_TYPE`: decidir o ramo não pode importar a
+# capability, que só é carregada quando o manifest é de fato de um ContextMapArtifact.
+_CONTEXT_MAP_ARTIFACT_TYPE = "context_map"
+_CONTEXT_MAP_SUMMARY_KEYS = ("context_map_id", "content_identity")
+
+_DOTENV_PATH = Path(".env")
+
+
+def _apply_dotenv(path: Path, *, environ: MutableMapping[str, str]) -> None:
+    """Fill secrets missing from ``environ`` with the ``KEY=VALUE`` pairs in ``path``.
+
+    This is a local convenience for supplying a backend secret (for example
+    ``GEMINI_API_KEY``) without exporting it by hand; it never learns a backend's secret
+    names itself, it just widens where any of them may come from. A key already present in
+    ``environ`` is never overwritten, so a value the real environment already provides
+    always wins over the file. A missing ``path`` is a silent no-op, since most invocations
+    have no local ``.env``.
+
+    Args:
+        path: The ``.env`` file to read.
+        environ: The mapping to fill; mutated in place.
+    """
+    try:
+        text = path.read_text(encoding="utf-8")
+    except OSError:
+        return
+    for line in text.splitlines():
+        stripped = line.strip()
+        if not stripped or stripped.startswith("#") or "=" not in stripped:
+            continue
+        name, _, value = stripped.partition("=")
+        name, value = name.strip(), value.strip()
+        if len(value) >= 2 and value[0] == value[-1] and value[0] in "\"'":
+            value = value[1:-1]
+        if name and name not in environ:
+            environ[name] = value
+
+
+class _UsageError(Exception):
+    """Raised when the command line asks for something that cannot be done as written."""
+
+
+class _Failure(Exception):
+    """Raised for an expected, explainable failure of a well-formed request."""
+
+
+@dataclass(frozen=True)
+class _Session:
+    """Everything a command needs besides its arguments."""
+
+    args: argparse.Namespace
+    executors: Mapping[str, StageExecutor]
+    providers: Mapping[str, RuntimeProvider]
+    environ: Mapping[str, str] | None
+    module_available: Callable[[str], bool] | None
+    verifier: Callable[[ArtifactRef], bool] | None
+    adapter_factory: SourceAdapterFactory | None
+    out: TextIO
+    err: TextIO
+
+    def emit(self, document: Mapping[str, Any], lines: Sequence[str]) -> None:
+        """Print a document as JSON, or its human-readable lines."""
+        if self.args.json:
+            print(json.dumps(document, indent=2, sort_keys=True), file=self.out)
+        else:
+            print("\n".join(lines), file=self.out)
+
+    def fail(
+        self,
+        message: str,
+        problems: Sequence[ConfigProblem] = (),
+        *,
+        run_directory: Path | None = None,
+    ) -> int:
+        """Report a failure, as JSON on stdout or as text on stderr."""
+        if self.args.json:
+            document: dict[str, Any] = {
+                "ok": False,
+                "error": message,
+                "problems": [{"path": p.path, "message": p.message} for p in problems],
+            }
+            if run_directory is not None:
+                document["run_directory"] = str(run_directory)
+            print(json.dumps(document, indent=2, sort_keys=True), file=self.out)
+        else:
+            print(f"error: {message}", file=self.err)
+            for problem in problems:
+                print(f"  - {problem}", file=self.err)
+            if run_directory is not None:
+                print(f"run record: {run_directory}", file=self.err)
+        return EXIT_FAILED
+
+
+def main(
+    argv: Sequence[str] | None = None,
+    *,
+    executors: Mapping[str, StageExecutor] | None = None,
+    providers: Mapping[str, RuntimeProvider] | None = None,
+    environ: Mapping[str, str] | None = None,
+    module_available: Callable[[str], bool] | None = None,
+    verifier: Callable[[ArtifactRef], bool] | None = None,
+    adapter_factory: SourceAdapterFactory | None = None,
+    stdout: TextIO | None = None,
+    stderr: TextIO | None = None,
+) -> int:
+    """Run one CLI command.
+
+    Args:
+        argv: Arguments after the program name; defaults to ``sys.argv[1:]``.
+        executors: Executors to use in addition to, and in preference over, the ones
+            :func:`~contextmap.runtime.composition.compose_executors` builds automatically
+            from the resolved configuration for ``run``, ``stage`` and their dry runs. Pass
+            an entry here to override a composed stage (for example with a test double) or
+            to supply one composition cannot build on its own, such as ``ingestion``'s
+            :class:`~contextmap.runtime.ingestion_service.IngestionStageExecutor`. A stage
+            with neither a composed nor a supplied executor is blocked by preflight.
+        providers: Model runtimes or clients for a backend with no bundled loader (SAM2, SAM3,
+            Qwen, Gemini, Florence-2 and every other backend built through
+            :meth:`~contextmap.runtime.composition._Context.runtime`, for example
+            ``entity_resolution.appearance`` or ``visual_perception``'s four backends), keyed
+            by component identity (``"<capability>.<slot>"``) in the exact shape
+            :func:`~contextmap.runtime.composition.compose_executors` already expects. This is
+            the Python-embedding path; the installed binary instead declares a
+            ``resources.providers`` target in configuration for the same component (see the
+            module docstring) -- an entry given here for a component that also has one
+            declared still wins, and that override is recorded on the run's ``run_planned``
+            event. Without either, a component that needs one composes as absent, exactly
+            like an incomplete selection, never with a substitute.
+        environ: Environment to look secrets up in; defaults to ``os.environ``. When left
+            as ``None``, a ``.env`` file in the current working directory, if any, first
+            fills whichever of its ``KEY=VALUE`` pairs a private copy of ``os.environ``
+            does not already have (see :func:`_apply_dotenv`), and that copy -- never the
+            real process environment -- is what the session consults; passing an explicit
+            mapping here, as every test and any Python embedder does, skips that step
+            entirely.
+        module_available: Predicate telling whether an optional module is installed.
+        verifier: Tells whether an indexed artifact still exists and is intact; the reuse
+            flags need it, and only the owner of the executors can provide it.
+        adapter_factory: Builds the source adapter for ``ingest``; by default it is composed
+            from the configuration's selected adapter backend.
+        stdout: Stream for results; defaults to ``sys.stdout``.
+        stderr: Stream for errors; defaults to ``sys.stderr``.
+
+    Returns:
+        The process exit code.
+    """
+    if environ is None:
+        # Só quando o chamador não trouxe seu próprio ambiente: preenche uma cópia do
+        # ambiente real com o `.env` local, sem jamais mutar o `os.environ` do processo.
+        environ = dict(os.environ)
+        _apply_dotenv(_DOTENV_PATH, environ=environ)
+    out = stdout if stdout is not None else sys.stdout
+    err = stderr if stderr is not None else sys.stderr
+    with contextlib.redirect_stdout(out), contextlib.redirect_stderr(err):
+        try:
+            args = _build_parser().parse_args(argv)
+        except SystemExit as stop:
+            return stop.code if isinstance(stop.code, int) else EXIT_USAGE
+        session = _Session(
+            args=args,
+            executors=executors or {},
+            providers=providers or {},
+            environ=environ,
+            module_available=module_available,
+            verifier=verifier,
+            adapter_factory=adapter_factory,
+            out=out,
+            err=err,
+        )
+        try:
+            return int(args.handler(session))
+        except _UsageError as error:
+            print(f"error: {error}", file=err)
+            return EXIT_USAGE
+        except ConfigurationError as error:
+            return session.fail("invalid configuration", error.problems)
+        except PreflightError as error:
+            return session.fail("the plan cannot run", error.report.problems)
+        except BackendUnavailableError as error:
+            return session.fail("a selected backend is unavailable", error.problems)
+        except (PipelineError, CompositionError, _Failure) as error:
+            return session.fail(str(error))
+        except (
+            ContextBranchError,
+            ContextBuildError,
+            ContextRunError,
+            SpatialFoundationError,
+        ) as error:
+            return session.fail(str(error))
+
+
+# --- parser --------------------------------------------------------------------------
+
+
+def _build_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(
+        prog="contextmap",
+        description="Resolve, plan, run and inspect ContextMap2 pipelines.",
+    )
+    parser.add_argument("--version", action="version", version=f"contextmap {__version__}")
+    commands = parser.add_subparsers(dest="command", required=True, metavar="COMMAND")
+
+    config = _config_options()
+    run = commands.add_parser(
+        "run",
+        parents=[config],
+        help="run the pipeline, or the stages selected with --stage",
+        description="Resolve the configuration and run the pipeline (or a subgraph).",
+    )
+    run.add_argument(
+        "--stage",
+        action="append",
+        dest="targets",
+        metavar="STAGE",
+        help="stage to produce; repeat for several (default: the complete pipeline)",
+    )
+    _execution_flags(run)
+    run.set_defaults(handler=_run_command)
+
+    stage = commands.add_parser(
+        "stage",
+        parents=[config],
+        help="run exactly one stage, starting from explicitly selected upstream runs",
+        description="Run one stage; select its upstream runs with --select and --catalog.",
+    )
+    stage.add_argument("stage", metavar="STAGE", help="the stage to produce")
+    _execution_flags(stage)
+    stage.set_defaults(handler=_stage_command)
+
+    ingest = commands.add_parser(
+        "ingest",
+        parents=[_ingest_options()],
+        help="ingest a recorded source into an immutable sequence artifact",
+        description=(
+            "Run canonical ingestion through the public ingestion service: preflight, then "
+            "read, validate, synchronize and publish a SequenceArtifact."
+        ),
+    )
+    ingest.set_defaults(handler=_ingest)
+
+    inspect = commands.add_parser("inspect", help="show the configuration, the plan or an artifact")
+    subjects = inspect.add_subparsers(dest="subject", required=True, metavar="SUBJECT")
+    subjects.add_parser(
+        "config", parents=[config], help="show the effective configuration and its digest"
+    ).set_defaults(handler=_inspect_config)
+    subjects.add_parser(
+        "plan", parents=[config], help="show the resolved topology without executing anything"
+    ).set_defaults(handler=_inspect_plan)
+    run_record = subjects.add_parser(
+        "run", help="show a run's lifecycle: status, failure record, events and environment"
+    )
+    _path_argument(run_record)
+    run_record.add_argument(
+        "--events", action="store_true", help="list every event, not only the summary"
+    )
+    run_record.set_defaults(handler=_inspect_run)
+    artifact = subjects.add_parser(
+        "artifact", help="summarise an artifact directory or a runtime document"
+    )
+    _path_argument(artifact)
+    artifact.set_defaults(handler=_inspect_artifact)
+
+    validate = commands.add_parser(
+        "validate", help="check the integrity of an artifact directory or a runtime document"
+    )
+    _path_argument(validate)
+    validate.add_argument(
+        "--full",
+        action="store_true",
+        help=(
+            "for a context map artifact, run the full level of its validator (every hash, "
+            "record, reference, rebuilt index and upstream file) instead of the structural one"
+        ),
+    )
+    validate.set_defaults(handler=_validate)
+
+    support = commands.add_parser(
+        "derive-spatial-support",
+        help="derive a semantic spatial support from a context map and a voxel aggregation",
+        description=(
+            "Join the entities of a finalized ContextMap onto the occupied voxels of an "
+            "aggregation of its raw map. The three upstream artifacts are selected "
+            "explicitly; the derivation only reads them."
+        ),
+    )
+    support.add_argument(
+        "--context-map", type=Path, required=True, help="finalized ContextMapArtifact directory"
+    )
+    support.add_argument(
+        "--voxel-aggregation",
+        type=Path,
+        required=True,
+        help="VoxelAggregationArtifact directory of the context map's raw map",
+    )
+    support.add_argument(
+        "--raw-geometry",
+        type=Path,
+        required=True,
+        help="raw GeometricMapArtifact directory the aggregation was derived from",
+    )
+    support.add_argument(
+        "--output", type=Path, required=True, help="directory of the derivation; never replaced"
+    )
+    support.add_argument("--run-id", required=True, help="identity of the derivation")
+    support.add_argument(
+        "--code-version", default=None, help="code revision that derives it, when known"
+    )
+    _json_flag(support)
+    support.set_defaults(handler=_derive_spatial_support)
+
+    _context_parser(commands, config)
+    return parser
+
+
+def _context_parser(commands: Any, config: argparse.ArgumentParser) -> None:
+    """Add ``context``: branches, context runs and builds of incremental context (#502)."""
+    context = commands.add_parser(
+        "context",
+        help="incremental context: branches, context runs and builds",
+        description=(
+            "Accumulate context evidence over a fixed spatial foundation and materialize "
+            "frozen revisions of it as ContextMaps."
+        ),
+    )
+    actions = context.add_subparsers(dest="action", required=True, metavar="ACTION")
+
+    branch = actions.add_parser("branch", help="create a branch over a spatial foundation")
+    branch_actions = branch.add_subparsers(dest="branch_action", required=True, metavar="ACTION")
+    create = branch_actions.add_parser(
+        "create",
+        parents=[config],
+        help="bind a new branch to the sequence, trajectory and map of a completed run",
+    )
+    create.add_argument("name", help="branch name, a lowercase slug unique in the dataset")
+    create.add_argument(
+        "--from-run",
+        required=True,
+        metavar="RUN",
+        help="completed run (a directory or a run id) whose sequence, trajectory and map "
+        "become the foundation",
+    )
+    create.set_defaults(handler=_context_branch_create)
+
+    run = actions.add_parser(
+        "run",
+        parents=[config],
+        help="run the context stages over a branch's foundation and append the ContextRun",
+        description=(
+            "Run visual perception and sensor association (and point representation when "
+            "enabled) over inputs.observation_selection, against the branch's foundation; "
+            "publish the ContextRun and append it to the branch. The foundation is never "
+            "recomputed."
+        ),
+    )
+    run.add_argument("--branch", required=True, metavar="NAME", help="the branch to append to")
+    _reuse_flags(run)
+    run.set_defaults(handler=_context_run)
+
+    build = actions.add_parser(
+        "build",
+        parents=[config],
+        help="freeze a branch revision and materialize its ContextMap",
+        description=(
+            "Freeze the ContextRuns of a branch revision (or an explicit subset), record them "
+            "before anything runs, then run semantic fusion through context_map over them."
+        ),
+    )
+    build.add_argument("--branch", required=True, metavar="NAME", help="the branch to build")
+    build.add_argument(
+        "--revision", type=int, metavar="N", help="revision to freeze (default: the current one)"
+    )
+    build.add_argument(
+        "--member",
+        action="append",
+        dest="members",
+        metavar="CONTEXT_RUN_ID",
+        help="build only this member of the revision; repeat for several",
+    )
+    _reuse_flags(build)
+    build.set_defaults(handler=_context_build)
+
+    inspect = actions.add_parser("inspect", help="show a branch or a context record, reading only")
+    subjects = inspect.add_subparsers(dest="subject", required=True, metavar="SUBJECT")
+    branch_subject = subjects.add_parser(
+        "branch", parents=[config], help="show a branch's foundation and members"
+    )
+    branch_subject.add_argument("name", help="the branch")
+    branch_subject.add_argument("--revision", type=int, metavar="N", help="an earlier revision")
+    branch_subject.set_defaults(handler=_context_inspect_branch)
+    record = subjects.add_parser(
+        "run", help="show the ContextRun or ContextBuild record of a run directory"
+    )
+    record.add_argument("path", type=Path, help="the run directory")
+    record.add_argument(
+        "--workspace", required=True, metavar="DIR", help="the workspace the run lives in"
+    )
+    _json_flag(record)
+    record.set_defaults(handler=_context_inspect_record)
+
+
+def _config_options() -> argparse.ArgumentParser:
+    common = argparse.ArgumentParser(add_help=False)
+    group = common.add_argument_group("configuration (each flag is a configuration override)")
+    group.add_argument(
+        "-c",
+        "--config",
+        action="append",
+        metavar="FILE",
+        help="configuration file (.json or .toml); repeat for several, later ones win",
+    )
+    group.add_argument("--profile", default=CANONICAL_PROFILE_ID, metavar="ID", help="base profile")
+    group.add_argument(
+        "--set",
+        action="append",
+        metavar="PATH=VALUE",
+        help="override one setting, for example policies.debug_level=full",
+    )
+    group.add_argument(
+        "--sequence", metavar="ID", help="expected identity of the physical sequence"
+    )
+    group.add_argument(
+        "--select",
+        action="append",
+        type=_parse_select,
+        metavar="STAGE=REF[,REF...]",
+        help="upstream run(s) of a stage: artifact ids, latest, or named:<name>",
+    )
+    group.add_argument(
+        "--catalog", metavar="FILE", help="catalog file listing the runs to select from"
+    )
+    group.add_argument("--workspace", metavar="DIR", help="directory that receives run records")
+    group.add_argument(
+        "--maps-root",
+        metavar="DIR",
+        help="clean directory a build publishes each map into; the viewer scans only this",
+    )
+    group.add_argument("--device", metavar="DEVICE", help="device handed to backends that have one")
+    group.add_argument("--debug-level", choices=DEBUG_LEVELS, help="amount of debug evidence")
+    _json_flag(group)
+    return common
+
+
+def _ingest_options() -> argparse.ArgumentParser:
+    common = argparse.ArgumentParser(add_help=False)
+    group = common.add_argument_group("configuration")
+    group.add_argument("-c", "--config", action="append", metavar="FILE", help="configuration file")
+    group.add_argument("--profile", default=CANONICAL_PROFILE_ID, metavar="ID", help="base profile")
+    group.add_argument("--set", action="append", metavar="PATH=VALUE", help="override one setting")
+    group.add_argument(
+        "--workspace",
+        metavar="DIR",
+        help="workspace that receives artifacts/ingestion-<dataset-name>/",
+    )
+    source = common.add_argument_group("source and request")
+    source.add_argument("--source", required=True, metavar="PATH", help="the recorded source")
+    source.add_argument(
+        "--sequence-name", required=True, metavar="NAME", help="logical dataset name"
+    )
+    source.add_argument(
+        "--topic",
+        action="append",
+        type=_parse_topic,
+        metavar="KEY=TOPIC",
+        help="a topic to read, for example rgb=/camera; repeat for several",
+    )
+    source.add_argument(
+        "--required", action="append", metavar="KEY", help="a topic that must exist in the source"
+    )
+    source.add_argument("--clock-id", metavar="ID", help="identity of the shared header clock")
+    source.add_argument(
+        "--sync-reference", required=True, metavar="MODALITY", help="synchronization anchor"
+    )
+    source.add_argument(
+        "--sync-tolerance-ns",
+        required=True,
+        type=int,
+        metavar="N",
+        help="synchronization tolerance, in nanoseconds",
+    )
+    source.add_argument(
+        "--on-problems",
+        choices=("fail", "warn"),
+        default="fail",
+        help="what to do with structural problems (default: fail)",
+    )
+    source.add_argument(
+        "--no-duplicate-timestamps",
+        action="store_true",
+        help="report two observations of one clock at the same timestamp",
+    )
+    source.add_argument(
+        "--no-source-hash", action="store_true", help="skip hashing the source bytes (recorded)"
+    )
+    source.add_argument(
+        "--preflight", action="store_true", help="only check that the request can run"
+    )
+    # Campos que o IngestionRequest já modela e que antes só a API Python preenchia: sem a flag,
+    # o pedido é exatamente o anterior (nenhum valor é inferido).
+    request = common.add_argument_group("request details")
+    request.add_argument(
+        "--timestamp-policy",
+        metavar="FILE",
+        help="JSON timestamp policy (clocks and correction) applied to every observation",
+    )
+    request.add_argument(
+        "--window-clock", metavar="ID", help="clock of the temporal window to ingest"
+    )
+    request.add_argument(
+        "--window-start", type=float, metavar="SECONDS", help="window start, in that clock"
+    )
+    request.add_argument(
+        "--window-end", type=float, metavar="SECONDS", help="window end, in that clock"
+    )
+    request.add_argument(
+        "--calibration",
+        metavar="FILE",
+        help="JSON calibration set merged with the calibration the source holds",
+    )
+    request.add_argument(
+        "--extra",
+        action="append",
+        type=_parse_extra,
+        metavar="KEY=VALUE",
+        help="adapter-specific setting, for example format=tum; repeat for several",
+    )
+    _json_flag(common)
+    return common
+
+
+def _parse_extra(text: str) -> tuple[str, str]:
+    key, separator, value = text.partition("=")
+    if not separator or not key or not value:
+        raise argparse.ArgumentTypeError(f"{text!r}: expected KEY=VALUE")
+    return key, value
+
+
+def _parse_topic(text: str) -> tuple[str, str]:
+    key, separator, topic = text.partition("=")
+    if not separator or not key or not topic:
+        raise argparse.ArgumentTypeError(f"{text!r}: expected KEY=TOPIC")
+    return key, topic
+
+
+def _execution_flags(parser: argparse.ArgumentParser) -> None:
+    parser.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="show the resolved plan, inputs, outputs and preflight; load nothing, run nothing",
+    )
+    reuse = _reuse_flags(parser)
+    reuse.add_argument(
+        "--resume",
+        metavar="RUN",
+        help="resume a failed, cancelled or interrupted run (a directory or a run id)",
+    )
+
+
+def _reuse_flags(parser: argparse.ArgumentParser) -> argparse._ArgumentGroup:
+    parser.add_argument(
+        "--code-identity",
+        metavar="ID",
+        type=_code_identity,
+        help="identity of the code producing the results (a commit, a release): recorded by "
+        "the run, keyed by reuse and required by every stage whose run records its code, from "
+        "semantic fusion on",
+    )
+    reuse = parser.add_argument_group("reuse and resume (need --reuse-index)")
+    reuse.add_argument("--reuse-index", metavar="DIR", help="index of completed artifacts to reuse")
+    reuse.add_argument(
+        "--force",
+        action="append",
+        metavar="STAGE",
+        help="always recompute this stage; repeat for several",
+    )
+    return reuse
+
+
+def _code_identity(text: str) -> str:
+    """Accept a code identity; an empty one would be recorded as no identity at all."""
+    if not text.strip():
+        raise argparse.ArgumentTypeError("a code identity must not be empty")
+    return text
+
+
+def _path_argument(parser: argparse.ArgumentParser) -> None:
+    parser.add_argument("path", type=Path, help="artifact directory or runtime document")
+    _json_flag(parser)
+
+
+def _json_flag(parser: argparse.ArgumentParser | argparse._ArgumentGroup) -> None:
+    parser.add_argument("--json", action="store_true", help="machine-readable output")
+
+
+def _parse_select(text: str) -> tuple[str, list[str]]:
+    stage, separator, refs = text.partition("=")
+    references = [ref for ref in refs.split(",") if ref]
+    if not separator or not stage or not references:
+        raise argparse.ArgumentTypeError(f"{text!r}: expected STAGE=REF[,REF...]")
+    return stage, references
+
+
+# --- configuration -------------------------------------------------------------------
+
+
+def _overrides(args: argparse.Namespace) -> list[str]:
+    """Translate the flags into configuration overrides; a flag beats an earlier --set."""
+    overrides = list(args.set or [])
+    # Nem todo comando tem todas as flags de configuração (`ingest` tem um subconjunto).
+    if getattr(args, "sequence", None) is not None:
+        overrides.append(f"inputs.sequence={json.dumps(args.sequence)}")
+    for stage, references in getattr(args, "select", None) or []:
+        value = references if len(references) > 1 else references[0]
+        overrides.append(f"inputs.selections.{stage}={json.dumps(value)}")
+    if args.workspace is not None:
+        overrides.append(f"resources.workspace={json.dumps(args.workspace)}")
+    if getattr(args, "maps_root", None) is not None:
+        overrides.append(f"resources.maps_root={json.dumps(args.maps_root)}")
+    if getattr(args, "device", None) is not None:
+        overrides.append(f"resources.device={json.dumps(args.device)}")
+    if getattr(args, "debug_level", None) is not None:
+        overrides.append(f"policies.debug_level={json.dumps(args.debug_level)}")
+    return overrides
+
+
+def _effective(args: argparse.Namespace) -> EffectiveConfig:
+    return resolve_effective_config(
+        profile=args.profile, files=args.config or (), overrides=_overrides(args)
+    )
+
+
+def _scope(
+    session: _Session, effective: EffectiveConfig, plan: PipelinePlan, targets: Sequence[str] | None
+) -> tuple[ExecutionPlan, ResolvedSelections | None]:
+    """Scope the plan, resolving the configured selections against the catalog."""
+    inputs = effective.config.inputs
+    if not inputs.selections:
+        return plan.scope(targets=targets), None
+    if session.args.catalog is None:
+        raise _UsageError(
+            "selections need --catalog FILE, a catalog listing the runs available to select from"
+        )
+    try:
+        catalog = load_catalog(session.args.catalog)
+    except ValueError as error:
+        raise _Failure(str(error)) from error
+    resolved = resolve_selections(plan, inputs, catalog)
+    return plan.scope(targets=targets, selections=resolved), resolved
+
+
+# --- commands ------------------------------------------------------------------------
+
+
+def _inspect_config(session: _Session) -> int:
+    effective = _effective(session.args)
+    session.emit(effective.to_document(), _config_lines(effective))
+    return EXIT_OK
+
+
+def _inspect_plan(session: _Session) -> int:
+    effective = _effective(session.args)
+    plan = resolve_plan(effective)
+    document = {
+        "plan": plan.to_document(),
+        "plan_digest": plan.digest,
+        "problems": _problem_documents(plan.problems),
+    }
+    session.emit(document, [*_plan_lines(plan, None), *_problem_lines("plan", plan.problems)])
+    return EXIT_FAILED if plan.problems else EXIT_OK
+
+
+def _stage_command(session: _Session) -> int:
+    return _run(session, [session.args.stage])
+
+
+def _run_command(session: _Session) -> int:
+    return _run(session, session.args.targets)
+
+
+def _run(session: _Session, targets: Sequence[str] | None) -> int:
+    args = session.args
+    effective = _effective(args)
+    workspace = effective.config.resources.workspace
+    if not args.dry_run and workspace is None:
+        raise _UsageError(
+            "a real run persists its records: pass --workspace DIR (or resources.workspace)"
+        )
+    plan = resolve_plan(effective)
+    execution, resolved = _scope(session, effective, plan, targets)
+    provider_overrides: list[str] = []
+    failures: dict[str, CompositionError | ConfigurationError] = {}
+    executors = _executors_for(session, effective, provider_overrides, failures)
+    reuse = _reuse_policy(session)
+    if reuse is not None:
+        # O dry-run não passa executores ao preflight; a fonte de cada estágio-fonte e a
+        # configuração efetiva que um executor nomeia já vão na política, para que a previsão e o
+        # preflight vejam a mesma chave que o run usaria.
+        reuse = with_executor_identities(reuse, executors)
+    if args.dry_run:
+        return _dry_run(session, effective, plan, execution, resolved, reuse, executors)
+    assert workspace is not None  # exigido acima
+    _dataset_directory(effective, workspace)  # recusa cedo um run sem dataset
+    return _execute(
+        session,
+        effective,
+        execution,
+        Path(workspace),
+        reuse,
+        executors,
+        provider_overrides,
+        failures,
+    )
+
+
+def _executors_for(
+    session: _Session,
+    effective: EffectiveConfig,
+    provider_overrides: list[str] | None = None,
+    composition_failures: dict[str, CompositionError | ConfigurationError] | None = None,
+) -> Mapping[str, StageExecutor]:
+    """Merge the executors composed from ``effective`` with the ones the caller injected.
+
+    ``compose_executors`` builds every stage it genuinely can (today: ``state_estimation``,
+    ``geometric_mapping``, ``sensor_association`` and ``context_map``; with the command's
+    ``--code-identity``, ``semantic_fusion`` (either accumulation policy, #655),
+    ``semantic_mapping``, ``entity_resolution`` and ``spatial_relations``, whose runs record
+    it, together with the identities :func:`~contextmap.runtime.composition.
+    executor_identities` derives from it and from the dataset; and, once a runtime provider is
+    available for every backend that needs one -- explicitly through ``session.providers``, or
+    declared as a ``resources.providers`` target in the resolved configuration itself --
+    ``visual_perception`` and, when enabled, ``semantic_scoring``) from the resolved
+    configuration and the command alone, so the
+    installed CLI runs them with no Python wrapper; a stage it cannot build for any
+    reason is simply absent, never raised, with its cause in ``composition_failures`` (see
+    its own docstring). Whatever the caller of :func:`main` passed in ``session.executors``
+    (tests, a stage composition cannot build such as ``ingestion``, or an explicit override)
+    is layered on top and always wins.
+
+    Args:
+        session: The current CLI session.
+        effective: The resolved configuration.
+        provider_overrides: When given, receives (by mutation) the component identities
+            where ``session.providers`` won over a ``resources.providers`` target the
+            configuration also declared -- so ``_run`` can pass it into ``run_plan`` for a
+            real run to record it, exactly as it happened, in the run's own trail.
+        composition_failures: When given, receives (by mutation) why each stage could not be
+            composed, by stage, so a real run blocked for lack of an executor reports the cause.
+    """
+    composed = compose_executors(
+        effective,
+        providers=session.providers,
+        environ=session.environ,
+        module_available=session.module_available,
+        on_provider_override=None if provider_overrides is None else provider_overrides.append,
+        on_composition_failure=(
+            None if composition_failures is None else composition_failures.__setitem__
+        ),
+        **executor_identities(effective, session.args.code_identity),
+    )
+    return {**composed, **session.executors}
+
+
+def _dry_run(
+    session: _Session,
+    effective: EffectiveConfig,
+    plan: PipelinePlan,
+    execution: ExecutionPlan,
+    resolved: ResolvedSelections | None,
+    reuse: ReusePolicy | None,
+    executors: Mapping[str, StageExecutor],
+) -> int:
+    """Show what the configuration resolves to, without loading, running or writing anything."""
+    # Um dry-run não confere executores no preflight: mostra o que a configuração resolve.
+    report = preflight(
+        execution,
+        environ=session.environ,
+        module_available=session.module_available,
+        provided_runtimes=provided_runtimes(effective, session.providers),
+        reuse=reuse,
+    )
+    missing = [s.stage_id for s in execution.stages if s.stage_id not in executors]
+    predicted = {} if reuse is None else predict_reuse(execution, reuse)
+    document = {
+        "effective_config": effective.to_document(),
+        "plan": plan.to_document(),
+        "plan_digest": plan.digest,
+        "scope": {
+            "run": [s.stage_id for s in execution.stages],
+            "provided": {
+                stage: [ref.artifact_id for ref in refs] for stage, refs in execution.reused.items()
+            },
+        },
+        "selections": None if resolved is None else resolved.to_document(),
+        "reuse": {stage: decision.to_document() for stage, decision in predicted.items()},
+        "preflight": {"ok": report.ok, "problems": _problem_documents(report.problems)},
+        "executors": {"registered": sorted(executors), "missing": missing},
+    }
+    lines = [
+        *_config_lines(effective),
+        "",
+        *_plan_lines(plan, execution),
+        "",
+        *(
+            [
+                "reuse (predicted):",
+                *(f"  {s}: {d.kind} - {d.reason}" for s, d in predicted.items()),
+                "",
+            ]
+            if predicted
+            else []
+        ),
+        *_preflight_lines(report),
+        *(
+            [f"executors: none registered for {', '.join(missing)} (a real run is blocked)"]
+            if missing
+            else ["executors: registered for every stage to run"]
+        ),
+    ]
+    session.emit(document, lines)
+    return EXIT_OK if report.ok else EXIT_FAILED
+
+
+def _execute(
+    session: _Session,
+    effective: EffectiveConfig,
+    execution: ExecutionPlan,
+    workspace: Path,
+    reuse: ReusePolicy | None,
+    executors: Mapping[str, StageExecutor],
+    provider_overrides: Sequence[str] = (),
+    composition_failures: Mapping[str, CompositionError | ConfigurationError] | None = None,
+) -> int:
+    """Run for real, journaling every step of the lifecycle into a fresh run directory."""
+    args = session.args
+    previous: Path | None = None
+    if args.resume is not None:
+        if reuse is None:
+            raise _UsageError(
+                "--resume reuses the completed stages: pass --reuse-index and --code-identity"
+            )
+        previous = _previous_run(_dataset_directory(effective, str(workspace)), args.resume)
+        check_resumable(read_run(previous), execution)  # recusa antes de criar um run novo
+    secrets = resolve_secrets(effective.config, environ=session.environ)
+    provided = provided_runtimes(effective, session.providers)
+    journal = RunJournal.create(workspace, effective, execution, code_identity=args.code_identity)
+
+    def execute() -> ExecutionRecord:
+        if previous is not None and reuse is not None:
+            return resume_plan(
+                previous,
+                execution,
+                executors,
+                reuse=reuse,
+                environ=session.environ,
+                module_available=session.module_available,
+                provided_runtimes=provided,
+                provider_overrides=provider_overrides,
+                journal=journal,
+                redact=secrets.redact,
+                composition_failures=composition_failures,
+            )
+        return run_plan(
+            execution,
+            executors,
+            environ=session.environ,
+            module_available=session.module_available,
+            provided_runtimes=provided,
+            provider_overrides=provider_overrides,
+            reuse=reuse,
+            journal=journal,
+            redact=secrets.redact,
+            composition_failures=composition_failures,
+        )
+
+    record = _journaled(session, journal, execute)
+    if isinstance(record, int):
+        return record
+    result = {
+        "ok": True,
+        "run_directory": str(journal.directory),
+        "execution": record.to_document(),
+    }
+    lines = [
+        f"run completed: {journal.directory}",
+        f"  order: {' -> '.join(record.order)}",
+        *(f"  {stage.stage_id}: {stage.output.artifact_id}" for stage in record.stages),
+    ]
+    if record.resume is not None:
+        lines.append(
+            f"  resumed {record.resume['from']}: reused {record.resume['reused']}, "
+            f"recomputed {record.resume['recomputed']}"
+        )
+    session.emit(result, lines)
+    return EXIT_OK
+
+
+def _journaled(
+    session: _Session, journal: RunJournal, execute: Callable[[], ExecutionRecord]
+) -> ExecutionRecord | int:
+    """Run into ``journal``; the exit code of the failure when the run did not complete."""
+    try:
+        return execute()
+    except PreflightError as error:
+        return session.fail(
+            "the plan cannot run", error.report.problems, run_directory=journal.directory
+        )
+    except PipelineError as error:
+        return session.fail(str(error), run_directory=journal.directory)
+    except KeyboardInterrupt:
+        print(f"cancelled; run record: {journal.directory}", file=session.err)
+        return EXIT_INTERRUPTED
+
+
+def _reuse_policy(session: _Session) -> ReusePolicy | None:
+    """Build the reuse policy from the flags; an artifact verifier has to come from outside."""
+    args = session.args
+    if args.reuse_index is None:
+        if args.force:
+            raise _UsageError("--force applies to reuse: pass --reuse-index DIR")
+        return None
+    if session.verifier is None:
+        raise _UsageError(
+            "--reuse-index needs an artifact verifier: the CLI cannot tell whether an indexed "
+            "artifact still exists, so the owner of the stage executors supplies it to main()"
+        )
+    if not args.code_identity:
+        raise _UsageError(
+            "reuse across runs needs --code-identity ID: it must be a decision, not an accident"
+        )
+    return ReusePolicy(
+        store=FileArtifactStore(args.reuse_index, verify=session.verifier),
+        code_identity=args.code_identity,
+        force_recompute=frozenset(args.force or ()),
+    )
+
+
+def _dataset_directory(effective: EffectiveConfig, workspace: str) -> Path:
+    """Resolve ``<workspace>/<dataset>``: a real run needs ``inputs.sequence`` to be placed."""
+    try:
+        return dataset_directory(workspace, effective.config.inputs.sequence)
+    except ValueError as error:
+        raise _UsageError(str(error)) from error
+
+
+def _previous_run(datasets: Path, reference: str) -> Path:
+    """Resolve ``--resume`` as a run directory, or as a run id under the dataset directory."""
+    candidate = Path(reference)
+    if candidate.is_dir():
+        return candidate
+    under = datasets / reference
+    if under.is_dir():
+        return under
+    raise _Failure(f"no run record at {candidate} or {under}")
+
+
+# --- context ---------------------------------------------------------------------------
+
+
+def _context_place(session: _Session) -> tuple[EffectiveConfig, Path, str]:
+    """Resolve the configuration, the workspace and the dataset a context command works in."""
+    effective = _effective(session.args)
+    workspace = effective.config.resources.workspace
+    if workspace is None:
+        raise _UsageError("context records live in a workspace: pass --workspace DIR")
+    datasets = _dataset_directory(effective, workspace)
+    return effective, Path(workspace), datasets.name
+
+
+def _maps_root(effective: EffectiveConfig, workspace: Path) -> Path:
+    """Resolve the maps root a context build publishes into.
+
+    When ``resources.maps_root`` is set it wins. Otherwise the default is a clean sibling of the
+    run store, ``<workspace>/../maps``, so every ``context build`` publishes each map by ``map_id``
+    into a directory kept apart from the run store even when the config leaves ``maps_root`` unset.
+    """
+    return effective_maps_root(workspace, effective.config.resources.maps_root)
+
+
+def _context_branch_create(session: _Session) -> int:
+    """Validate a completed run's sequence, trajectory and map as one foundation; bind a branch."""
+    args = session.args
+    effective, workspace, dataset = _context_place(session)
+    maps_root = _maps_root(effective, workspace)
+    run = _previous_run(workspace / dataset, args.from_run)
+    foundation = foundation_of_run(workspace, run)
+    branch = create_branch(
+        workspace, dataset=dataset, name=args.name, foundation=foundation, maps_root=maps_root
+    )
+    document = {
+        "ok": True,
+        "branch": {"name": branch.name, "dataset": dataset, "revision": branch.revision},
+        "foundation": foundation.to_document(),
+    }
+    lines = [
+        f"branch {branch.name} created in {dataset}, at revision 0",
+        f"  foundation: {foundation.identity}",
+        *(
+            f"  {role}: {getattr(foundation, role).artifact_id}"
+            for role in ("sequence", "state_estimation", "geometry")
+        ),
+    ]
+    session.emit(document, lines)
+    return EXIT_OK
+
+
+def _context_run(session: _Session) -> int:
+    """Run the context stages over the branch's foundation, publish and append the ContextRun."""
+    args = session.args
+    effective, workspace, dataset = _context_place(session)
+    branch = open_branch(workspace, dataset=dataset, name=args.branch)
+    plan = resolve_plan(effective)
+    selected = _context_selected(session, effective, plan)
+    if isinstance(selected, int):
+        return selected
+    execution = context_scope(plan, branch.foundation, selected=selected)
+    # Antes de qualquer execução: a percepção selecionada tem de cobrir a seleção que o registro
+    # vai declarar, sobre a sequência da fundação.
+    check_context_selection(execution, branch.foundation, workspace=workspace)
+    reuse = _reuse_policy(session)
+    provider_overrides: list[str] = []
+    failures: dict[str, CompositionError | ConfigurationError] = {}
+    executors = _executors_for(session, effective, provider_overrides, failures)
+    secrets = resolve_secrets(effective.config, environ=session.environ)
+    journal = RunJournal.create(workspace, effective, execution, code_identity=args.code_identity)
+    record = _journaled(
+        session,
+        journal,
+        lambda: run_plan(
+            execution,
+            executors,
+            environ=session.environ,
+            module_available=session.module_available,
+            provided_runtimes=provided_runtimes(effective, session.providers),
+            provider_overrides=provider_overrides,
+            reuse=reuse,
+            journal=journal,
+            redact=secrets.redact,
+            composition_failures=failures,
+        ),
+    )
+    if isinstance(record, int):
+        return record
+    context = publish_context_run(
+        journal.directory,
+        workspace=workspace,
+        foundation=branch.foundation,
+        execution=execution,
+        record=record,
+    )
+    branch = append_to_branch(workspace, branch, context)
+    dispositions = {artifact.ref.stage_id: artifact.disposition for artifact in context.artifacts}
+    stages = {stage: dispositions.get(stage, "not selected") for stage in CONTEXT_STAGES}
+    document = {
+        "ok": True,
+        "run_directory": str(journal.directory),
+        "context_run": context.to_document(),
+        "branch": {"name": branch.name, "revision": branch.revision},
+        "stages": stages,
+    }
+    lines = [
+        f"context run {context.identity}: {journal.directory}",
+        f"  branch {branch.name} at revision {branch.revision}",
+        *(f"  {stage}: {disposition}" for stage, disposition in stages.items()),
+    ]
+    session.emit(document, lines)
+    return EXIT_OK
+
+
+def _context_selected(
+    session: _Session, effective: EffectiveConfig, plan: PipelinePlan
+) -> dict[str, tuple[ArtifactRef, ...]] | int:
+    """Resolve the runs a context run selects instead of executing (``--select``, ``--catalog``).
+
+    Returns:
+        The selected runs by stage (none without ``--select``), or the exit code of a selection
+        the catalog cannot satisfy.
+
+    Raises:
+        _UsageError: If a stage other than the selectable context stages is selected, or a
+            selection comes without a catalog; checked before any file is read.
+    """
+    inputs = effective.config.inputs
+    if not inputs.selections:
+        return {}
+    refused = sorted(set(inputs.selections) - set(SELECTABLE_CONTEXT_STAGES))
+    if refused:
+        raise _UsageError(
+            f"cannot select {refused}: a context run may select only "
+            f"{SELECTABLE_CONTEXT_STAGES}; the foundation comes from the branch"
+        )
+    if session.args.catalog is None:
+        raise _UsageError(
+            "selections need --catalog FILE, a catalog listing the runs available to select from"
+        )
+    try:
+        catalog = load_catalog(session.args.catalog)
+    except ValueError as error:
+        raise _Failure(str(error)) from error
+    resolved = resolve_selections(plan, inputs, catalog)
+    if not resolved.ok:
+        return session.fail("the selection cannot be used", resolved.problems)
+    return {stage_id: tuple(refs) for stage_id, refs in resolved.provided.items()}
+
+
+def _context_build(session: _Session) -> int:
+    """Freeze a branch revision, record it, then materialize its ContextMap."""
+    args = session.args
+    if not args.code_identity:
+        raise _UsageError("a build records the code that materializes it: pass --code-identity ID")
+    effective, workspace, dataset = _context_place(session)
+    maps_root = _maps_root(effective, workspace)
+    branch = open_branch(workspace, dataset=dataset, name=args.branch)
+    planned = plan_context_build(
+        workspace,
+        branch,
+        resolve_plan(effective),
+        code_identity=args.code_identity,
+        revision=args.revision,
+        context_run_ids=args.members,
+    )
+    # O mapa final é publicado isolado no maps root, um diretório imutável por build. O ordinal
+    # é do índice da branch, que o reivindica e o segura até o build terminar.
+    with claim_context_build(workspace, branch, maps_root=maps_root) as claimed:
+        return _materialize_context_build(
+            session,
+            claimed,
+            effective,
+            workspace=workspace,
+            branch=branch,
+            planned=planned,
+            maps_root=maps_root,
+        )
+
+
+def _materialize_context_build(
+    session: _Session,
+    claimed: ClaimedContextBuild,
+    effective: EffectiveConfig,
+    *,
+    workspace: Path,
+    branch: ContextBranch,
+    planned: PlannedContextBuild,
+    maps_root: Path,
+) -> int:
+    """Run the frozen build and record it, with the map's ordinal already held."""
+    args = session.args
+    overrides: dict[str, StageOutputTarget] = {
+        MATERIALIZATION_TARGET: StageOutputTarget(
+            output_dir=claimed.map_output, output_root=maps_root
+        )
+    }
+    reuse = _reuse_policy(session)
+    provider_overrides: list[str] = []
+    failures: dict[str, CompositionError | ConfigurationError] = {}
+    executors = _executors_for(session, effective, provider_overrides, failures)
+    secrets = resolve_secrets(effective.config, environ=session.environ)
+    journal = RunJournal.create(
+        workspace, effective, planned.execution, code_identity=args.code_identity
+    )
+    # A entrada congelada é gravada antes do primeiro estágio de jusante.
+    publish_context_build(journal.directory, workspace=workspace, build=planned.build)
+    record = _journaled(
+        session,
+        journal,
+        lambda: run_plan(
+            planned.execution,
+            executors,
+            environ=session.environ,
+            module_available=session.module_available,
+            provided_runtimes=provided_runtimes(effective, session.providers),
+            provider_overrides=provider_overrides,
+            reuse=reuse,
+            journal=journal,
+            redact=secrets.redact,
+            composition_failures=failures,
+            output_overrides=overrides,
+        ),
+    )
+    if isinstance(record, int):
+        return record
+    context_map = _context_map_output(record)
+    document = {
+        "ok": True,
+        "run_directory": str(journal.directory),
+        "context_build": planned.build.to_document(),
+        "context_map_id": context_map.artifact_id,
+    }
+    lines = [
+        f"context build {planned.build.identity}: {journal.directory}",
+        f"  branch {branch.name} at revision {planned.build.revision}, "
+        f"{len(planned.build.context_run_ids)} context run(s)",
+        f"  context map: {context_map.artifact_id}",
+    ]
+    entry = record_context_build(
+        workspace,
+        branch,
+        index=claimed.index,
+        context_build_id=planned.build.identity,
+        branch_revision=planned.build.revision,
+        context_map=context_map,
+        run=journal.directory.relative_to(workspace).as_posix(),
+    )
+    location = resolve_map_artifact(maps_root, entry)
+    document["map"] = {"index": entry.index, "location": str(location)}
+    lines.append(f"  map {branch.name} build {entry.index}: {location}")
+    session.emit(document, lines)
+    return EXIT_OK
+
+
+def _context_map_output(record: ExecutionRecord) -> ArtifactRef:
+    """Return the handle to the ``context_map`` artifact a completed build produced."""
+    for stage in record.stages:
+        if stage.stage_id == MATERIALIZATION_TARGET:
+            return stage.output
+    raise PipelineError(f"the build did not run {MATERIALIZATION_TARGET!r}")
+
+
+def _context_inspect_branch(session: _Session) -> int:
+    """Show a branch's foundation and members, reading only its records."""
+    args = session.args
+    _, workspace, dataset = _context_place(session)
+    branch = open_branch(workspace, dataset=dataset, name=args.name)
+    if args.revision is not None:
+        branch = branch.at(args.revision)
+    builds = read_context_builds(workspace, dataset=dataset, name=args.name)
+    document = _branch_document(branch)
+    document["builds"] = [entry.to_document() for entry in builds]
+    lines = [
+        f"map {branch.name} in {dataset}, at revision {branch.revision}",
+        f"  foundation: {branch.foundation.identity}",
+        *(
+            f"  revision {member.revision}: {member.context_run_id} ({member.run})"
+            for member in branch.members
+        ),
+        *(
+            f"  build {entry.index}: {entry.context_map.artifact_id} ({entry.context_map.location})"
+            for entry in builds
+        ),
+    ]
+    session.emit(document, lines)
+    return EXIT_OK
+
+
+def _context_inspect_record(session: _Session) -> int:
+    """Show the ContextRun or ContextBuild record of a run, reading only records."""
+    args = session.args
+    directory, workspace = Path(args.path), Path(args.workspace)
+    if (directory / CONTEXT_BUILD_FILENAME).is_file():
+        build = read_context_build(directory, workspace=workspace)
+        execution = directory / EXECUTION_FILENAME
+        context_map_id = (
+            _context_map_id(read_plan_document(execution)) if execution.is_file() else None
+        )
+        document: dict[str, Any] = {
+            "context_build": build.to_document(),
+            "context_map_id": context_map_id,
+        }
+        lines = [
+            f"context build {build.identity}",
+            f"  branch {build.branch} at revision {build.revision}",
+            *(f"  context run: {run_id}" for run_id in build.context_run_ids),
+            f"  context map: {context_map_id or 'not materialized'}",
+        ]
+    else:
+        context = read_context_run(directory, workspace=workspace)
+        document = {"context_run": context.to_document()}
+        lines = [
+            f"context run {context.identity}",
+            f"  foundation: {context.foundation.identity}",
+            *(
+                f"  {artifact.ref.stage_id}: {artifact.ref.artifact_id} ({artifact.disposition})"
+                for artifact in context.artifacts
+            ),
+        ]
+    session.emit(document, lines)
+    return EXIT_OK
+
+
+def _branch_document(branch: ContextBranch) -> dict[str, Any]:
+    return {
+        "branch": {"name": branch.name, "dataset": branch.dataset, "revision": branch.revision},
+        "foundation": branch.foundation.to_document(),
+        "members": [
+            {
+                "revision": member.revision,
+                "context_run_id": member.context_run_id,
+                "run": member.run,
+            }
+            for member in branch.members
+        ],
+    }
+
+
+def _context_map_id(execution: Mapping[str, Any]) -> str | None:
+    """Return the ContextMapId a completed build produced, from its execution record."""
+    for stage in execution.get("stages", ()):
+        if stage.get("stage_id") == MATERIALIZATION_TARGET:
+            return str(stage["output"]["artifact_id"])
+    return None
+
+
+def _inspect_run(session: _Session) -> int:
+    summary = read_run(session.args.path)
+    session.emit(summary.to_document(), _run_lines(summary, events=session.args.events))
+    return EXIT_OK
+
+
+def _run_lines(summary: RunSummary, *, events: bool) -> list[str]:
+    state = summary.status.value + (
+        " (interrupted: no live process owns it)" if summary.interrupted else ""
+    )
+    lines = [
+        f"run {summary.run_id}: {state}",
+        f"  created: {summary.created_at}    updated: {summary.updated_at}",
+        f"  plan: {summary.plan_digest}",
+        f"  config: {summary.config_digest}",
+        f"  stages to run: {', '.join(summary.targets) or '-'}",
+        f"  completed: {', '.join(summary.completed_stages) or '-'}",
+    ]
+    if summary.resumed_from is not None:
+        lines.append(f"  resumed from: {summary.resumed_from}")
+    if summary.code_identity is not None:
+        lines.append(f"  code identity: {summary.code_identity}")
+    if summary.failure is not None:
+        failure = summary.failure
+        lines.append(
+            f"  failure: {failure.category} in {failure.stage_id or 'the runner'}: "
+            f"{failure.message} ({failure.exception_type})"
+        )
+    for problem in summary.blocked_problems:
+        lines.append(f"  blocked: {problem['path']}: {problem['message']}")
+    lines.extend(f"  note: {note}" for note in summary.notes)
+    if summary.truncated:
+        lines.append("  note: the last event was cut off (the process died while writing it)")
+    lines.append(f"  environment: {json.dumps(dict(summary.environment), sort_keys=True)}")
+    if events:
+        lines.append("  events:")
+        lines.extend(
+            f"    {e.sequence:>3} {e.time} {e.kind}{' ' + e.stage_id if e.stage_id else ''}"
+            for e in summary.events
+        )
+    return lines
+
+
+def _ingest(session: _Session) -> int:
+    """Ingest a recorded source through the public ingestion service."""
+    args = session.args
+    effective = _effective(args)
+    workspace = effective.config.resources.workspace
+    if workspace is None:
+        raise _UsageError("ingest publishes a sequence artifact: pass --workspace DIR")
+    artifact_id = f"ingestion-{args.sequence_name}-{uuid4().hex}"
+    output_dir = Path(workspace) / "artifacts" / f"ingestion-{args.sequence_name}"
+    adapter = effective.config.components.get("ingestion.source_adapter")
+    if adapter is None or adapter.backend is None:
+        raise _UsageError(
+            "select the source adapter: set components.ingestion.source_adapter.backend "
+            "in a configuration file or with --set"
+        )
+    document = {
+        "source_path": args.source,
+        "sequence_name": args.sequence_name,
+        "topics": dict(args.topic or []),
+        "required_topics": list(args.required or []),
+        "timestamp_clock_id": args.clock_id,
+        "synchronization": {
+            "reference_modality": args.sync_reference,
+            "tolerance_nanoseconds": args.sync_tolerance_ns,
+        },
+        "validation": {
+            "allow_duplicate_timestamps": not args.no_duplicate_timestamps,
+            "on_problems": args.on_problems,
+        },
+        "hash_source": not args.no_source_hash,
+        "config_identity": effective.digest,
+        "timestamp_policy": _json_file(args.timestamp_policy, "--timestamp-policy"),
+        "window": _window_document(args),
+        "extra": dict(args.extra or []),
+    }
+    calibration = _calibration_file(args.calibration)
+    try:
+        request = IngestionRequest.from_document(
+            document,
+            output_dir=str(output_dir),
+            source_type=adapter.backend,
+            artifact_id=artifact_id,
+        )
+    except ValueError as error:
+        raise _Failure(str(error)) from error
+    if calibration is not None:
+        request = replace(request, calibration=calibration)
+    factory = session.adapter_factory or _composed_adapter_factory(session, effective)
+    service = IngestionService(factory)
+
+    if args.preflight:
+        report = service.preflight(request)
+        lines = [
+            f"ingestion preflight {report.identity}: {'ok' if report.ok else 'BLOCKED'}",
+            *(f"  - {problem}" for problem in report.problems),
+            *(f"  warning: {warning}" for warning in report.warnings),
+        ]
+        session.emit(report.to_document(), lines)
+        return EXIT_OK if report.ok else EXIT_FAILED
+
+    expected_content_identity = (
+        service.content_identity(request) if Path(request.source_path).exists() else None
+    )
+    replacement_dir: Path | None = None
+    if expected_content_identity is not None:
+        artifact_id = f"ingestion-{expected_content_identity.removeprefix('sha256:')}"
+        request = replace(request, output_dir=str(output_dir), artifact_id=artifact_id)
+        reused = service.reuse_if_equivalent(request, output_dir, expected_content_identity)
+        if reused is not None:
+            replacement_dir = output_dir.parent / f".replacement-{output_dir.name}-{uuid4().hex}"
+            request = replace(request, output_dir=str(replacement_dir))
+        elif output_dir.exists():
+            raise _Failure(
+                f"{output_dir} contains a different ingestion; use another --sequence-name"
+            )
+
+    events: list[ExecutionEvent] = []
+
+    class _Progress:
+        def emit(self, event: ExecutionEvent) -> None:
+            events.append(event)
+            if not args.json:
+                print(f"{event.kind}", file=session.err)
+
+    secrets = resolve_secrets(effective.config, environ=session.environ)
+    try:
+        result = service.run(request, event_sink=_Progress(), redact=secrets.redact)
+    except KeyboardInterrupt:
+        print("cancelled; nothing was published", file=session.err)
+        return EXIT_INTERRUPTED
+    if replacement_dir is not None and result.status == "completed":
+        try:
+            _replace_ingestion_artifact(output_dir, replacement_dir)
+        except OSError as error:
+            shutil.rmtree(replacement_dir, ignore_errors=True)
+            raise _Failure(f"could not replace {output_dir}: {error}") from error
+        result = replace(result, artifact_path=str(output_dir))
+    document_out = result.to_document()
+    document_out["events"] = [event.to_document() for event in events]
+    session.emit(document_out, _ingestion_lines(result))
+    if result.status == "completed":
+        return EXIT_OK
+    return EXIT_INTERRUPTED if result.status == "cancelled" else EXIT_FAILED
+
+
+def _replace_ingestion_artifact(current: Path, replacement: Path) -> None:
+    """Replace a validated local ingestion artifact while retaining the old one until then.
+
+    The replacement was fully published and verified by ``IngestionService`` at its sibling
+    path before this function runs. If the second rename cannot complete, the old artifact is
+    restored at its canonical path; no failed or cancelled ingestion can remove it.
+    """
+    previous = current.parent / f".replacement-previous-{current.name}-{uuid4().hex}"
+    current.rename(previous)
+    try:
+        replacement.rename(current)
+    except OSError:
+        previous.rename(current)
+        raise
+    shutil.rmtree(previous)
+
+
+def _json_file(path: str | None, flag: str) -> Any:
+    """Read a JSON document a flag names, or ``None`` when the flag is absent."""
+    if path is None:
+        return None
+    try:
+        return json.loads(Path(path).read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as error:
+        raise _UsageError(f"{flag} {path}: not a readable JSON document ({error})") from error
+
+
+def _window_document(args: argparse.Namespace) -> dict[str, Any] | None:
+    """The request window from the three window flags, which come all together or not at all."""
+    given = (args.window_clock, args.window_start, args.window_end)
+    if all(value is None for value in given):
+        return None
+    if any(value is None for value in given):
+        raise _UsageError("a window needs --window-clock, --window-start and --window-end together")
+    return {
+        "clock_id": args.window_clock,
+        "start_seconds": args.window_start,
+        "end_seconds": args.window_end,
+    }
+
+
+def _calibration_file(path: str | None) -> Any:
+    """The validated calibration set of a ``--calibration`` file; ``None`` without the flag."""
+    if path is None:
+        return None
+    try:
+        return calibration_from_file(Path(path))
+    except ValueError as error:
+        raise _UsageError(f"--calibration {path}: {error}") from error
+
+
+def _composed_adapter_factory(
+    session: _Session, effective: EffectiveConfig
+) -> SourceAdapterFactory:
+    """Compose the configured source adapter; a missing module or selection fails explicitly."""
+    composed = compose(
+        effective,
+        stages=["ingestion"],
+        environ=session.environ,
+        module_available=session.module_available,
+    )
+    assert composed.source_adapter is not None  # o estágio `ingestion` foi composto
+    return composed.source_adapter
+
+
+def _ingestion_lines(result: IngestionResult) -> list[str]:
+    lines = [f"ingestion {result.status}: {result.sequence_name}"]
+    if result.reused:
+        lines.append("  reused: equivalent artifact")
+    if result.failure is not None:
+        failure = result.failure
+        lines.append(f"  failure: {failure.category} during {failure.phase}: {failure.message}")
+    if result.artifact_path is not None:
+        lines.append(f"  artifact: {result.artifact_path}")
+    counts = ", ".join(f"{name}={count}" for name, count in result.observation_counts.items())
+    lines.append(f"  observations: {counts}")
+    lines.extend(f"  warning: {warning}" for warning in result.warnings)
+    metrics = result.metrics
+    lines.append(
+        f"  metrics: {metrics.elapsed_s}s, {metrics.files_written} files, "
+        f"{metrics.bytes_written} bytes, {metrics.dropped_events} dropped events"
+    )
+    return lines
+
+
+# --- artifacts -----------------------------------------------------------------------
+
+
+def _inspect_artifact(session: _Session) -> int:
+    examined = _examine(session.args.path)
+    lines = [f"{examined['kind']}: {examined['path']}"]
+    lines.extend(f"  {key}: {value}" for key, value in examined["summary"].items())
+    lines.extend(_integrity_lines(examined["integrity"]))
+    session.emit(examined, lines)
+    return EXIT_OK if examined["integrity"]["ok"] else EXIT_FAILED
+
+
+def _validate(session: _Session) -> int:
+    examined = _examine(session.args.path, full=session.args.full)
+    integrity = examined["integrity"]
+    lines = [f"{examined['path']}: {'ok' if integrity['ok'] else 'FAILED'}"]
+    lines.extend(_integrity_lines(integrity)[1:])
+    session.emit(examined, lines)
+    return EXIT_OK if integrity["ok"] else EXIT_FAILED
+
+
+def _derive_spatial_support(session: _Session) -> int:
+    """Derive a semantic spatial support and report what the run holds.
+
+    The capability is not a stage of the DAG: nothing downstream consumes its artifact and
+    the consumer is a viewer outside this repository. This command is its supported
+    production path, and it selects the three upstream artifacts explicitly.
+    """
+    # Import tardio: importar a CLI não carrega capability nenhuma, só este ramo a usa.
+    from contextmap.spatial_support import (
+        SpatialSupportArtifactError,
+        SpatialSupportRunId,
+        derive_semantic_spatial_support_artifact,
+    )
+
+    args = session.args
+    try:
+        manifest = derive_semantic_spatial_support_artifact(
+            context_map_dir=args.context_map,
+            voxel_aggregation_dir=args.voxel_aggregation,
+            raw_geometry_dir=args.raw_geometry,
+            output_dir=args.output,
+            run_id=SpatialSupportRunId(args.run_id),
+            code_version=args.code_version,
+        )
+    except SpatialSupportArtifactError as error:
+        raise _Failure(str(error)) from error
+    document = {
+        "run_id": str(manifest.run_id),
+        "output": str(args.output),
+        "source_context_map_id": manifest.source_context_map_id,
+        "source_map_id": str(manifest.source_map_id),
+        "grid_fingerprint": manifest.grid_fingerprint,
+        "policy_fingerprint": manifest.policy_fingerprint,
+        "cell_count": manifest.cell_count,
+        "entity_count": manifest.entity_count,
+        "total_support_weight": manifest.total_support_weight,
+    }
+    session.emit(
+        document,
+        [
+            f"{args.output}: {manifest.run_id}",
+            f"  cells: {manifest.cell_count}",
+            f"  entities: {manifest.entity_count}",
+            f"  support weight: {manifest.total_support_weight}",
+            f"  grid: {manifest.grid_fingerprint}",
+            f"  policy: {manifest.policy_fingerprint}",
+        ],
+    )
+    return EXIT_OK
+
+
+def _examine(path: Path, *, full: bool = False) -> dict[str, Any]:
+    """Inspect an artifact directory or a runtime document.
+
+    Only a ContextMapArtifact goes beyond the standard library: it is also handed to the
+    artifact capability's own validator, at the full level when ``full`` is set and at the
+    structural one otherwise. Every other path has a single level of checks.
+    """
+    if not path.exists():
+        raise _Failure(f"{path} does not exist")
+    if path.is_dir() and (path / "status.json").is_file():
+        return _examine_run(path)
+    if path.is_dir():
+        return _examine_manifest(path, full=full)
+    if path.name == "effective_config.json":
+        return _examine_document(path, "effective-config", _read_config_summary)
+    if path.name in {"plan.json", "execution.json"}:
+        kind = "plan" if path.name == "plan.json" else "execution-record"
+        return _examine_document(path, kind, _read_plan_summary)
+    raise _Failure(
+        f"{path} is not recognised: pass an artifact directory containing {_MANIFEST}, or an "
+        "effective_config.json, plan.json or execution.json runtime document"
+    )
+
+
+def _examine_run(directory: Path) -> dict[str, Any]:
+    """Check a run record: its status and event log, and the digest of each document."""
+    problems: list[str] = []
+    summary: dict[str, Any] = {}
+    try:
+        run = read_run(directory)
+    except RunRecordError as error:
+        problems.append(str(error))
+    else:
+        summary = {
+            "run_id": run.run_id,
+            "status": run.status.value,
+            "interrupted": run.interrupted,
+            "events": len(run.events),
+            "completed_stages": len(run.completed_stages),
+        }
+        problems.extend(run.notes)
+    documents: tuple[tuple[str, Callable[[Path], object]], ...] = (
+        ("effective_config.json", read_effective_config),
+        ("plan.json", read_plan_document),
+        ("execution.json", read_plan_document),
+    )
+    for name, read in documents:
+        if (directory / name).is_file():
+            try:
+                read(directory / name)
+            except (ConfigurationError, PipelineError) as error:
+                problems.append(f"{name}: {error}")
+    return {
+        "kind": "run",
+        "path": str(directory),
+        "summary": summary,
+        "integrity": {"ok": not problems, "problems": problems},
+    }
+
+
+def _examine_manifest(root: Path, *, full: bool) -> dict[str, Any]:
+    """Check an artifact directory: its manifest, its inventory and, for a map, its validator.
+
+    Only a ContextMapArtifact reports ``integrity.warnings``: its validator is the only check
+    here that tells warnings apart from errors.
+    """
+    manifest_path = root / _MANIFEST
+    problems: list[str] = []
+    warnings: list[str] | None = None
+    summary: dict[str, Any] = {}
+    if not manifest_path.is_file():
+        problems.append(f"missing {_MANIFEST} in {root}: not a finalized artifact")
+    else:
+        try:
+            manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+        except (OSError, ValueError) as error:
+            manifest = None
+            problems.append(f"cannot read {_MANIFEST}: {error}")
+        if isinstance(manifest, dict):
+            context_map = manifest.get("artifact_type") == _CONTEXT_MAP_ARTIFACT_TYPE
+            keys = _SUMMARY_KEYS + (_CONTEXT_MAP_SUMMARY_KEYS if context_map else ())
+            summary = {key: manifest[key] for key in keys if key in manifest}
+            inventory = _inventory(manifest.get("file_inventory"), problems)
+            summary["files"] = len(inventory)
+            summary["total_bytes"] = sum(entry.size_bytes for entry in inventory)
+            problems.extend(check_file_inventory(root, inventory))
+            if context_map:
+                errors, warnings = _context_map_findings(root, full=full)
+                problems.extend(errors)
+        elif manifest is not None:
+            problems.append(f"{_MANIFEST} is not a JSON object")
+    integrity: dict[str, Any] = {"ok": not problems, "problems": problems}
+    if warnings is not None:
+        integrity["warnings"] = warnings
+    return {"kind": "artifact", "path": str(root), "summary": summary, "integrity": integrity}
+
+
+def _context_map_findings(root: Path, *, full: bool) -> tuple[list[str], list[str]]:
+    """Validate a ContextMapArtifact with the artifact capability's own validator.
+
+    The artifact capability owns what makes its map valid; the CLI only picks the level and
+    reports the findings, each named by its stable code. Only errors are problems: a warning
+    (optional evidence that is not there, a file outside the inventory) does not stop the map
+    from being trusted, so it is reported apart and never fails the command.
+
+    Args:
+        root: The artifact directory.
+        full: Run ``ValidationLevel.FULL`` instead of the default ``STRUCTURAL``.
+
+    Returns:
+        One problem per error finding of the report, and one warning per warning finding, each
+        as ``"<code>: <message>"`` in the order of the report.
+    """
+    # Import tardio: importar a CLI não carrega capability nenhuma, só este ramo a usa.
+    from contextmap.artifact import Severity, ValidationLevel, validate_context_map_artifact
+
+    level = ValidationLevel.FULL if full else ValidationLevel.STRUCTURAL
+    report = validate_context_map_artifact(root, level=level)
+    by_severity: dict[Severity, list[str]] = {Severity.ERROR: [], Severity.WARNING: []}
+    for finding in report.findings:
+        by_severity[finding.severity].append(f"{finding.code}: {finding.message}")
+    return by_severity[Severity.ERROR], by_severity[Severity.WARNING]
+
+
+def _inventory(raw: object, problems: list[str]) -> list[FileEntry]:
+    """Read the manifest's file inventory, refusing paths that leave the artifact."""
+    if not isinstance(raw, list):
+        problems.append(f"{_MANIFEST} has no file_inventory list")
+        return []
+    entries = []
+    for item in raw:
+        try:
+            entry = FileEntry(
+                path=item["path"], size_bytes=item["size_bytes"], content_hash=item["content_hash"]
+            )
+        except (KeyError, TypeError):
+            problems.append(f"malformed file_inventory entry: {item!r}")
+            continue
+        relative = PurePosixPath(entry.path)
+        if relative.is_absolute() or ".." in relative.parts:
+            problems.append(f"file_inventory path leaves the artifact: {entry.path}")
+            continue
+        entries.append(entry)
+    return entries
+
+
+def _examine_document(
+    path: Path, kind: str, read: Callable[[Path], dict[str, Any]]
+) -> dict[str, Any]:
+    problems: list[str] = []
+    summary: dict[str, Any] = {}
+    try:
+        summary = read(path)
+    except (ConfigurationError, PipelineError) as error:
+        details = [problem.message for problem in getattr(error, "problems", ())]
+        problems.extend(details or [str(error)])
+    return {
+        "kind": kind,
+        "path": str(path),
+        "summary": summary,
+        "integrity": {"ok": not problems, "problems": problems},
+    }
+
+
+def _read_config_summary(path: Path) -> dict[str, Any]:
+    effective = read_effective_config(path)
+    return {
+        "digest": effective.digest,
+        "schema_version": effective.config.schema_version,
+        "preset": effective.config.pipeline.preset,
+        "layers": len(effective.sources),
+    }
+
+
+def _read_plan_summary(path: Path) -> dict[str, Any]:
+    document = read_plan_document(path)
+    summary = {"schema_version": document["schema_version"]}
+    if "order" in document:
+        summary["order"] = " -> ".join(document["order"])
+    if "stages" in document:
+        summary["stages"] = len(document["stages"])
+    for key in ("preset", "config_digest", "plan_digest"):
+        if key in document:
+            summary[key] = document[key]
+    return summary
+
+
+# --- rendering -----------------------------------------------------------------------
+
+
+def _problem_documents(problems: Sequence[ConfigProblem]) -> list[dict[str, str]]:
+    return [{"path": problem.path, "message": problem.message} for problem in problems]
+
+
+def _problem_lines(label: str, problems: Sequence[ConfigProblem]) -> list[str]:
+    if not problems:
+        return []
+    return [f"{label} problems ({len(problems)}):", *(f"  - {problem}" for problem in problems)]
+
+
+def _integrity_lines(integrity: Mapping[str, Any]) -> list[str]:
+    lines = [f"  integrity: {'ok' if integrity['ok'] else 'FAILED'}"]
+    lines.extend(f"    - {problem}" for problem in integrity["problems"])
+    lines.extend(f"    warning: {warning}" for warning in integrity.get("warnings", ()))
+    return lines
+
+
+def _config_lines(effective: EffectiveConfig) -> list[str]:
+    config = effective.config
+    lines = [
+        f"effective configuration {effective.digest}",
+        f"  preset: {config.pipeline.preset}",
+        "  layers: "
+        + ", ".join(
+            f"{source.kind} {source.identity}" if source.kind != "override" else "override"
+            for source in effective.sources
+        ),
+        "  stages: "
+        + ", ".join(
+            f"{stage}{'' if enabled else ' (off)'}"
+            for stage, enabled in config.pipeline.stages.items()
+        ),
+        "  backends:",
+    ]
+    lines.extend(
+        f"    {component_id}: {component.backend or '(not selected)'}"
+        for component_id, component in config.components.items()
+    )
+    selections = {stage: list(refs) for stage, refs in config.inputs.selections.items()}
+    lines.append(
+        f"  inputs: sequence={config.inputs.sequence or '-'}, selections={selections or '-'}"
+    )
+    lines.append(
+        f"  resources: device={config.resources.device or '-'}, "
+        f"workspace={config.resources.workspace or '-'}"
+    )
+    lines.append(
+        f"  policies: debug_level={config.policies.debug_level}, "
+        f"trajectory_mode={config.policies.trajectory_mode}"
+    )
+    return lines
+
+
+def _plan_lines(plan: PipelinePlan, execution: ExecutionPlan | None) -> list[str]:
+    lines = [f"topology {plan.preset_id} {plan.digest}"]
+    running = {s.stage_id for s in execution.stages} if execution is not None else set()
+    provided = execution.reused if execution is not None else {}
+    for number, stage in enumerate(plan.stages, start=1):
+        if not stage.available:
+            state = "unavailable"
+        elif stage.stage_id in running:
+            state = "run"
+        elif stage.stage_id in provided:
+            state = "provided " + ", ".join(ref.artifact_id for ref in provided[stage.stage_id])
+        else:
+            state = "-" if execution is not None else ""
+        header = f"  {number:>2}. {stage.stage_id}"
+        lines.append(
+            f"{header} [{state}] -> {stage.output}" if state else f"{header} -> {stage.output}"
+        )
+        for item in stage.inputs:
+            many = " (several runs)" if item.multiple else ""
+            lines.append(f"        <- {item.name}: {item.source} ({item.contract}){many}")
+        for component_id, backend in stage.components.items():
+            lines.append(f"        backend {component_id} = {backend or '(not selected)'}")
+        if not stage.available:
+            lines.append(f"        {stage.unavailable_reason}")
+    return lines
+
+
+def _preflight_lines(report: PreflightReport) -> list[str]:
+    if report.ok:
+        return ["preflight: ok"]
+    return [f"preflight: BLOCKED ({len(report.problems)})", *(f"  - {p}" for p in report.problems)]

@@ -1,0 +1,11 @@
+{
+  "error": "the plan cannot run",
+  "ok": false,
+  "problems": [
+    {
+      "message": "2 runs are supplied, but stage 'semantic_scoring' consumes one run of input 'perception'",
+      "path": "provided.visual_perception"
+    }
+  ],
+  "run_directory": "workspace/run-frame-10_31/corridor-02/run-0011"
+}

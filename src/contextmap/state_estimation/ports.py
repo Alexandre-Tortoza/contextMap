@@ -1,0 +1,153 @@
+"""Port e contratos de request/result dos backends de State Estimation.
+
+Um backend (fonte de pose externa, FAST-LIO, ...) é um adapter que satisfaz
+:class:`StateEstimator`: recebe observações canônicas e devolve uma
+:class:`~contextmap.state_estimation.Trajectory` canônica, de modo que a geometria downstream
+nunca vê mensagem ROS, objeto nativo de estimador ou formato de pose de dataset.
+
+O port declara o que um backend precisa por meio de ``GeometryRequirements`` (de
+``requirements``), nunca do avaliador ``preflight``. Ele não constrói backends concretos, que é
+tarefa do composition root, e não há fallback implícito de um backend para outro.
+"""
+
+from __future__ import annotations
+
+from collections.abc import Sequence
+from dataclasses import dataclass
+from enum import Enum
+from typing import Protocol, runtime_checkable
+
+from contextmap.ingestion import (
+    CalibrationSet,
+    SequenceArtifactId,
+    SourceObservation,
+    SourceObservationId,
+)
+from contextmap.state_estimation.models import EstimatorProvenance, Trajectory, TrajectoryId
+from contextmap.state_estimation.requirements import GeometryRequirements
+
+
+class StateEstimationError(Exception):
+    """Base class for failures a State Estimation backend reports."""
+
+
+class MissingEstimatorInputError(StateEstimationError):
+    """Raised when the request lacks an input the backend cannot run without."""
+
+
+class DiagnosticSeverity(Enum):
+    """How serious an :class:`EstimationDiagnostic` is.
+
+    Attributes:
+        INFO: Worth recording, no action needed.
+        WARNING: Something was rejected or looks wrong, and the run continued.
+    """
+
+    INFO = "info"
+    WARNING = "warning"
+
+
+@dataclass(frozen=True, kw_only=True)
+class EstimationDiagnostic:
+    """One auditable event a backend recorded while estimating.
+
+    Attributes:
+        severity: How serious the event is.
+        code: Stable identifier ``"<backend_id>.<condition>"``, suitable for
+            counting events across runs.
+        message: Human-readable explanation with the numbers behind it.
+        observation_id: Observation the event refers to, when there is one.
+    """
+
+    severity: DiagnosticSeverity
+    code: str
+    message: str
+    observation_id: SourceObservationId | None = None
+
+
+@dataclass(frozen=True, kw_only=True)
+class StateEstimationRequest:
+    """Canonical inputs of one State Estimation run.
+
+    Attributes:
+        trajectory_id: Identity the produced trajectory must carry.
+        sequence_artifact_id: Canonical sequence the observations come from.
+        selection_id: Deterministic identity of the sequence selection.
+        observations: The selected canonical observations, in sequence
+            order. A backend uses the modalities it needs and ignores the rest.
+        calibration: Canonical calibration of the sequence, or ``None`` when
+            the run has none. Backends never keep a second, hidden copy.
+        auxiliary_sequence_artifact_id: The auxiliary pose ``SequenceArtifact`` (merged by the
+            runtime's auxiliary pose bridge) some of ``observations`` actually came from, when
+            the caller merged one in.
+            ``None`` when no auxiliary sequence contributed. A backend never needs to act on
+            this itself: :func:`~contextmap.state_estimation.execute_state_estimation` copies it
+            onto the published :class:`TrajectoryProvenance` regardless of which backend ran, so
+            every backend's lineage stays complete without each one repeating this concern.
+        auxiliary_selection_id: Deterministic identity of the auxiliary sequence's selection,
+            alongside ``auxiliary_sequence_artifact_id``. ``None`` under the same condition.
+    """
+
+    trajectory_id: TrajectoryId
+    sequence_artifact_id: SequenceArtifactId
+    selection_id: str
+    observations: Sequence[SourceObservation]
+    calibration: CalibrationSet | None
+    auxiliary_sequence_artifact_id: SequenceArtifactId | None = None
+    auxiliary_selection_id: str | None = None
+
+
+@dataclass(frozen=True, kw_only=True)
+class StateEstimationResult:
+    """What a backend produced for one request.
+
+    Attributes:
+        trajectory: The canonical trajectory.
+        diagnostics: Events recorded while estimating, in the order they occurred.
+        consumed_observation_count: Observations of the backend's input
+            modality that it considered.
+        rejected_observation_count: Consumed observations the backend
+            rejected instead of publishing.
+    """
+
+    trajectory: Trajectory
+    diagnostics: tuple[EstimationDiagnostic, ...]
+    consumed_observation_count: int
+    rejected_observation_count: int
+
+
+@runtime_checkable
+class StateEstimator(Protocol):
+    """Capability port: turn canonical observations into a canonical trajectory."""
+
+    def estimator_provenance(self) -> EstimatorProvenance:
+        """Report this backend's identity and effective configuration.
+
+        Returns:
+            The provenance attached to every trajectory this backend produces.
+        """
+        ...
+
+    def geometry_requirements(self) -> GeometryRequirements:
+        """Declare what this backend needs from the sequence and its calibration.
+
+        Returns:
+            The modalities, static relations and dynamic frames the backend
+            requires, checked by the geometry preflight before ``estimate``.
+        """
+        ...
+
+    def estimate(self, request: StateEstimationRequest) -> StateEstimationResult:
+        """Estimate the trajectory of the body for the requested observations.
+
+        Args:
+            request: Canonical inputs of the run.
+
+        Returns:
+            The canonical trajectory and the events recorded on the way.
+
+        Raises:
+            MissingEstimatorInputError: If an input the backend requires is absent.
+            StateEstimationError: If the backend cannot produce a trajectory.
+        """
+        ...

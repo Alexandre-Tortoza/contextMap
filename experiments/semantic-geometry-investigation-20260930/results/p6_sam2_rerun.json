@@ -1,0 +1,1132 @@
+{
+  "proposal_count": 431,
+  "order_is_descending_predicted_iou": true,
+  "predicted_iou_quantiles": [
+    0.0031,
+    0.0268,
+    0.304,
+    0.8515,
+    0.9735
+  ],
+  "stability_quantiles": [
+    0.0,
+    0.1638,
+    0.7163,
+    0.918,
+    0.974
+  ],
+  "would_pass_sam2_defaults_0p8_0p95": 10,
+  "accepted_regions_matched_iou_ge_0p99": 83,
+  "accepted_regions_passing_sam2_defaults": 2,
+  "accepted_regions": [
+    {
+      "region_id": "region-0001",
+      "best_proposal": 151,
+      "best_iou": 1.0,
+      "contributors": [
+        1,
+        151
+      ],
+      "representative_index_matches": false,
+      "predicted_iou": 0.4814106225967407,
+      "stability": 0.0399189218878746,
+      "area_px": 6648
+    },
+    {
+      "region_id": "region-0002",
+      "best_proposal": 17,
+      "best_iou": 1.0,
+      "contributors": [
+        3,
+        9,
+        17
+      ],
+      "representative_index_matches": false,
+      "predicted_iou": 0.9164997935295105,
+      "stability": 0.7706678509712219,
+      "area_px": 7461
+    },
+    {
+      "region_id": "region-0003",
+      "best_proposal": 7,
+      "best_iou": 1.0,
+      "contributors": [
+        7
+      ],
+      "representative_index_matches": true,
+      "predicted_iou": 0.9606041312217712,
+      "stability": 0.9533834457397461,
+      "area_px": 2591
+    },
+    {
+      "region_id": "region-0004",
+      "best_proposal": 8,
+      "best_iou": 1.0,
+      "contributors": [
+        8
+      ],
+      "representative_index_matches": true,
+      "predicted_iou": 0.9562973976135254,
+      "stability": 0.9610592126846313,
+      "area_px": 631
+    },
+    {
+      "region_id": "region-0005",
+      "best_proposal": 87,
+      "best_iou": 1.0,
+      "contributors": [
+        10,
+        13,
+        87,
+        130,
+        132,
+        168,
+        243
+      ],
+      "representative_index_matches": false,
+      "predicted_iou": 0.7293828129768372,
+      "stability": 0.39026379585266113,
+      "area_px": 43793
+    },
+    {
+      "region_id": "region-0006",
+      "best_proposal": 53,
+      "best_iou": 1.0,
+      "contributors": [
+        11,
+        23,
+        52,
+        53
+      ],
+      "representative_index_matches": false,
+      "predicted_iou": 0.8294321298599243,
+      "stability": 0.705251157283783,
+      "area_px": 4831
+    },
+    {
+      "region_id": "region-0007",
+      "best_proposal": 203,
+      "best_iou": 1.0,
+      "contributors": [
+        14,
+        203
+      ],
+      "representative_index_matches": false,
+      "predicted_iou": 0.32908257842063904,
+      "stability": 0.7989556193351746,
+      "area_px": 340
+    },
+    {
+      "region_id": "region-0008",
+      "best_proposal": 190,
+      "best_iou": 1.0,
+      "contributors": [
+        15,
+        71,
+        93,
+        101,
+        105,
+        108,
+        110,
+        113,
+        118,
+        120,
+        121,
+        141,
+        144,
+        153,
+        160,
+        171,
+        182,
+        186,
+        187,
+        190,
+        193,
+        198,
+        208,
+        217,
+        224,
+        233,
+        236,
+        237,
+        240,
+        242
+      ],
+      "representative_index_matches": false,
+      "predicted_iou": 0.37806645035743713,
+      "stability": 0.5641962289810181,
+      "area_px": 37840
+    },
+    {
+      "region_id": "region-0009",
+      "best_proposal": 16,
+      "best_iou": 1.0,
+      "contributors": [
+        16
+      ],
+      "representative_index_matches": true,
+      "predicted_iou": 0.9261828064918518,
+      "stability": 0.9119591116905212,
+      "area_px": 3178
+    },
+    {
+      "region_id": "region-0010",
+      "best_proposal": 67,
+      "best_iou": 1.0,
+      "contributors": [
+        19,
+        43,
+        67,
+        75,
+        100,
+        154,
+        166,
+        176,
+        177,
+        189,
+        191,
+        200
+      ],
+      "representative_index_matches": false,
+      "predicted_iou": 0.7893159985542297,
+      "stability": 0.16009312868118286,
+      "area_px": 45562
+    },
+    {
+      "region_id": "region-0011",
+      "best_proposal": 159,
+      "best_iou": 1.0,
+      "contributors": [
+        20,
+        24,
+        159
+      ],
+      "representative_index_matches": false,
+      "predicted_iou": 0.4508650302886963,
+      "stability": 0.5590096116065979,
+      "area_px": 6358
+    },
+    {
+      "region_id": "region-0012",
+      "best_proposal": 21,
+      "best_iou": 1.0,
+      "contributors": [
+        21
+      ],
+      "representative_index_matches": true,
+      "predicted_iou": 0.9132167100906372,
+      "stability": 0.9419419169425964,
+      "area_px": 967
+    },
+    {
+      "region_id": "region-0013",
+      "best_proposal": 25,
+      "best_iou": 1.0,
+      "contributors": [
+        25
+      ],
+      "representative_index_matches": true,
+      "predicted_iou": 0.9070006012916565,
+      "stability": 0.9037036895751953,
+      "area_px": 382
+    },
+    {
+      "region_id": "region-0014",
+      "best_proposal": 123,
+      "best_iou": 1.0,
+      "contributors": [
+        26,
+        48,
+        123,
+        173,
+        209,
+        214,
+        225
+      ],
+      "representative_index_matches": false,
+      "predicted_iou": 0.5763829350471497,
+      "stability": 0.8881086111068726,
+      "area_px": 2046
+    },
+    {
+      "region_id": "region-0015",
+      "best_proposal": 94,
+      "best_iou": 1.0,
+      "contributors": [
+        27,
+        94,
+        145,
+        196,
+        227,
+        231
+      ],
+      "representative_index_matches": false,
+      "predicted_iou": 0.7072992920875549,
+      "stability": 0.27457553148269653,
+      "area_px": 38646
+    },
+    {
+      "region_id": "region-0016",
+      "best_proposal": 83,
+      "best_iou": 1.0,
+      "contributors": [
+        28,
+        83,
+        95,
+        239,
+        250
+      ],
+      "representative_index_matches": false,
+      "predicted_iou": 0.7376037836074829,
+      "stability": 0.7863191962242126,
+      "area_px": 1380
+    },
+    {
+      "region_id": "region-0017",
+      "best_proposal": 89,
+      "best_iou": 1.0,
+      "contributors": [
+        29,
+        40,
+        89,
+        136,
+        158,
+        172,
+        178,
+        184,
+        194,
+        195,
+        205,
+        226
+      ],
+      "representative_index_matches": false,
+      "predicted_iou": 0.724013090133667,
+      "stability": 0.16384166479110718,
+      "area_px": 56037
+    },
+    {
+      "region_id": "region-0018",
+      "best_proposal": 70,
+      "best_iou": 1.0,
+      "contributors": [
+        32,
+        70
+      ],
+      "representative_index_matches": false,
+      "predicted_iou": 0.7727315425872803,
+      "stability": 0.8635531067848206,
+      "area_px": 997
+    },
+    {
+      "region_id": "region-0019",
+      "best_proposal": 33,
+      "best_iou": 1.0,
+      "contributors": [
+        33
+      ],
+      "representative_index_matches": true,
+      "predicted_iou": 0.8844883441925049,
+      "stability": 0.9097832441329956,
+      "area_px": 3257
+    },
+    {
+      "region_id": "region-0020",
+      "best_proposal": 98,
+      "best_iou": 1.0,
+      "contributors": [
+        34,
+        98,
+        150,
+        197
+      ],
+      "representative_index_matches": false,
+      "predicted_iou": 0.6922109127044678,
+      "stability": 0.6937413215637207,
+      "area_px": 6349
+    },
+    {
+      "region_id": "region-0021",
+      "best_proposal": 36,
+      "best_iou": 1.0,
+      "contributors": [
+        36
+      ],
+      "representative_index_matches": true,
+      "predicted_iou": 0.8816115260124207,
+      "stability": 0.81095290184021,
+      "area_px": 4078
+    },
+    {
+      "region_id": "region-0022",
+      "best_proposal": 37,
+      "best_iou": 1.0,
+      "contributors": [
+        37,
+        62
+      ],
+      "representative_index_matches": true,
+      "predicted_iou": 0.8808027505874634,
+      "stability": 0.7024891972541809,
+      "area_px": 28971
+    },
+    {
+      "region_id": "region-0023",
+      "best_proposal": 39,
+      "best_iou": 1.0,
+      "contributors": [
+        39
+      ],
+      "representative_index_matches": true,
+      "predicted_iou": 0.8775190114974976,
+      "stability": 0.9149797558784485,
+      "area_px": 711
+    },
+    {
+      "region_id": "region-0024",
+      "best_proposal": 169,
+      "best_iou": 1.0,
+      "contributors": [
+        41,
+        169
+      ],
+      "representative_index_matches": false,
+      "predicted_iou": 0.42896097898483276,
+      "stability": 0.6019813418388367,
+      "area_px": 1362
+    },
+    {
+      "region_id": "region-0025",
+      "best_proposal": 42,
+      "best_iou": 1.0,
+      "contributors": [
+        42
+      ],
+      "representative_index_matches": true,
+      "predicted_iou": 0.8578596711158752,
+      "stability": 0.8079178929328918,
+      "area_px": 613
+    },
+    {
+      "region_id": "region-0026",
+      "best_proposal": 44,
+      "best_iou": 1.0,
+      "contributors": [
+        44
+      ],
+      "representative_index_matches": true,
+      "predicted_iou": 0.8476625680923462,
+      "stability": 0.7744942903518677,
+      "area_px": 4952
+    },
+    {
+      "region_id": "region-0027",
+      "best_proposal": 45,
+      "best_iou": 1.0,
+      "contributors": [
+        45
+      ],
+      "representative_index_matches": true,
+      "predicted_iou": 0.8455196022987366,
+      "stability": 0.9041095972061157,
+      "area_px": 70
+    },
+    {
+      "region_id": "region-0028",
+      "best_proposal": 46,
+      "best_iou": 1.0,
+      "contributors": [
+        46
+      ],
+      "representative_index_matches": true,
+      "predicted_iou": 0.8414454460144043,
+      "stability": 0.9104729890823364,
+      "area_px": 1125
+    },
+    {
+      "region_id": "region-0029",
+      "best_proposal": 80,
+      "best_iou": 1.0,
+      "contributors": [
+        47,
+        80,
+        97,
+        106,
+        111,
+        114,
+        163,
+        251
+      ],
+      "representative_index_matches": false,
+      "predicted_iou": 0.7424576878547668,
+      "stability": 0.9295103549957275,
+      "area_px": 17583
+    },
+    {
+      "region_id": "region-0030",
+      "best_proposal": 125,
+      "best_iou": 1.0,
+      "contributors": [
+        49,
+        125
+      ],
+      "representative_index_matches": false,
+      "predicted_iou": 0.5625506639480591,
+      "stability": 0.6467432975769043,
+      "area_px": 1030
+    },
+    {
+      "region_id": "region-0031",
+      "best_proposal": 50,
+      "best_iou": 1.0,
+      "contributors": [
+        50
+      ],
+      "representative_index_matches": true,
+      "predicted_iou": 0.8342728018760681,
+      "stability": 0.9045643210411072,
+      "area_px": 698
+    },
+    {
+      "region_id": "region-0032",
+      "best_proposal": 51,
+      "best_iou": 1.0,
+      "contributors": [
+        51
+      ],
+      "representative_index_matches": true,
+      "predicted_iou": 0.8324269652366638,
+      "stability": 0.8625429272651672,
+      "area_px": 269
+    },
+    {
+      "region_id": "region-0033",
+      "best_proposal": 127,
+      "best_iou": 1.0,
+      "contributors": [
+        54,
+        127
+      ],
+      "representative_index_matches": false,
+      "predicted_iou": 0.5591046214103699,
+      "stability": 0.7209302186965942,
+      "area_px": 38
+    },
+    {
+      "region_id": "region-0034",
+      "best_proposal": 164,
+      "best_iou": 1.0,
+      "contributors": [
+        55,
+        164
+      ],
+      "representative_index_matches": false,
+      "predicted_iou": 0.4467604458332062,
+      "stability": 0.7950310707092285,
+      "area_px": 437
+    },
+    {
+      "region_id": "region-0035",
+      "best_proposal": 57,
+      "best_iou": 1.0,
+      "contributors": [
+        57
+      ],
+      "representative_index_matches": true,
+      "predicted_iou": 0.8147681355476379,
+      "stability": 0.7452651262283325,
+      "area_px": 15669
+    },
+    {
+      "region_id": "region-0036",
+      "best_proposal": 175,
+      "best_iou": 1.0,
+      "contributors": [
+        59,
+        175
+      ],
+      "representative_index_matches": false,
+      "predicted_iou": 0.414014995098114,
+      "stability": 0.8771331310272217,
+      "area_px": 277
+    },
+    {
+      "region_id": "region-0037",
+      "best_proposal": 60,
+      "best_iou": 1.0,
+      "contributors": [
+        60,
+        131
+      ],
+      "representative_index_matches": true,
+      "predicted_iou": 0.8035522103309631,
+      "stability": 0.8559573292732239,
+      "area_px": 1546
+    },
+    {
+      "region_id": "region-0038",
+      "best_proposal": 61,
+      "best_iou": 1.0,
+      "contributors": [
+        61
+      ],
+      "representative_index_matches": true,
+      "predicted_iou": 0.8012476563453674,
+      "stability": 0.867511510848999,
+      "area_px": 1619
+    },
+    {
+      "region_id": "region-0039",
+      "best_proposal": 174,
+      "best_iou": 1.0,
+      "contributors": [
+        64,
+        174
+      ],
+      "representative_index_matches": false,
+      "predicted_iou": 0.4221055507659912,
+      "stability": 0.4794520437717438,
+      "area_px": 467
+    },
+    {
+      "region_id": "region-0040",
+      "best_proposal": 65,
+      "best_iou": 1.0,
+      "contributors": [
+        65
+      ],
+      "representative_index_matches": true,
+      "predicted_iou": 0.7894256711006165,
+      "stability": 0.9415243268013,
+      "area_px": 1475
+    },
+    {
+      "region_id": "region-0041",
+      "best_proposal": 69,
+      "best_iou": 1.0,
+      "contributors": [
+        69
+      ],
+      "representative_index_matches": true,
+      "predicted_iou": 0.7744958400726318,
+      "stability": 0.7885117530822754,
+      "area_px": 336
+    },
+    {
+      "region_id": "region-0042",
+      "best_proposal": 73,
+      "best_iou": 1.0,
+      "contributors": [
+        72,
+        73
+      ],
+      "representative_index_matches": false,
+      "predicted_iou": 0.7625682950019836,
+      "stability": 0.9143730998039246,
+      "area_px": 315
+    },
+    {
+      "region_id": "region-0043",
+      "best_proposal": 76,
+      "best_iou": 1.0,
+      "contributors": [
+        76
+      ],
+      "representative_index_matches": true,
+      "predicted_iou": 0.7554291486740112,
+      "stability": 0.863323986530304,
+      "area_px": 3595
+    },
+    {
+      "region_id": "region-0044",
+      "best_proposal": 77,
+      "best_iou": 1.0,
+      "contributors": [
+        77
+      ],
+      "representative_index_matches": true,
+      "predicted_iou": 0.7554231286048889,
+      "stability": 0.8736059665679932,
+      "area_px": 255
+    },
+    {
+      "region_id": "region-0045",
+      "best_proposal": 79,
+      "best_iou": 1.0,
+      "contributors": [
+        79
+      ],
+      "representative_index_matches": true,
+      "predicted_iou": 0.7452996969223022,
+      "stability": 0.9006050229072571,
+      "area_px": 1100
+    },
+    {
+      "region_id": "region-0046",
+      "best_proposal": 81,
+      "best_iou": 1.0,
+      "contributors": [
+        81
+      ],
+      "representative_index_matches": true,
+      "predicted_iou": 0.7392776608467102,
+      "stability": 0.8386138677597046,
+      "area_px": 912
+    },
+    {
+      "region_id": "region-0047",
+      "best_proposal": 232,
+      "best_iou": 1.0,
+      "contributors": [
+        82,
+        232
+      ],
+      "representative_index_matches": false,
+      "predicted_iou": 0.25588181614875793,
+      "stability": 0.7761938571929932,
+      "area_px": 1225
+    },
+    {
+      "region_id": "region-0048",
+      "best_proposal": 84,
+      "best_iou": 1.0,
+      "contributors": [
+        84
+      ],
+      "representative_index_matches": true,
+      "predicted_iou": 0.7364645600318909,
+      "stability": 0.7453183531761169,
+      "area_px": 457
+    },
+    {
+      "region_id": "region-0049",
+      "best_proposal": 222,
+      "best_iou": 1.0,
+      "contributors": [
+        85,
+        116,
+        222
+      ],
+      "representative_index_matches": false,
+      "predicted_iou": 0.2795036733150482,
+      "stability": 0.5694611072540283,
+      "area_px": 1199
+    },
+    {
+      "region_id": "region-0050",
+      "best_proposal": 86,
+      "best_iou": 1.0,
+      "contributors": [
+        86
+      ],
+      "representative_index_matches": true,
+      "predicted_iou": 0.7320895195007324,
+      "stability": 0.8814814686775208,
+      "area_px": 126
+    },
+    {
+      "region_id": "region-0051",
+      "best_proposal": 181,
+      "best_iou": 1.0,
+      "contributors": [
+        90,
+        181
+      ],
+      "representative_index_matches": false,
+      "predicted_iou": 0.3985850512981415,
+      "stability": 0.5485040545463562,
+      "area_px": 800
+    },
+    {
+      "region_id": "region-0052",
+      "best_proposal": 92,
+      "best_iou": 1.0,
+      "contributors": [
+        92,
+        215
+      ],
+      "representative_index_matches": true,
+      "predicted_iou": 0.7103399634361267,
+      "stability": 0.5400346517562866,
+      "area_px": 4479
+    },
+    {
+      "region_id": "region-0053",
+      "best_proposal": 107,
+      "best_iou": 1.0,
+      "contributors": [
+        107
+      ],
+      "representative_index_matches": true,
+      "predicted_iou": 0.6628462672233582,
+      "stability": 0.9245283007621765,
+      "area_px": 51
+    },
+    {
+      "region_id": "region-0054",
+      "best_proposal": 109,
+      "best_iou": 1.0,
+      "contributors": [
+        109,
+        129
+      ],
+      "representative_index_matches": true,
+      "predicted_iou": 0.6497451066970825,
+      "stability": 0.8814729452133179,
+      "area_px": 806
+    },
+    {
+      "region_id": "region-0055",
+      "best_proposal": 122,
+      "best_iou": 1.0,
+      "contributors": [
+        112,
+        122
+      ],
+      "representative_index_matches": false,
+      "predicted_iou": 0.5962046384811401,
+      "stability": 0.9172185659408569,
+      "area_px": 587
+    },
+    {
+      "region_id": "region-0056",
+      "best_proposal": 143,
+      "best_iou": 1.0,
+      "contributors": [
+        115,
+        143
+      ],
+      "representative_index_matches": false,
+      "predicted_iou": 0.5126930475234985,
+      "stability": 0.8622589707374573,
+      "area_px": 1706
+    },
+    {
+      "region_id": "region-0057",
+      "best_proposal": 117,
+      "best_iou": 1.0,
+      "contributors": [
+        117
+      ],
+      "representative_index_matches": true,
+      "predicted_iou": 0.6200451254844666,
+      "stability": 0.857723593711853,
+      "area_px": 226
+    },
+    {
+      "region_id": "region-0058",
+      "best_proposal": 119,
+      "best_iou": 1.0,
+      "contributors": [
+        119
+      ],
+      "representative_index_matches": true,
+      "predicted_iou": 0.6157140731811523,
+      "stability": 0.7764530777931213,
+      "area_px": 588
+    },
+    {
+      "region_id": "region-0059",
+      "best_proposal": 126,
+      "best_iou": 1.0,
+      "contributors": [
+        126
+      ],
+      "representative_index_matches": true,
+      "predicted_iou": 0.5606729984283447,
+      "stability": 0.5516340136528015,
+      "area_px": 630
+    },
+    {
+      "region_id": "region-0060",
+      "best_proposal": 128,
+      "best_iou": 1.0,
+      "contributors": [
+        128
+      ],
+      "representative_index_matches": true,
+      "predicted_iou": 0.5586845874786377,
+      "stability": 0.5511049628257751,
+      "area_px": 3871
+    },
+    {
+      "region_id": "region-0061",
+      "best_proposal": 133,
+      "best_iou": 1.0,
+      "contributors": [
+        133
+      ],
+      "representative_index_matches": true,
+      "predicted_iou": 0.5439767837524414,
+      "stability": 0.4601910710334778,
+      "area_px": 1696
+    },
+    {
+      "region_id": "region-0062",
+      "best_proposal": 149,
+      "best_iou": 1.0,
+      "contributors": [
+        134,
+        149,
+        202
+      ],
+      "representative_index_matches": false,
+      "predicted_iou": 0.5046829581260681,
+      "stability": 0.8438088297843933,
+      "area_px": 2410
+    },
+    {
+      "region_id": "region-0063",
+      "best_proposal": 135,
+      "best_iou": 1.0,
+      "contributors": [
+        135
+      ],
+      "representative_index_matches": true,
+      "predicted_iou": 0.540062427520752,
+      "stability": 0.1684981733560562,
+      "area_px": 914
+    },
+    {
+      "region_id": "region-0064",
+      "best_proposal": 137,
+      "best_iou": 1.0,
+      "contributors": [
+        137
+      ],
+      "representative_index_matches": true,
+      "predicted_iou": 0.5326084494590759,
+      "stability": 0.7535780668258667,
+      "area_px": 1433
+    },
+    {
+      "region_id": "region-0065",
+      "best_proposal": 252,
+      "best_iou": 1.0,
+      "contributors": [
+        138,
+        140,
+        252
+      ],
+      "representative_index_matches": false,
+      "predicted_iou": 0.22617293894290924,
+      "stability": 0.47939640283584595,
+      "area_px": 1126
+    },
+    {
+      "region_id": "region-0066",
+      "best_proposal": 139,
+      "best_iou": 1.0,
+      "contributors": [
+        139
+      ],
+      "representative_index_matches": true,
+      "predicted_iou": 0.5283276438713074,
+      "stability": 0.4995996654033661,
+      "area_px": 1675
+    },
+    {
+      "region_id": "region-0067",
+      "best_proposal": 147,
+      "best_iou": 1.0,
+      "contributors": [
+        147
+      ],
+      "representative_index_matches": true,
+      "predicted_iou": 0.510259747505188,
+      "stability": 0.8662790656089783,
+      "area_px": 320
+    },
+    {
+      "region_id": "region-0068",
+      "best_proposal": 148,
+      "best_iou": 1.0,
+      "contributors": [
+        148
+      ],
+      "representative_index_matches": true,
+      "predicted_iou": 0.5070982575416565,
+      "stability": 0.8709677457809448,
+      "area_px": 142
+    },
+    {
+      "region_id": "region-0069",
+      "best_proposal": 162,
+      "best_iou": 1.0,
+      "contributors": [
+        162
+      ],
+      "representative_index_matches": true,
+      "predicted_iou": 0.4471558928489685,
+      "stability": 0.03599260374903679,
+      "area_px": 7828
+    },
+    {
+      "region_id": "region-0070",
+      "best_proposal": 167,
+      "best_iou": 1.0,
+      "contributors": [
+        167
+      ],
+      "representative_index_matches": true,
+      "predicted_iou": 0.4401474893093109,
+      "stability": 0.26892679929733276,
+      "area_px": 7908
+    },
+    {
+      "region_id": "region-0071",
+      "best_proposal": 206,
+      "best_iou": 1.0,
+      "contributors": [
+        206
+      ],
+      "representative_index_matches": true,
+      "predicted_iou": 0.3280653655529022,
+      "stability": 0.10017574578523636,
+      "area_px": 290
+    },
+    {
+      "region_id": "region-0072",
+      "best_proposal": 207,
+      "best_iou": 1.0,
+      "contributors": [
+        207
+      ],
+      "representative_index_matches": true,
+      "predicted_iou": 0.32406312227249146,
+      "stability": 0.7836990356445312,
+      "area_px": 282
+    },
+    {
+      "region_id": "region-0073",
+      "best_proposal": 210,
+      "best_iou": 1.0,
+      "contributors": [
+        210
+      ],
+      "representative_index_matches": true,
+      "predicted_iou": 0.31600531935691833,
+      "stability": 0.5253526568412781,
+      "area_px": 1897
+    },
+    {
+      "region_id": "region-0074",
+      "best_proposal": 211,
+      "best_iou": 1.0,
+      "contributors": [
+        211
+      ],
+      "representative_index_matches": true,
+      "predicted_iou": 0.312979519367218,
+      "stability": 0.9042253494262695,
+      "area_px": 340
+    },
+    {
+      "region_id": "region-0075",
+      "best_proposal": 218,
+      "best_iou": 1.0,
+      "contributors": [
+        218
+      ],
+      "representative_index_matches": true,
+      "predicted_iou": 0.2955349385738373,
+      "stability": 0.5930232405662537,
+      "area_px": 581
+    },
+    {
+      "region_id": "region-0076",
+      "best_proposal": 230,
+      "best_iou": 1.0,
+      "contributors": [
+        230
+      ],
+      "representative_index_matches": true,
+      "predicted_iou": 0.26537036895751953,
+      "stability": 0.59375,
+      "area_px": 632
+    },
+    {
+      "region_id": "region-0077",
+      "best_proposal": 234,
+      "best_iou": 1.0,
+      "contributors": [
+        234
+      ],
+      "representative_index_matches": true,
+      "predicted_iou": 0.2510955035686493,
+      "stability": 0.6660869717597961,
+      "area_px": 486
+    },
+    {
+      "region_id": "region-0078",
+      "best_proposal": 235,
+      "best_iou": 1.0,
+      "contributors": [
+        235
+      ],
+      "representative_index_matches": true,
+      "predicted_iou": 0.24816805124282837,
+      "stability": 0.635407567024231,
+      "area_px": 911
+    },
+    {
+      "region_id": "region-0079",
+      "best_proposal": 238,
+      "best_iou": 1.0,
+      "contributors": [
+        238
+      ],
+      "representative_index_matches": true,
+      "predicted_iou": 0.24072152376174927,
+      "stability": 0.18001136183738708,
+      "area_px": 990
+    },
+    {
+      "region_id": "region-0080",
+      "best_proposal": 244,
+      "best_iou": 1.0,
+      "contributors": [
+        244
+      ],
+      "representative_index_matches": true,
+      "predicted_iou": 0.23384897410869598,
+      "stability": 0.7783251404762268,
+      "area_px": 181
+    },
+    {
+      "region_id": "region-0081",
+      "best_proposal": 245,
+      "best_iou": 1.0,
+      "contributors": [
+        245
+      ],
+      "representative_index_matches": true,
+      "predicted_iou": 0.23104897141456604,
+      "stability": 0.42839428782463074,
+      "area_px": 1139
+    },
+    {
+      "region_id": "region-0082",
+      "best_proposal": 247,
+      "best_iou": 1.0,
+      "contributors": [
+        247
+      ],
+      "representative_index_matches": true,
+      "predicted_iou": 0.23077623546123505,
+      "stability": 0.7185741066932678,
+      "area_px": 456
+    },
+    {
+      "region_id": "region-0083",
+      "best_proposal": 248,
+      "best_iou": 1.0,
+      "contributors": [
+        248
+      ],
+      "representative_index_matches": true,
+      "predicted_iou": 0.23010315001010895,
+      "stability": 0.8015102744102478,
+      "area_px": 1693
+    }
+  ]
+}

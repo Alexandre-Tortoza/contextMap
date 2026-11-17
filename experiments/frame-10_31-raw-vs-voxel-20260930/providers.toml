@@ -1,0 +1,4 @@
+schema_version = "0.1.0"
+[resources.providers]
+"visual_perception.region_discovery" = "ablation_providers:load_sam2"
+"visual_perception.semantic_interpretation" = "ablation_providers:load_qwen"

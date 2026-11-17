@@ -1,0 +1,47 @@
+{
+  "schema": "contextmap.experiment.canonical-2-validation.calibration/v1",
+  "origin": "rebuilt fresh from the corridor-02 dataset YAMLs (the canonical SequenceArtifact 720a486d… was absent on this machine)",
+  "source_files": {
+    "datasets/corridor-02/corridor-02-Intrinsics.yaml": "sha256:8d47e98aed48cf941c8ee642136514b50ea7e6dd0bd26de9266081bd8693fe12",
+    "datasets/corridor-02/corridor-02-extrinsics.yaml": "sha256:892bf743dc0f51eabfe9d8ae71dc98663753f174910ae9cc40ee244c77a9e217"
+  },
+  "camera_model": {
+    "kind": "mei",
+    "sensor_id": "camera_1_image_raw",
+    "frame_id": "d",
+    "width": 640,
+    "height": 480,
+    "fx_gamma1": 761.6791126513665,
+    "fy_gamma2": 678.7676595096547,
+    "cx_u0": 317.73997456826834,
+    "cy_v0": 233.50210820810244,
+    "xi": 1.5629934283981157,
+    "distortion_k1_k2_p1_p2": [-0.07083665039247518, 0.3094574364801575, 0.0004607746627279861, 0.00015704097191542886]
+  },
+  "sensors": [
+    {"sensor_id": "camera_1_image_raw", "frame_id": "d", "modality": "image"},
+    {"sensor_id": "velodyne_points", "frame_id": "cmu_rc1_velodyne", "modality": "lidar"},
+    {"sensor_id": "imu_data", "frame_id": "epson", "modality": "imu"}
+  ],
+  "static_transforms": [
+    {
+      "parent_frame": "epson",
+      "child_frame": "d",
+      "source": "rgb_camera_to_imu (extrinsics.yaml)",
+      "convention": "RigidTransform T_parent_child: p_epson = R p_d + t; quaternion (x,y,z,w) from the 3x3 rotation via scipy"
+    },
+    {
+      "parent_frame": "epson",
+      "child_frame": "cmu_rc1_velodyne",
+      "source": "laser_to_imu (extrinsics.yaml)",
+      "convention": "RigidTransform T_parent_child: p_epson = R p_child + t; quaternion (x,y,z,w) via scipy"
+    }
+  ],
+  "decisions": [
+    "sensor_id = sanitize_topic(bag topic): /camera_1/image_raw -> camera_1_image_raw, /velodyne_points -> velodyne_points, /imu/data -> imu_data (matches how the ROS1 bag adapter attaches calibration by sensor).",
+    "frames: epson = IMU/body, d = camera, cmu_rc1_velodyne = LiDAR (as the canonical ingestion README names them).",
+    "extrinsic direction: the YAML *_to_imu matrices are parent=epson, child=sensor.",
+    "new calibration identity: content hashes differ from the canonical build, but the geometry (MEI params, transforms) is identical to the dataset YAMLs."
+  ],
+  "note": "This declares the calibration identity used. It carries no weights and no absolute paths; the dataset physical location is the environment's responsibility."
+}

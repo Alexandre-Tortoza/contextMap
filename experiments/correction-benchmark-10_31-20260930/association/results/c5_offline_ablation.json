@@ -1,0 +1,1968 @@
+{
+  "experiment": "C5 preliminar — ablação offline de calibração × candidatos × raio de oclusão",
+  "status": "preliminar: regiões do E0 (SAM2 0/0), mapa sem deskew; nada entra em produção",
+  "provenance": {
+    "run": "workspace-old/frame-10_31-raw",
+    "image": "camera_1_image_raw-000055",
+    "perception_run_id": "ebd2f3e34ec4ec0964ae4396a74f6d37",
+    "perception_configuration_digest": "sha256:08b089586b987def4a54787f22f09be5831411b305bc2a288baf8e6d1911f653",
+    "region_discovery_backend": {
+      "backend_id": "sam2",
+      "model": "facebook/sam2.1-hiera-tiny",
+      "version": "de431c4043854a71d8101e17995dfe596bf101a5",
+      "configuration_fingerprint": "sha256:9336bb272b4474c3020ce2910755a37060bd5bde67fa8a97779d51c4a4d64f69"
+    },
+    "usable_area": {
+      "valid": {
+        "path": "examples/v0.2.0/assets/corridor-02/camera_1-valid.npy",
+        "sha256": "sha256:3fcd56880ddcca733c0cbc2fa799a8ae0582bf2bdfd5785badfea787ebd4b1eb"
+      },
+      "ego_exclusion": {
+        "path": "examples/v0.2.0/assets/corridor-02/camera_1-ego.npy",
+        "sha256": "sha256:3e100f93ee65f8a2b864bd2aa5737c4091cf4cac411ab1854ef72d54dbf40ba8"
+      }
+    },
+    "sensor_association_run_id": "c744af1bde5c2591104661f265c3e341",
+    "geometric_map_id": "corridor-02--5659900dc9d8f118d7ff41071f722453",
+    "calibration_identity": "sha256:f7d3288e82305a34960dee8b841d625c7de643a506cb5706395a9f9bbe3242d6",
+    "candidate_policy": {
+      "block_points": 1000000,
+      "fingerprint": "sha256:30a6533761f29db00fcd306dc25d6348bd992cc6057ea6f492a46c34cd72ddd7",
+      "max_range_m": null,
+      "policy_id": "camera-range-candidates-v1"
+    },
+    "visibility_policy": {
+      "cell_size_px": 4,
+      "depth_margin_m": 0.1,
+      "depth_margin_ratio": 0.02,
+      "fingerprint": "sha256:781601365351031d271df0b4a4c8f5fbfd9394cadb64fd1b23413d218923c550",
+      "neighborhood_radius_cells": 2,
+      "policy_id": "conservative-depth-support-v1"
+    },
+    "membership_policy_id": "mask-membership-v1",
+    "code": {
+      "head": "a3a175f099fd1609e710614a27753b0d0e24be3d",
+      "tracked_worktree_diff_sha256": "sha256:be67367f81032eefad54333da559e67dd6bcaa6e88907711f6435ed578c57bb5",
+      "metric_modules": {
+        "src/contextmap/evaluation/region_structure.py": "sha256:b07fbd983960a5b0c187a17a1288ba6cbe89a1d14d4fc490c0d384e9465635b3",
+        "src/contextmap/evaluation/association_conflicts.py": "sha256:b4b4645ed59edcf453739be150e3ba298b2234acfa1467f915bc442a7ce92b07"
+      }
+    },
+    "reimplementation": "experiments/semantic-geometry-investigation-20260930/scripts/assoc.py (validada = artefato; results/p4_reimplementation_validation.json)",
+    "image_time_ns": 1724621714984856033
+  },
+  "definitions": {
+    "calibrations": {
+      "base": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "corrected_yaw4.0_pitch-1.75": [
+        4.0,
+        -1.75,
+        0.0
+      ]
+    },
+    "candidates": {
+      "full_map": {
+        "definition": "todos os pontos do mapa",
+        "points": 2322324
+      },
+      "scan_start_within_50ms": {
+        "definition": "|início do scan − t_imagem| ≤ 50 ms",
+        "scans": [],
+        "points": 0
+      },
+      "scan_start_within_150ms": {
+        "definition": "|início do scan − t_imagem| ≤ 150 ms",
+        "scans": [
+          [
+            "velodyne_points-000022",
+            -50.26
+          ],
+          [
+            "velodyne_points-000023",
+            50.6
+          ]
+        ],
+        "points": 57515
+      },
+      "scan_start_within_500ms": {
+        "definition": "|início do scan − t_imagem| ≤ 500 ms",
+        "scans": [
+          [
+            "velodyne_points-000018",
+            -453.7
+          ],
+          [
+            "velodyne_points-000019",
+            -352.84
+          ],
+          [
+            "velodyne_points-000020",
+            -251.98
+          ],
+          [
+            "velodyne_points-000021",
+            -151.12
+          ],
+          [
+            "velodyne_points-000022",
+            -50.26
+          ],
+          [
+            "velodyne_points-000023",
+            50.6
+          ],
+          [
+            "velodyne_points-000024",
+            151.46
+          ],
+          [
+            "velodyne_points-000025",
+            252.32
+          ],
+          [
+            "velodyne_points-000026",
+            353.18
+          ],
+          [
+            "velodyne_points-000027",
+            453.98
+          ]
+        ],
+        "points": 287046
+      },
+      "scan_in_progress": {
+        "definition": "último scan com início ≤ t_imagem (varredura em andamento no instante da imagem)",
+        "scans": [
+          [
+            "velodyne_points-000022",
+            -50.26
+          ]
+        ],
+        "sweep_duration_ms": 100.84,
+        "image_inside_sweep": true,
+        "points": 28709
+      },
+      "range_20m": {
+        "definition": "||P − C|| ≤ 20 m, C = centro óptico (calibração base; a correção é só rotação, C não muda)",
+        "points": 2307030
+      }
+    },
+    "occlusion": {
+      "cell_size_px": 4,
+      "depth_margin_m": 0.1,
+      "depth_margin_ratio": 0.02,
+      "radii": [
+        0,
+        1,
+        2
+      ]
+    },
+    "nested_containment_threshold": 0.9,
+    "duplicate_iou_threshold": 0.8,
+    "depth_layers": {
+      "gap_m": 0.3,
+      "gap_ratio": 0.08,
+      "main_layer_min_share": 0.2,
+      "min_points": 30
+    },
+    "occlusion_proximity_m": 0.5,
+    "depth_metric": "alcance do raio (RAY_RANGE), métrica do pipeline para MEI",
+    "conflict_classes": [
+      "nested",
+      "duplicate",
+      "partial"
+    ]
+  },
+  "sanity": {
+    "base_full_r2_equals_e0_artifact": true,
+    "corrected_full_r2_equals_p5_fit_p4": true
+  },
+  "skipped_arms": {
+    "base|scan_start_within_50ms": "nenhum candidato: |início do scan − t_imagem| ≤ 50 ms",
+    "corrected_yaw4.0_pitch-1.75|scan_start_within_50ms": "nenhum candidato: |início do scan − t_imagem| ≤ 50 ms"
+  },
+  "arms": {
+    "base|full_map|r0": {
+      "calibration": "base",
+      "correction_yaw_pitch_roll_deg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "candidates": "full_map",
+      "neighborhood_radius_cells": 0,
+      "stages": {
+        "candidates": 2322324,
+        "projected": 1783217,
+        "in_image": 1549066,
+        "in_valid_support": 1540099,
+        "occluded": 1405628,
+        "visible": 134471,
+        "associated": 116944
+      },
+      "regions_with_points": 83,
+      "e0_associated_retained": 21602,
+      "e0_associated_retained_fraction": 1.0,
+      "multi_mask_point_rate": 0.7953892461349021,
+      "mean_regions_per_point": 2.216582295799699,
+      "max_regions_per_point": 7,
+      "regions_per_point_histogram": {
+        "1": 23928,
+        "2": 51850,
+        "3": 35167,
+        "4": 4147,
+        "5": 1669,
+        "6": 127,
+        "7": 56
+      },
+      "multi_mask_points_by_class": {
+        "nested": 33741,
+        "duplicate": 0,
+        "partial": 59275
+      },
+      "multi_mask_point_rate_by_class": {
+        "nested": 0.2885227117252702,
+        "duplicate": 0.0,
+        "partial": 0.5068665344096319
+      },
+      "pair_count_by_class": {
+        "nested": 38,
+        "duplicate": 0,
+        "partial": 245
+      },
+      "depth_layer_mask_count": 74,
+      "off_main_layer_fraction_weighted": 0.04052890979895715,
+      "occlusion_near_support": {
+        "metric_version": "1.0.0",
+        "proximity_m": 0.5,
+        "occluded_point_count": 1405628,
+        "near_support_point_count": 306635,
+        "near_support_fraction": 0.21814804485966416
+      }
+    },
+    "base|full_map|r1": {
+      "calibration": "base",
+      "correction_yaw_pitch_roll_deg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "candidates": "full_map",
+      "neighborhood_radius_cells": 1,
+      "stages": {
+        "candidates": 2322324,
+        "projected": 1783217,
+        "in_image": 1549066,
+        "in_valid_support": 1540099,
+        "occluded": 1498397,
+        "visible": 41702,
+        "associated": 37085
+      },
+      "regions_with_points": 81,
+      "e0_associated_retained": 21602,
+      "e0_associated_retained_fraction": 1.0,
+      "multi_mask_point_rate": 0.8854793043009302,
+      "mean_regions_per_point": 2.3768909262505056,
+      "max_regions_per_point": 7,
+      "regions_per_point_histogram": {
+        "1": 4247,
+        "2": 17881,
+        "3": 12457,
+        "4": 1812,
+        "5": 629,
+        "6": 39,
+        "7": 20
+      },
+      "multi_mask_points_by_class": {
+        "nested": 12939,
+        "duplicate": 0,
+        "partial": 19899
+      },
+      "multi_mask_point_rate_by_class": {
+        "nested": 0.3489011729809896,
+        "duplicate": 0.0,
+        "partial": 0.5365781313199407
+      },
+      "pair_count_by_class": {
+        "nested": 37,
+        "duplicate": 0,
+        "partial": 199
+      },
+      "depth_layer_mask_count": 52,
+      "off_main_layer_fraction_weighted": 0.013290512145956473,
+      "occlusion_near_support": {
+        "metric_version": "1.0.0",
+        "proximity_m": 0.5,
+        "occluded_point_count": 1498397,
+        "near_support_point_count": 226615,
+        "near_support_fraction": 0.15123828998589825
+      }
+    },
+    "base|full_map|r2": {
+      "calibration": "base",
+      "correction_yaw_pitch_roll_deg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "candidates": "full_map",
+      "neighborhood_radius_cells": 2,
+      "stages": {
+        "candidates": 2322324,
+        "projected": 1783217,
+        "in_image": 1549066,
+        "in_valid_support": 1540099,
+        "occluded": 1516151,
+        "visible": 23948,
+        "associated": 21602
+      },
+      "regions_with_points": 75,
+      "e0_associated_retained": 21602,
+      "e0_associated_retained_fraction": 1.0,
+      "multi_mask_point_rate": 0.9233404314415332,
+      "mean_regions_per_point": 2.498703823720026,
+      "max_regions_per_point": 7,
+      "regions_per_point_histogram": {
+        "1": 1656,
+        "2": 9697,
+        "3": 8546,
+        "4": 1272,
+        "5": 395,
+        "6": 26,
+        "7": 10
+      },
+      "multi_mask_points_by_class": {
+        "nested": 7457,
+        "duplicate": 0,
+        "partial": 12489
+      },
+      "multi_mask_point_rate_by_class": {
+        "nested": 0.345199518563096,
+        "duplicate": 0.0,
+        "partial": 0.5781409128784372
+      },
+      "pair_count_by_class": {
+        "nested": 35,
+        "duplicate": 0,
+        "partial": 169
+      },
+      "depth_layer_mask_count": 39,
+      "off_main_layer_fraction_weighted": 0.0041921299746609,
+      "occlusion_near_support": {
+        "metric_version": "1.0.0",
+        "proximity_m": 0.5,
+        "occluded_point_count": 1516151,
+        "near_support_point_count": 184768,
+        "near_support_fraction": 0.12186648955150245
+      }
+    },
+    "base|scan_start_within_150ms|r0": {
+      "calibration": "base",
+      "correction_yaw_pitch_roll_deg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "candidates": "scan_start_within_150ms",
+      "neighborhood_radius_cells": 0,
+      "stages": {
+        "candidates": 57515,
+        "projected": 40525,
+        "in_image": 18012,
+        "in_valid_support": 17750,
+        "occluded": 2000,
+        "visible": 15750,
+        "associated": 12910
+      },
+      "regions_with_points": 60,
+      "e0_associated_retained": 3143,
+      "e0_associated_retained_fraction": 0.14549578742709007,
+      "multi_mask_point_rate": 0.8451587916343919,
+      "mean_regions_per_point": 2.393725793958172,
+      "max_regions_per_point": 7,
+      "regions_per_point_histogram": {
+        "1": 1999,
+        "2": 4886,
+        "3": 5209,
+        "4": 604,
+        "5": 193,
+        "6": 9,
+        "7": 10
+      },
+      "multi_mask_points_by_class": {
+        "nested": 3771,
+        "duplicate": 0,
+        "partial": 7140
+      },
+      "multi_mask_point_rate_by_class": {
+        "nested": 0.29209914794732766,
+        "duplicate": 0.0,
+        "partial": 0.5530596436870643
+      },
+      "pair_count_by_class": {
+        "nested": 19,
+        "duplicate": 0,
+        "partial": 144
+      },
+      "depth_layer_mask_count": 51,
+      "off_main_layer_fraction_weighted": 0.10184914367423874,
+      "occlusion_near_support": {
+        "metric_version": "1.0.0",
+        "proximity_m": 0.5,
+        "occluded_point_count": 2000,
+        "near_support_point_count": 1517,
+        "near_support_fraction": 0.7585
+      }
+    },
+    "base|scan_start_within_150ms|r1": {
+      "calibration": "base",
+      "correction_yaw_pitch_roll_deg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "candidates": "scan_start_within_150ms",
+      "neighborhood_radius_cells": 1,
+      "stages": {
+        "candidates": 57515,
+        "projected": 40525,
+        "in_image": 18012,
+        "in_valid_support": 17750,
+        "occluded": 6432,
+        "visible": 11318,
+        "associated": 9553
+      },
+      "regions_with_points": 59,
+      "e0_associated_retained": 3143,
+      "e0_associated_retained_fraction": 0.14549578742709007,
+      "multi_mask_point_rate": 0.8495760494085628,
+      "mean_regions_per_point": 2.4068878886213754,
+      "max_regions_per_point": 7,
+      "regions_per_point_histogram": {
+        "1": 1437,
+        "2": 3518,
+        "3": 4015,
+        "4": 455,
+        "5": 119,
+        "6": 3,
+        "7": 6
+      },
+      "multi_mask_points_by_class": {
+        "nested": 2786,
+        "duplicate": 0,
+        "partial": 5330
+      },
+      "multi_mask_point_rate_by_class": {
+        "nested": 0.2916361352454726,
+        "duplicate": 0.0,
+        "partial": 0.5579399141630901
+      },
+      "pair_count_by_class": {
+        "nested": 19,
+        "duplicate": 0,
+        "partial": 137
+      },
+      "depth_layer_mask_count": 39,
+      "off_main_layer_fraction_weighted": 0.04778472650400775,
+      "occlusion_near_support": {
+        "metric_version": "1.0.0",
+        "proximity_m": 0.5,
+        "occluded_point_count": 6432,
+        "near_support_point_count": 5031,
+        "near_support_fraction": 0.7821828358208955
+      }
+    },
+    "base|scan_start_within_150ms|r2": {
+      "calibration": "base",
+      "correction_yaw_pitch_roll_deg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "candidates": "scan_start_within_150ms",
+      "neighborhood_radius_cells": 2,
+      "stages": {
+        "candidates": 57515,
+        "projected": 40525,
+        "in_image": 18012,
+        "in_valid_support": 17750,
+        "occluded": 10295,
+        "visible": 7455,
+        "associated": 6718
+      },
+      "regions_with_points": 47,
+      "e0_associated_retained": 3143,
+      "e0_associated_retained_fraction": 0.14549578742709007,
+      "multi_mask_point_rate": 0.8788329860077404,
+      "mean_regions_per_point": 2.4476034534087527,
+      "max_regions_per_point": 7,
+      "regions_per_point_histogram": {
+        "1": 814,
+        "2": 2462,
+        "3": 3114,
+        "4": 286,
+        "5": 37,
+        "6": 1,
+        "7": 4
+      },
+      "multi_mask_points_by_class": {
+        "nested": 2033,
+        "duplicate": 0,
+        "partial": 3871
+      },
+      "multi_mask_point_rate_by_class": {
+        "nested": 0.3026198273295624,
+        "duplicate": 0.0,
+        "partial": 0.576213158678178
+      },
+      "pair_count_by_class": {
+        "nested": 16,
+        "duplicate": 0,
+        "partial": 96
+      },
+      "depth_layer_mask_count": 29,
+      "off_main_layer_fraction_weighted": 0.02758663062177439,
+      "occlusion_near_support": {
+        "metric_version": "1.0.0",
+        "proximity_m": 0.5,
+        "occluded_point_count": 10295,
+        "near_support_point_count": 6754,
+        "near_support_fraction": 0.6560466245750364
+      }
+    },
+    "base|scan_start_within_500ms|r0": {
+      "calibration": "base",
+      "correction_yaw_pitch_roll_deg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "candidates": "scan_start_within_500ms",
+      "neighborhood_radius_cells": 0,
+      "stages": {
+        "candidates": 287046,
+        "projected": 200693,
+        "in_image": 98198,
+        "in_valid_support": 96703,
+        "occluded": 36743,
+        "visible": 59960,
+        "associated": 50528
+      },
+      "regions_with_points": 63,
+      "e0_associated_retained": 9209,
+      "e0_associated_retained_fraction": 0.4263031200814739,
+      "multi_mask_point_rate": 0.8714376187460418,
+      "mean_regions_per_point": 2.388893286890437,
+      "max_regions_per_point": 7,
+      "regions_per_point_histogram": {
+        "1": 6496,
+        "2": 21254,
+        "3": 20209,
+        "4": 1819,
+        "5": 715,
+        "6": 21,
+        "7": 14
+      },
+      "multi_mask_points_by_class": {
+        "nested": 17243,
+        "duplicate": 0,
+        "partial": 26789
+      },
+      "multi_mask_point_rate_by_class": {
+        "nested": 0.34125633312222925,
+        "duplicate": 0.0,
+        "partial": 0.5301812856238125
+      },
+      "pair_count_by_class": {
+        "nested": 22,
+        "duplicate": 0,
+        "partial": 162
+      },
+      "depth_layer_mask_count": 56,
+      "off_main_layer_fraction_weighted": 0.05473965287049401,
+      "occlusion_near_support": {
+        "metric_version": "1.0.0",
+        "proximity_m": 0.5,
+        "occluded_point_count": 36743,
+        "near_support_point_count": 26313,
+        "near_support_fraction": 0.7161364069346542
+      }
+    },
+    "base|scan_start_within_500ms|r1": {
+      "calibration": "base",
+      "correction_yaw_pitch_roll_deg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "candidates": "scan_start_within_500ms",
+      "neighborhood_radius_cells": 1,
+      "stages": {
+        "candidates": 287046,
+        "projected": 200693,
+        "in_image": 98198,
+        "in_valid_support": 96703,
+        "occluded": 63830,
+        "visible": 32873,
+        "associated": 28753
+      },
+      "regions_with_points": 58,
+      "e0_associated_retained": 9209,
+      "e0_associated_retained_fraction": 0.4263031200814739,
+      "multi_mask_point_rate": 0.8953500504295204,
+      "mean_regions_per_point": 2.4427016311341427,
+      "max_regions_per_point": 7,
+      "regions_per_point_histogram": {
+        "1": 3009,
+        "2": 11653,
+        "3": 12753,
+        "4": 1034,
+        "5": 300,
+        "6": 3,
+        "7": 1
+      },
+      "multi_mask_points_by_class": {
+        "nested": 9547,
+        "duplicate": 0,
+        "partial": 16197
+      },
+      "multi_mask_point_rate_by_class": {
+        "nested": 0.33203491809550306,
+        "duplicate": 0.0,
+        "partial": 0.5633151323340173
+      },
+      "pair_count_by_class": {
+        "nested": 20,
+        "duplicate": 0,
+        "partial": 136
+      },
+      "depth_layer_mask_count": 42,
+      "off_main_layer_fraction_weighted": 0.015018487586905941,
+      "occlusion_near_support": {
+        "metric_version": "1.0.0",
+        "proximity_m": 0.5,
+        "occluded_point_count": 63830,
+        "near_support_point_count": 42421,
+        "near_support_fraction": 0.6645934513551621
+      }
+    },
+    "base|scan_start_within_500ms|r2": {
+      "calibration": "base",
+      "correction_yaw_pitch_roll_deg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "candidates": "scan_start_within_500ms",
+      "neighborhood_radius_cells": 2,
+      "stages": {
+        "candidates": 287046,
+        "projected": 200693,
+        "in_image": 98198,
+        "in_valid_support": 96703,
+        "occluded": 74367,
+        "visible": 22336,
+        "associated": 19502
+      },
+      "regions_with_points": 54,
+      "e0_associated_retained": 9209,
+      "e0_associated_retained_fraction": 0.4263031200814739,
+      "multi_mask_point_rate": 0.9178545790175366,
+      "mean_regions_per_point": 2.5176392164906165,
+      "max_regions_per_point": 6,
+      "regions_per_point_histogram": {
+        "1": 1602,
+        "2": 7400,
+        "3": 9516,
+        "4": 773,
+        "5": 209,
+        "6": 2
+      },
+      "multi_mask_points_by_class": {
+        "nested": 6017,
+        "duplicate": 0,
+        "partial": 11883
+      },
+      "multi_mask_point_rate_by_class": {
+        "nested": 0.30853245820941444,
+        "duplicate": 0.0,
+        "partial": 0.6093221208081222
+      },
+      "pair_count_by_class": {
+        "nested": 19,
+        "duplicate": 0,
+        "partial": 107
+      },
+      "depth_layer_mask_count": 30,
+      "off_main_layer_fraction_weighted": 0.004726632836798171,
+      "occlusion_near_support": {
+        "metric_version": "1.0.0",
+        "proximity_m": 0.5,
+        "occluded_point_count": 74367,
+        "near_support_point_count": 46073,
+        "near_support_fraction": 0.6195355466806514
+      }
+    },
+    "base|scan_in_progress|r0": {
+      "calibration": "base",
+      "correction_yaw_pitch_roll_deg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "candidates": "scan_in_progress",
+      "neighborhood_radius_cells": 0,
+      "stages": {
+        "candidates": 28709,
+        "projected": 19793,
+        "in_image": 8502,
+        "in_valid_support": 8358,
+        "occluded": 709,
+        "visible": 7649,
+        "associated": 6115
+      },
+      "regions_with_points": 59,
+      "e0_associated_retained": 1607,
+      "e0_associated_retained_fraction": 0.07439126006851217,
+      "multi_mask_point_rate": 0.8356500408830744,
+      "mean_regions_per_point": 2.3694194603434178,
+      "max_regions_per_point": 7,
+      "regions_per_point_histogram": {
+        "1": 1005,
+        "2": 2375,
+        "3": 2333,
+        "4": 296,
+        "5": 93,
+        "6": 5,
+        "7": 8
+      },
+      "multi_mask_points_by_class": {
+        "nested": 1777,
+        "duplicate": 0,
+        "partial": 3333
+      },
+      "multi_mask_point_rate_by_class": {
+        "nested": 0.29059689288634505,
+        "duplicate": 0.0,
+        "partial": 0.5450531479967293
+      },
+      "pair_count_by_class": {
+        "nested": 19,
+        "duplicate": 0,
+        "partial": 135
+      },
+      "depth_layer_mask_count": 41,
+      "off_main_layer_fraction_weighted": 0.1464721223655459,
+      "occlusion_near_support": {
+        "metric_version": "1.0.0",
+        "proximity_m": 0.5,
+        "occluded_point_count": 709,
+        "near_support_point_count": 588,
+        "near_support_fraction": 0.8293370944992948
+      }
+    },
+    "base|scan_in_progress|r1": {
+      "calibration": "base",
+      "correction_yaw_pitch_roll_deg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "candidates": "scan_in_progress",
+      "neighborhood_radius_cells": 1,
+      "stages": {
+        "candidates": 28709,
+        "projected": 19793,
+        "in_image": 8502,
+        "in_valid_support": 8358,
+        "occluded": 2081,
+        "visible": 6277,
+        "associated": 4771
+      },
+      "regions_with_points": 58,
+      "e0_associated_retained": 1607,
+      "e0_associated_retained_fraction": 0.07439126006851217,
+      "multi_mask_point_rate": 0.8411234542024733,
+      "mean_regions_per_point": 2.391322573883882,
+      "max_regions_per_point": 7,
+      "regions_per_point_histogram": {
+        "1": 758,
+        "2": 1790,
+        "3": 1912,
+        "4": 235,
+        "5": 67,
+        "6": 3,
+        "7": 6
+      },
+      "multi_mask_points_by_class": {
+        "nested": 1362,
+        "duplicate": 0,
+        "partial": 2651
+      },
+      "multi_mask_point_rate_by_class": {
+        "nested": 0.28547474324041083,
+        "duplicate": 0.0,
+        "partial": 0.5556487109620625
+      },
+      "pair_count_by_class": {
+        "nested": 19,
+        "duplicate": 0,
+        "partial": 129
+      },
+      "depth_layer_mask_count": 34,
+      "off_main_layer_fraction_weighted": 0.06171614183885229,
+      "occlusion_near_support": {
+        "metric_version": "1.0.0",
+        "proximity_m": 0.5,
+        "occluded_point_count": 2081,
+        "near_support_point_count": 1595,
+        "near_support_fraction": 0.7664584334454589
+      }
+    },
+    "base|scan_in_progress|r2": {
+      "calibration": "base",
+      "correction_yaw_pitch_roll_deg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "candidates": "scan_in_progress",
+      "neighborhood_radius_cells": 2,
+      "stages": {
+        "candidates": 28709,
+        "projected": 19793,
+        "in_image": 8502,
+        "in_valid_support": 8358,
+        "occluded": 3721,
+        "visible": 4637,
+        "associated": 3493
+      },
+      "regions_with_points": 51,
+      "e0_associated_retained": 1607,
+      "e0_associated_retained_fraction": 0.07439126006851217,
+      "multi_mask_point_rate": 0.8620097337532208,
+      "mean_regions_per_point": 2.4056684798167765,
+      "max_regions_per_point": 7,
+      "regions_per_point_histogram": {
+        "1": 482,
+        "2": 1333,
+        "3": 1496,
+        "4": 152,
+        "5": 25,
+        "6": 1,
+        "7": 4
+      },
+      "multi_mask_points_by_class": {
+        "nested": 1051,
+        "duplicate": 0,
+        "partial": 1960
+      },
+      "multi_mask_point_rate_by_class": {
+        "nested": 0.30088748926424275,
+        "duplicate": 0.0,
+        "partial": 0.561122244488978
+      },
+      "pair_count_by_class": {
+        "nested": 17,
+        "duplicate": 0,
+        "partial": 102
+      },
+      "depth_layer_mask_count": 28,
+      "off_main_layer_fraction_weighted": 0.04543784445805266,
+      "occlusion_near_support": {
+        "metric_version": "1.0.0",
+        "proximity_m": 0.5,
+        "occluded_point_count": 3721,
+        "near_support_point_count": 2339,
+        "near_support_fraction": 0.6285944638538027
+      }
+    },
+    "base|range_20m|r0": {
+      "calibration": "base",
+      "correction_yaw_pitch_roll_deg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "candidates": "range_20m",
+      "neighborhood_radius_cells": 0,
+      "stages": {
+        "candidates": 2307030,
+        "projected": 1772187,
+        "in_image": 1538377,
+        "in_valid_support": 1529410,
+        "occluded": 1394939,
+        "visible": 134471,
+        "associated": 116944
+      },
+      "regions_with_points": 83,
+      "e0_associated_retained": 21602,
+      "e0_associated_retained_fraction": 1.0,
+      "multi_mask_point_rate": 0.7953892461349021,
+      "mean_regions_per_point": 2.216582295799699,
+      "max_regions_per_point": 7,
+      "regions_per_point_histogram": {
+        "1": 23928,
+        "2": 51850,
+        "3": 35167,
+        "4": 4147,
+        "5": 1669,
+        "6": 127,
+        "7": 56
+      },
+      "multi_mask_points_by_class": {
+        "nested": 33741,
+        "duplicate": 0,
+        "partial": 59275
+      },
+      "multi_mask_point_rate_by_class": {
+        "nested": 0.2885227117252702,
+        "duplicate": 0.0,
+        "partial": 0.5068665344096319
+      },
+      "pair_count_by_class": {
+        "nested": 38,
+        "duplicate": 0,
+        "partial": 245
+      },
+      "depth_layer_mask_count": 74,
+      "off_main_layer_fraction_weighted": 0.04052890979895715,
+      "occlusion_near_support": {
+        "metric_version": "1.0.0",
+        "proximity_m": 0.5,
+        "occluded_point_count": 1394939,
+        "near_support_point_count": 306635,
+        "near_support_fraction": 0.21981964802761986
+      }
+    },
+    "base|range_20m|r1": {
+      "calibration": "base",
+      "correction_yaw_pitch_roll_deg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "candidates": "range_20m",
+      "neighborhood_radius_cells": 1,
+      "stages": {
+        "candidates": 2307030,
+        "projected": 1772187,
+        "in_image": 1538377,
+        "in_valid_support": 1529410,
+        "occluded": 1487708,
+        "visible": 41702,
+        "associated": 37085
+      },
+      "regions_with_points": 81,
+      "e0_associated_retained": 21602,
+      "e0_associated_retained_fraction": 1.0,
+      "multi_mask_point_rate": 0.8854793043009302,
+      "mean_regions_per_point": 2.3768909262505056,
+      "max_regions_per_point": 7,
+      "regions_per_point_histogram": {
+        "1": 4247,
+        "2": 17881,
+        "3": 12457,
+        "4": 1812,
+        "5": 629,
+        "6": 39,
+        "7": 20
+      },
+      "multi_mask_points_by_class": {
+        "nested": 12939,
+        "duplicate": 0,
+        "partial": 19899
+      },
+      "multi_mask_point_rate_by_class": {
+        "nested": 0.3489011729809896,
+        "duplicate": 0.0,
+        "partial": 0.5365781313199407
+      },
+      "pair_count_by_class": {
+        "nested": 37,
+        "duplicate": 0,
+        "partial": 199
+      },
+      "depth_layer_mask_count": 52,
+      "off_main_layer_fraction_weighted": 0.013290512145956473,
+      "occlusion_near_support": {
+        "metric_version": "1.0.0",
+        "proximity_m": 0.5,
+        "occluded_point_count": 1487708,
+        "near_support_point_count": 226615,
+        "near_support_fraction": 0.15232491859961766
+      }
+    },
+    "base|range_20m|r2": {
+      "calibration": "base",
+      "correction_yaw_pitch_roll_deg": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "candidates": "range_20m",
+      "neighborhood_radius_cells": 2,
+      "stages": {
+        "candidates": 2307030,
+        "projected": 1772187,
+        "in_image": 1538377,
+        "in_valid_support": 1529410,
+        "occluded": 1505462,
+        "visible": 23948,
+        "associated": 21602
+      },
+      "regions_with_points": 75,
+      "e0_associated_retained": 21602,
+      "e0_associated_retained_fraction": 1.0,
+      "multi_mask_point_rate": 0.9233404314415332,
+      "mean_regions_per_point": 2.498703823720026,
+      "max_regions_per_point": 7,
+      "regions_per_point_histogram": {
+        "1": 1656,
+        "2": 9697,
+        "3": 8546,
+        "4": 1272,
+        "5": 395,
+        "6": 26,
+        "7": 10
+      },
+      "multi_mask_points_by_class": {
+        "nested": 7457,
+        "duplicate": 0,
+        "partial": 12489
+      },
+      "multi_mask_point_rate_by_class": {
+        "nested": 0.345199518563096,
+        "duplicate": 0.0,
+        "partial": 0.5781409128784372
+      },
+      "pair_count_by_class": {
+        "nested": 35,
+        "duplicate": 0,
+        "partial": 169
+      },
+      "depth_layer_mask_count": 39,
+      "off_main_layer_fraction_weighted": 0.0041921299746609,
+      "occlusion_near_support": {
+        "metric_version": "1.0.0",
+        "proximity_m": 0.5,
+        "occluded_point_count": 1505462,
+        "near_support_point_count": 184768,
+        "near_support_fraction": 0.12273175942003185
+      }
+    },
+    "corrected_yaw4.0_pitch-1.75|full_map|r0": {
+      "calibration": "corrected_yaw4.0_pitch-1.75",
+      "correction_yaw_pitch_roll_deg": [
+        4.0,
+        -1.75,
+        0.0
+      ],
+      "candidates": "full_map",
+      "neighborhood_radius_cells": 0,
+      "stages": {
+        "candidates": 2322324,
+        "projected": 1774549,
+        "in_image": 1550499,
+        "in_valid_support": 1542117,
+        "occluded": 1411787,
+        "visible": 130330,
+        "associated": 113466
+      },
+      "regions_with_points": 83,
+      "e0_associated_retained": 20100,
+      "e0_associated_retained_fraction": 0.9304694009813906,
+      "multi_mask_point_rate": 0.7204096381294838,
+      "mean_regions_per_point": 2.10216276241341,
+      "max_regions_per_point": 7,
+      "regions_per_point_histogram": {
+        "1": 31724,
+        "2": 45999,
+        "3": 30200,
+        "4": 3725,
+        "5": 1637,
+        "6": 150,
+        "7": 31
+      },
+      "multi_mask_points_by_class": {
+        "nested": 35992,
+        "duplicate": 0,
+        "partial": 45750
+      },
+      "multi_mask_point_rate_by_class": {
+        "nested": 0.3172051539668271,
+        "duplicate": 0.0,
+        "partial": 0.40320448416265664
+      },
+      "pair_count_by_class": {
+        "nested": 38,
+        "duplicate": 0,
+        "partial": 241
+      },
+      "depth_layer_mask_count": 72,
+      "off_main_layer_fraction_weighted": 0.0037381844422721107,
+      "occlusion_near_support": {
+        "metric_version": "1.0.0",
+        "proximity_m": 0.5,
+        "occluded_point_count": 1411787,
+        "near_support_point_count": 309385,
+        "near_support_fraction": 0.21914424768042204
+      }
+    },
+    "corrected_yaw4.0_pitch-1.75|full_map|r1": {
+      "calibration": "corrected_yaw4.0_pitch-1.75",
+      "correction_yaw_pitch_roll_deg": [
+        4.0,
+        -1.75,
+        0.0
+      ],
+      "candidates": "full_map",
+      "neighborhood_radius_cells": 1,
+      "stages": {
+        "candidates": 2322324,
+        "projected": 1774549,
+        "in_image": 1550499,
+        "in_valid_support": 1542117,
+        "occluded": 1501084,
+        "visible": 41033,
+        "associated": 36200
+      },
+      "regions_with_points": 82,
+      "e0_associated_retained": 20100,
+      "e0_associated_retained_fraction": 0.9304694009813906,
+      "multi_mask_point_rate": 0.8596961325966851,
+      "mean_regions_per_point": 2.36560773480663,
+      "max_regions_per_point": 7,
+      "regions_per_point_histogram": {
+        "1": 5079,
+        "2": 16082,
+        "3": 12603,
+        "4": 1701,
+        "5": 647,
+        "6": 72,
+        "7": 16
+      },
+      "multi_mask_points_by_class": {
+        "nested": 12862,
+        "duplicate": 0,
+        "partial": 18259
+      },
+      "multi_mask_point_rate_by_class": {
+        "nested": 0.35530386740331493,
+        "duplicate": 0.0,
+        "partial": 0.5043922651933702
+      },
+      "pair_count_by_class": {
+        "nested": 37,
+        "duplicate": 0,
+        "partial": 191
+      },
+      "depth_layer_mask_count": 52,
+      "off_main_layer_fraction_weighted": 0.003261073573573578,
+      "occlusion_near_support": {
+        "metric_version": "1.0.0",
+        "proximity_m": 0.5,
+        "occluded_point_count": 1501084,
+        "near_support_point_count": 224175,
+        "near_support_fraction": 0.14934207546013414
+      }
+    },
+    "corrected_yaw4.0_pitch-1.75|full_map|r2": {
+      "calibration": "corrected_yaw4.0_pitch-1.75",
+      "correction_yaw_pitch_roll_deg": [
+        4.0,
+        -1.75,
+        0.0
+      ],
+      "candidates": "full_map",
+      "neighborhood_radius_cells": 2,
+      "stages": {
+        "candidates": 2322324,
+        "projected": 1774549,
+        "in_image": 1550499,
+        "in_valid_support": 1542117,
+        "occluded": 1518909,
+        "visible": 23208,
+        "associated": 20857
+      },
+      "regions_with_points": 71,
+      "e0_associated_retained": 18702,
+      "e0_associated_retained_fraction": 0.8657531710026849,
+      "multi_mask_point_rate": 0.9072733374886129,
+      "mean_regions_per_point": 2.5009349379105337,
+      "max_regions_per_point": 7,
+      "regions_per_point_histogram": {
+        "1": 1934,
+        "2": 8463,
+        "3": 8991,
+        "4": 1069,
+        "5": 353,
+        "6": 41,
+        "7": 6
+      },
+      "multi_mask_points_by_class": {
+        "nested": 6772,
+        "duplicate": 0,
+        "partial": 12151
+      },
+      "multi_mask_point_rate_by_class": {
+        "nested": 0.3246871553914753,
+        "duplicate": 0.0,
+        "partial": 0.5825861820971376
+      },
+      "pair_count_by_class": {
+        "nested": 33,
+        "duplicate": 0,
+        "partial": 161
+      },
+      "depth_layer_mask_count": 39,
+      "off_main_layer_fraction_weighted": 0.001792667412005096,
+      "occlusion_near_support": {
+        "metric_version": "1.0.0",
+        "proximity_m": 0.5,
+        "occluded_point_count": 1518909,
+        "near_support_point_count": 182070,
+        "near_support_fraction": 0.11986893224018029
+      }
+    },
+    "corrected_yaw4.0_pitch-1.75|scan_start_within_150ms|r0": {
+      "calibration": "corrected_yaw4.0_pitch-1.75",
+      "correction_yaw_pitch_roll_deg": [
+        4.0,
+        -1.75,
+        0.0
+      ],
+      "candidates": "scan_start_within_150ms",
+      "neighborhood_radius_cells": 0,
+      "stages": {
+        "candidates": 57515,
+        "projected": 40456,
+        "in_image": 18047,
+        "in_valid_support": 17816,
+        "occluded": 1995,
+        "visible": 15821,
+        "associated": 12538
+      },
+      "regions_with_points": 58,
+      "e0_associated_retained": 2933,
+      "e0_associated_retained_fraction": 0.13577446532728452,
+      "multi_mask_point_rate": 0.8523687988514914,
+      "mean_regions_per_point": 2.4105120433881,
+      "max_regions_per_point": 7,
+      "regions_per_point_histogram": {
+        "1": 1851,
+        "2": 4679,
+        "3": 5242,
+        "4": 564,
+        "5": 186,
+        "6": 10,
+        "7": 6
+      },
+      "multi_mask_points_by_class": {
+        "nested": 3518,
+        "duplicate": 0,
+        "partial": 7169
+      },
+      "multi_mask_point_rate_by_class": {
+        "nested": 0.2805870154729622,
+        "duplicate": 0.0,
+        "partial": 0.5717817833785293
+      },
+      "pair_count_by_class": {
+        "nested": 18,
+        "duplicate": 0,
+        "partial": 141
+      },
+      "depth_layer_mask_count": 46,
+      "off_main_layer_fraction_weighted": 0.08320832083208321,
+      "occlusion_near_support": {
+        "metric_version": "1.0.0",
+        "proximity_m": 0.5,
+        "occluded_point_count": 1995,
+        "near_support_point_count": 1544,
+        "near_support_fraction": 0.7739348370927318
+      }
+    },
+    "corrected_yaw4.0_pitch-1.75|scan_start_within_150ms|r1": {
+      "calibration": "corrected_yaw4.0_pitch-1.75",
+      "correction_yaw_pitch_roll_deg": [
+        4.0,
+        -1.75,
+        0.0
+      ],
+      "candidates": "scan_start_within_150ms",
+      "neighborhood_radius_cells": 1,
+      "stages": {
+        "candidates": 57515,
+        "projected": 40456,
+        "in_image": 18047,
+        "in_valid_support": 17816,
+        "occluded": 6421,
+        "visible": 11395,
+        "associated": 9370
+      },
+      "regions_with_points": 56,
+      "e0_associated_retained": 2933,
+      "e0_associated_retained_fraction": 0.13577446532728452,
+      "multi_mask_point_rate": 0.8482390608324439,
+      "mean_regions_per_point": 2.4192102454642477,
+      "max_regions_per_point": 7,
+      "regions_per_point_histogram": {
+        "1": 1422,
+        "2": 3352,
+        "3": 4010,
+        "4": 440,
+        "5": 130,
+        "6": 10,
+        "7": 6
+      },
+      "multi_mask_points_by_class": {
+        "nested": 2598,
+        "duplicate": 0,
+        "partial": 5350
+      },
+      "multi_mask_point_rate_by_class": {
+        "nested": 0.27726787620064036,
+        "duplicate": 0.0,
+        "partial": 0.5709711846318036
+      },
+      "pair_count_by_class": {
+        "nested": 18,
+        "duplicate": 0,
+        "partial": 117
+      },
+      "depth_layer_mask_count": 39,
+      "off_main_layer_fraction_weighted": 0.038375725122713075,
+      "occlusion_near_support": {
+        "metric_version": "1.0.0",
+        "proximity_m": 0.5,
+        "occluded_point_count": 6421,
+        "near_support_point_count": 5039,
+        "near_support_fraction": 0.7847687276125214
+      }
+    },
+    "corrected_yaw4.0_pitch-1.75|scan_start_within_150ms|r2": {
+      "calibration": "corrected_yaw4.0_pitch-1.75",
+      "correction_yaw_pitch_roll_deg": [
+        4.0,
+        -1.75,
+        0.0
+      ],
+      "candidates": "scan_start_within_150ms",
+      "neighborhood_radius_cells": 2,
+      "stages": {
+        "candidates": 57515,
+        "projected": 40456,
+        "in_image": 18047,
+        "in_valid_support": 17816,
+        "occluded": 10363,
+        "visible": 7453,
+        "associated": 6618
+      },
+      "regions_with_points": 51,
+      "e0_associated_retained": 2929,
+      "e0_associated_retained_fraction": 0.13558929728728822,
+      "multi_mask_point_rate": 0.8671804170444243,
+      "mean_regions_per_point": 2.45164702326987,
+      "max_regions_per_point": 7,
+      "regions_per_point_histogram": {
+        "1": 879,
+        "2": 2351,
+        "3": 2978,
+        "4": 352,
+        "5": 49,
+        "6": 6,
+        "7": 3
+      },
+      "multi_mask_points_by_class": {
+        "nested": 1851,
+        "duplicate": 0,
+        "partial": 3888
+      },
+      "multi_mask_point_rate_by_class": {
+        "nested": 0.27969174977334543,
+        "duplicate": 0.0,
+        "partial": 0.5874886672710788
+      },
+      "pair_count_by_class": {
+        "nested": 16,
+        "duplicate": 0,
+        "partial": 95
+      },
+      "depth_layer_mask_count": 29,
+      "off_main_layer_fraction_weighted": 0.012478836144729423,
+      "occlusion_near_support": {
+        "metric_version": "1.0.0",
+        "proximity_m": 0.5,
+        "occluded_point_count": 10363,
+        "near_support_point_count": 6843,
+        "near_support_fraction": 0.6603300202644022
+      }
+    },
+    "corrected_yaw4.0_pitch-1.75|scan_start_within_500ms|r0": {
+      "calibration": "corrected_yaw4.0_pitch-1.75",
+      "correction_yaw_pitch_roll_deg": [
+        4.0,
+        -1.75,
+        0.0
+      ],
+      "candidates": "scan_start_within_500ms",
+      "neighborhood_radius_cells": 0,
+      "stages": {
+        "candidates": 287046,
+        "projected": 199379,
+        "in_image": 98808,
+        "in_valid_support": 97201,
+        "occluded": 38424,
+        "visible": 58777,
+        "associated": 47961
+      },
+      "regions_with_points": 63,
+      "e0_associated_retained": 8499,
+      "e0_associated_retained_fraction": 0.39343579298213127,
+      "multi_mask_point_rate": 0.8659535872896729,
+      "mean_regions_per_point": 2.3800379474990097,
+      "max_regions_per_point": 7,
+      "regions_per_point_histogram": {
+        "1": 6429,
+        "2": 20197,
+        "3": 18854,
+        "4": 1714,
+        "5": 720,
+        "6": 21,
+        "7": 26
+      },
+      "multi_mask_points_by_class": {
+        "nested": 16173,
+        "duplicate": 0,
+        "partial": 25359
+      },
+      "multi_mask_point_rate_by_class": {
+        "nested": 0.33721148433101894,
+        "duplicate": 0.0,
+        "partial": 0.5287421029586539
+      },
+      "pair_count_by_class": {
+        "nested": 21,
+        "duplicate": 0,
+        "partial": 165
+      },
+      "depth_layer_mask_count": 56,
+      "off_main_layer_fraction_weighted": 0.022471023514352356,
+      "occlusion_near_support": {
+        "metric_version": "1.0.0",
+        "proximity_m": 0.5,
+        "occluded_point_count": 38424,
+        "near_support_point_count": 27107,
+        "near_support_fraction": 0.7054705392463044
+      }
+    },
+    "corrected_yaw4.0_pitch-1.75|scan_start_within_500ms|r1": {
+      "calibration": "corrected_yaw4.0_pitch-1.75",
+      "correction_yaw_pitch_roll_deg": [
+        4.0,
+        -1.75,
+        0.0
+      ],
+      "candidates": "scan_start_within_500ms",
+      "neighborhood_radius_cells": 1,
+      "stages": {
+        "candidates": 287046,
+        "projected": 199379,
+        "in_image": 98808,
+        "in_valid_support": 97201,
+        "occluded": 66092,
+        "visible": 31109,
+        "associated": 26591
+      },
+      "regions_with_points": 60,
+      "e0_associated_retained": 8499,
+      "e0_associated_retained_fraction": 0.39343579298213127,
+      "multi_mask_point_rate": 0.8770636681583994,
+      "mean_regions_per_point": 2.4005114512429016,
+      "max_regions_per_point": 7,
+      "regions_per_point_histogram": {
+        "1": 3269,
+        "2": 11059,
+        "3": 10896,
+        "4": 1096,
+        "5": 257,
+        "6": 10,
+        "7": 4
+      },
+      "multi_mask_points_by_class": {
+        "nested": 9085,
+        "duplicate": 0,
+        "partial": 14237
+      },
+      "multi_mask_point_rate_by_class": {
+        "nested": 0.34165695160016546,
+        "duplicate": 0.0,
+        "partial": 0.535406716558234
+      },
+      "pair_count_by_class": {
+        "nested": 20,
+        "duplicate": 0,
+        "partial": 125
+      },
+      "depth_layer_mask_count": 40,
+      "off_main_layer_fraction_weighted": 0.011174591183090173,
+      "occlusion_near_support": {
+        "metric_version": "1.0.0",
+        "proximity_m": 0.5,
+        "occluded_point_count": 66092,
+        "near_support_point_count": 43444,
+        "near_support_fraction": 0.6573261514252859
+      }
+    },
+    "corrected_yaw4.0_pitch-1.75|scan_start_within_500ms|r2": {
+      "calibration": "corrected_yaw4.0_pitch-1.75",
+      "correction_yaw_pitch_roll_deg": [
+        4.0,
+        -1.75,
+        0.0
+      ],
+      "candidates": "scan_start_within_500ms",
+      "neighborhood_radius_cells": 2,
+      "stages": {
+        "candidates": 287046,
+        "projected": 199379,
+        "in_image": 98808,
+        "in_valid_support": 97201,
+        "occluded": 76711,
+        "visible": 20490,
+        "associated": 17445
+      },
+      "regions_with_points": 56,
+      "e0_associated_retained": 8353,
+      "e0_associated_retained_fraction": 0.38667715952226644,
+      "multi_mask_point_rate": 0.8993981083404987,
+      "mean_regions_per_point": 2.4631699627400403,
+      "max_regions_per_point": 7,
+      "regions_per_point_histogram": {
+        "1": 1755,
+        "2": 7088,
+        "3": 7551,
+        "4": 880,
+        "5": 163,
+        "6": 5,
+        "7": 3
+      },
+      "multi_mask_points_by_class": {
+        "nested": 5796,
+        "duplicate": 0,
+        "partial": 9894
+      },
+      "multi_mask_point_rate_by_class": {
+        "nested": 0.33224419604471195,
+        "duplicate": 0.0,
+        "partial": 0.5671539122957867
+      },
+      "pair_count_by_class": {
+        "nested": 20,
+        "duplicate": 0,
+        "partial": 106
+      },
+      "depth_layer_mask_count": 29,
+      "off_main_layer_fraction_weighted": 0.0031368509761692852,
+      "occlusion_near_support": {
+        "metric_version": "1.0.0",
+        "proximity_m": 0.5,
+        "occluded_point_count": 76711,
+        "near_support_point_count": 47260,
+        "near_support_fraction": 0.616078528503083
+      }
+    },
+    "corrected_yaw4.0_pitch-1.75|scan_in_progress|r0": {
+      "calibration": "corrected_yaw4.0_pitch-1.75",
+      "correction_yaw_pitch_roll_deg": [
+        4.0,
+        -1.75,
+        0.0
+      ],
+      "candidates": "scan_in_progress",
+      "neighborhood_radius_cells": 0,
+      "stages": {
+        "candidates": 28709,
+        "projected": 19752,
+        "in_image": 8537,
+        "in_valid_support": 8420,
+        "occluded": 698,
+        "visible": 7722,
+        "associated": 5927
+      },
+      "regions_with_points": 58,
+      "e0_associated_retained": 1507,
+      "e0_associated_retained_fraction": 0.06976205906860476,
+      "multi_mask_point_rate": 0.8442719757044036,
+      "mean_regions_per_point": 2.40357685169563,
+      "max_regions_per_point": 7,
+      "regions_per_point_histogram": {
+        "1": 923,
+        "2": 2184,
+        "3": 2433,
+        "4": 292,
+        "5": 86,
+        "6": 5,
+        "7": 4
+      },
+      "multi_mask_points_by_class": {
+        "nested": 1631,
+        "duplicate": 0,
+        "partial": 3373
+      },
+      "multi_mask_point_rate_by_class": {
+        "nested": 0.27518137337607557,
+        "duplicate": 0.0,
+        "partial": 0.569090602328328
+      },
+      "pair_count_by_class": {
+        "nested": 18,
+        "duplicate": 0,
+        "partial": 134
+      },
+      "depth_layer_mask_count": 37,
+      "off_main_layer_fraction_weighted": 0.09157456581024831,
+      "occlusion_near_support": {
+        "metric_version": "1.0.0",
+        "proximity_m": 0.5,
+        "occluded_point_count": 698,
+        "near_support_point_count": 594,
+        "near_support_fraction": 0.8510028653295129
+      }
+    },
+    "corrected_yaw4.0_pitch-1.75|scan_in_progress|r1": {
+      "calibration": "corrected_yaw4.0_pitch-1.75",
+      "correction_yaw_pitch_roll_deg": [
+        4.0,
+        -1.75,
+        0.0
+      ],
+      "candidates": "scan_in_progress",
+      "neighborhood_radius_cells": 1,
+      "stages": {
+        "candidates": 28709,
+        "projected": 19752,
+        "in_image": 8537,
+        "in_valid_support": 8420,
+        "occluded": 2103,
+        "visible": 6317,
+        "associated": 4599
+      },
+      "regions_with_points": 57,
+      "e0_associated_retained": 1507,
+      "e0_associated_retained_fraction": 0.06976205906860476,
+      "multi_mask_point_rate": 0.8406175255490324,
+      "mean_regions_per_point": 2.421178517068928,
+      "max_regions_per_point": 7,
+      "regions_per_point_histogram": {
+        "1": 733,
+        "2": 1610,
+        "3": 1934,
+        "4": 243,
+        "5": 70,
+        "6": 5,
+        "7": 4
+      },
+      "multi_mask_points_by_class": {
+        "nested": 1247,
+        "duplicate": 0,
+        "partial": 2619
+      },
+      "multi_mask_point_rate_by_class": {
+        "nested": 0.27114590128288757,
+        "duplicate": 0.0,
+        "partial": 0.5694716242661448
+      },
+      "pair_count_by_class": {
+        "nested": 18,
+        "duplicate": 0,
+        "partial": 116
+      },
+      "depth_layer_mask_count": 31,
+      "off_main_layer_fraction_weighted": 0.054301572617946346,
+      "occlusion_near_support": {
+        "metric_version": "1.0.0",
+        "proximity_m": 0.5,
+        "occluded_point_count": 2103,
+        "near_support_point_count": 1599,
+        "near_support_fraction": 0.760342368045649
+      }
+    },
+    "corrected_yaw4.0_pitch-1.75|scan_in_progress|r2": {
+      "calibration": "corrected_yaw4.0_pitch-1.75",
+      "correction_yaw_pitch_roll_deg": [
+        4.0,
+        -1.75,
+        0.0
+      ],
+      "candidates": "scan_in_progress",
+      "neighborhood_radius_cells": 2,
+      "stages": {
+        "candidates": 28709,
+        "projected": 19752,
+        "in_image": 8537,
+        "in_valid_support": 8420,
+        "occluded": 3711,
+        "visible": 4709,
+        "associated": 3392
+      },
+      "regions_with_points": 50,
+      "e0_associated_retained": 1507,
+      "e0_associated_retained_fraction": 0.06976205906860476,
+      "multi_mask_point_rate": 0.8637971698113207,
+      "mean_regions_per_point": 2.451061320754717,
+      "max_regions_per_point": 7,
+      "regions_per_point_histogram": {
+        "1": 462,
+        "2": 1213,
+        "3": 1481,
+        "4": 206,
+        "5": 24,
+        "6": 3,
+        "7": 3
+      },
+      "multi_mask_points_by_class": {
+        "nested": 951,
+        "duplicate": 0,
+        "partial": 1979
+      },
+      "multi_mask_point_rate_by_class": {
+        "nested": 0.2803655660377358,
+        "duplicate": 0.0,
+        "partial": 0.5834316037735849
+      },
+      "pair_count_by_class": {
+        "nested": 15,
+        "duplicate": 0,
+        "partial": 90
+      },
+      "depth_layer_mask_count": 22,
+      "off_main_layer_fraction_weighted": 0.014403807615230461,
+      "occlusion_near_support": {
+        "metric_version": "1.0.0",
+        "proximity_m": 0.5,
+        "occluded_point_count": 3711,
+        "near_support_point_count": 2295,
+        "near_support_fraction": 0.618431689571544
+      }
+    },
+    "corrected_yaw4.0_pitch-1.75|range_20m|r0": {
+      "calibration": "corrected_yaw4.0_pitch-1.75",
+      "correction_yaw_pitch_roll_deg": [
+        4.0,
+        -1.75,
+        0.0
+      ],
+      "candidates": "range_20m",
+      "neighborhood_radius_cells": 0,
+      "stages": {
+        "candidates": 2307030,
+        "projected": 1763519,
+        "in_image": 1539810,
+        "in_valid_support": 1531428,
+        "occluded": 1401098,
+        "visible": 130330,
+        "associated": 113466
+      },
+      "regions_with_points": 83,
+      "e0_associated_retained": 20100,
+      "e0_associated_retained_fraction": 0.9304694009813906,
+      "multi_mask_point_rate": 0.7204096381294838,
+      "mean_regions_per_point": 2.10216276241341,
+      "max_regions_per_point": 7,
+      "regions_per_point_histogram": {
+        "1": 31724,
+        "2": 45999,
+        "3": 30200,
+        "4": 3725,
+        "5": 1637,
+        "6": 150,
+        "7": 31
+      },
+      "multi_mask_points_by_class": {
+        "nested": 35992,
+        "duplicate": 0,
+        "partial": 45750
+      },
+      "multi_mask_point_rate_by_class": {
+        "nested": 0.3172051539668271,
+        "duplicate": 0.0,
+        "partial": 0.40320448416265664
+      },
+      "pair_count_by_class": {
+        "nested": 38,
+        "duplicate": 0,
+        "partial": 241
+      },
+      "depth_layer_mask_count": 72,
+      "off_main_layer_fraction_weighted": 0.0037381844422721107,
+      "occlusion_near_support": {
+        "metric_version": "1.0.0",
+        "proximity_m": 0.5,
+        "occluded_point_count": 1401098,
+        "near_support_point_count": 309385,
+        "near_support_fraction": 0.2208161027993759
+      }
+    },
+    "corrected_yaw4.0_pitch-1.75|range_20m|r1": {
+      "calibration": "corrected_yaw4.0_pitch-1.75",
+      "correction_yaw_pitch_roll_deg": [
+        4.0,
+        -1.75,
+        0.0
+      ],
+      "candidates": "range_20m",
+      "neighborhood_radius_cells": 1,
+      "stages": {
+        "candidates": 2307030,
+        "projected": 1763519,
+        "in_image": 1539810,
+        "in_valid_support": 1531428,
+        "occluded": 1490395,
+        "visible": 41033,
+        "associated": 36200
+      },
+      "regions_with_points": 82,
+      "e0_associated_retained": 20100,
+      "e0_associated_retained_fraction": 0.9304694009813906,
+      "multi_mask_point_rate": 0.8596961325966851,
+      "mean_regions_per_point": 2.36560773480663,
+      "max_regions_per_point": 7,
+      "regions_per_point_histogram": {
+        "1": 5079,
+        "2": 16082,
+        "3": 12603,
+        "4": 1701,
+        "5": 647,
+        "6": 72,
+        "7": 16
+      },
+      "multi_mask_points_by_class": {
+        "nested": 12862,
+        "duplicate": 0,
+        "partial": 18259
+      },
+      "multi_mask_point_rate_by_class": {
+        "nested": 0.35530386740331493,
+        "duplicate": 0.0,
+        "partial": 0.5043922651933702
+      },
+      "pair_count_by_class": {
+        "nested": 37,
+        "duplicate": 0,
+        "partial": 191
+      },
+      "depth_layer_mask_count": 52,
+      "off_main_layer_fraction_weighted": 0.003261073573573578,
+      "occlusion_near_support": {
+        "metric_version": "1.0.0",
+        "proximity_m": 0.5,
+        "occluded_point_count": 1490395,
+        "near_support_point_count": 224175,
+        "near_support_fraction": 0.15041314550840548
+      }
+    },
+    "corrected_yaw4.0_pitch-1.75|range_20m|r2": {
+      "calibration": "corrected_yaw4.0_pitch-1.75",
+      "correction_yaw_pitch_roll_deg": [
+        4.0,
+        -1.75,
+        0.0
+      ],
+      "candidates": "range_20m",
+      "neighborhood_radius_cells": 2,
+      "stages": {
+        "candidates": 2307030,
+        "projected": 1763519,
+        "in_image": 1539810,
+        "in_valid_support": 1531428,
+        "occluded": 1508220,
+        "visible": 23208,
+        "associated": 20857
+      },
+      "regions_with_points": 71,
+      "e0_associated_retained": 18702,
+      "e0_associated_retained_fraction": 0.8657531710026849,
+      "multi_mask_point_rate": 0.9072733374886129,
+      "mean_regions_per_point": 2.5009349379105337,
+      "max_regions_per_point": 7,
+      "regions_per_point_histogram": {
+        "1": 1934,
+        "2": 8463,
+        "3": 8991,
+        "4": 1069,
+        "5": 353,
+        "6": 41,
+        "7": 6
+      },
+      "multi_mask_points_by_class": {
+        "nested": 6772,
+        "duplicate": 0,
+        "partial": 12151
+      },
+      "multi_mask_point_rate_by_class": {
+        "nested": 0.3246871553914753,
+        "duplicate": 0.0,
+        "partial": 0.5825861820971376
+      },
+      "pair_count_by_class": {
+        "nested": 33,
+        "duplicate": 0,
+        "partial": 161
+      },
+      "depth_layer_mask_count": 39,
+      "off_main_layer_fraction_weighted": 0.001792667412005096,
+      "occlusion_near_support": {
+        "metric_version": "1.0.0",
+        "proximity_m": 0.5,
+        "occluded_point_count": 1508220,
+        "near_support_point_count": 182070,
+        "near_support_fraction": 0.12071846282372597
+      }
+    }
+  },
+  "e0_taxonomy_nested_threshold_sensitivity": {
+    "0.5": {
+      "multi_mask_point_rate_by_class": {
+        "nested": 0.7256735487454865,
+        "duplicate": 0.0,
+        "partial": 0.19766688269604665
+      },
+      "pair_count_by_class": {
+        "nested": 94,
+        "duplicate": 0,
+        "partial": 110
+      }
+    },
+    "0.8": {
+      "multi_mask_point_rate_by_class": {
+        "nested": 0.370150911952597,
+        "duplicate": 0.0,
+        "partial": 0.5531895194889362
+      },
+      "pair_count_by_class": {
+        "nested": 53,
+        "duplicate": 0,
+        "partial": 151
+      }
+    },
+    "0.9": {
+      "multi_mask_point_rate_by_class": {
+        "nested": 0.345199518563096,
+        "duplicate": 0.0,
+        "partial": 0.5781409128784372
+      },
+      "pair_count_by_class": {
+        "nested": 35,
+        "duplicate": 0,
+        "partial": 169
+      }
+    }
+  },
+  "runtime_s": 46.6
+}

@@ -1,0 +1,21 @@
+{
+  "integrity": {
+    "ok": true,
+    "problems": [],
+    "warnings": [
+      "dependency.optional_missing: the semantic_fusion_run '27767aaf975edb3650dd7209413020f4' has no recorded hint; pass its location explicitly",
+      "dependency.optional_missing: the sequence '4a4d895e0e4e4731ad91326114607296' has no recorded hint; pass its location explicitly",
+      "dependency.optional_missing: the semantic_map 'semantic-map-corridor-02' has no recorded hint; pass its location explicitly"
+    ]
+  },
+  "kind": "artifact",
+  "path": "workspace/corridor02-f055-f061-florencerp-florencesem-boxdepth-vox10/000001",
+  "summary": {
+    "code_version": "4b67748+local.51f44dbb81b3",
+    "content_identity": "sha256:6a6a993b87e100c890174b13c02c616c05a362be0af95fc0aede7d7428bee5ba",
+    "context_map_id": "4ae500bcacfb40e2a6bd9a5a6edbcfe2",
+    "files": 8,
+    "schema_version": "0.2.0",
+    "total_bytes": 700909
+  }
+}

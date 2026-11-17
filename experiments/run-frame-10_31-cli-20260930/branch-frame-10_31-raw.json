@@ -1,0 +1,32 @@
+{
+  "branch": {
+    "dataset": "corridor-02",
+    "name": "frame-10_31-raw",
+    "revision": 0
+  },
+  "foundation": {
+    "geometry": {
+      "artifact_id": "1ee700b9bedfe887767f1b0206acf674",
+      "content_hash": "sha256:b0e8034b04f51b761a8174d718b08ec70ebedbed3e3ae784ada3107a0b580480",
+      "contract": "GeometricMapArtifact",
+      "location": "corridor-02/run-0001/geometric_mapping",
+      "stage_id": "geometric_mapping"
+    },
+    "identity": "sha256:67b83cc3f2d0dbd59082cc14963828bf40a12f316d23d530ec2e0af442aceeac",
+    "sequence": {
+      "artifact_id": "4a4d895e0e4e4731ad91326114607296",
+      "content_hash": "sha256:a5aedeec06003aa335a26dd071bce5de5de1a38b46d0c791ecdcc6cf442f9f41",
+      "contract": "SequenceArtifact",
+      "location": "sequences/corridor-02/frame-10_31-refined",
+      "stage_id": "ingestion"
+    },
+    "state_estimation": {
+      "artifact_id": "656b7e023842c4e0d1b2759644634026",
+      "content_hash": "sha256:1de9434ff4cfa527b5bc652629776b0a5febea5fe76f96c2a236525b6f8d5cfe",
+      "contract": "StateEstimationRunArtifact",
+      "location": "corridor-02/run-0001/state_estimation",
+      "stage_id": "state_estimation"
+    }
+  },
+  "ok": true
+}

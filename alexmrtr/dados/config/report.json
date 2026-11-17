@@ -1,0 +1,270 @@
+{
+  "raw": {
+    "build_run": "corridor-02/run-0012",
+    "context_map": {
+      "location": "workspace/frame-10_31-raw/000001",
+      "context_map_id": "91a94edf924d74485a33587a805e02fb",
+      "entity_count": 63,
+      "relation_count": 5382
+    },
+    "geometry": {
+      "map_run": "corridor-02/run-0001/geometric_mapping",
+      "point_count": 2264716,
+      "source_point_count": 2264716,
+      "scan_count": 79,
+      "rejected_scan_count": 10
+    },
+    "perception_runs": [
+      "bdb3a1a34ad65531210cfd28ce3d84ee",
+      "c4e5415bf8afbb83bcdd401f4cbfae50"
+    ],
+    "association": {
+      "camera_1_image_raw-000061": {
+        "run": "corridor-02/run-0007/sensor_association",
+        "observations": 68,
+        "observations_without_support": 7,
+        "visible_points": 37632,
+        "support_points": {
+          "count": 61,
+          "min": 1.0,
+          "median": 20.0,
+          "p90": 319.0,
+          "max": 16574.0
+        },
+        "support_points_total": 33096
+      },
+      "camera_1_image_raw-000055": {
+        "run": "corridor-02/run-0006/sensor_association",
+        "observations": 61,
+        "observations_without_support": 8,
+        "visible_points": 38189,
+        "support_points": {
+          "count": 53,
+          "min": 1.0,
+          "median": 27.0,
+          "p90": 1435.0,
+          "max": 16958.0
+        },
+        "support_points_total": 38353
+      }
+    },
+    "fusion": {
+      "supports": 68,
+      "excluded_observations": 43
+    },
+    "semantic_mapping": {
+      "entities": 68,
+      "ambiguity_state": {
+        "conflicting": 6,
+        "unambiguous": 52,
+        "insufficient_evidence": 4,
+        "ambiguous": 6
+      },
+      "with_primary_label": 52
+    },
+    "entity_resolution": {
+      "resolved": 63,
+      "merged_from_several_entities": 4,
+      "seen_in_both_frames": 11,
+      "belief_support_status": {
+        "tentative": 54,
+        "insufficient_evidence": 4,
+        "supported": 4,
+        "contested": 1
+      },
+      "without_interaction_radius": 14,
+      "with_several_distinct_radii": 2,
+      "interaction_radius_m": {
+        "count": 52,
+        "min": 0.014413288934782997,
+        "median": 0.2233367477489721,
+        "p90": 0.6637193680474014,
+        "max": 3.785687762074758
+      },
+      "max_extent_m": {
+        "count": 63,
+        "min": 0.03603322233695749,
+        "median": 0.5908500177584983,
+        "p90": 1.745116634005754,
+        "max": 10.37589561208209
+      },
+      "distinct_labels": 44
+    },
+    "spatial_relations": {
+      "derived_interaction_reach_m": 3.785687762074758,
+      "interaction_reach": "max_entity_radius",
+      "entity_count": 63,
+      "pairs_not_enumerated": 179,
+      "candidates_by_predicate": {
+        "next_to": 471,
+        "touching": 471,
+        "within_interaction_range": 3498
+      },
+      "excluded_by_predicate": {
+        "next_to": {
+          "count": 1303,
+          "min_gap_m": 0.6042626884814142
+        },
+        "touching": {
+          "count": 1303,
+          "min_gap_m": 0.6042626884814142
+        },
+        "within_interaction_range": {
+          "count": 50,
+          "min_gap_m": 3.7925142656386637
+        }
+      },
+      "relations_by_predicate_and_state": {
+        "next_to": {
+          "rejected": 132,
+          "supported": 360,
+          "unresolved": 450
+        },
+        "touching": {
+          "unresolved": 454,
+          "rejected": 372,
+          "supported": 116
+        },
+        "within_interaction_range": {
+          "rejected": 1386,
+          "supported": 236,
+          "unresolved": 1876
+        }
+      }
+    }
+  },
+  "voxel": {
+    "build_run": "corridor-02/run-0013",
+    "context_map": {
+      "location": "workspace/frame-10_31-voxel/000001",
+      "context_map_id": "71613c69963db1f61eb8a1e2ecff0a90",
+      "entity_count": 51,
+      "relation_count": 3526
+    },
+    "geometry": {
+      "map_run": "corridor-02/run-0003/geometric_mapping",
+      "point_count": 393054,
+      "source_point_count": 2264716,
+      "scan_count": 79,
+      "rejected_scan_count": 10
+    },
+    "perception_runs": [
+      "bdb3a1a34ad65531210cfd28ce3d84ee",
+      "c4e5415bf8afbb83bcdd401f4cbfae50"
+    ],
+    "association": {
+      "camera_1_image_raw-000055": {
+        "run": "corridor-02/run-0009/sensor_association",
+        "observations": 61,
+        "observations_without_support": 9,
+        "visible_points": 6494,
+        "support_points": {
+          "count": 52,
+          "min": 1.0,
+          "median": 15.0,
+          "p90": 349.0,
+          "max": 2758.0
+        },
+        "support_points_total": 6124
+      },
+      "camera_1_image_raw-000061": {
+        "run": "corridor-02/run-0010/sensor_association",
+        "observations": 68,
+        "observations_without_support": 8,
+        "visible_points": 6665,
+        "support_points": {
+          "count": 60,
+          "min": 1.0,
+          "median": 10.5,
+          "p90": 143.0,
+          "max": 2349.0
+        },
+        "support_points_total": 5554
+      }
+    },
+    "fusion": {
+      "supports": 57,
+      "excluded_observations": 54
+    },
+    "semantic_mapping": {
+      "entities": 57,
+      "ambiguity_state": {
+        "conflicting": 7,
+        "unambiguous": 42,
+        "insufficient_evidence": 3,
+        "ambiguous": 5
+      },
+      "with_primary_label": 42
+    },
+    "entity_resolution": {
+      "resolved": 51,
+      "merged_from_several_entities": 5,
+      "seen_in_both_frames": 11,
+      "belief_support_status": {
+        "tentative": 43,
+        "insufficient_evidence": 3,
+        "supported": 5
+      },
+      "without_interaction_radius": 13,
+      "with_several_distinct_radii": 3,
+      "interaction_radius_m": {
+        "count": 42,
+        "min": 0.024799584162337053,
+        "median": 0.2853597068148678,
+        "p90": 0.9544495071229676,
+        "max": 3.7839228428579363
+      },
+      "max_extent_m": {
+        "count": 51,
+        "min": 0.06199896040584263,
+        "median": 0.7129306655819079,
+        "p90": 1.8353752012822042,
+        "max": 10.37589561208209
+      },
+      "distinct_labels": 42
+    },
+    "spatial_relations": {
+      "derived_interaction_reach_m": 3.7839228428579363,
+      "interaction_reach": "max_entity_radius",
+      "entity_count": 51,
+      "pairs_not_enumerated": 144,
+      "candidates_by_predicate": {
+        "next_to": 327,
+        "touching": 327,
+        "within_interaction_range": 2218
+      },
+      "excluded_by_predicate": {
+        "next_to": {
+          "count": 804,
+          "min_gap_m": 0.6033522681704224
+        },
+        "touching": {
+          "count": 804,
+          "min_gap_m": 0.6033522681704224
+        },
+        "within_interaction_range": {
+          "count": 44,
+          "min_gap_m": 3.7996737698276246
+        }
+      },
+      "relations_by_predicate_and_state": {
+        "next_to": {
+          "supported": 292,
+          "rejected": 96,
+          "unresolved": 266
+        },
+        "touching": {
+          "unresolved": 282,
+          "rejected": 290,
+          "supported": 82
+        },
+        "within_interaction_range": {
+          "rejected": 804,
+          "unresolved": 1222,
+          "supported": 192
+        }
+      }
+    }
+  },
+  "same_perception_in_both_arms": true
+}

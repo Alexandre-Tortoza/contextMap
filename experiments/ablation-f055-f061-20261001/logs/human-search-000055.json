@@ -1,0 +1,67 @@
+{
+  "execution": {
+    "order": [
+      "visual_perception"
+    ],
+    "plan_digest": "sha256:4eec213fd0d218ce6b5a90706378f09e4f80b4a82089b81bd8ca28c1e97a57ba",
+    "resume": null,
+    "reused": {
+      "ingestion": [
+        {
+          "artifact_id": "4a4d895e0e4e4731ad91326114607296",
+          "content_hash": "sha256:a5aedeec06003aa335a26dd071bce5de5de1a38b46d0c791ecdcc6cf442f9f41",
+          "contract": "SequenceArtifact",
+          "location": "sequences/corridor-02/frame-10_31-refined",
+          "stage_id": "ingestion"
+        }
+      ]
+    },
+    "schema_version": "0.1.0",
+    "selections": {
+      "sequence": "corridor-02",
+      "stages": {
+        "ingestion": [
+          {
+            "artifact_id": "4a4d895e0e4e4731ad91326114607296",
+            "content_hash": "sha256:a5aedeec06003aa335a26dd071bce5de5de1a38b46d0c791ecdcc6cf442f9f41",
+            "lineage": {
+              "calibration": null,
+              "schema_version": null,
+              "selection": null,
+              "sequence": null,
+              "upstream": {}
+            },
+            "origin": "exact",
+            "run_index": 1
+          }
+        ]
+      }
+    },
+    "stages": [
+      {
+        "decision": null,
+        "inputs": {
+          "sequence": [
+            {
+              "artifact_id": "4a4d895e0e4e4731ad91326114607296",
+              "content_hash": "sha256:a5aedeec06003aa335a26dd071bce5de5de1a38b46d0c791ecdcc6cf442f9f41",
+              "contract": "SequenceArtifact",
+              "location": "sequences/corridor-02/frame-10_31-refined",
+              "stage_id": "ingestion"
+            }
+          ]
+        },
+        "output": {
+          "artifact_id": "620930463c08ae929861beabf8579538",
+          "content_hash": "sha256:0b62a3ff3ca175fd4a9eb2c06beddf86d4304b8808a6fd017ced9eea7808a28b",
+          "contract": "PerceptionRunArtifact",
+          "location": "corridor-02/run-0034/visual_perception",
+          "stage_id": "visual_perception"
+        },
+        "stage_id": "visual_perception"
+      }
+    ]
+  },
+  "ok": true,
+  "run_directory": "workspace/run-frame-10_31/corridor-02/run-0034"
+}

@@ -1,0 +1,6 @@
+# F1q: o mesmo Qwen3-VL-4B e o mesmo prompt region-interaction/v3 do baseline, com a view
+# tight_crop (uma caixa não tem máscara para o contorno). Isola o intérprete sobre as mesmas caixas.
+schema_version = "0.1.0"
+
+[components.semantic_interpretation.interpreter.qwen]
+view_policy = { region_views = ["tight_crop"] }

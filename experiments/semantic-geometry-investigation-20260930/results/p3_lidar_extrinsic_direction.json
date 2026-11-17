@@ -1,0 +1,17 @@
+{
+  "as_ingested": {
+    "median_m": 0.02161,
+    "p90_m": 0.06852,
+    "matched": 1089956
+  },
+  "inverted": {
+    "median_m": 0.02201,
+    "p90_m": 0.06888,
+    "matched": 1085723
+  },
+  "identity": {
+    "median_m": 0.02169,
+    "p90_m": 0.06664,
+    "matched": 1088736
+  }
+}

@@ -1,0 +1,269 @@
+# Documentação do ContextMap2
+
+Este diretório é o ponto de entrada da documentação global do ContextMap2.
+
+O objetivo da documentação principal é permitir que uma pessoa entenda **o que o projeto produz, como o pipeline funciona, quais contratos conectam os módulos e como os resultados permanecem reproduzíveis** sem precisar reconstruir essas decisões a partir das issues.
+
+> A documentação descreve a arquitetura alvo do **canonical pipeline**. Uma capability documentada pode ainda estar planejada ou em implementação. O fato de uma etapa aparecer no pipeline não significa, por si só, que ela já esteja concluída no código.
+
+## O que é o ContextMap2
+
+O ContextMap2 transforma observações robóticas registradas, como RGB, LiDAR, IMU, pose e calibração, em um mapa contextual 3D portátil e versionado.
+
+O produto final do repositório é um `ContextMapArtifact` que conecta:
+
+- geometria 3D persistente;
+- entidades semânticas resolvidas;
+- relações espaciais entre entidades;
+- evidências e provenance suficientes para explicar de onde cada resultado veio.
+
+```mermaid
+flowchart LR
+    A[Dados registrados] --> B[Sequência canônica]
+    B --> C[Percepção + estado + geometria]
+    C --> D[Associação 2D ↔ 3D]
+    D --> E[Fusão semântica]
+    E --> F[Entidades persistentes]
+    F --> G[Relações espaciais]
+    G --> H[ContextMapArtifact]
+```
+
+Visualização, busca em linguagem natural, navegação, planejamento, agentes e dashboards são **consumidores externos**. Eles não pertencem ao núcleo deste repositório.
+
+## Estado da decomposição de percepção nesta branch
+
+A percepção possui três produtores selecionáveis. `region_perception` publica regiões finais,
+máscaras e auditorias de descoberta, grounding e refinamento; `visual_perception` publica as
+features; `semantic_interpretation` publica claims e contexto de cena. `semantic_scoring` lê
+os três artifacts explicitamente. O `PerceptionResult` é uma view derivada, sem artifact nem
+identidade de execução próprios. Os vínculos a jusante registram as identidades dos produtores,
+inclusive quando se repetem inferências sobre o mesmo frame.
+
+```mermaid
+flowchart LR
+    RAW["Fonte registrada"] --> ING["SequenceArtifact"]
+    ING --> RP["RegionPerceptionArtifact"]
+    ING --> ST["StateEstimationRunArtifact"]
+    ST --> GM["GeometricMapArtifact"]
+    RP --> VP["VisualEvidenceArtifact"]
+    RP --> SI["SemanticInterpretationArtifact"]
+    VP --> SS["SemanticScoringArtifact"]
+    SI --> SS
+    RP --> SA["SensorAssociationRunArtifact"]
+    VP -.-> SA
+    GM --> SA
+    ST --> SA
+    SA --> SF["SemanticFusionRunArtifact"]
+    SI --> SF
+    SS -.-> SF
+    SF --> SM["SemanticMappingRunArtifact"]
+    SM --> ER["EntityResolutionRunArtifact"]
+    ER --> SR["SpatialRelationsRunArtifact"]
+    GM --> ART["ContextMapArtifact"]
+    ER --> ART
+    SR --> ART
+```
+
+O [registro da decisão](perception-dag-decomposition.md) explica por que essas fronteiras
+são artifacts, como são pinadas em ablações e quais identidades substituíram
+`perception_result_id`. Os relatos de execuções reais e do release anterior abaixo são
+históricos: seus manifests preservam a topologia com que foram produzidos.
+
+State Estimation possui os contratos `PoseEstimate`/`Trajectory`, lookup temporal com interpolação auditável, frame graph estático e preflight de geometria, o port `StateEstimator` com os backends `ExternalPose` e FAST-LIO, o `StateEstimationRunArtifact` e o harness de avaliação em `evaluation`, com o perfil de referência do `corridor-02`. O FAST-LIO roda dentro de um container (wrapper de implantação e receita da imagem no repositório) e foi executado de verdade sobre a janela de 90 s de referência: 888 poses, repetíveis byte a byte, ATE de 0,092 m contra o arquivo de referência com alinhamento SE(3) explícito. O arquivo de referência não tem acurácia caracterizada e provavelmente é derivado de LiDAR, então o resultado é concordância com ele, não erro absoluto. Uma sequência e uma janela; a covariância do FAST-LIO não é exportada.
+
+Geometric Mapping possui os contratos `GeometryPoint`/`GeometryReference`/`GeometricMap`, o estado explícito de correção de movimento, a montagem dos inputs, a transformação fonte→mapa com traces auditáveis, a acumulação com referências estáveis, o acesso espacial por `GeometrySource` com índice derivado e verificável, o `GeometricMapArtifact` e o harness de validação em `evaluation`. A validação real usou a trajetória do dataset como entrada, não uma execução FAST-LIO, e não há geometria de referência confiável para o `corridor-02`.
+
+Sensor Association possui os contratos `SpatialObservation` e `ObservationQuality`, os modelos de câmera calibrados (pinhole, fisheye e MEI, com o MEI adicionado à calibração canônica de Ingestion), a cadeia mapa → câmera → imagem preparada, a resolução de visibilidade e oclusão, o pertencimento à máscara de `Region2D`, a amostragem de features densas (nativas ou melhoradas, como canais distintos), os diagnósticos de calibração, reprojeção e alinhamento temporal, o `SensorAssociationRunArtifact` e o harness de avaliação estratificada em `evaluation`. A verificação usa fixtures sintéticos determinísticos e uma primeira execução real sobre 20 frames do `corridor-02`: a trajetória de referência do dataset como entrada `ExternalPose` (não FAST-LIO), o mapa LiDAR real construído sobre ela e uma calibração MEI derivada do YAML de intrínsecos do dataset (o `SequenceArtifact` persistido não guarda o modelo MEI). A cadeia canônica sobre um mapa construído com a trajetória real do FAST-LIO (que já existe) continua pendente e não há correspondências de referência reais, então a correção da associação não foi medida.
+
+Point Representation é uma capability **opcional**: possui os contratos `PointRepresentation`/`RepresentationSpace`, a extração de suporte local sobre `GeometrySource`, o port `PointEncoder` e o serviço de execução independente de backend, o descritor geométrico determinístico (baseline), a fronteira do backend PTv3 com seu runtime real sobre o Pointcept, o `PointRepresentationRunArtifact` e o harness de ablação em `evaluation`. Ela deve justificar seu custo por avaliação controlada, e essa justificativa **não existe ainda**: o PTv3 e o descritor foram avaliados sobre geometria real do corredor-02 (sem vantagem demonstrada do PTv3 e a um custo cerca de 20 vezes maior), mas a ablação downstream sobre Semantic Fusion e Entity Resolution ainda não foi realizada, pois falta Entity Resolution integrada e anotações de identidade.
+
+Semantic Fusion acumula a evidência multi-vista **sem criar identidade de objeto**: possui `FusionSupport`, `EvidenceContribution`, o agrupamento por observação física, a política baseline de acumulação (hipóteses por chave de label, stances e sinais tipados, abstenção configurável e registros de incerteza), os canais de evidência tipados, a política opcional ciente de qualidade, o `SemanticFusionRunArtifact` e o harness de validação em `evaluation`. A verificação usa fixtures sintéticos e uma primeira execução real sobre 20 frames do `corridor-02` (cadeia real com trajetória `ExternalPose`, mapa LiDAR, associação MEI e percepção existente). Ela **não tem claims nem anotações de referência**, então não há hipótese fundida, a correção é N/A e **nenhuma decisão foi tomada** sobre manter a política ciente de qualidade opcional ou adotá-la.
+
+Semantic Mapping materializa a evidência fundida como entidades persistentes **sem decidir se dois suportes são o mesmo objeto**: possui `Entity` (suporte 3D exato por `GeometryReference` com resumos derivados reproduzíveis, estado semântico que mantém toda hipótese, alternativa, conflito, abstenção e sinal sem score, vínculos de evidência com identidade, versão, digest e sequência canônica do artifact de fusão, e estado temporal com frames físicos e resultados de inferência distintos), `EntityReference` (`(semantic_map_id, entity_id)`, porque um id só vale dentro do mapa que o possui), a política de materialização `one-support-one-entity-v1` com identidade determinística e rejeição explícita de candidatos, o `SemanticMappingRunArtifact` e o harness de validação em `evaluation`. O artifact versiona separadamente o schema do run e o schema canônico da entidade e registra `code_version`/`code_digest` junto da configuração e lineage. Quem decide identidade entre suportes é o estágio seguinte, Entity Resolution: Semantic Mapping em si mantém duas entidades para suportes diferentes mesmo com o mesmo label e geometria adjacente; toda a verificação usa fixtures sintéticos, sem run de mapeamento sobre dados reais.
+
+Entity Resolution decide, **sobre entidades de origem que nunca são mutadas**, quais delas são o mesmo objeto físico: possui `EntityCandidateSet` (recuperação permissiva de candidatos, sem all-pairs), `EntityMatchEvidence` (a evidência de uma comparação, com um canal tipado por vez: geometria, semântica, aparência, temporal e, opcional, representação 3D, cada um medido ou indisponível e sem score que os resuma), `ResolutionDecision` (`MATCH`, `DISTINCT` ou `UNRESOLVED`, este último resultado válido, com as regras que dispararam), a política baseline `conservative-staged-resolution-v1` (sobre o estado dos canais, sem soma ponderada, que prefere `UNRESOLVED` a um `MATCH` sem explicação), `ResolvedEntity`/`ResolvedEntityReference` (componentes conexos de `MATCH`, com agregação exata e linhagem de fusão; um componente com uma contradição de transitividade não é fundido), a detecção opcional de candidatos a divisão (só diagnóstico), o `EntityResolutionRunArtifact` (`output_dir` explícito, escrita atômica, reabre sem NumPy nem runtime) e o harness de avaliação em `evaluation` (fusão falsa, duplicata e falha de recuperação em separado, ablação de canais). Toda a verificação usa fixtures sintéticos: **não há run de resolução sobre dados reais** e, portanto, nenhum limiar foi calibrado com evidência real. Cada componente documenta o detalhe em [`entity_resolution`](../src/contextmap/entity_resolution/docs/README.md).
+
+Evaluation, além dos harnesses por capability, possui a infraestrutura de avaliação controlada: o **reference set versionado** (manifesto com amostras ligadas a `SourceObservation`, calibrações, anotações com trust e proveniência declarados, estratos e splits, com digest), as sete famílias de **anotação** (regiões, semântica open-vocabulary, correspondências 3D↔pixel, identidade, relações, visibilidade e contexto de cena, onde ausência nunca é verdade negativa), a **validação de integridade** e de vazamento entre splits, o **QA do conteúdo das anotações** com divergência visível entre anotadores, o **registro versionado de métricas** por estágio e o relatório comum (qualidade e performance separadas, sem score geral), os **manifestos de experimento** e a execução controlada por arm (só as variáveis declaradas variam; arms indisponíveis ficam explícitos), a checagem de reprodutibilidade dos evaluators, um subconjunto determinístico de fixtures para CI (sem fusão multi-vista nem round-trip do artifact final) e os protocolos e a evidência por estrato das duas técnicas opcionais (resolução de features e fusão ciente de qualidade). Nada disso foi executado sobre dados reais: **não existe reference set real versionado** (só o subconjunto sintético de CI), Entity Resolution tem harness de avaliação, mas só sobre dados sintéticos, Spatial Relations tem o avaliador por predicado de relações persistidas, também só sobre dados sintéticos, e **nenhuma decisão foi tomada** sobre as técnicas opcionais.
+
+Spatial Relations descreve **como entidades resolvidas se relacionam no espaço, sem esconder a incerteza**: possui `Relation` (predicado canônico entre duas `ResolvedEntityReference`, com estado `SUPPORTED`, `REJECTED` ou `UNRESOLVED` e o rastro da evidência), `RelationEvidence` (o que um canal geométrico, de contato por pontos ou de observação mediu ou afirmou sobre um candidato dirigido, com medições, limiares, geometria e proveniência), a taxonomia versionada de 11 predicados (direção, simetria, inverso e requisito de frame), as convenções de frame declaradas pela execução (nada a montante define o eixo vertical), a geração determinística de candidatos, os avaliadores geométricos e de contato, a evidência de observação (afirmações upstream como canal só corroborante), a política de decisão conservadora com consistência de inverso e simetria, o `SpatialRelationsRunArtifact` e o avaliador por predicado em `evaluation`. Lê um run de Entity Resolution pela API pública dela: a linhagem vem do manifest, a geometria das entidades resolvidas é conferida com a persistida e as afirmações upstream são vinculadas às entidades resolvidas pelas observações espaciais da evidência delas. A avaliação por predicado usa o `IdentityEvaluation` da avaliação de Entity Resolution para ligar entidades resolvidas às identidades anotadas. Toda a verificação usa fixtures sintéticos, sem run de relações sobre dados reais nem reference set real de relações.
+
+Evaluation também define **o que significa "Solution 1 validada"**: o cenário end-to-end congelado (`solution-1-canonical`, sobre a amostra real do `corridor-02` e sobre o subconjunto sintético de CI), o perfil canônico de backends, as opções que só entram por ablação e uma matriz de aceitação de 25 gates atribuíveis a uma capability, sem score global. As checagens entre estágios (lineage, frames, rastreabilidade e identidade da observação física) leem os artifacts persistidos e nomeiam a capability que quebrou uma fronteira. Só um gate aprovado com evidência **real** conta como cumprido; o ensaio de CI é evidência de contrato. Existe uma execução real **parcial** sobre o `corridor-02` (geometria, associação, fusão e checagens entre estágios): 3 gates cumpridos, 1 reprovado por um achado real (a sequência pinada não carrega modelo de câmera), 12 bloqueados e 9 não avaliados. Entity Resolution e Spatial Relations já têm executor real composto automaticamente da configuração, e a montagem do `ContextMapArtifact` a partir desses dois runs já existe (`assemble_context_map_with_metrics`); nenhum run canônico real os encadeou ainda até o artifact final, então os gates que dependem disso continuam bloqueados até essa execução acontecer.
+
+Runtime & Configuration compõe essas capabilities: possui a configuração efetiva versionada (perfil, arquivos e overrides, digest determinístico, segredos só do ambiente), o catálogo de stages, pontos de variação e backends, a composition root, o DAG de estágios com preflight, o reuso por identidade de conteúdo, a seleção explícita de runs com linhagem, o ciclo de vida do run (journal, eventos, cancelamento, retomada), o serviço público de ingestion, a CLI `contextmap` e a API pública de aplicação `Runtime` para qualquer frontend. `visual_perception`, `state_estimation`, `geometric_mapping`, `sensor_association`, `semantic_fusion`, `semantic_mapping`, `entity_resolution`, `spatial_relations` e `context_map` têm executor real, composto automaticamente da configuração (`compose_executors`); Point Representation também, como estágio opcional e derivado quando habilitado, sem consumidor a jusante (#663, #657); a Ingestion tem executor real, mas continua exigindo injeção explícita de quem chama, porque `compose_executors` não a constrói (precisa de um `IngestionRequest` da execução, não da configuração); Semantic Mapping compõe quando o chamador também fornece `semantic_map_id`/`code_digest`, que não são valor de configuração, e a fusão e os estágios seguintes só compõem com a identidade do código que gravam; a CLI (`--code-identity`) e `Runtime` derivam essas identidades do código do run e do dataset, então o binário instalado materializa um `ContextMap` sozinho (#659). Um preset versionado declara a topologia, do recorded source ao `ContextMapArtifact`: `canonical/1`. Antes do v0.1.0 sair não existe consumidor publicado a proteger de uma mudança de topologia, então esta identidade continua livre para evoluir; a disciplina de nunca mudar a topologia de um preset publicado começa a valer a partir do release. A orquestração end-to-end **foi executada sobre dados reais**: os doze estágios, do `SequenceArtifact` do `corridor-02` ao `ContextMapArtifact` verificado por hash, com os mesmos executores reais de `contextmap.runtime.executors`. A distinção que importa: esse run encadeou os executores estágio a estágio, não uma única invocação de `contextmap run` sobre um plano resolvido; o caminho do `run_plan` (com journal, reuso por referência e retomada de interrupção) é validado por evidência de **contrato** sobre a cadeia sintética. A evidência real está em [release-v0.1.0.md](release-v0.1.0.md) e no relatório de aceitação que ele cita.
+
+O **contexto incremental** (milestone v0.1.1) está implementado no runtime: `SpatialFoundation` (sequência, trajetória e mapa validados juntos), `ContextRun` (percepção e associação sobre uma seleção de observações, contra a fundação fixa), `ContextBranch` (acúmulo por acréscimo) e `ContextBuild` (revisão congelada materializada até o `ContextMapArtifact`), com os comandos `contextmap context`. A evidência é de **contrato**, na cadeia de CI: invariância à partição em `ContextRun`s, inferência repetida como evidência correlacionada e imutabilidade dos mapas anteriores. Não houve execução incremental sobre dados reais. Detalhes em [runtime-composition.md](runtime-composition.md#contexto-incremental-v011-decisão-de-arquitetura).
+
+Os detalhes implementados pertencem aos documentos dos módulos. Os documentos globais integram esses boundaries e descrevem como eles se conectam ao restante do canonical pipeline, sem duplicar a especificação interna.
+
+## Ordem recomendada de leitura
+
+1. [PIPELINE.md](PIPELINE.md), fluxo completo da entrada ao `ContextMapArtifact`.
+2. [canonical-2.md](canonical-2.md), perfil SAM2-first em implementação, seus limites e a validação planejada.
+3. [architecture.md](architecture.md), boundaries, ownership, dependências e regras arquiteturais.
+3. [perception-dag-decomposition.md](perception-dag-decomposition.md), decisão **fechada e não implementada** sobre as fronteiras materializadas da percepção visual, e o critério capability/stage/artifact/evidence/view/cache que substitui a convenção "pacote na raiz gera artifact".
+4. [module-api.md](module-api.md), superfície pública, encapsulamento e imports permitidos entre capabilities.
+4. [shared-primitives.md](shared-primitives.md), critérios para tipos transversais e limites do namespace `shared`.
+5. [runtime-composition.md](runtime-composition.md), composition root, configuração, optional stages e limite da orquestração.
+6. [CONTRACTS.md](CONTRACTS.md), contratos públicos, identidades e semântica dos dados que cruzam módulos.
+7. [ARTIFACTS.md](ARTIFACTS.md), persistência, immutability, lineage, debug e reprodutibilidade.
+8. [development.md](development.md), fluxo de desenvolvimento, branches, commits, Python e qualidade.
+9. [repository-settings.md](repository-settings.md), políticas esperadas do GitHub e checks.
+10. [versioning.md](versioning.md), Semantic Versioning e releases.
+11. [installation.md](installation.md), instalação base, extras opcionais e runtimes que não vêm do PyPI.
+12. [third-party-licenses.md](third-party-licenses.md), licenças declaradas de dependências, modelos e runtimes, e o que o repositório redistribui.
+13. [release-v0.1.0.md](release-v0.1.0.md), escopo **congelado** do v0.1.0 e checklist de aceitação com a evidência de cada item.
+14. [releases/v0.1.0.md](releases/v0.1.0.md), notas da release: capacidades validadas com o gate que as sustenta, backend experimental e limitações conhecidas.
+15. [troubleshooting.md](troubleshooting.md), falhas comuns de calibração, backend, recursos, orquestração, leitura de artifact e publicação.
+16. [build_results.md](build_results.md), resultados **reais** do run canônico end-to-end sobre o `corridor-02`, estágio por estágio.
+
+## Mapa da documentação
+
+```mermaid
+flowchart TD
+    R[docs/README.md]
+
+    R --> P[PIPELINE.md]
+    R --> A[architecture.md]
+    A --> PD[perception-dag-decomposition.md]
+    R --> API[module-api.md]
+    R --> SH[shared-primitives.md]
+    R --> RC[runtime-composition.md]
+    R --> C[CONTRACTS.md]
+    R --> AR[ARTIFACTS.md]
+    R --> D[development.md]
+    R --> RS[repository-settings.md]
+    R --> V[versioning.md]
+    R --> I[installation.md]
+    R --> TS[troubleshooting.md]
+    R --> BR[build_results.md]
+    R --> L[third-party-licenses.md]
+    R --> RL[release-v0.1.0.md]
+
+    A --> M[docs específicos dos módulos]
+    API --> M
+    SH --> M
+    RC --> M
+    P --> M
+    C --> M
+    AR --> M
+
+    M --> ING[src/contextmap/ingestion/docs/README.md]
+    M --> VP[src/contextmap/visual_perception/docs/README.md]
+    M --> ST[src/contextmap/state_estimation/docs/README.md]
+    M --> GM[src/contextmap/geometric_mapping/docs/README.md]
+    M --> SA[src/contextmap/sensor_association/docs/README.md]
+    M --> PR[src/contextmap/point_representation/docs/README.md]
+    M --> SF[src/contextmap/semantic_fusion/docs/README.md]
+    M --> SM[src/contextmap/semantic_mapping/docs/README.md]
+    M --> EV[src/contextmap/evaluation/docs/README.md]
+    M --> RTM[src/contextmap/runtime/docs/README.md]
+    RTM --> RTD[configuration / composition / pipeline / reuse / selection / lifecycle / cli / api]
+    M --> ART[src/contextmap/artifact/docs/README.md]
+    ING --> ID[contracts / artifact / synchronization / calibration / adapters]
+    VP --> VD[contracts / ports / pipeline / service / identity / run_artifact / evidence_set]
+    VP --> RD[Region Discovery]
+    VP --> FE[Feature Extraction]
+    VP --> SI[Semantic Interpretation]
+```
+
+## Responsabilidade de cada documento
+
+| Documento | Pergunta principal |
+| --- | --- |
+| `PIPELINE.md` | Como os dados percorrem o sistema do sensor ao mapa contextual? |
+| `architecture.md` | Quem é responsável por cada capability e quem pode depender de quem? |
+| `module-api.md` | O que uma capability expõe publicamente e como outras capabilities podem importá-la? |
+| `shared-primitives.md` | Quais conceitos podem ser compartilhados sem perder ownership de domínio? |
+| `runtime-composition.md` | Onde implementations são construídas e como runtime orquestra sem absorver lógica científica? |
+| `CONTRACTS.md` | Qual é o significado dos objetos que atravessam as fronteiras entre módulos? |
+| `ARTIFACTS.md` | Como runs e resultados são persistidos, auditados e reutilizados? |
+| `development.md` | Como uma mudança deve ser implementada e integrada? |
+| `repository-settings.md` | Como o GitHub deve reforçar o fluxo de desenvolvimento? |
+| `versioning.md` | Como versões e releases são identificadas? |
+| `installation.md` | O que cada instalação e cada extra traz, e o que fica por conta do usuário? |
+| `third-party-licenses.md` | Sob quais licenças estão as dependências, os modelos e os runtimes, e o que o repositório redistribui? |
+| `release-v0.1.0.md` | O que entra no v0.1.0 e qual evidência sustenta cada item de aceitação? |
+
+## Pipeline em uma linha
+
+```text
+raw source
+→ ingestion
+→ visual perception + state estimation
+→ geometric mapping
+→ sensor association
+→ optional point representation
+→ semantic fusion
+→ semantic mapping
+→ entity resolution
+→ spatial relations
+→ ContextMapArtifact
+```
+
+O detalhamento completo, incluindo branches paralelos e contratos intermediários, está em [PIPELINE.md](PIPELINE.md).
+
+## Documentação por módulo
+
+Decisões globais pertencem a `docs/`. Detalhes internos de uma capability pertencem ao próprio módulo:
+
+```text
+src/contextmap/<module>/docs/
+├── README.md
+├── pipeline.md       # quando o fluxo interno exigir detalhamento
+├── contracts.md      # quando houver contratos públicos ou invariantes próprios
+├── architecture.md   # quando houver decisões estruturais próprias
+├── evaluation.md     # quando houver métricas/protocolo de avaliação
+└── backends.md       # quando houver múltiplos backends reais
+```
+
+Arquivos complementares só devem existir quando houver conteúdo real. O objetivo é fragmentar por responsabilidade, não multiplicar arquivos vazios.
+
+Módulos com documentação própria:
+
+- [`ingestion`](../src/contextmap/ingestion/docs/README.md) — observações de sensor canônicas, sequência, sincronização, calibração, seleção/replay, provenance e adapters de fonte.
+- [`visual_perception`](../src/contextmap/visual_perception/docs/README.md) — evidência visual por run, ports, preset canônico, execução do DAG, artifacts e leitura multi-run; [Region Discovery](../src/contextmap/visual_perception/docs/region-discovery.md) documenta SAM2/SAM3/Florence-2, passes, normalização e avaliação geométrica; [Feature Extraction](../src/contextmap/visual_perception/docs/feature-extraction.md) documenta embeddings, payloads, sampling, pooling, diagnostics, enhancement opcional e os adapters concretos; [Semantic Interpretation](../src/contextmap/visual_perception/docs/semantic-interpretation.md) documenta claims/contexto, seleção auditável de evidência, prompts/parsing, Qwen/Gemini/Florence-2 e persistência da execução.
+- [`state_estimation`](../src/contextmap/state_estimation/docs/README.md) — pose dinâmica do rig: `PoseEstimate`, `Trajectory`, convenção de transform e provenance.
+- [`geometric_mapping`](../src/contextmap/geometric_mapping/docs/README.md) — geometria 3D persistente no frame global do mapa: `GeometryPoint`, `GeometryReference`, `GeometricMap`, `Bounds3D` e a fronteira de leitura `GeometrySource`.
+- [`sensor_association`](../src/contextmap/sensor_association/docs/README.md) — evidência visual 2D ancorada em geometria 3D persistente: `SpatialObservation`, modelos de câmera, visibilidade e oclusão, pertencimento à máscara, features densas e `ObservationQuality`.
+- [`semantic_fusion`](../src/contextmap/semantic_fusion/docs/README.md) — acumulação de evidência multi-vista sobre suporte espacial, sem identidade de objeto: `FusionSupport`, `FusedEvidence`, agrupamento por observação física, política baseline e ciente de qualidade, canais tipados e o artifact de run.
+- [`spatial_relations`](../src/contextmap/spatial_relations/docs/README.md) — relações espaciais entre entidades resolvidas: `Relation`, `RelationEvidence`, taxonomia versionada de predicados, convenções de frame, candidatos, avaliadores geométricos e de contato, evidência de observação, política de decisão e o artifact de run.
+- [`semantic_mapping`](../src/contextmap/semantic_mapping/docs/README.md) — entidades semânticas persistentes sem resolução entre suportes: `Entity`, `EntityReference`, resumos geométricos, estado semântico sem colapso, vínculos de evidência, estado temporal, materialização determinística e o artifact de run.
+- [`entity_resolution`](../src/contextmap/entity_resolution/docs/README.md) — identidade entre entidades de origem sem mutá-las: candidatos, evidência por canal sem score único, decisões `MATCH`/`DISTINCT`/`UNRESOLVED`, entidades resolvidas com linhagem, contradições de transitividade, detecção de divisão opcional e o `EntityResolutionRunArtifact`.
+- [`point_representation`](../src/contextmap/point_representation/docs/README.md) — representação opcional da estrutura 3D local: `PointRepresentation`, `RepresentationSpace`, o port `PointEncoder`, o descritor determinístico, a fronteira PTv3 e o runtime real `PointceptPTv3Runtime`, já medido em geometria real.
+- [`spatial_support`](../src/contextmap/spatial_support/docs/README.md) — consumidora **derivada** do produto público, fora da cadeia canônica: `SpatialCell` como endereço espacial cuja identidade é função pura da grade, `EntitySupport` como contagem de medições, a junção pelo `membership()` da agregação voxel, a política versionada da regra e o run persistido. Não é estágio do DAG: a produção é o comando `contextmap derive-spatial-support`.
+- [`runtime`](../src/contextmap/runtime/docs/README.md) — configuração efetiva, composition root, DAG com preflight, reuso, seleção de runs, lifecycle, CLI, serviço de ingestion e a API pública `Runtime` para frontends; compõe e executa, sem decidir ciência.
+- [`evaluation`](../src/contextmap/evaluation/docs/README.md) — relatórios de qualidade, regressão e custo sem alterar outputs do pipeline; [cenário end-to-end e matriz de aceitação](../src/contextmap/evaluation/docs/end-to-end.md) (perfil canônico congelado, gates por estágio, invariantes entre estágios e a validação real parcial); [reference set](../src/contextmap/evaluation/docs/reference-set.md), [anotações](../src/contextmap/evaluation/docs/annotations.md), [integridade](../src/contextmap/evaluation/docs/reference-integrity.md), [QA](../src/contextmap/evaluation/docs/annotation-qa.md), [métricas](../src/contextmap/evaluation/docs/metrics.md), [experimentos](../src/contextmap/evaluation/docs/experiments.md), [fixtures de CI](../src/contextmap/evaluation/docs/ci-fixtures.md) e [técnicas opcionais](../src/contextmap/evaluation/docs/optional-techniques.md).
+- [`artifact`](../src/contextmap/artifact/docs/README.md) — o schema do produto final: `ContextMap` (metadados de frame, unidades, âncora e capacidades; geometria referenciada; entidades e relações por referência; linhagem e proveniência; versionamento). O schema é independente de layout, serializador, ROS e modelos; a **montagem** real de um `ContextMap` a partir de runs de Entity Resolution e Spatial Relations (`assemble_context_map_with_metrics`, [documentação](../src/contextmap/artifact/docs/assembly.md)) e a persistência (layout em disco, escrita atômica, leitura preguiçosa, validação de integridade e bundle portátil, documentados em [Layout e formatos](../src/contextmap/artifact/docs/storage-layout.md)) ficam em módulos separados do pacote.
+
+## Integração da documentação
+
+A documentação é fragmentada fisicamente, mas forma um único grafo de conhecimento.
+
+- `docs/` contém decisões transversais ao sistema;
+- cada módulo documenta apenas seu domínio e suas fronteiras;
+- conteúdo global é referenciado por link, não copiado para cada módulo;
+- documentação de upstream/downstream deve apontar para o contrato público relevante;
+- quando um módulo já estiver implementado, seu `src/contextmap/<module>/docs/` é a fonte de verdade para detalhes de comportamento; os documentos globais resumem e conectam esse comportamento ao sistema;
+- uma alteração arquitetural ou de contrato deve atualizar código e documentação no mesmo PR;
+- `docs/README.md` é o índice canônico dos pontos de entrada globais.
+
+## Estado da arquitetura
+
+O canonical pipeline é **pre-alpha** e evolui por milestones. Os documentos principais descrevem o desenho canônico que as milestones devem materializar.
+
+Ao ler uma etapa do pipeline, diferencie:
+
+- **contrato**, semântica que deve permanecer estável na fronteira do módulo;
+- **backend**, implementação substituível de uma capability;
+- **canonical pipeline**, composição integrada de referência que as milestones materializam e validam;
+- **experimento**, alternativa que não substitui silenciosamente o baseline;
+- **artefato**, resultado persistido e imutável de uma execução.
+
+## Regras de escrita
+
+- Markdown em PT-BR;
+- nomes de APIs, classes e contratos permanecem em inglês;
+- Mermaid é preferido para fluxos, dependências, estados e lineage quando reduzir ambiguidade;
+- exemplos devem ser pequenos e ligados a uma decisão real;
+- documentos globais não devem repetir detalhes que pertencem ao `docs/` de um módulo;
+- arquitetura planejada nunca deve ser apresentada como funcionalidade já implementada.

@@ -1,0 +1,19 @@
+{
+  "components": {
+    "region_perception": {
+      "discovery": {
+        "backend": "sam2"
+      }
+    },
+    "semantic_interpretation": {
+      "interpreter": {
+        "qwen": {
+          "prompt_policy": {
+            "region": "region-scene-context/v1",
+            "region_scene_context": true
+          }
+        }
+      }
+    }
+  }
+}

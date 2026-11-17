@@ -1,0 +1,73 @@
+{
+  "schema": "contextmap.experiment.canonical-2-empirical-validation/v1",
+  "date": "2026-09-29",
+  "code_commit": "6788b830d2b9890be8c57de287dd37da23b83158",
+  "branch": "milestone/canonical-2",
+  "purpose": "Empirically validate the canonical/2 pipeline and the PR #688 round-1 fixes (#1 scorer, #2/#3 fusion provenance) on real corridor-02 data, with a controlled dense_region_pooling ON/OFF ablation.",
+  "dataset": {
+    "name": "corridor-02",
+    "bag": "corridor-02.bag",
+    "note": "physical location is the environment's responsibility; not committed"
+  },
+  "calibration": "fresh rebuild — see ../calibration/",
+  "window": {
+    "start_offset_s": 150.0,
+    "end_offset_s": 155.0,
+    "padding_s": 5.0,
+    "clock_id": "corridor-02-header",
+    "correction_offset_ns": 78621358412432135,
+    "quality": {"max_pose_gap_ms": 504.299, "max_lidar_gap_ms": 100.86, "within_thresholds": true}
+  },
+  "frame_selection": {
+    "rule": "every 6th image from the ingested window start (stride 6), first 4 frames",
+    "observation_ids": [
+      "camera_1_image_raw-000000",
+      "camera_1_image_raw-000006",
+      "camera_1_image_raw-000012",
+      "camera_1_image_raw-000018"
+    ]
+  },
+  "arms": {
+    "pooling_on": {"config": ["config/base.template.toml", "config/pooling-on.toml"], "preset": "canonical/2"},
+    "pooling_off": {"config": ["config/base.template.toml", "config/pooling-off.toml"], "preset": "canonical/1"},
+    "sole_difference": "dense_region_pooling ON (canonical/2) vs OFF (canonical/1)"
+  },
+  "chain": ["ingestion", "state_estimation", "geometric_mapping", "visual_perception", "semantic_scoring", "sensor_association", "semantic_fusion"],
+  "models": {
+    "region_discovery": {"backend": "sam2", "checkpoint": "facebook/sam2.1-hiera-tiny", "model_version": "de431c4043854a71d8101e17995dfe596bf101a5", "precision": "float32"},
+    "dense_features": {"backend": "dinov2", "checkpoint": "facebook/dinov2-base", "revision": "f9e44c814b77203eaa57a6bdbbd535f21ede1415", "precision": "float32"},
+    "region_features": {"backend": "clip", "checkpoint": "openai/clip-vit-large-patch14", "revision": "32bd64288804d66eefd0ccbe215aa642df71cc41", "precision": "float32"},
+    "semantic_interpretation": {"backend": "qwen", "model": "Qwen/Qwen3-VL-4B-Instruct", "revision": "ebb281ec70b05090aa6165b016eac8ec08e71b17", "quantization": "4bit", "precision": "bfloat16", "temperature": 0.0, "max_new_tokens": 1024},
+    "semantic_scoring": {"backend": "clip", "checkpoint": "openai/clip-vit-large-patch14", "revision": "32bd64288804d66eefd0ccbe215aa642df71cc41", "text_template": "a photo of a {hypothesis}"},
+    "note": "identities and revisions only; no weights are committed. SAM2/Qwen need a machine-local RuntimeProvider; CLIP/DINOv2 self-load."
+  },
+  "run_identities": {
+    "sequence_artifact_id": "962f2b5d2ae248f6b80807da7102f4fe",
+    "pose_sequence_artifact_id": "03c3864a7a56424e8287c6780a1baa19",
+    "state_estimation": "7e807fe280c57492d442e869b457d290",
+    "geometric_mapping": "0b2c0278fcf6e376c55cff8ebbfb0463",
+    "perception_pooling_on": {
+      "camera_1_image_raw-000000": "a10bb11a4c0683ea9d01dde9c01c03bb",
+      "camera_1_image_raw-000006": "e5ac3a122de85889824639b27d685d26",
+      "camera_1_image_raw-000012": "f42b358a4abb48d6411c39792aaba6f4",
+      "camera_1_image_raw-000018": "4c95d1f79aae3f1c8a8f8099c4946c41"
+    },
+    "perception_pooling_off": {
+      "camera_1_image_raw-000000": "1dc0b46d4d30ba6cc046cf08a76ebda5",
+      "camera_1_image_raw-000006": "e0fd7194472a9e080af48c246a6ad40b",
+      "camera_1_image_raw-000012": "ff9ab2b67676d207e0e707db4579f7e6",
+      "camera_1_image_raw-000018": "71dda6240486df3dcf9d751545ac3938"
+    },
+    "downstream_on_frame0": {
+      "semantic_scoring": "0a04d5fc4554e9af4cced478b4d18dd6",
+      "sensor_association": "54e50013f23f95046914cb18f97ca6e1",
+      "semantic_fusion": "6638e6a6a7bd0f9e87b8d11846e686e3"
+    },
+    "note": "run ids are from this machine's execution; they prove the lineage of the artifacts these metrics were read from. They are not re-derivable without the dataset."
+  },
+  "runtime_limitation": {
+    "issue": "#689",
+    "summary": "Multi-frame perception degrades after the first frame on the 8 GB device; each frame succeeds in an isolated process. Perception was therefore run process-isolated per frame. This is an experimental condition, not a defect in the results.",
+    "hypothesis": "frame-major executor keeps SAM2+DINO+CLIP+Qwen GPU-resident (no unload between stages)."
+  }
+}

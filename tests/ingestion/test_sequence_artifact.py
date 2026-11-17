@@ -1,0 +1,1241 @@
+import errno
+import hashlib
+import json
+import shutil
+from pathlib import Path
+from typing import Any
+
+import pytest
+
+from contextmap.ingestion import (
+    CalibrationEntry,
+    CalibrationProvenance,
+    CalibrationReferenceId,
+    CalibrationSet,
+    DroppedEvent,
+    ExternalPoseMeasurement,
+    FrameId,
+    ImageEncoding,
+    ImageObservation,
+    ImuObservation,
+    IncompleteSequenceArtifactError,
+    LidarObservation,
+    PinholeCameraModel,
+    PointFieldDataType,
+    PointFieldDescriptor,
+    SensorId,
+    SequenceArtifactError,
+    SequenceArtifactId,
+    SequenceArtifactReader,
+    SequenceArtifactWriter,
+    SequenceProvenance,
+    SourceObservationId,
+    SourceProvenance,
+    SynchronizationConfig,
+    SynchronizationDiagnostics,
+    synchronize,
+)
+from contextmap.ingestion.calibration import compute_content_hash
+from contextmap.ingestion.sequence_artifact import (
+    sequence_artifact_writer as sequence_artifact_module,
+)
+from contextmap.shared import SourceTimestamp
+from sync_recorder import Identity, SyncRecorder, identity
+
+_ARTIFACT_ID = "sequence-0001"
+
+
+def _output_dir(tmp_path: Path) -> Path:
+    """Diretório final escolhido pelo chamador; o leitor abre exatamente este caminho."""
+    return tmp_path / "ingestion"
+
+
+def _writer(
+    tmp_path: Path, *, sequence_name: str = "corridor-02", artifact_id: str = _ARTIFACT_ID
+) -> SequenceArtifactWriter:
+    return SequenceArtifactWriter(
+        output_dir=_output_dir(tmp_path),
+        sequence_name=sequence_name,
+        artifact_id=SequenceArtifactId(artifact_id),
+    )
+
+
+def _timestamp(seconds: int = 1) -> SourceTimestamp:
+    return SourceTimestamp(seconds=seconds, nanoseconds=0, clock_id="system")
+
+
+def _provenance(**overrides: object) -> SourceProvenance:
+    defaults: dict[str, object] = {"source_type": "dataset", "source_path": "fixtures/example"}
+    defaults.update(overrides)
+    return SourceProvenance(**defaults)  # type: ignore[arg-type]
+
+
+def _build_fixture_sequence(writer: SequenceArtifactWriter) -> None:
+    """Deterministic multimodal fixture: 2 images, 1 lidar scan, 1 IMU, 1 pose."""
+    writer.add_observation(
+        ImageObservation(
+            observation_id=SourceObservationId("frame-0001"),
+            sensor_id=SensorId("front_camera"),
+            frame_id=FrameId("front_camera_optical"),
+            timestamp=_timestamp(1),
+            provenance=_provenance(source_topic="/camera/image_raw"),
+            width=2,
+            height=1,
+            encoding=ImageEncoding.RGB8,
+            data=b"\x01\x02\x03\x04\x05\x06",
+        )
+    )
+    writer.add_observation(
+        ImageObservation(
+            observation_id=SourceObservationId("frame-0002"),
+            sensor_id=SensorId("front_camera"),
+            frame_id=FrameId("front_camera_optical"),
+            timestamp=_timestamp(2),
+            provenance=_provenance(source_topic="/camera/image_raw"),
+            width=2,
+            height=1,
+            encoding=ImageEncoding.RGB8,
+            data=b"\x07\x08\x09\x0a\x0b\x0c",
+        )
+    )
+    writer.add_observation(
+        LidarObservation(
+            observation_id=SourceObservationId("scan-0001"),
+            sensor_id=SensorId("velodyne_top"),
+            frame_id=FrameId("velodyne"),
+            timestamp=_timestamp(1),
+            provenance=_provenance(source_topic="/velodyne_points"),
+            point_count=1,
+            point_step_bytes=12,
+            fields=(
+                PointFieldDescriptor(
+                    name="x", offset_bytes=0, data_type=PointFieldDataType.FLOAT32
+                ),
+                PointFieldDescriptor(
+                    name="y", offset_bytes=4, data_type=PointFieldDataType.FLOAT32
+                ),
+                PointFieldDescriptor(
+                    name="z", offset_bytes=8, data_type=PointFieldDataType.FLOAT32
+                ),
+            ),
+            data=b"\x00" * 12,
+        )
+    )
+    writer.add_observation(
+        ImuObservation(
+            observation_id=SourceObservationId("imu-0001"),
+            sensor_id=SensorId("imu0"),
+            frame_id=FrameId("imu_link"),
+            timestamp=_timestamp(1),
+            provenance=_provenance(source_topic="/imu/data"),
+            linear_acceleration=(0.0, 0.0, 9.81),
+            angular_velocity=(0.0, 0.0, 0.0),
+            orientation=None,
+            linear_acceleration_covariance=tuple(float(value) for value in range(9)),
+            angular_velocity_covariance=tuple(float(value) for value in range(10, 19)),
+        )
+    )
+    writer.add_observation(
+        ExternalPoseMeasurement(
+            observation_id=SourceObservationId("odom-0001"),
+            sensor_id=SensorId("wheel_odometry"),
+            frame_id=FrameId("base_link"),
+            timestamp=_timestamp(1),
+            provenance=_provenance(source_topic="/odom"),
+            parent_frame=FrameId("odom"),
+            translation=(1.0, 2.0, 0.0),
+            orientation=(0.0, 0.0, 0.0, 1.0),
+            pose_covariance=tuple(float(value) for value in range(36)),
+            linear_velocity=(0.1, 0.0, 0.0),
+            angular_velocity=(0.0, 0.0, 0.01),
+            twist_covariance=tuple(float(value) for value in range(100, 136)),
+        )
+    )
+
+
+def test_finalized_artifact_can_be_reopened_without_the_original_source(tmp_path: Path) -> None:
+    writer = _writer(tmp_path)
+    _build_fixture_sequence(writer)
+
+    manifest = writer.finalize()
+
+    assert manifest.schema_version == "0.2.0"
+    assert manifest.observation_counts == {"image": 2, "lidar": 1, "imu": 1, "external_pose": 1}
+
+    artifact_dir = _output_dir(tmp_path)
+    assert artifact_dir.is_dir()
+    assert (artifact_dir / "manifest.json").is_file()
+    assert (artifact_dir / "index.jsonl").is_file()
+    assert (artifact_dir / "rgb" / "frame-0001.bin").is_file()
+
+    reader = SequenceArtifactReader(artifact_dir)
+    observations = reader.list_observations()
+
+    assert [obs.observation_id for obs in observations] == [
+        "frame-0001",
+        "frame-0002",
+        "scan-0001",
+        "imu-0001",
+        "odom-0001",
+    ]
+    assert reader.verify_integrity() == []
+
+
+def test_round_trip_preserves_observation_fields(tmp_path: Path) -> None:
+    writer = _writer(tmp_path)
+    _build_fixture_sequence(writer)
+    writer.finalize()
+
+    reader = SequenceArtifactReader(_output_dir(tmp_path))
+
+    image = reader.get_observation(SourceObservationId("frame-0001"))
+    assert isinstance(image, ImageObservation)
+    assert image.data == b"\x01\x02\x03\x04\x05\x06"
+    assert image.width == 2
+    assert image.encoding is ImageEncoding.RGB8
+
+    lidar = reader.get_observation(SourceObservationId("scan-0001"))
+    assert isinstance(lidar, LidarObservation)
+    assert lidar.fields[0].name == "x"
+    assert lidar.data == b"\x00" * 12
+
+    imu = reader.get_observation(SourceObservationId("imu-0001"))
+    assert isinstance(imu, ImuObservation)
+    assert imu.orientation is None
+    assert imu.linear_acceleration == (0.0, 0.0, 9.81)
+    assert imu.linear_acceleration_covariance == tuple(float(value) for value in range(9))
+    assert imu.angular_velocity_covariance == tuple(float(value) for value in range(10, 19))
+
+    pose = reader.get_observation(SourceObservationId("odom-0001"))
+    assert isinstance(pose, ExternalPoseMeasurement)
+    assert pose.parent_frame == "odom"
+    assert pose.translation == (1.0, 2.0, 0.0)
+    assert pose.pose_covariance == tuple(float(value) for value in range(36))
+    assert pose.linear_velocity == (0.1, 0.0, 0.0)
+    assert pose.angular_velocity == (0.0, 0.0, 0.01)
+    assert pose.twist_covariance == tuple(float(value) for value in range(100, 136))
+
+
+def test_get_observation_raises_for_unknown_id(tmp_path: Path) -> None:
+    writer = _writer(tmp_path)
+    _build_fixture_sequence(writer)
+    writer.finalize()
+    reader = SequenceArtifactReader(_output_dir(tmp_path))
+
+    with pytest.raises(SequenceArtifactError, match="not found"):
+        reader.get_observation(SourceObservationId("does-not-exist"))
+
+
+def test_duplicate_observation_id_is_rejected(tmp_path: Path) -> None:
+    writer = _writer(tmp_path)
+    _build_fixture_sequence(writer)
+
+    with pytest.raises(SequenceArtifactError, match="duplicate"):
+        _build_fixture_sequence(writer)
+
+
+def test_cannot_add_observation_after_finalize(tmp_path: Path) -> None:
+    writer = _writer(tmp_path)
+    _build_fixture_sequence(writer)
+    writer.finalize()
+
+    with pytest.raises(SequenceArtifactError, match="finalize"):
+        writer.add_observation(
+            ImuObservation(
+                observation_id=SourceObservationId("imu-0002"),
+                sensor_id=SensorId("imu0"),
+                frame_id=FrameId("imu_link"),
+                timestamp=_timestamp(3),
+                provenance=_provenance(),
+            )
+        )
+
+
+def test_the_artifact_appears_exactly_at_output_dir_and_nothing_else_is_created(
+    tmp_path: Path,
+) -> None:
+    writer = _writer(tmp_path)
+    _build_fixture_sequence(writer)
+
+    writer.finalize()
+
+    assert list(tmp_path.iterdir()) == [_output_dir(tmp_path)]
+    assert not (tmp_path / "sequences").exists()
+    assert not (tmp_path / "runs.json").exists()
+
+
+def test_the_artifact_id_is_recorded_as_supplied_and_never_allocated(tmp_path: Path) -> None:
+    writer = _writer(tmp_path, artifact_id="chosen-by-the-caller")
+    _build_fixture_sequence(writer)
+
+    manifest = writer.finalize()
+
+    assert manifest.artifact_id == "chosen-by-the-caller"
+    assert (
+        SequenceArtifactReader(_output_dir(tmp_path)).manifest.artifact_id == manifest.artifact_id
+    )
+    with pytest.raises(TypeError, match="artifact_id"):
+        SequenceArtifactWriter(  # type: ignore[call-arg]
+            output_dir=tmp_path / "without-identity", sequence_name="corridor-02"
+        )
+
+
+def test_finalize_refuses_a_second_run_at_the_same_directory_without_altering_the_first(
+    tmp_path: Path,
+) -> None:
+    first_writer = _writer(tmp_path)
+    _build_fixture_sequence(first_writer)
+    first_writer.finalize()
+    artifact_dir = _output_dir(tmp_path)
+    before = {
+        path.relative_to(artifact_dir): path.read_bytes()
+        for path in artifact_dir.rglob("*")
+        if path.is_file()
+    }
+
+    second_writer = _writer(tmp_path, artifact_id="another-run")
+    _build_fixture_sequence(second_writer)
+
+    with pytest.raises(SequenceArtifactError, match="already exists"):
+        second_writer.finalize()
+
+    after = {
+        path.relative_to(artifact_dir): path.read_bytes()
+        for path in artifact_dir.rglob("*")
+        if path.is_file()
+    }
+    assert after == before  # the first, valid artifact remains untouched
+    assert list(tmp_path.iterdir()) == [artifact_dir]  # and the refused run left nothing behind
+    assert SequenceArtifactReader(artifact_dir).verify_integrity() == []
+
+
+def test_opening_a_directory_without_a_manifest_fails(tmp_path: Path) -> None:
+    empty_dir = tmp_path / "not-an-artifact"
+    empty_dir.mkdir()
+
+    with pytest.raises(IncompleteSequenceArtifactError):
+        SequenceArtifactReader(empty_dir)
+
+
+def test_verify_integrity_detects_a_missing_payload_file(tmp_path: Path) -> None:
+    writer = _writer(tmp_path)
+    _build_fixture_sequence(writer)
+    writer.finalize()
+    artifact_dir = _output_dir(tmp_path)
+
+    (artifact_dir / "rgb" / "frame-0001.bin").unlink()
+
+    reader = SequenceArtifactReader(artifact_dir)
+    problems = reader.verify_integrity()
+
+    assert any("missing file" in problem for problem in problems)
+
+
+def test_verify_integrity_detects_a_content_hash_mismatch(tmp_path: Path) -> None:
+    writer = _writer(tmp_path)
+    _build_fixture_sequence(writer)
+    writer.finalize()
+    artifact_dir = _output_dir(tmp_path)
+
+    (artifact_dir / "rgb" / "frame-0001.bin").write_bytes(b"\xff\xff\xff\xff\xff\xff")
+
+    reader = SequenceArtifactReader(artifact_dir)
+    problems = reader.verify_integrity()
+
+    assert any("hash mismatch" in problem for problem in problems)
+
+
+def _calibration_set() -> CalibrationSet:
+    model = PinholeCameraModel(width=2, height=1, fx=1.0, fy=1.0, cx=1.0, cy=0.5)
+    entry = CalibrationEntry(
+        calibration_id=CalibrationReferenceId("front_camera-calib"),
+        sensor_id=SensorId("front_camera"),
+        frame_id=FrameId("front_camera_optical"),
+        camera_model=model,
+        provenance=CalibrationProvenance(source_type="dataset", source_path="fixtures/calib.yaml"),
+        content_hash=compute_content_hash(
+            sensor_id=SensorId("front_camera"),
+            frame_id=FrameId("front_camera_optical"),
+            camera_model=model,
+        ),
+    )
+    return CalibrationSet(entries={entry.calibration_id: entry}, static_transforms=())
+
+
+def test_calibration_round_trips_through_the_artifact(tmp_path: Path) -> None:
+    writer = _writer(tmp_path)
+    _build_fixture_sequence(writer)
+    writer.set_calibration(_calibration_set())
+    writer.finalize()
+
+    artifact_dir = _output_dir(tmp_path)
+    assert (artifact_dir / "calibration" / "calibration.json").is_file()
+
+    reader = SequenceArtifactReader(artifact_dir)
+    calibration = reader.read_calibration()
+
+    assert calibration is not None
+    assert calibration.entries.keys() == {CalibrationReferenceId("front_camera-calib")}
+    assert reader.verify_integrity() == []
+
+
+def test_read_calibration_returns_none_when_never_set(tmp_path: Path) -> None:
+    writer = _writer(tmp_path)
+    _build_fixture_sequence(writer)
+    writer.finalize()
+
+    reader = SequenceArtifactReader(_output_dir(tmp_path))
+
+    assert reader.read_calibration() is None
+
+
+def _sequence_provenance() -> SequenceProvenance:
+    return SequenceProvenance(
+        source_type="dataset",
+        source_path="fixtures/example",
+        source_content_hash="sha256:aaaa",
+        configuration_hash="sha256:bbbb",
+        adapter_type="dataset",
+    )
+
+
+def test_provenance_round_trips_through_the_artifact(tmp_path: Path) -> None:
+    writer = _writer(tmp_path)
+    _build_fixture_sequence(writer)
+    writer.set_provenance(_sequence_provenance())
+    writer.finalize()
+
+    artifact_dir = _output_dir(tmp_path)
+    assert (artifact_dir / "provenance" / "provenance.json").is_file()
+
+    reader = SequenceArtifactReader(artifact_dir)
+    provenance = reader.read_provenance()
+
+    assert provenance is not None
+    assert provenance.source_type == "dataset"
+    assert provenance.configuration_hash == "sha256:bbbb"
+    assert reader.verify_integrity() == []
+
+
+def test_read_provenance_returns_none_when_never_set(tmp_path: Path) -> None:
+    writer = _writer(tmp_path)
+    _build_fixture_sequence(writer)
+    writer.finalize()
+
+    reader = SequenceArtifactReader(_output_dir(tmp_path))
+
+    assert reader.read_provenance() is None
+
+
+def test_verify_integrity_detects_an_index_payload_cross_reference_error(tmp_path: Path) -> None:
+    writer = _writer(tmp_path)
+    _build_fixture_sequence(writer)
+    writer.finalize()
+    artifact_dir = _output_dir(tmp_path)
+
+    index_path = artifact_dir / "index.jsonl"
+    lines = index_path.read_text(encoding="utf-8").splitlines()
+    first_record = json.loads(lines[0])
+    first_record["payload_path"] = "rgb/does-not-exist.bin"
+    lines[0] = json.dumps(first_record)
+    index_path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+    reader = SequenceArtifactReader(artifact_dir)
+    problems = reader.verify_integrity()
+
+    assert any(
+        "payload_path" in problem and "not present in manifest" in problem for problem in problems
+    )
+
+
+def test_diagnostics_round_trip_through_the_artifact(tmp_path: Path) -> None:
+    writer = _writer(tmp_path)
+    _build_fixture_sequence(writer)
+    writer.set_diagnostics(warnings=["imu topic not available"])
+    writer.finalize()
+
+    artifact_dir = _output_dir(tmp_path)
+    assert (artifact_dir / "diagnostics" / "summary.json").is_file()
+    assert (artifact_dir / "diagnostics" / "warnings.jsonl").is_file()
+
+    reader = SequenceArtifactReader(artifact_dir)
+    diagnostics = reader.read_diagnostics()
+
+    assert diagnostics is not None
+    assert diagnostics.warnings == ("imu topic not available",)
+    assert diagnostics.summary.modality_summaries["image"].count == 2
+    assert diagnostics.summary.warning_count == 1
+    assert reader.verify_integrity() == []
+
+
+def test_structured_synchronization_and_frame_graph_diagnostics_round_trip(
+    tmp_path: Path,
+) -> None:
+    image = ImageObservation(
+        observation_id=SourceObservationId("frame-sync"),
+        sensor_id=SensorId("front_camera"),
+        frame_id=FrameId("front_camera_optical"),
+        timestamp=_timestamp(1),
+        provenance=_provenance(source_topic="/camera/image_raw"),
+        width=1,
+        height=1,
+        encoding=ImageEncoding.MONO8,
+        data=b"\x01",
+    )
+    imu = ImuObservation(
+        observation_id=SourceObservationId("imu-sync"),
+        sensor_id=SensorId("imu0"),
+        frame_id=FrameId("imu_link"),
+        timestamp=_timestamp(1),
+        provenance=_provenance(source_topic="/imu/data"),
+    )
+    _, synchronization = synchronize(
+        [image, imu],
+        config=SynchronizationConfig(reference_modality="image", tolerance_nanoseconds=0),
+    )
+    calibration = _calibration_set()
+    writer = _writer(tmp_path, sequence_name="structured")
+    writer.add_observation(image)
+    writer.add_observation(imu)
+    writer.set_calibration(calibration)
+    writer.set_diagnostics(synchronization=synchronization)
+
+    writer.finalize()
+    artifact_dir = _output_dir(tmp_path)
+
+    assert (artifact_dir / "diagnostics" / "synchronization.jsonl").is_file()
+    assert (artifact_dir / "diagnostics" / "dropped-events.jsonl").is_file()
+    assert (artifact_dir / "diagnostics" / "frame-graph.json").is_file()
+
+    diagnostics = SequenceArtifactReader(artifact_dir).read_diagnostics()
+
+    assert diagnostics is not None
+    assert diagnostics.synchronization == synchronization
+    assert diagnostics.frame_graph is not None
+    assert diagnostics.frame_graph.calibration_ids == ("front_camera-calib",)
+    assert diagnostics.summary.synchronization_status_counts["matched"] == 1
+    assert diagnostics.summary.calibration_ids == ["front_camera-calib"]
+
+
+def test_read_diagnostics_returns_none_when_never_set(tmp_path: Path) -> None:
+    writer = _writer(tmp_path)
+    _build_fixture_sequence(writer)
+    writer.finalize()
+
+    reader = SequenceArtifactReader(_output_dir(tmp_path))
+
+    assert reader.read_diagnostics() is None
+
+
+def test_set_diagnostics_with_no_warnings_still_writes_a_summary(tmp_path: Path) -> None:
+    writer = _writer(tmp_path)
+    _build_fixture_sequence(writer)
+    writer.set_diagnostics()
+    writer.finalize()
+
+    reader = SequenceArtifactReader(_output_dir(tmp_path))
+    diagnostics = reader.read_diagnostics()
+
+    assert diagnostics is not None
+    assert diagnostics.warnings == ()
+    assert diagnostics.summary.warning_count == 0
+
+
+def test_read_summary_diagnostics_does_not_decode_observation_payloads(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    writer = _writer(tmp_path)
+    _build_fixture_sequence(writer)
+    writer.set_diagnostics()
+    writer.finalize()
+    reader = SequenceArtifactReader(_output_dir(tmp_path))
+
+    def fail_if_called() -> None:
+        raise AssertionError("summary-only diagnostics must not decode observation payloads")
+
+    monkeypatch.setattr(reader, "list_observations", fail_if_called)
+
+    assert reader.read_diagnostics() is not None
+
+
+def _count_payload_reads(monkeypatch: pytest.MonkeyPatch, *, directory: str) -> list[Path]:
+    """Track calls to ``Path.read_bytes`` for files under ``directory`` (e.g. "rgb").
+
+    A payload file (image/LiDAR) is read through :meth:`Path.read_bytes`
+    exactly where :func:`contextmap.ingestion.sequence_artifact._decode_observation`
+    decodes it; counting those calls is a direct, deterministic proxy for
+    "how many observations were actually decoded with their payload",
+    without depending on process memory measurement.
+    """
+    calls: list[Path] = []
+    real_read_bytes = Path.read_bytes
+
+    def counting_read_bytes(self: Path) -> bytes:
+        if self.parent.name == directory:
+            calls.append(self)
+        return real_read_bytes(self)
+
+    monkeypatch.setattr(Path, "read_bytes", counting_read_bytes)
+    return calls
+
+
+def test_get_observation_reads_only_the_matching_payload(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    writer = _writer(tmp_path)
+    for index in range(6):
+        writer.add_observation(_image(index, bytes([index]) * 100))
+    writer.finalize()
+    reader = SequenceArtifactReader(_output_dir(tmp_path))
+
+    payload_reads = _count_payload_reads(monkeypatch, directory="rgb")
+    observation = reader.get_observation(SourceObservationId("frame-0005"))
+
+    assert isinstance(observation, ImageObservation)
+    assert observation.data == bytes([5]) * 100
+    assert len(payload_reads) == 1, (
+        "get_observation must decode only the matching observation's payload, "
+        f"not every preceding one; read {len(payload_reads)} payload files"
+    )
+
+
+def test_resolve_selection_frame_range_reads_only_selected_payloads(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    from contextmap.ingestion import FrameRangeSelection, resolve_selection
+
+    writer = _writer(tmp_path)
+    for index in range(6):
+        writer.add_observation(_image(index, bytes([index]) * 100))
+    writer.finalize()
+    reader = SequenceArtifactReader(_output_dir(tmp_path))
+
+    payload_reads = _count_payload_reads(monkeypatch, directory="rgb")
+    result = resolve_selection(reader, FrameRangeSelection(start_frame_index=1, end_frame_index=3))
+
+    assert payload_reads == [], (
+        "resolving a selection must not decode any payload before the caller "
+        "accesses the resulting observations"
+    )
+
+    materialized = list(result.observations)
+
+    assert [obs.observation_id for obs in materialized] == ["frame-0001", "frame-0002"]
+    assert len(payload_reads) == 2, (
+        "accessing the resolved selection must decode exactly the selected "
+        f"payloads, not the whole sequence; read {len(payload_reads)} payload files"
+    )
+
+
+def test_read_diagnostics_dropped_events_do_not_decode_unrelated_payloads(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    dropped_imu = ImuObservation(
+        observation_id=SourceObservationId("imu-dropped"),
+        sensor_id=SensorId("imu0"),
+        frame_id=FrameId("imu_link"),
+        timestamp=_timestamp(1),
+        provenance=_provenance(source_topic="/imu/data"),
+    )
+    kept_image = _image(0, b"\x09" * 100)
+    writer = _writer(tmp_path)
+    writer.add_observation(dropped_imu)
+    writer.add_observation(kept_image)
+    writer.set_diagnostics(
+        synchronization=SynchronizationDiagnostics(
+            dropped_events=(
+                DroppedEvent(observation=dropped_imu, reason="no match within tolerance"),
+            ),
+            decisions=(),
+        )
+    )
+    writer.finalize()
+    reader = SequenceArtifactReader(_output_dir(tmp_path))
+
+    payload_reads = _count_payload_reads(monkeypatch, directory="rgb")
+    diagnostics = reader.read_diagnostics()
+
+    assert diagnostics is not None
+    assert diagnostics.synchronization is not None
+    assert [
+        str(event.observation.observation_id)
+        for event in diagnostics.synchronization.dropped_events
+    ] == ["imu-dropped"]
+    assert payload_reads == [], (
+        "reading diagnostics must resolve dropped events from index metadata, "
+        "not by decoding every observation's payload"
+    )
+
+
+def test_read_diagnostics_dropped_image_and_lidar_do_not_decode_payloads(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """Regressão do #374: reconstruir dropped_events não pode decodificar payload.
+
+    O teste anterior só usava um IMU descartado (sem payload), então nunca
+    exercitava o caminho de bug: uma IMAGE ou um LIDAR descartados forçavam
+    ``read_diagnostics`` a decodificar o payload binário completo via
+    ``observation_at`` só para reconstruir metadados de diagnóstico.
+    """
+    dropped_image = _image(0, b"\x0a" * 100)
+    dropped_lidar = LidarObservation(
+        observation_id=SourceObservationId("scan-dropped"),
+        sensor_id=SensorId("velodyne_top"),
+        frame_id=FrameId("velodyne"),
+        timestamp=_timestamp(1),
+        provenance=_provenance(source_topic="/velodyne_points"),
+        point_count=1,
+        point_step_bytes=12,
+        fields=(
+            PointFieldDescriptor(name="x", offset_bytes=0, data_type=PointFieldDataType.FLOAT32),
+            PointFieldDescriptor(name="y", offset_bytes=4, data_type=PointFieldDataType.FLOAT32),
+            PointFieldDescriptor(name="z", offset_bytes=8, data_type=PointFieldDataType.FLOAT32),
+        ),
+        data=b"\x00" * 12,
+    )
+    kept_image = _image(1, b"\x09" * 100)
+    writer = _writer(tmp_path)
+    writer.add_observation(dropped_image)
+    writer.add_observation(dropped_lidar)
+    writer.add_observation(kept_image)
+    writer.set_diagnostics(
+        synchronization=SynchronizationDiagnostics(
+            dropped_events=(
+                DroppedEvent(observation=dropped_image, reason="no match within tolerance"),
+                DroppedEvent(observation=dropped_lidar, reason="no match within tolerance"),
+            ),
+            decisions=(),
+        )
+    )
+    writer.finalize()
+    reader = SequenceArtifactReader(_output_dir(tmp_path))
+
+    payload_reads: list[Path] = []
+    real_read_bytes = Path.read_bytes
+
+    def counting_read_bytes(self: Path) -> bytes:
+        if self.parent.name in ("rgb", "pointcloud"):
+            payload_reads.append(self)
+        return real_read_bytes(self)
+
+    monkeypatch.setattr(Path, "read_bytes", counting_read_bytes)
+
+    diagnostics = reader.read_diagnostics()
+
+    assert diagnostics is not None
+    assert diagnostics.synchronization is not None
+    assert {
+        str(event.observation.observation_id)
+        for event in diagnostics.synchronization.dropped_events
+    } == {"frame-0000", "scan-dropped"}
+    assert payload_reads == [], (
+        "reading diagnostics must resolve dropped IMAGE/LIDAR events from index "
+        f"metadata alone, not by decoding their payload; read {payload_reads}"
+    )
+
+
+def _image(index: int, data: bytes) -> ImageObservation:
+    return ImageObservation(
+        observation_id=SourceObservationId(f"frame-{index:04d}"),
+        sensor_id=SensorId("front_camera"),
+        frame_id=FrameId("front_camera_optical"),
+        timestamp=_timestamp(index),
+        provenance=_provenance(source_topic="/camera/image_raw"),
+        width=len(data),
+        height=1,
+        encoding=ImageEncoding.MONO8,
+        data=data,
+    )
+
+
+def _tmp_dirs(workspace: Path) -> list[Path]:
+    return list(workspace.glob(".tmp-*"))
+
+
+def _final_dirs(workspace: Path) -> list[Path]:
+    return [
+        path for path in workspace.iterdir() if path.is_dir() and not path.name.startswith(".tmp-")
+    ]
+
+
+def test_add_observation_persists_the_payload_before_finalize(tmp_path: Path) -> None:
+    writer = _writer(tmp_path)
+
+    writer.add_observation(_image(1, b"\x01\x02\x03"))
+
+    (tmp_dir,) = _tmp_dirs(tmp_path)
+    assert (tmp_dir / "rgb" / "frame-0001.bin").read_bytes() == b"\x01\x02\x03"
+    assert _final_dirs(tmp_path) == []
+
+
+def test_writer_does_not_retain_payload_bytes_in_memory(tmp_path: Path) -> None:
+    import tracemalloc
+
+    writer = _writer(tmp_path)
+    payload_size = 1_000_000
+
+    tracemalloc.start()
+    try:
+        for index in range(20):
+            writer.add_observation(_image(index, bytes([index]) * payload_size))
+        retained, _ = tracemalloc.get_traced_memory()
+    finally:
+        tracemalloc.stop()
+
+    assert retained < 5 * payload_size  # 20 payloads queued in memory would be 20 * payload_size
+    manifest = writer.finalize()
+    reader = SequenceArtifactReader(_output_dir(tmp_path))
+    assert reader.verify_integrity() == []
+    assert manifest.observation_counts["image"] == 20
+
+
+def test_streamed_artifact_exposes_summary_diagnostics_without_payloads(tmp_path: Path) -> None:
+    writer = _writer(tmp_path)
+    _build_fixture_sequence(writer)
+    writer.set_diagnostics()
+
+    writer.finalize()
+
+    reader = SequenceArtifactReader(_output_dir(tmp_path))
+    diagnostics = reader.read_diagnostics()
+    assert diagnostics is not None
+    assert diagnostics.summary.modality_summaries["image"].count == 2
+    assert list(diagnostics.summary.image_resolutions) == [(2, 1)]
+    assert list(diagnostics.summary.pointcloud_field_names) == [("x", "y", "z")]
+
+
+def test_abort_removes_the_partial_artifact_and_closes_the_writer(tmp_path: Path) -> None:
+    writer = _writer(tmp_path)
+    _build_fixture_sequence(writer)
+
+    writer.abort()
+
+    assert _tmp_dirs(tmp_path) == []
+    assert _final_dirs(tmp_path) == []
+    with pytest.raises(SequenceArtifactError, match="abort"):
+        writer.add_observation(_image(9, b"\x00"))
+    with pytest.raises(SequenceArtifactError, match="abort"):
+        writer.finalize()
+
+
+def test_writer_context_manager_aborts_when_the_block_raises(tmp_path: Path) -> None:
+    with (
+        pytest.raises(RuntimeError, match="boom"),
+        _writer(tmp_path) as writer,
+    ):
+        _build_fixture_sequence(writer)
+        raise RuntimeError("boom")
+
+    assert _tmp_dirs(tmp_path) == []
+
+
+def test_writer_context_manager_keeps_a_finalized_artifact(tmp_path: Path) -> None:
+    with _writer(tmp_path) as writer:
+        _build_fixture_sequence(writer)
+        writer.finalize()
+
+    assert _tmp_dirs(tmp_path) == []
+    reader = SequenceArtifactReader(_output_dir(tmp_path))
+    assert reader.verify_integrity() == []
+
+
+def test_rejected_finalize_leaves_no_temporary_directory(tmp_path: Path) -> None:
+    for _ in range(2):
+        writer = _writer(tmp_path)
+        _build_fixture_sequence(writer)
+        if _ == 0:
+            writer.finalize()
+
+    with pytest.raises(SequenceArtifactError, match="already exists"):
+        writer.finalize()
+
+    assert _tmp_dirs(tmp_path) == []
+
+
+def test_empty_writer_finalizes_to_an_empty_valid_artifact(tmp_path: Path) -> None:
+    writer = _writer(tmp_path)
+
+    writer.finalize()
+
+    reader = SequenceArtifactReader(_output_dir(tmp_path))
+    assert reader.verify_integrity() == []
+    assert reader.list_observations() == []
+
+
+class _FailingIndexHandle:
+    """Wraps the real index handle; ``write``/``close`` can be made to fail like a full disk.
+
+    Everything else a file offers to the shared stream that writes the index (context
+    manager, ``flush`` and ``fileno`` for the ``fsync``) goes to the real handle (#622).
+    """
+
+    def __init__(self, real: Any, *, fail_write: bool, fail_close: bool) -> None:
+        self._real = real
+        self._fail_write = fail_write
+        self._fail_close = fail_close
+
+    def __enter__(self) -> "_FailingIndexHandle":
+        return self
+
+    def __exit__(self, *exc_info: object) -> None:
+        self.close()
+
+    def write(self, data: bytes) -> int:
+        if self._fail_write:
+            raise OSError(errno.ENOSPC, "no space left on device (write)")
+        return int(self._real.write(data))
+
+    def flush(self) -> None:
+        self._real.flush()
+
+    def fileno(self) -> int:
+        return int(self._real.fileno())
+
+    def close(self) -> None:
+        self._real.close()  # the descriptor is released even when the flush fails
+        if self._fail_close:
+            raise OSError(errno.ENOSPC, "no space left on device (flush)")
+
+
+def _fail_index_io(
+    monkeypatch: pytest.MonkeyPatch, *, fail_write: bool = False, fail_close: bool = False
+) -> None:
+    real_open = Path.open
+
+    def open_with_failures(self: Path, *args: Any, **kwargs: Any) -> Any:
+        handle = real_open(self, *args, **kwargs)
+        if self.name == "index.jsonl" and args[:1] == ("wb",):
+            return _FailingIndexHandle(handle, fail_write=fail_write, fail_close=fail_close)
+        return handle
+
+    monkeypatch.setattr(Path, "open", open_with_failures)
+
+
+def test_abort_removes_the_temporary_directory_even_when_closing_the_index_fails(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    _fail_index_io(monkeypatch, fail_close=True)
+    writer = _writer(tmp_path)
+    _build_fixture_sequence(writer)
+
+    writer.abort()  # a flush error on data being discarded is irrelevant and must not escape
+
+    assert _tmp_dirs(tmp_path) == []
+    with pytest.raises(SequenceArtifactError, match="abort"):
+        writer.add_observation(_image(9, b"\x00"))
+
+
+def test_failed_write_reports_the_original_error_and_cleans_up_when_close_also_fails(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    _fail_index_io(monkeypatch, fail_write=True, fail_close=True)
+    writer = _writer(tmp_path)
+
+    with pytest.raises(OSError, match=r"\(write\)"):
+        writer.add_observation(_image(1, b"\x01"))
+
+    assert _tmp_dirs(tmp_path) == []
+
+
+def test_abort_surfaces_a_failed_removal_and_can_be_retried(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    writer = _writer(tmp_path)
+    _build_fixture_sequence(writer)
+    real_rmtree = shutil.rmtree
+
+    def refuse(*args: Any, **kwargs: Any) -> None:
+        raise PermissionError(errno.EACCES, "cannot remove")
+
+    monkeypatch.setattr(shutil, "rmtree", refuse)
+    with pytest.raises(PermissionError):
+        writer.abort()
+    assert len(_tmp_dirs(tmp_path)) == 1  # still there, and the caller knows about it
+
+    monkeypatch.setattr(shutil, "rmtree", real_rmtree)
+    writer.abort()  # retry removes it
+
+    assert _tmp_dirs(tmp_path) == []
+
+
+def test_failed_cleanup_is_attached_to_the_original_error_instead_of_replacing_it(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    writer = _writer(tmp_path)
+    _build_fixture_sequence(writer)
+
+    def refuse(*args: Any, **kwargs: Any) -> None:
+        raise PermissionError(errno.EACCES, "cannot remove")
+
+    monkeypatch.setattr(shutil, "rmtree", refuse)
+    with pytest.raises(RuntimeError, match="boom") as excinfo, writer:
+        raise RuntimeError("boom")
+
+    assert any("temporary" in note for note in excinfo.value.__notes__)
+
+
+def test_index_entry_carries_modality_so_callers_can_filter_without_decoding_payloads(
+    tmp_path: Path,
+) -> None:
+    """Semantic Fusion only needs image timestamps, but had to decode every payload (#514).
+
+    ``index.jsonl`` already records each observation's modality, so a caller can select the
+    image observations while paying only the index cost. On the real corridor-02 sequence
+    that is a 24 MB index instead of a 2.6 GB decode.
+    """
+    writer = _writer(tmp_path)
+    _build_fixture_sequence(writer)
+    writer.finalize()
+
+    reader = SequenceArtifactReader(_output_dir(tmp_path))
+    entries = list(reader.iter_index())
+
+    assert [entry.modality for entry in entries] == [
+        "image",
+        "image",
+        "lidar",
+        "imu",
+        "external_pose",
+    ]
+    image_timestamps = {
+        entry.observation_id: entry.timestamp for entry in entries if entry.modality == "image"
+    }
+    assert set(image_timestamps) == {
+        SourceObservationId("frame-0001"),
+        SourceObservationId("frame-0002"),
+    }
+
+
+# --- ING-03 / ING-13: paths de payload e hash do inventário ------------------------------------
+
+
+def test_an_observation_id_that_escapes_the_artifact_is_refused_before_writing(
+    tmp_path: Path,
+) -> None:
+    workspace = tmp_path / "workspace"
+    workspace.mkdir()
+    writer = _writer(workspace)
+    escaping = ImageObservation(
+        observation_id=SourceObservationId("../../escape"),
+        sensor_id=SensorId("front_camera"),
+        frame_id=FrameId("front_camera_optical"),
+        timestamp=_timestamp(1),
+        provenance=_provenance(),
+        width=1,
+        height=1,
+        encoding=ImageEncoding.MONO8,
+        data=b"\x01",
+    )
+
+    with pytest.raises(SequenceArtifactError, match="escape"):
+        writer.add_observation(escaping)
+    writer.abort()
+
+    assert sorted(path.name for path in tmp_path.rglob("*") if path.is_file()) == []
+
+
+def _tamper_first_payload_path(artifact_dir: Path, payload_path: str) -> None:
+    index_path = artifact_dir / "index.jsonl"
+    lines = index_path.read_text(encoding="utf-8").splitlines()
+    first_record = json.loads(lines[0])
+    first_record["payload_path"] = payload_path
+    lines[0] = json.dumps(first_record)
+    index_path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+
+@pytest.mark.parametrize("kind", ["absolute", "parent"])
+def test_a_payload_path_outside_the_artifact_is_never_read(tmp_path: Path, kind: str) -> None:
+    writer = _writer(tmp_path)
+    _build_fixture_sequence(writer)
+    writer.finalize()
+    artifact_dir = _output_dir(tmp_path)
+    secret = tmp_path / "secret.bin"
+    secret.write_bytes(b"outside the artifact")
+    outside = str(secret) if kind == "absolute" else "../secret.bin"
+    _tamper_first_payload_path(artifact_dir, outside)
+    reader = SequenceArtifactReader(artifact_dir)
+
+    with pytest.raises(SequenceArtifactError, match="payload_path"):
+        reader.list_observations()
+    assert any(outside in problem for problem in reader.verify_integrity())
+
+
+def test_an_inventory_path_outside_the_artifact_is_reported_and_never_read(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    writer = _writer(tmp_path)
+    _build_fixture_sequence(writer)
+    writer.finalize()
+    artifact_dir = _output_dir(tmp_path)
+    manifest_path = artifact_dir / "manifest.json"
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    manifest["file_inventory"][0]["path"] = "../secret.bin"
+    manifest_path.write_text(json.dumps(manifest), encoding="utf-8")
+    (tmp_path / "secret.bin").write_bytes(b"outside the artifact")
+    opened: list[Path] = []
+    real_open = Path.open
+
+    def recording_open(self: Path, *args: Any, **kwargs: Any) -> Any:
+        opened.append(self)
+        return real_open(self, *args, **kwargs)
+
+    monkeypatch.setattr(Path, "open", recording_open)
+
+    problems = SequenceArtifactReader(artifact_dir).verify_integrity()
+
+    assert any("../secret.bin" in problem for problem in problems)
+    assert all(path.name != "secret.bin" for path in opened)
+
+
+def test_the_inventory_is_hashed_in_chunks_never_whole_in_memory(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    payload = bytes(range(256)) * (3 * 4096)  # 3 MiB, maior que o chunk de hash
+    writer = _writer(tmp_path)
+    writer.add_observation(_image(1, payload))
+    whole_reads = _count_payload_reads(monkeypatch, directory="rgb")
+
+    writer.finalize()
+    problems = SequenceArtifactReader(_output_dir(tmp_path)).verify_integrity()
+
+    assert problems == []
+    assert whole_reads == []
+
+
+# --- #622: convergência com o primitivo compartilhado de run directory ---------------------------
+
+
+def _characterized_artifact(tmp_path: Path) -> Path:
+    """Write an artifact touching every output the writer can produce.
+
+    Payloads, index, calibration, provenance and every diagnostics file are there, so the
+    digests pin the whole layout.
+    """
+    image = ImageObservation(
+        observation_id=SourceObservationId("frame-sync"),
+        sensor_id=SensorId("front_camera"),
+        frame_id=FrameId("front_camera_optical"),
+        timestamp=_timestamp(3),
+        provenance=_provenance(source_topic="/camera/image_raw"),
+        width=1,
+        height=1,
+        encoding=ImageEncoding.MONO8,
+        data=b"\x01",
+    )
+    imu = ImuObservation(
+        observation_id=SourceObservationId("imu-sync"),
+        sensor_id=SensorId("imu0"),
+        frame_id=FrameId("imu_link"),
+        timestamp=_timestamp(3),
+        provenance=_provenance(source_topic="/imu/data"),
+    )
+    _, synchronization = synchronize(
+        [image, imu],
+        config=SynchronizationConfig(reference_modality="image", tolerance_nanoseconds=0),
+    )
+    writer = _writer(tmp_path)
+    _build_fixture_sequence(writer)
+    writer.add_observation(image)
+    writer.add_observation(imu)
+    writer.set_calibration(_calibration_set())
+    writer.set_provenance(_sequence_provenance())
+    writer.set_diagnostics(warnings=["imu topic not available"], synchronization=synchronization)
+    writer.finalize()
+    return _output_dir(tmp_path)
+
+
+def _published_contents(artifact_dir: Path) -> dict[str, str]:
+    """SHA-256 of every published file; the manifest loses only its ``created_at`` line."""
+    contents: dict[str, str] = {}
+    for path in sorted(artifact_dir.rglob("*")):
+        if not path.is_file():
+            continue
+        data = path.read_bytes()
+        if path == artifact_dir / "manifest.json":
+            data = b"".join(
+                line for line in data.splitlines(keepends=True) if b'"created_at":' not in line
+            )
+        contents[str(path.relative_to(artifact_dir))] = hashlib.sha256(data).hexdigest()
+    return contents
+
+
+def test_the_shared_primitives_keep_every_published_byte(tmp_path: Path) -> None:
+    """#622 moves the writer onto the shared run directory without changing the artifact.
+
+    The digests were recorded from the writer that still had its own temporary directory,
+    hashing and rename: same files, no ``README.md``, same manifest bytes apart from the time.
+    """
+    assert _published_contents(_characterized_artifact(tmp_path)) == {
+        "calibration/calibration.json": (
+            "a9abd6673a3a16ddffa562c3421086258976f284f5b6fcbb5166906fbb1ec38d"
+        ),
+        "diagnostics/dropped-events.jsonl": (
+            "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        ),
+        "diagnostics/frame-graph.json": (
+            "722c22fde66ffae678c31df43a4702a946fe28845cfaf016862dc63a0526d359"
+        ),
+        "diagnostics/summary.json": (
+            "51117c8e38a989499c448373850c9bf17730e6c6257fa8d436df90df226e5650"
+        ),
+        "diagnostics/synchronization.jsonl": (
+            "cd0dfe27c783da4be523181cc2a16b21661d901c62dd6269bfdbd4369e72181b"
+        ),
+        "diagnostics/warnings.jsonl": (
+            "91baf7ebb84a82619ff84262197fbe31e28ce32a665369e228792a625fba2435"
+        ),
+        "index.jsonl": "6f5c99b1e031abd942c881fec081c12f94e9de98de72761973e1a4940d176652",
+        "manifest.json": "08e1b5cbfada51035dfb8feecb1f559f4798d1e8f73d331ec3603b1e960a1162",
+        "pointcloud/scan-0001.bin": (
+            "15ec7bf0b50732b49f8228e07d24365338f9e3ab994b00af08e5a3bffe55fd8b"
+        ),
+        "provenance/provenance.json": (
+            "731275eddc6034530f479f6560ded68754cf5dcdcef016e9dca4c9532d08555f"
+        ),
+        "rgb/frame-0001.bin": "7192385c3c0605de55bb9476ce1d90748190ecb32a8eed7f5207b30cf6a1fe89",
+        "rgb/frame-0002.bin": "6530dad8b33e0bc24e103f91005f615ca6898385db0167c2d2c8a25f0ba1a14e",
+        "rgb/frame-sync.bin": "4bf5122f344554c53bde2ebb8cd2b7e3d1600ad631c385a5d7cce23c7785459a",
+    }
+
+
+def test_every_file_and_directory_reaches_the_disk_before_the_artifact_becomes_visible(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    # Herdado do primitivo compartilhado (#616): o rename não pode sobreviver a uma queda sem os
+    # payloads, o índice ou o manifest.
+    recorder = SyncRecorder(_output_dir(tmp_path), monkeypatch)
+
+    artifact_dir = _characterized_artifact(tmp_path)
+
+    published = [artifact_dir, *sorted(artifact_dir.rglob("*"))]
+    assert [path for path in published if not recorder.synced_before_publication(path)] == []
+    assert recorder.synced_after_publication(tmp_path)
+
+
+def test_a_directory_that_appears_while_finalizing_is_never_replaced(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    # Herdado do primitivo compartilhado (#637): rename(2) substituiria em silêncio um diretório
+    # vazio criado depois da checagem de finalize().
+    artifact_dir = _output_dir(tmp_path)
+    real_encode_provenance = sequence_artifact_module.encode_provenance
+    occupied: list[Identity | None] = []
+
+    def encode_provenance_racing_with_another_writer(provenance: SequenceProvenance) -> Any:
+        artifact_dir.mkdir()
+        occupied.append(identity(artifact_dir))
+        return real_encode_provenance(provenance)
+
+    monkeypatch.setattr(
+        sequence_artifact_module, "encode_provenance", encode_provenance_racing_with_another_writer
+    )
+    writer = _writer(tmp_path)
+    _build_fixture_sequence(writer)
+    writer.set_provenance(_sequence_provenance())
+
+    with pytest.raises(SequenceArtifactError, match="already exists"):
+        writer.finalize()
+
+    assert occupied == [identity(artifact_dir)]
+    assert list(artifact_dir.iterdir()) == []
+    assert list(tmp_path.iterdir()) == [artifact_dir]

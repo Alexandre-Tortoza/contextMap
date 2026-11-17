@@ -1,0 +1,5 @@
+/home/alexmrtr/.cache/contextmap2-ablation/venv/lib/python3.12/site-packages/timm/models/layers/__init__.py:49: FutureWarning: Importing from timm.models.layers is deprecated, please import via timm.layers
+  warnings.warn(f"Importing from {__name__} is deprecated, please import via timm.layers", FutureWarning)
+Loading weights:   0%|          | 0/223 [00:00<?, ?it/s]Loading weights: 100%|██████████| 223/223 [00:00<00:00, 20764.80it/s]
+Loading weights:   0%|          | 0/590 [00:00<?, ?it/s]Loading weights:  20%|██        | 118/590 [00:00<00:00, 1106.92it/s]Loading weights:  39%|███▉      | 229/590 [00:00<00:00, 964.68it/s] Loading weights:  55%|█████▌    | 327/590 [00:00<00:00, 803.22it/s]Loading weights:  70%|███████   | 414/590 [00:00<00:00, 795.94it/s]Loading weights:  85%|████████▍ | 501/590 [00:00<00:00, 817.43it/s]Loading weights:  99%|█████████▉| 584/590 [00:00<00:00, 815.01it/s]Loading weights: 100%|██████████| 590/590 [00:00<00:00, 845.64it/s]
+Loading weights:   0%|          | 0/917 [00:00<?, ?it/s]Loading weights: 100%|██████████| 917/917 [00:00<00:00, 17572.48it/s]

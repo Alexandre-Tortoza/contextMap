@@ -1,0 +1,133 @@
+# DAG de estágios
+
+O runtime **não codifica o pipeline canônico**. Um preset declara os estágios, o tipo de artifact que cada um produz e as entradas tipadas que cada um consome, ligadas ao estágio produtor; a configuração escolhe quais estágios opcionais participam. Daí derivam uma topologia determinística, a validação antes de qualquer execução pesada e a execução em ordem de dependência.
+
+É um runner de DAG pequeno, não um motor de workflow: sem scheduler, sem retry, sem descoberta dinâmica. Um estágio só existe quando a transformação tem significado científico, custo e saída próprios; o trabalho científico acontece nos executores, nunca neste módulo.
+
+## Topologia canônica
+
+```mermaid
+flowchart TD
+    ING["ingestion<br/>SequenceArtifact"]
+    RP["region_perception<br/>RegionPerceptionRunArtifact"]
+    VP["visual_perception<br/>VisualEvidenceArtifact"]
+    SI["semantic_interpretation<br/>SemanticInterpretationArtifact"]
+    SC["semantic_scoring<br/>(opcional)<br/>SemanticScoringRunArtifact"]
+    ST["state_estimation<br/>StateEstimationRunArtifact"]
+    GM["geometric_mapping<br/>GeometricMapArtifact"]
+    SA["sensor_association<br/>SensorAssociationRunArtifact"]
+    PR["point_representation<br/>(opcional, derivado)<br/>PointRepresentationRunArtifact"]
+    SF["semantic_fusion<br/>SemanticFusionRunArtifact"]
+    SM["semantic_mapping<br/>SemanticEntityArtifact"]
+    ER["entity_resolution<br/>EntityResolutionRunArtifact"]
+    SR["spatial_relations<br/>SpatialRelationsRunArtifact"]
+    CM["context_map<br/>ContextMapArtifact"]
+
+    ING --> RP
+    ING --> VP
+    ING --> SI
+    RP --> VP
+    RP --> SI
+    RP --> SC
+    VP --> SC
+    SI --> SC
+    ING --> ST
+    ING --> GM
+    ST --> GM
+    ING --> SA
+    RP --> SA
+    VP -. canais densos opcionais .-> SA
+    ST --> SA
+    GM --> SA
+    GM --> PR
+    SA --> PR
+    SA --> SF
+    RP --> SF
+    SI --> SF
+    VP -. evidência visual opcional .-> SF
+    SC -. scores opcionais .-> SF
+    GM --> SF
+    SF --> SM
+    GM --> SM
+    SM --> ER
+    ER --> SR
+    GM --> SR
+    ING --> CM
+    GM --> CM
+    ER --> CM
+    SR --> CM
+```
+
+Uma aresta tracejada é uma entrada **opcional**: ela existe no plano somente quando o estágio de origem participa. `point_representation` é um estágio opcional sem consumidor: ele entra no plano quando habilitado e nenhum estágio lê a saída dele (#663, #657).
+
+| Estágio | Entradas (contrato ← origem) | Saída |
+|---|---|---|
+| `ingestion` | — | `SequenceArtifact` |
+| `region_perception` | `sequence` ← `ingestion` | `RegionPerceptionRunArtifact` |
+| `visual_perception` | `sequence` ← `ingestion`, `regions` ← `region_perception` | `VisualEvidenceArtifact` |
+| `semantic_interpretation` | `sequence` ← `ingestion`, `regions` ← `region_perception` | `SemanticInterpretationArtifact` |
+| `semantic_scoring` (opcional) | `regions`, `visual_evidence`, `semantic_interpretation` | `SemanticScoringRunArtifact` |
+| `state_estimation` | `sequence` ← `ingestion` | `StateEstimationRunArtifact` |
+| `geometric_mapping` | `sequence` ← `ingestion`, `trajectory` ← `state_estimation` | `GeometricMapArtifact` |
+| `sensor_association` | `sequence`, `regions`, `trajectory`, `geometry`; `visual_evidence` quando canais densos estão selecionados | `SensorAssociationRunArtifact` |
+| `point_representation` (opcional) | `geometry` ← `geometric_mapping`, `association` ← `sensor_association` | `PointRepresentationRunArtifact` |
+| `semantic_fusion` | `sequence`, `association`, `regions`, `semantic_interpretation`, `geometry`; `visual_evidence` e `semantic_scores` opcionais | `SemanticFusionRunArtifact` |
+| `semantic_mapping` | `fusion` ← `semantic_fusion`, `geometry` ← `geometric_mapping` | `SemanticEntityArtifact` |
+| `entity_resolution` | `entities` ← `semantic_mapping` | `EntityResolutionRunArtifact` |
+| `spatial_relations` | `entities` ← `entity_resolution`, `geometry` ← `geometric_mapping` | `SpatialRelationsRunArtifact` |
+| `context_map` | `sequence` ← `ingestion`, `geometry` ← `geometric_mapping`, `entities` ← `entity_resolution`, `relations` ← `spatial_relations` | `ContextMapArtifact` |
+
+Um preset declara esta topologia (ver `RuntimePreset` em `components/presets.py`): `canonical/1`, do recorded source ao `ContextMapArtifact`. Antes do v0.1.0 sair não existe consumidor publicado a proteger de uma mudança de topologia, então esta identidade continua livre para evoluir junto com o pipeline; a disciplina de nunca mudar a topologia de um preset já publicado (e de abrir uma nova identidade versionada em vez disso) começa a valer a partir do release, não antes. `semantic_mapping`, `entity_resolution`, `spatial_relations` e `context_map` já têm executor automático (ver [`executors.md`](executors.md)); nenhum estágio da topologia precisa de artifact suprido manualmente hoje. Um estágio de capability ainda inexistente que um preset declare continua na topologia como indisponível, com o motivo, e o preflight o reporta se o escopo o incluir.
+
+## Estágios opcionais
+
+Há dois padrões, ambos declarativos e validados por contrato:
+
+- **Ramo opcional.** Uma entrada marcada `optional` desaparece do plano quando o estágio de origem não participa e é ligada quando participa (`pose_ingestion` → `pose_sequence` de `state_estimation`, #555).
+- **Inserção entre produtor e consumidor.** Um estágio opcional declara uma `Interception(consumer, input_name)`: quando participa, ele consome o que a entrada do consumidor lia e produz o **mesmo contrato**, e o consumidor passa a ler dele. O consumidor não é editado e não sabe qual estágio produziu a entrada (um exemplo estrutural nos testes é `produtor → [transformação opcional] → consumidor`, sem `if loftup` em Sensor Association). Um contrato incompatível falha no preflight. Duas interceptações da mesma entrada também.
+
+## Plano
+
+`resolve_plan(effective)` devolve um `PipelinePlan`:
+
+- **determinístico:** ordem topológica com desempate pela ordem de declaração do preset;
+- **inspecionável:** cada `PlannedStage` traz as entradas ligadas a seus produtores, o backend de cada ponto de variação e o `config_digest`;
+- **identificado:** `PipelinePlan.digest` cobre a topologia; `PlannedStage.config_digest` cobre a configuração **própria** do estágio (contrato declarado, backend e parâmetros de cada componente), não sua posição. Alterar um estágio muda o digest dele e não o dos demais, o que é a base do reuse por identidade;
+- **tolerante na resolução:** origem desconhecida ou desligada, contrato incompatível e ciclo não levantam exceção, ficam em `plan.problems` e o preflight os reporta junto com os demais.
+
+## Escopo e subgrafo
+
+`plan.scope(targets=..., provided=... | selections=...)` escolhe o que uma execução roda. Um alvo puxa os estágios de que depende transitivamente, **exceto** aqueles cujo artifact foi fornecido explicitamente: um artifact imutável existente é reutilizado em vez de recomputado. Sem `targets`, é o pipeline completo. Nada é inferido: um artifact fornecido que não é necessário, de outro tipo ou de outro estágio é um problema de preflight, nunca ignorado em silêncio.
+
+## Preflight
+
+`preflight(execution, ...)` valida, sem importar módulo nem carregar modelo, e devolve **todos** os problemas de uma vez:
+
+- ciclos, dependências ausentes e incompatibilidade de contrato entre produtor e consumidor;
+- artifacts fornecidos de tipo errado ou desnecessários, e alvos desconhecidos;
+- estágios do escopo sem capability implementada;
+- pontos de variação sem backend, e módulos opcionais e segredos ausentes (com `provided_runtimes` para os runtimes que o chamador fornece);
+- estágio do escopo sem executor, quando os executores são informados;
+- módulo opcional que o próprio executor declara em `required_modules` (`ModuleRequiringStageExecutor`) e não está instalado, em `stages.<id>`, antes de o estágio começar. Os três executores de percepção declaram o Pillow, que `_materialize_prepared_image` importa qualquer que seja o backend; sem ele o preflight nomeia o stage e pede `contextmap[vision]`. Executar Visual Perception real é uma capacidade opcional que exige o extra `vision`; o Pillow não é dependência base. Esse módulo é verificado mesmo com `provided_runtimes`, porque a materialização das imagens é do executor, não do runtime de modelo fornecido.
+
+O estágio sem executor é reportado com o **motivo** quando o chamador informa `composition_failures` — o que `compose_executors` entregou a `on_composition_failure` ([`composition.md`](composition.md#compose_executors-os-executores-reais-do-dag)); `run_plan` e `resume_plan` recebem o mesmo parâmetro e o repassam ao preflight (issue #602). Uma falha que nomeia o componente em que ocorreu — `BackendConfigurationError` (parâmetro recusado pelo backend), `BackendRuntimeMissingError` (runtime de modelo ausente) ou `ProviderConfigurationError` (alvo `resources.providers` inválido) — **substitui** o genérico `stages.<id>: no executor is registered for it` por um problema em `components.<capability>.<slot>`, com a mensagem da própria exceção. Uma identidade que o run do estágio grava e ninguém forneceu (`ExecutorIdentityMissingError`, a identidade do código, #659) substitui o genérico por `stages.<id>: no executor could be composed: ...`, com a mensagem que nomeia o que falta. As demais falhas (seleção incompleta, módulo ou segredo ausente, estágio desabilitado ou indisponível) já aparecem nas checagens acima, então o estágio mantém o problema genérico, sem repetir a causa; o mesmo vale para um estágio sem falha conhecida (por exemplo `ingestion`, que a composição nunca monta). Um estágio que tem executor (o injetado pelo chamador vence o composto) ou que será certamente reaproveitado não é bloqueado pela falha.
+
+## Execução
+
+`run_plan(execution, executors, ...)` roda o preflight e bloqueia tudo se houver problema. Cada estágio recebe um `StageRequest` com os artifacts exatos que o alimentam (reutilizados ou recém-produzidos) e a configuração de seus componentes, e devolve um `ArtifactRef`. O `StageRequest` também traz `output_dir`, o diretório final do artifact do estágio, `<workspace>/artifacts/<estágio>/<run>/` (o run é o nome do diretório do `journal`): o executor o entrega, sem alteração, ao writer da capability, que o cria e o finaliza de forma atômica. O diretório ainda não existe e um executor nunca calcula um caminho próprio. Sem `journal` (uma execução em memória) `output_dir` e `workspace` são `None`, e um executor que persiste não pode rodar. Para abrir uma **entrada**, o executor usa `request.directory_of(ref)`, que resolve o `location` do `ArtifactRef` dentro do `workspace`: um artifact reutilizado de um run anterior é aberto onde foi gravado (referenciado, nunca copiado). Um `location` ausente, vazio, absoluto ou que saia do workspace é recusado, e o runner recusa um executor que declare um `location` diferente do diretório que recebeu. Cada entrada é uma **tupla de runs**: um run para uma entrada comum, vários (evidência distinta, em ordem determinística) para uma entrada declarada `multiple`. A primeira falha, ou uma saída que contradiz o contrato declarado, levanta `StageExecutionError` com os estágios já concluídos: nada posterior roda, nada é repetido e nada é substituído. Cada passo emite um evento estruturado (`journal`/`events`) e um `CancellationToken` para o run entre estágios ([`lifecycle.md`](lifecycle.md)).
+
+O `ExecutionRecord` guarda a ordem, as entradas e saídas exatas de cada estágio, a decisão de reuso de cada um (quando há uma `ReusePolicy`) e os artifacts reutilizados.
+
+## Persistência
+
+`write_plan()` grava `plan.json` (topologia, identidades e ordem) e `write_execution_record()` grava `execution.json`. As duas escritas são atômicas, nunca substituem um arquivo existente e trazem o digest do documento; `read_plan_document()` recusa outra versão de schema e um documento alterado. Um plano com problemas estruturais não é persistido.
+
+## Testabilidade
+
+O DAG roda em CI com executores leves (sem modelo nem GPU): a ordem, as entradas, a inserção de estágios opcionais, o escopo, o preflight e a falha são exercitados com estágios falsos.
+
+## Lacunas conhecidas
+
+- **`point_representation` sem consumidor.** O estágio tem executor real desde a #663 (`PointRepresentationExecutor`, ver [`executors.md`](executors.md#pointrepresentationexecutor-663)), mas nem a fusão nem a Entity Resolution recebem o run dele: consumir a evidência 3D é um contrato novo, fora de escopo (#657). Por isso a comparação de Point Representation da #180 continua fora da campanha do milestone #22 (ver [`experiment-phases.md`](../../evaluation/docs/experiment-phases.md#técnicas-opcionais-fora-da-campanha-656-657)).
+- **`FeatureResolutionEnhancement` não é um estágio de topo.** Não participa do DAG canônico nem altera os três produtores; o padrão de inserção acima é o mecanismo, exercitado com estágios de teste. Não existe backend concreto do port, e a comparação nativo × melhorado (#197 A2, #180) ficou fora da campanha do milestone #22 (#656).
+- O reuso por identidade está em [`reuse.md`](reuse.md), a seleção de runs com linhagem em [`selection.md`](selection.md) e o ciclo de vida, os eventos e a retomada em [`lifecycle.md`](lifecycle.md); sem uma `ReusePolicy`, o reuso é apenas o artifact fornecido ou selecionado explicitamente.

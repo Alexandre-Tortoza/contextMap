@@ -1,0 +1,13 @@
+{
+  "schema": "contextmap.experiment.canonical-2-validation.frames/v1",
+  "sequence_artifact_id": "962f2b5d2ae248f6b80807da7102f4fe",
+  "clock_id": "corridor-02-header",
+  "stride": 6,
+  "rule": "every 6th image from the ingested window start (2:30 + 5 s padding); first 4 frames",
+  "frames": [
+    {"index": 0, "observation_id": "camera_1_image_raw-000000", "recording_ts_ns": 1724621229713517430},
+    {"index": 6, "observation_id": "camera_1_image_raw-000006", "recording_ts_ns": 1724621229998818042},
+    {"index": 12, "observation_id": "camera_1_image_raw-000012", "recording_ts_ns": 1724621230243366810},
+    {"index": 18, "observation_id": "camera_1_image_raw-000018", "recording_ts_ns": 1724621230486372257}
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "supported_points": 1540099,
+  "occluded": 1516151,
+  "visible": 23948,
+  "occluded_gap_hist": {
+    "0-0.1 m": 0,
+    "0.1-0.3 m": 94812,
+    "0.3-0.5 m": 89956,
+    "0.5-1.0 m": 157232,
+    "1.0-2.0 m": 285462,
+    "2.0-5.0 m": 430082,
+    "5.0-inf m": 458607
+  },
+  "occluded_within_0p5m_of_support_fraction": 0.12186648955150245,
+  "occluded_within_1m_or_20pct_fraction": 0.22824705454799687,
+  "occluded_inside_some_mask": 1337264,
+  "occluded_inside_some_mask_within_0p5m": 161833
+}

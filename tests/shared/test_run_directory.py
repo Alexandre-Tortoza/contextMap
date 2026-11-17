@@ -1,0 +1,546 @@
+import errno
+import json
+import os
+import shutil
+import stat
+import sys
+from collections.abc import Callable
+from pathlib import Path
+
+import pytest
+
+from contextmap.shared import (
+    DEBUG_DIRECTORY,
+    AtomicRunDirectory,
+    FileEntry,
+    RunDirectoryError,
+    check_file_inventory,
+    file_entry,
+    hash_file,
+)
+from sync_recorder import Identity, SyncRecorder, identity
+
+
+def test_file_entry_records_size_and_sha256() -> None:
+    entry = file_entry("outputs/data.bin", b"abc")
+
+    assert entry == FileEntry(
+        path="outputs/data.bin",
+        size_bytes=3,
+        content_hash="sha256:ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad",
+    )
+
+
+def test_a_matching_inventory_reports_no_problem(tmp_path: Path) -> None:
+    (tmp_path / "a.txt").write_bytes(b"abc")
+
+    assert check_file_inventory(tmp_path, [file_entry("a.txt", b"abc")]) == []
+
+
+def test_the_inventory_check_detects_missing_resized_and_altered_files(tmp_path: Path) -> None:
+    (tmp_path / "resized.txt").write_bytes(b"abcd")
+    (tmp_path / "altered.txt").write_bytes(b"xyz")
+    inventory = [
+        file_entry("missing.txt", b"abc"),
+        file_entry("resized.txt", b"abc"),
+        file_entry("altered.txt", b"abc"),
+    ]
+
+    problems = check_file_inventory(tmp_path, inventory)
+
+    assert any("missing.txt" in problem and "missing" in problem for problem in problems)
+    assert any("resized.txt" in problem and "size" in problem for problem in problems)
+    assert any("altered.txt" in problem and "hash" in problem for problem in problems)
+
+
+def test_publishing_makes_the_run_visible_only_when_complete(tmp_path: Path) -> None:
+    final_dir = tmp_path / "runs" / "run-0001"
+
+    with AtomicRunDirectory(final_dir) as run:
+        run.write_text("outputs/result.json", '{"ok": true}\n')
+        run.write_bytes("outputs/blob.bin", b"\x00\x01")
+        assert not final_dir.exists()
+        run.publish(manifest={"run_id": "r1"}, readme="# Run\n")
+
+    assert (final_dir / "outputs" / "result.json").read_text() == '{"ok": true}\n'
+    manifest = json.loads((final_dir / "manifest.json").read_text())
+    assert manifest["run_id"] == "r1"
+    assert [entry["path"] for entry in manifest["file_inventory"]] == [
+        "outputs/blob.bin",
+        "outputs/result.json",
+    ]
+    assert (final_dir / "README.md").read_text() == "# Run\n"
+    assert not list(final_dir.parent.glob(".tmp-*"))
+
+
+def test_manifest_and_readme_are_not_part_of_their_own_inventory(tmp_path: Path) -> None:
+    final_dir = tmp_path / "run-0001"
+
+    with AtomicRunDirectory(final_dir) as run:
+        run.write_text("outputs/a.txt", "a")
+        run.publish(manifest={}, readme="# x\n")
+
+    paths = [
+        entry["path"]
+        for entry in json.loads((final_dir / "manifest.json").read_text())["file_inventory"]
+    ]
+    assert "manifest.json" not in paths
+    assert "README.md" not in paths
+
+
+def test_non_contractual_files_are_written_but_not_inventoried(tmp_path: Path) -> None:
+    final_dir = tmp_path / "run-0001"
+
+    with AtomicRunDirectory(final_dir) as run:
+        run.write_text("outputs/a.txt", "a")
+        run.write_text("__DEBUG__/notes.txt", "human only", contractual=False)
+        run.publish(manifest={}, readme="# x\n")
+
+    assert (final_dir / "__DEBUG__" / "notes.txt").read_text() == "human only"
+    paths = [
+        entry["path"]
+        for entry in json.loads((final_dir / "manifest.json").read_text())["file_inventory"]
+    ]
+    assert paths == ["outputs/a.txt"]
+    (final_dir / "__DEBUG__" / "notes.txt").unlink()
+    manifest = json.loads((final_dir / "manifest.json").read_text())
+    inventory = [FileEntry(**entry) for entry in manifest["file_inventory"]]
+    assert check_file_inventory(final_dir, inventory) == []
+
+
+def test_an_interrupted_write_never_looks_like_a_finished_run(tmp_path: Path) -> None:
+    final_dir = tmp_path / "run-0001"
+
+    with pytest.raises(RuntimeError, match="boom"), AtomicRunDirectory(final_dir) as run:
+        run.write_text("outputs/a.txt", "a")
+        raise RuntimeError("boom")
+
+    assert not final_dir.exists()
+    assert not list(tmp_path.glob(".tmp-*"))
+
+
+def test_every_file_and_directory_reaches_the_disk_before_the_run_becomes_visible(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    # Sem fsync, uma queda de energia pode persistir o rename antes dos dados (#616).
+    final_dir = tmp_path / "runs" / "run-0001"
+    recorder = SyncRecorder(final_dir, monkeypatch)
+
+    with AtomicRunDirectory(final_dir) as run:
+        run.write_bytes("outputs/nested/a.bin", b"abc")
+        with run.open_binary("outputs/b.bin") as handle:
+            handle.write(b"def")
+        run.write_text("__DEBUG__/notes.txt", "human only", contractual=False)
+        run.publish(manifest={}, readme="# x\n")
+
+    published = [final_dir, *sorted(final_dir.rglob("*"))]
+    assert len(published) == 9
+    assert [path for path in published if not recorder.synced_before_publication(path)] == []
+    assert recorder.synced_after_publication(final_dir.parent)
+
+
+def test_a_run_whose_data_cannot_reach_the_disk_is_never_published(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    def failing_fsync(descriptor: int) -> None:
+        raise OSError(errno.EIO, "simulated I/O error")
+
+    monkeypatch.setattr(os, "fsync", failing_fsync)
+    final_dir = tmp_path / "run-0001"
+
+    with pytest.raises(OSError, match="simulated"), AtomicRunDirectory(final_dir) as run:
+        run.write_text("outputs/a.txt", "a")
+        run.publish(manifest={}, readme="# x\n")
+
+    assert not final_dir.exists()
+    assert not list(tmp_path.glob(".tmp-*"))
+
+
+def test_leaving_without_publishing_discards_the_temporary_directory(tmp_path: Path) -> None:
+    final_dir = tmp_path / "run-0001"
+
+    with AtomicRunDirectory(final_dir) as run:
+        run.write_text("outputs/a.txt", "a")
+
+    assert not final_dir.exists()
+    assert not list(tmp_path.glob(".tmp-*"))
+
+
+def test_an_existing_run_is_never_overwritten(tmp_path: Path) -> None:
+    final_dir = tmp_path / "run-0001"
+    final_dir.mkdir()
+    (final_dir / "marker").write_text("immutable")
+
+    with pytest.raises(RunDirectoryError, match="already exists"):
+        AtomicRunDirectory(final_dir)
+
+    assert (final_dir / "marker").read_text() == "immutable"
+
+
+def _make_empty_directory(path: Path) -> None:
+    path.mkdir()
+
+
+def _make_non_empty_directory(path: Path) -> None:
+    path.mkdir()
+    (path / "marker").write_text("immutable")
+
+
+def _make_file(path: Path) -> None:
+    path.write_text("immutable")
+
+
+@pytest.mark.parametrize(
+    "occupy",
+    [_make_empty_directory, _make_non_empty_directory, _make_file],
+    ids=lambda f: f.__name__,
+)
+def test_a_target_that_appears_while_publishing_is_never_replaced(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, occupy: Callable[[Path], None]
+) -> None:
+    # rename(2) substitui em silêncio um diretório vazio: a recusa não pode depender de
+    # uma checagem feita antes, que outro processo invalida (#637).
+    final_dir = tmp_path / "run-0001"
+    real_fsync = os.fsync
+    occupied: list[Identity | None] = []
+
+    def fsync_racing_with_another_writer(descriptor: int) -> None:
+        # Os diretórios do run são sincronizados depois de qualquer checagem e antes do rename.
+        if stat.S_ISDIR(os.fstat(descriptor).st_mode) and not occupied:
+            occupy(final_dir)
+            occupied.append(identity(final_dir))
+        real_fsync(descriptor)
+
+    monkeypatch.setattr(os, "fsync", fsync_racing_with_another_writer)
+
+    with AtomicRunDirectory(final_dir) as run:
+        run.write_text("outputs/a.txt", "a")
+        with pytest.raises(RunDirectoryError, match="already exists"):
+            run.publish(manifest={}, readme="# x\n")
+
+    assert occupied == [identity(final_dir)]
+    assert not (final_dir / "manifest.json").exists()
+    assert not list(tmp_path.glob(".tmp-*"))
+
+
+def test_publication_is_refused_where_a_no_replace_rename_is_unavailable(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    # Sem a primitiva do sistema não há publicação sem janela; nada a substitui em silêncio.
+    final_dir = tmp_path / "run-0001"
+
+    with AtomicRunDirectory(final_dir) as run:
+        run.write_text("outputs/a.txt", "a")
+        monkeypatch.setattr(sys, "platform", "darwin")
+        with pytest.raises(RunDirectoryError, match="RENAME_NOREPLACE"):
+            run.publish(manifest={}, readme="# x\n")
+
+    assert not final_dir.exists()
+    assert not list(tmp_path.glob(".tmp-*"))
+
+
+@pytest.mark.parametrize("bad_path", ["../escape.txt", "/absolute.txt", "a/../../b.txt", ""])
+def test_writes_outside_the_run_directory_are_rejected(tmp_path: Path, bad_path: str) -> None:
+    with (
+        AtomicRunDirectory(tmp_path / "run-0001") as run,
+        pytest.raises(RunDirectoryError, match="relative path"),
+    ):
+        run.write_text(bad_path, "x")
+
+
+def test_the_same_path_cannot_be_written_twice(tmp_path: Path) -> None:
+    with AtomicRunDirectory(tmp_path / "run-0001") as run:
+        run.write_text("outputs/a.txt", "a")
+        with pytest.raises(RunDirectoryError, match="already written"):
+            run.write_text("outputs/a.txt", "b")
+
+
+def test_a_streamed_file_is_inventoried_like_one_written_at_once(tmp_path: Path) -> None:
+    final_dir = tmp_path / "run-0001"
+
+    with AtomicRunDirectory(final_dir) as run:
+        with run.open_binary("outputs/big.bin") as handle:
+            handle.write(b"abc")
+            handle.write(b"def")
+        run.publish(manifest={}, readme="# x\n")
+
+    manifest = json.loads((final_dir / "manifest.json").read_text())
+    assert manifest["file_inventory"] == [
+        {
+            "path": "outputs/big.bin",
+            "size_bytes": 6,
+            "content_hash": file_entry("outputs/big.bin", b"abcdef").content_hash,
+        }
+    ]
+    assert (final_dir / "outputs" / "big.bin").read_bytes() == b"abcdef"
+
+
+def test_a_streamed_file_larger_than_the_hashing_chunk_is_hashed_whole(tmp_path: Path) -> None:
+    payload = bytes(range(256)) * (3 * 4096)  # 3 MiB
+    final_dir = tmp_path / "run-0001"
+
+    with AtomicRunDirectory(final_dir) as run:
+        with run.open_binary("outputs/big.bin") as handle:
+            for start in range(0, len(payload), 100_000):
+                handle.write(payload[start : start + 100_000])
+        run.publish(manifest={}, readme="# x\n")
+
+    entry = FileEntry(**json.loads((final_dir / "manifest.json").read_text())["file_inventory"][0])
+    assert entry == file_entry("outputs/big.bin", payload)
+    assert check_file_inventory(final_dir, [entry]) == []
+
+
+def test_the_inventory_check_detects_a_change_in_the_last_byte_of_a_large_file(
+    tmp_path: Path,
+) -> None:
+    payload = bytes(range(256)) * (3 * 4096)
+    # O último byte original é 0xff; troca-se por 0x00.
+    (tmp_path / "big.bin").write_bytes(payload[:-1] + b"\x00")
+
+    problems = check_file_inventory(tmp_path, [file_entry("big.bin", payload)])
+
+    assert any("hash" in problem for problem in problems)
+
+
+def test_a_file_on_disk_measures_as_its_bytes_in_memory(tmp_path: Path) -> None:
+    # Mais de um bloco de 1 MiB e um bloco final parcial: a leitura em blocos não muda o digest.
+    payload = bytes(range(256)) * (5 * 4096 + 3)
+    (tmp_path / "big.bin").write_bytes(payload)
+
+    entry = file_entry("big.bin", payload)
+
+    assert hash_file(tmp_path / "big.bin") == (entry.size_bytes, entry.content_hash)
+
+
+def test_a_non_contractual_stream_stays_out_of_the_inventory(tmp_path: Path) -> None:
+    final_dir = tmp_path / "run-0001"
+
+    with AtomicRunDirectory(final_dir) as run:
+        with run.open_binary("__DEBUG__/samples.bin", contractual=False) as handle:
+            handle.write(b"human only")
+        run.publish(manifest={}, readme="# x\n")
+
+    assert json.loads((final_dir / "manifest.json").read_text())["file_inventory"] == []
+    assert (final_dir / "__DEBUG__" / "samples.bin").read_bytes() == b"human only"
+
+
+def test_a_written_file_can_be_read_back_before_publishing(tmp_path: Path) -> None:
+    with AtomicRunDirectory(tmp_path / "run-0001") as run:
+        with run.open_binary("outputs/big.bin") as handle:
+            handle.write(b"abc")
+
+        assert run.written_path("outputs/big.bin").read_bytes() == b"abc"
+        with pytest.raises(RunDirectoryError, match="not been written"):
+            run.written_path("outputs/other.bin")
+
+
+def test_the_inventory_is_known_before_publishing_and_is_the_one_published(
+    tmp_path: Path,
+) -> None:
+    # Um manifest cuja identidade cobre o inventário precisa dele antes de publicar (#600).
+    final_dir = tmp_path / "run-0001"
+
+    with AtomicRunDirectory(final_dir) as run:
+        run.write_bytes("outputs/b.txt", b"abc")
+        with run.open_binary("outputs/a.bin") as handle:
+            handle.write(b"def")
+            assert run.inventory() == (file_entry("outputs/b.txt", b"abc"),)
+        run.write_text("__DEBUG__/notes.txt", "human only", contractual=False)
+        inventory = run.inventory()
+        run.publish(manifest={}, readme="# x\n")
+
+    assert inventory == (file_entry("outputs/a.bin", b"def"), file_entry("outputs/b.txt", b"abc"))
+    published = json.loads((final_dir / "manifest.json").read_text())["file_inventory"]
+    assert tuple(FileEntry(**item) for item in published) == inventory
+
+
+def test_publishing_while_a_stream_is_open_is_refused(tmp_path: Path) -> None:
+    with (
+        AtomicRunDirectory(tmp_path / "run-0001") as run,
+        run.open_binary("outputs/big.bin") as out,
+    ):
+        out.write(b"abc")
+        with pytest.raises(RunDirectoryError, match="open"):
+            run.publish(manifest={}, readme="# x\n")
+
+
+def test_a_stream_that_failed_can_never_be_published(tmp_path: Path) -> None:
+    final_dir = tmp_path / "run-0001"
+
+    with AtomicRunDirectory(final_dir) as run:
+        with (
+            pytest.raises(RuntimeError, match="boom"),
+            run.open_binary("outputs/big.bin") as handle,
+        ):
+            handle.write(b"partial")
+            raise RuntimeError("boom")
+
+        with pytest.raises(RunDirectoryError, match="failed"):
+            run.publish(manifest={}, readme="# x\n")
+
+    assert not final_dir.exists()
+
+
+def _write_at_once(run: AtomicRunDirectory, relative_path: str) -> None:
+    run.write_bytes(relative_path, b"partial")
+
+
+def _write_as_stream(run: AtomicRunDirectory, relative_path: str) -> None:
+    with run.open_binary(relative_path) as handle:
+        handle.write(b"partial")
+
+
+@pytest.mark.parametrize("write", [_write_at_once, _write_as_stream], ids=lambda f: f.__name__)
+def test_a_write_that_failed_leaves_no_partial_file_and_the_run_is_never_published(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    write: Callable[[AtomicRunDirectory, str], None],
+) -> None:
+    # Um chamador que captura o erro e segue não pode publicar um arquivo truncado fora do
+    # inventário (#639); uma escrita bem-sucedida depois não reabilita o run.
+    final_dir = tmp_path / "run-0001"
+    real_fsync = os.fsync
+    failures = [OSError(errno.EIO, "simulated I/O error")]
+
+    def fsync_failing_once(descriptor: int) -> None:
+        if failures:
+            raise failures.pop()
+        real_fsync(descriptor)
+
+    monkeypatch.setattr(os, "fsync", fsync_failing_once)
+
+    with AtomicRunDirectory(final_dir) as run:
+        with pytest.raises(OSError, match="simulated"):
+            write(run, "outputs/partial.bin")
+        assert list(tmp_path.glob(".tmp-*/outputs/partial.bin")) == []
+
+        run.write_bytes("outputs/after.bin", b"complete")
+        with pytest.raises(RunDirectoryError, match="failed"):
+            run.publish(manifest={}, readme="# x\n")
+
+    assert not final_dir.exists()
+    assert not list(tmp_path.glob(".tmp-*"))
+
+
+def test_a_streamed_path_follows_the_same_rules_as_a_written_one(tmp_path: Path) -> None:
+    with AtomicRunDirectory(tmp_path / "run-0001") as run:
+        run.write_text("outputs/a.txt", "a")
+        with (
+            pytest.raises(RunDirectoryError, match="already written"),
+            run.open_binary("outputs/a.txt"),
+        ):
+            pass
+        with pytest.raises(RunDirectoryError, match="relative path"), run.open_binary("../x"):
+            pass
+
+
+@pytest.mark.parametrize("path", ["../outside.bin", "/etc/hostname", ""])
+def test_the_inventory_check_never_reads_outside_the_run(tmp_path: Path, path: str) -> None:
+    run = tmp_path / "run"
+    run.mkdir()
+    (tmp_path / "outside.bin").write_bytes(b"x")
+
+    problems = check_file_inventory(run, [file_entry(path, b"x")])
+
+    assert problems == [f"invalid path in manifest: {path!r}"]
+
+
+def test_an_owner_whose_layout_has_no_readme_publishes_only_its_manifest(tmp_path: Path) -> None:
+    # O layout é do owner: o SequenceArtifact não tem README (#622).
+    final_dir = tmp_path / "run-0001"
+
+    with AtomicRunDirectory(final_dir) as run:
+        run.write_text("index.jsonl", "{}\n")
+        run.publish(manifest={"artifact_id": "a1"}, readme=None)
+
+    assert sorted(path.name for path in final_dir.iterdir()) == ["index.jsonl", "manifest.json"]
+    assert (final_dir / "manifest.json").read_text() == json.dumps(
+        {"artifact_id": "a1", "file_inventory": [vars(file_entry("index.jsonl", b"{}\n"))]},
+        indent=2,
+        sort_keys=True,
+    )
+
+
+def test_an_owner_can_leave_the_existing_target_to_publication(tmp_path: Path) -> None:
+    # Um writer em fluxo que documenta a colisão só no fim não recusa já na construção (#622);
+    # a publicação continua recusando o destino existente.
+    final_dir = tmp_path / "run-0001"
+    final_dir.mkdir()
+    (final_dir / "marker").write_text("immutable")
+
+    with AtomicRunDirectory(final_dir, refuse_existing_early=False) as run:
+        run.write_text("outputs/a.txt", "a")
+        with pytest.raises(RunDirectoryError, match="already exists"):
+            run.publish(manifest={}, readme=None)
+
+    assert [path.name for path in final_dir.iterdir()] == ["marker"]
+    assert not list(tmp_path.glob(".tmp-*"))
+
+
+def test_discarding_reports_a_removal_that_failed_and_can_be_retried(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    # Quem mantém o run aberto entre chamadas precisa saber que a limpeza falhou (#622).
+    final_dir = tmp_path / "run-0001"
+    real_rmtree = shutil.rmtree
+
+    def refuse(*args: object, **kwargs: object) -> None:
+        raise PermissionError(errno.EACCES, "cannot remove")
+
+    with AtomicRunDirectory(final_dir) as run:
+        run.write_text("outputs/a.txt", "a")
+        monkeypatch.setattr(shutil, "rmtree", refuse)
+        with pytest.raises(PermissionError):
+            run.discard()
+        assert len(list(tmp_path.glob(".tmp-*"))) == 1
+
+        monkeypatch.setattr(shutil, "rmtree", real_rmtree)
+        run.discard()
+        assert not list(tmp_path.glob(".tmp-*"))
+
+        with pytest.raises(RunDirectoryError, match="discarded"):
+            run.write_text("outputs/b.txt", "b")
+        with pytest.raises(RunDirectoryError, match="discarded"):
+            run.publish(manifest={}, readme="# x\n")
+
+    assert not final_dir.exists()
+    assert not list(tmp_path.glob(".tmp-*"))
+
+
+def test_a_non_contractual_file_must_live_under_the_debug_directory(tmp_path: Path) -> None:
+    # A regra do `docs/ARTIFACTS.md` é mecânica: diagnóstico fora de `__DEBUG__/` seria
+    # evidência humana que ninguém sabe apagar sem risco.
+    with AtomicRunDirectory(tmp_path / "run") as run:
+        with pytest.raises(RunDirectoryError, match="must live under __DEBUG__/"):
+            run.write_text("notes.txt", "hello", contractual=False)
+        with (
+            pytest.raises(RunDirectoryError, match="must live under __DEBUG__/"),
+            run.open_binary("stream.jsonl", contractual=False),
+        ):
+            pass
+
+
+def test_a_contractual_file_must_not_live_under_the_debug_directory(tmp_path: Path) -> None:
+    # O inverso importa igual: dado contratual sob `__DEBUG__/` quebraria um consumidor a
+    # jusante no dia em que alguém apagasse o diretório, como o contrato permite.
+    with AtomicRunDirectory(tmp_path / "run") as run:
+        with pytest.raises(RunDirectoryError, match="must not live under __DEBUG__/"):
+            run.write_text(f"{DEBUG_DIRECTORY}/outputs.jsonl", "{}\n")
+        with (
+            pytest.raises(RunDirectoryError, match="must not live under __DEBUG__/"),
+            run.open_binary(f"{DEBUG_DIRECTORY}/stream.jsonl"),
+        ):
+            pass
+
+
+def test_debug_evidence_is_written_but_never_inventoried(tmp_path: Path) -> None:
+    with AtomicRunDirectory(tmp_path / "run") as run:
+        run.write_text("outputs/data.jsonl", "{}\n")
+        run.write_text(f"{DEBUG_DIRECTORY}/notes.txt", "diagnóstico", contractual=False)
+        run.publish(manifest={"schema_version": "1"}, readme="# run\n")
+
+    published = tmp_path / "run"
+    assert (published / DEBUG_DIRECTORY / "notes.txt").read_text(encoding="utf-8") == "diagnóstico"
+    inventory = json.loads((published / "manifest.json").read_text(encoding="utf-8"))
+    paths = {entry["path"] for entry in inventory["file_inventory"]}
+    assert paths == {"outputs/data.jsonl"}

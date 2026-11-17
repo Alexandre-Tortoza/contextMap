@@ -1,0 +1,216 @@
+{
+  "reference_scan": "velodyne_points-000022",
+  "scans_used": 52,
+  "sweep": [
+    {
+      "deskew": true,
+      "delta_ms": -150,
+      "matched": 1033618,
+      "median_m": 0.03603,
+      "p90_m": 0.13675
+    },
+    {
+      "deskew": true,
+      "delta_ms": -125,
+      "matched": 1047544,
+      "median_m": 0.03489,
+      "p90_m": 0.1248
+    },
+    {
+      "deskew": true,
+      "delta_ms": -100,
+      "matched": 1060346,
+      "median_m": 0.03332,
+      "p90_m": 0.1126
+    },
+    {
+      "deskew": true,
+      "delta_ms": -75,
+      "matched": 1071720,
+      "median_m": 0.0308,
+      "p90_m": 0.10018
+    },
+    {
+      "deskew": true,
+      "delta_ms": -50,
+      "matched": 1079977,
+      "median_m": 0.02774,
+      "p90_m": 0.0877
+    },
+    {
+      "deskew": true,
+      "delta_ms": -25,
+      "matched": 1085816,
+      "median_m": 0.02409,
+      "p90_m": 0.07588
+    },
+    {
+      "deskew": true,
+      "delta_ms": 0,
+      "matched": 1089956,
+      "median_m": 0.02161,
+      "p90_m": 0.06852
+    },
+    {
+      "deskew": true,
+      "delta_ms": 25,
+      "matched": 1092167,
+      "median_m": 0.02065,
+      "p90_m": 0.07641
+    },
+    {
+      "deskew": true,
+      "delta_ms": 50,
+      "matched": 1089961,
+      "median_m": 0.0217,
+      "p90_m": 0.09361
+    },
+    {
+      "deskew": true,
+      "delta_ms": 75,
+      "matched": 1082952,
+      "median_m": 0.02481,
+      "p90_m": 0.10616
+    },
+    {
+      "deskew": true,
+      "delta_ms": 100,
+      "matched": 1071489,
+      "median_m": 0.02854,
+      "p90_m": 0.11646
+    },
+    {
+      "deskew": true,
+      "delta_ms": 125,
+      "matched": 1055197,
+      "median_m": 0.03146,
+      "p90_m": 0.12184
+    },
+    {
+      "deskew": true,
+      "delta_ms": 150,
+      "matched": 1033413,
+      "median_m": 0.03283,
+      "p90_m": 0.12331
+    },
+    {
+      "deskew": true,
+      "delta_ms": 175,
+      "matched": 1012294,
+      "median_m": 0.03351,
+      "p90_m": 0.12436
+    },
+    {
+      "deskew": true,
+      "delta_ms": 200,
+      "matched": 994345,
+      "median_m": 0.03408,
+      "p90_m": 0.129
+    },
+    {
+      "deskew": false,
+      "delta_ms": -150,
+      "matched": 995844,
+      "median_m": 0.04081,
+      "p90_m": 0.1708
+    },
+    {
+      "deskew": false,
+      "delta_ms": -125,
+      "matched": 1015625,
+      "median_m": 0.04012,
+      "p90_m": 0.16388
+    },
+    {
+      "deskew": false,
+      "delta_ms": -100,
+      "matched": 1028015,
+      "median_m": 0.03965,
+      "p90_m": 0.1534
+    },
+    {
+      "deskew": false,
+      "delta_ms": -75,
+      "matched": 1049000,
+      "median_m": 0.03904,
+      "p90_m": 0.14046
+    },
+    {
+      "deskew": false,
+      "delta_ms": -50,
+      "matched": 1063879,
+      "median_m": 0.03777,
+      "p90_m": 0.12585
+    },
+    {
+      "deskew": false,
+      "delta_ms": -25,
+      "matched": 1073498,
+      "median_m": 0.03567,
+      "p90_m": 0.11195
+    },
+    {
+      "deskew": false,
+      "delta_ms": 0,
+      "matched": 1080456,
+      "median_m": 0.03282,
+      "p90_m": 0.10048
+    },
+    {
+      "deskew": false,
+      "delta_ms": 25,
+      "matched": 1086383,
+      "median_m": 0.02966,
+      "p90_m": 0.08742
+    },
+    {
+      "deskew": false,
+      "delta_ms": 50,
+      "matched": 1088917,
+      "median_m": 0.02646,
+      "p90_m": 0.07986
+    },
+    {
+      "deskew": false,
+      "delta_ms": 75,
+      "matched": 1089543,
+      "median_m": 0.02403,
+      "p90_m": 0.07863
+    },
+    {
+      "deskew": false,
+      "delta_ms": 100,
+      "matched": 1084530,
+      "median_m": 0.02339,
+      "p90_m": 0.08495
+    },
+    {
+      "deskew": false,
+      "delta_ms": 125,
+      "matched": 1073196,
+      "median_m": 0.02332,
+      "p90_m": 0.09338
+    },
+    {
+      "deskew": false,
+      "delta_ms": 150,
+      "matched": 1061679,
+      "median_m": 0.02486,
+      "p90_m": 0.10497
+    },
+    {
+      "deskew": false,
+      "delta_ms": 175,
+      "matched": 1050249,
+      "median_m": 0.02758,
+      "p90_m": 0.11445
+    },
+    {
+      "deskew": false,
+      "delta_ms": 200,
+      "matched": 1038051,
+      "median_m": 0.03083,
+      "p90_m": 0.12311
+    }
+  ]
+}

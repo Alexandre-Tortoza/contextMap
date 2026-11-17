@@ -1,0 +1,41 @@
+{
+  "stage_dir": "workspace/run-frame-10_31/corridor-02/run-0005/visual_perception",
+  "prompt_templates": {
+    "region-interaction/v2": 2
+  },
+  "regions_attempted": 61,
+  "regions_interpreted": 2,
+  "abstained": 0,
+  "parse_failures": 59,
+  "parse_failure_rate": 0.9672,
+  "parse_failure_kinds": {
+    "semantic response is missing required fields: ['abstained', 'claims']": 59
+  },
+  "backend_call_failures": 0,
+  "primary_claims": 2,
+  "primary_claims_per_frame": {
+    "camera_1_image_raw-000055": 2
+  },
+  "primary_claims_without_factor": 0,
+  "interaction_factor": {
+    "count": 2,
+    "distinct": [
+      0.8
+    ],
+    "histogram": {
+      "0.8": 2
+    },
+    "median": 0.8,
+    "min": 0.8,
+    "max": 0.8,
+    "outside_clamp_0.1_5.0": 0
+  },
+  "labels": {
+    "door": 2
+  },
+  "distinct_labels": 1,
+  "outline_leak": {
+    "color_attribute_pink_or_magenta": 0,
+    "description_mentions_pink_border": 0
+  }
+}

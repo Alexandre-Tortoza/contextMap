@@ -1,0 +1,118 @@
+# `SemanticFusionRunArtifact`
+
+Este documento descreve `src/contextmap/semantic_fusion/run_artifact/` (layout, manifest, writer, reader, metrics e debug) e `serialization.py`. As regras gerais de artifacts (imutabilidade, atomicidade, inventário, layout do workspace) estão em [`docs/ARTIFACTS.md`](../../../../docs/ARTIFACTS.md) e são implementadas uma única vez em `contextmap.shared.run_directory`.
+
+Um run persiste os **suportes de fusão** e a **evidência fundida** sobre cada um, com a linhagem, as métricas e a evidência pulada. É imutável, autodescritivo e **abre sem NumPy, sem runtime de percepção e sem biblioteca de modelo**. Toda hipótese fundida volta, depois de reabrir, à evidência e à proveniência exatas de origem. Nada a montante é duplicado: claims, scores, features, qualidade e representações 3D são só referenciados, e a geometria é guardada como deltas posicionais.
+
+## O que nunca se perde
+
+- **Todas as hipóteses**, com alternativas, conflitos, abstenções e evidência sem score: o artifact nunca guarda só a hipótese primária.
+- **Frames físicos e resultados de inferência** continuam distintos (grupos por suporte, contagens e métricas separadas).
+- **Ausência explícita:** um score não pontuado (`None`) volta como `None`, nunca como zero.
+- **A ponderação por qualidade**, quando existe, com fatores por componente, por contribuição e por hipótese (antes e depois).
+
+## Layout
+
+O writer grava o artifact **exatamente** no `output_dir` que o chamador entrega; ele não calcula caminho, não aloca índice e não mantém registro. No runtime, `output_dir` é `<workspace>/artifacts/semantic_fusion/<run>/` ([`docs/ARTIFACTS.md`](../../../../docs/ARTIFACTS.md)).
+
+```text
+<output_dir>/
+├── README.md
+├── manifest.json                           # identidade, linhagem, políticas e inventário
+├── outputs/                                # contratual
+│   ├── fusion-supports.jsonl               # um FusionSupport por linha
+│   ├── fused-evidence.jsonl                # um FusedEvidence por linha (autocontido)
+│   ├── support-observation-index.jsonl     # suporte → observações, offsets nos dois arquivos
+│   ├── hypothesis-evidence-index.jsonl     # hipótese → evidência exata (claim, stance, frame, produtor semântico e regional)
+│   ├── physical-observation-groups.jsonl   # grupos por frame físico de cada suporte
+│   ├── contribution-index.jsonl            # contribuição → suporte, observação, produtores, claims
+│   └── excluded-observations.jsonl         # observações que não entraram em suporte algum, com o motivo
+├── metrics/                                # contratual
+│   ├── counts.json
+│   ├── distributions.json
+│   ├── payload.json
+│   └── runtime.json                        # somente quando medido
+└── __DEBUG__/                              # nunca contratual
+```
+
+Não existem `config.yaml`, `lineage.json`, `environment.json` nem `events.jsonl` separados: a configuração efetiva e a linhagem ficam no `manifest.json`, e a evidência pulada em `excluded-observations.jsonl`. Criá-los sem produtor real violaria YAGNI (mesma decisão de Sensor Association e Point Representation).
+
+`fused-evidence.jsonl` é a fonte autoritativa; os índices são derivados e existem para acesso preguiçoso.
+
+## Escrita
+
+`SemanticFusionRunWriter.write(outcomes, excluded=..., warnings=..., runtime=...)` consome os `FusionOutcome` (um suporte e a evidência fundida sobre ele) **como fluxo**, gravando cada registro assim que ele chega (`open_binary`, com hash durante a escrita). Todos os arquivos de `outputs/`, os índices derivados inclusive, são escritos linha a linha (#598): o escritor mantém um outcome por vez mais os agregados de `metrics/` e do manifest. O run é publicado de forma atômica ao fim do fluxo.
+
+O writer recusa, com `FusionRunArtifactError` e sem deixar run visível, quando:
+
+- os suportes não chegam estritamente ordenados por identidade (o que também recusa duplicatas);
+- um suporte lista observações espaciais diferentes das contribuições da sua evidência;
+- um suporte é sobre outro mapa que o da linhagem, ou uma contribuição ou feature referencia um produtor regional, semântico ou visual que a linhagem não lista, ou uma referência de estrutura vem de uma run de Point Representation que ela não lista, ou uma referência de score bruto nomeia uma run de Semantic Scoring que a linhagem não lista;
+- suporte ou fusão usam política ou configuração diferentes do resto do run: **um run guarda uma política**;
+- já existe um run no `output_dir` (um run finalizado nunca é sobrescrito; reexecutar grava em outro diretório).
+
+## Linhagem (manifest)
+
+`FusionRunLineage` é a seleção **explícita** das runs a montante: a sequência canônica, o `GeometricMapArtifact`, as runs de Sensor Association, os artifacts regionais (`region_artifact_ids`), visuais (`visual_artifact_ids`) e semânticos (`semantic_interpretation_artifact_ids`) e, se selecionadas, as runs de Point Representation (a seleção, não o uso: numa ablação de canais todo braço lista as mesmas). Nunca se mescla automaticamente tudo o que existe. O manifest também registra:
+
+- as políticas: agrupamento por observação física, construção de suporte (com fingerprint) e fusão (com fingerprint);
+- as identidades que alimentaram cada canal (interpretadores, scorers, espaços de embedding, versão das definições de qualidade, espaços de representação, mapa);
+- contagens, avisos, o código e o inventário com hash de cada arquivo contratual.
+
+Um run sem suportes é válido e explícito (as políticas ficam `null`).
+
+## Métricas
+
+Separadas, sem um escalar único:
+
+- `counts.json`: suportes, contribuições, hipóteses, frames físicos e resultados de inferência, ambos **distintos no run inteiro** e contados à parte (o par artifact semântico e observação física com várias regiões em suportes diferentes conta uma vez; o valor por suporte está em `distributions.json`), claims (total, pontuadas, não pontuadas, sem hipótese), sinais de scorer, claims em abstenção, stances, incerteza por tipo, suportes com incerteza, observações excluídas e avisos;
+- `distributions.json`: por suporte, frames físicos, resultados de inferência, contribuições e hipóteses (contagem, mínimo, mediana, máximo);
+- `payload.json`: o tamanho de cada arquivo contratual;
+- `runtime.json`: tempo e memória, **só** quando quem chama os mediu, e nunca misturados às métricas de qualidade.
+
+Uma claim de um suporte sem nenhuma hipótese (só abstenções) não tem sinais persistidos em hipótese alguma; por isso aparece em `without_hypothesis`, e sua referência fica nos registros de `INSUFFICIENT_EVIDENCE`.
+
+## Versão do schema
+
+`schema_version` do manifest é `0.4.0`. `metrics/` é contratual e inventariada, então **o significado de um campo de métrica pertence à versão do schema**:
+
+| Versão | `counts.json` → `inference_results` |
+| --- | --- |
+| `0.1.0` | soma, sobre os suportes, dos resultados de cada suporte: um resultado com regiões em vários suportes era contado uma vez por suporte |
+| `0.2.0` | resultados **distintos no run inteiro**, o mesmo denominador de `physical_observations` |
+| `0.3.0` | referências de score bruto trazem run de scoring e feature exatos; a seleção de runs de scoring entra na lineage |
+| `0.4.0` | produtores regionais, visuais e semânticos independentes; resultados de inferência identificados pelo par artifact semântico e observação física, sem identidade de resultado monolítico |
+
+O contrato também carrega, em cada hipótese do registro de `FusedEvidence`, os campos **opcionais** `interaction_factor` (objeto com `value`, `aggregation_policy_id`, `physical_observation_ids`, `evidence`, `minimum` e `maximum`) e `observed_attributes` (a categoria e os atributos declarados pelas claims de suporte, cada valor com as claims exatas; ver [acumulação](accumulation.md)). Os dois são omitidos quando ausentes, e o leitor aceita a ausência. `counts.json` não muda.
+
+Historicamente, na execução real de `corridor-02` (ver [avaliação](../../evaluation/docs/semantic_fusion.md)) os dois significados deram 604 e 51 sobre a mesma evidência, ambos sob `schema_version = 0.1.0`. Por isso o leitor **recusa** um run `0.1.0` com `FusionRunArtifactError` (`unsupported run artifact schema_version`), em vez de devolver o mesmo campo com outro denominador. Pré-1.0 não há leitor de compatibilidade: nenhum código do repositório consome runs `0.1.0` além deste leitor e do avaliador, e um run de fusão se refaz sobre as mesmas runs a montante, sem nova inferência (a acumulação levou de 0,5 a 0,6 s por braço na execução real). O `EVALUATOR_VERSION` (hoje `"3"`) versiona a definição das métricas do **relatório** do avaliador; a `schema_version` do artifact versiona o layout e a semântica do **run persistido**. Em `0.2.0`/`"2"` as duas mudaram juntas porque a mesma definição de `inference_results` alimentava as duas, mas são versões distintas e podem avançar sozinhas: a passagem do avaliador para `"3"` (contar `raw_score_refs` no canal `semantic_scores` e registrar as runs de scoring na lineage do relatório) não mexeu no layout persistido e manteve então o schema em `0.3.0`. O schema atual `0.4.0` registra a decomposição em produtores independentes; o reader aceita apenas essa versão.
+
+## Leitura
+
+`SemanticFusionRunReader(run_dir)` abre um run só pelo seu diretório:
+
+- `support(id)` e `fused_evidence(id)` leem um registro por deslocamento, **sem carregar os outros**;
+- `iter_outcomes()` percorre tudo em ordem; `support_ids()` lista as identidades;
+- `support_of_observation(id)` diz em que suporte uma observação foi acumulada (`None` se excluída);
+- `contribution(id)` resolve uma contribuição às suas referências exatas a montante;
+- `excluded_observations()` devolve a evidência pulada;
+- `read_record()` lê JSON de `outputs/` e `metrics/` e **recusa `__DEBUG__/`**;
+- `verify_integrity()` confere o inventário (arquivo ausente, tamanho, hash).
+
+Registro malformado, truncado ou adulterado vira `FusionRunArtifactError` explícito, e uma escrita adulterada em um suporte não impede ler os outros. `run_id` e `run_index` são entregues pelo chamador e gravados como recebidos; o writer nunca os aloca, e o `run_index` é um ordinal legível que não substitui identidade nem hash.
+
+## Debug
+
+`SemanticFusionDebugLevel.NONE` (padrão) não grava nada; **desligar o debug não remove nenhum dado que Semantic Mapping precise**.
+
+- `standard`: para uma amostra de suportes (os primeiros 20), `__DEBUG__/supports/<support-id>/` com `summary.json`, `hypotheses.json`, `conflicts.json` e `physical-observations.json`.
+- `full`: o mesmo para todos os suportes, mais `contribution-trace.jsonl` e `geometry-summary.json`.
+
+O `summary.json` responde: qual hipótese foi sustentada, por quantos frames físicos, quais resultados de inferência contribuíram, que evidência conflitou ou se absteve, e quais canais de score e feature foram usados. `__DEBUG__/` nunca é inventariado nem autoritativo.
+
+## Limitações
+
+- O escritor não retém linhas de índice, mas os agregados de `metrics/` e do manifest crescem com o run: uma entrada por claim, frame físico, resultado de inferência e identidade de evidência distintos, e quatro inteiros por suporte (para as distribuições). Cada `FusedEvidence` ainda é codificado inteiro, e sob `baseline-evidence-accumulation-v1` cada hipótese lista cada claim do suporte: um suporte com H hipóteses e C claims custa O(H×C) no registro e no índice de hipóteses.
+- Medição da #598 (fixture sintética, H = C = 24 por suporte, `tracemalloc`): com 16, 64 e 256 suportes (9 216, 36 864 e 147 456 linhas no índice de hipóteses; 8,4, 33,5 e 133,9 MiB em `outputs/`), o pico de memória do escritor passou de 13,9, 55,4 e 221,8 MiB para 9,0, 9,2 e 9,8 MiB. Com um único suporte de fan-out alto (H = C = 192, 36 864 linhas) o pico continua em ~60 MiB, dominado pela codificação do próprio `FusedEvidence`; reduzir isso exige mudar a política de listagem de evidência, com nova versão de política e de schema.
+- Cada contribuição repete a sua geometria (como deltas) além da união no suporte; o custo cresce com o número de pontos por região. Uma tabela binária compartilhada, como a de Sensor Association, é uma otimização futura sem consumidor hoje.
+- Não há CLI; a composição das entradas e das runs a montante pertence ao `runtime`.

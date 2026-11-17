@@ -1,0 +1,7 @@
+# Arm ON: dense_region_pooling enabled (canonical/2). Layer over base.template.toml.
+# No-op relative to the base preset; kept explicit so both arms name their variable.
+[pipeline]
+preset = "canonical/2"
+
+[pipeline.stages]
+semantic_scoring = true

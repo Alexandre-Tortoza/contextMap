@@ -1,0 +1,14 @@
+# Regra de pertencimento por caixa (box-depth-component-v1) para regiões só com caixa.
+# Parâmetros declarados antes de rodar: célula 0,15 m = 1,5x o voxel de 0,10 m do mapa (centroides
+# de voxels vizinhos ficam em células adjacentes); núcleo = metade central de cada lado; mínimo de 3
+# pontos (= sparse_point_threshold do semantic mapping); ambíguo se o 2º núcleo >= 0,5x o 1º.
+schema_version = "0.1.0"
+
+[components.sensor_association.membership]
+backend = "box-depth-component-v1"
+
+[components.sensor_association.membership.box-depth-component-v1]
+cell_size_m = 0.15
+core_fraction = 0.5
+minimum_support_points = 3
+ambiguity_ratio = 0.5

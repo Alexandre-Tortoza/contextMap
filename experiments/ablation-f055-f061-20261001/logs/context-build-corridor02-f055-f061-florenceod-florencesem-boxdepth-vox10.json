@@ -1,0 +1,85 @@
+{
+  "context_build": {
+    "branch": "corridor02-f055-f061-florenceod-florencesem-boxdepth-vox10",
+    "code_identity": "4b67748+local.51f44dbb81b3",
+    "context_build_id": "sha256:96a52b020f88d4c4b7d629a646a43b1169861e0f0a4b8c08f59ac18bd3bfb873",
+    "context_run_ids": [
+      "sha256:155c8ef543dfd46b133c7ecb859f29363eb2948fced216c2a210e5e1e5b10638",
+      "sha256:8398d7b63f8cccf164cd4f56424d7b5c17350032fac1e7f556a3a79327fa2257"
+    ],
+    "foundation": {
+      "geometry": {
+        "artifact_id": "8e0d9b1194c264e7e648e73cc6e2944c",
+        "content_hash": "sha256:781b46918b9ce5ff855636bccc2c3cffe6cfcde5e33174a457594a7f9e8658de",
+        "contract": "GeometricMapArtifact",
+        "location": "corridor-02/run-0003/geometric_mapping",
+        "stage_id": "geometric_mapping"
+      },
+      "identity": "sha256:eb299e02fe667515223342c14b5077213586b4db0d8360fedc2fbf9e07bb9cb4",
+      "sequence": {
+        "artifact_id": "4a4d895e0e4e4731ad91326114607296",
+        "content_hash": "sha256:a5aedeec06003aa335a26dd071bce5de5de1a38b46d0c791ecdcc6cf442f9f41",
+        "contract": "SequenceArtifact",
+        "location": "sequences/corridor-02/frame-10_31-refined",
+        "stage_id": "ingestion"
+      },
+      "state_estimation": {
+        "artifact_id": "656b7e023842c4e0d1b2759644634026",
+        "content_hash": "sha256:1de9434ff4cfa527b5bc652629776b0a5febea5fe76f96c2a236525b6f8d5cfe",
+        "contract": "StateEstimationRunArtifact",
+        "location": "corridor-02/run-0001/state_estimation",
+        "stage_id": "state_estimation"
+      }
+    },
+    "provided": {
+      "sensor_association": [
+        {
+          "artifact_id": "0fbd6869a3907e9e166c6aaa4f7ad343",
+          "content_hash": "sha256:774b37478f2d59aa1cec22cdf2a695d8fef590256bfc3b2934adec8bdcf900ef",
+          "contract": "SensorAssociationRunArtifact",
+          "location": "corridor-02/run-0020/sensor_association",
+          "stage_id": "sensor_association"
+        },
+        {
+          "artifact_id": "b8f9c42476a14c0ea82b41aef852ca83",
+          "content_hash": "sha256:6a0d9865968b3eafd372e353c0b7f02bca76fa28d6532b2d13a9303c6985d00b",
+          "contract": "SensorAssociationRunArtifact",
+          "location": "corridor-02/run-0022/sensor_association",
+          "stage_id": "sensor_association"
+        }
+      ],
+      "visual_perception": [
+        {
+          "artifact_id": "31e77593153153fb3463544eb86fae5d",
+          "content_hash": "sha256:c484bd0e948c00ae004d9bef0142015a69fc6057afc3ec53cbbbef9a2c16f1b3",
+          "contract": "PerceptionRunArtifact",
+          "location": "corridor-02/run-0020/visual_perception",
+          "stage_id": "visual_perception"
+        },
+        {
+          "artifact_id": "c32fc8ecc140d757515bcfdffc6a1f73",
+          "content_hash": "sha256:7da3d826f6e58e805401eec055d45379d4f640cd0f754ee36a637cf3e40bb041",
+          "contract": "PerceptionRunArtifact",
+          "location": "corridor-02/run-0022/visual_perception",
+          "stage_id": "visual_perception"
+        }
+      ]
+    },
+    "revision": 2,
+    "schema_version": "0.1.0",
+    "stage_configs": {
+      "context_map": "sha256:af772dfb2aac71d9a2e2db4ca2fd68c17c44b29f04786c469f965cb833b2a73e",
+      "entity_resolution": "sha256:4c4c8bda3fd2e17b4d25e49ffa2ac08d874f5f2e10cf701b583b2ebac1a37771",
+      "semantic_fusion": "sha256:57c957f84ae74fd3fe0e5d6a5de15d7872e70b4ebf3c580f82c7a4965f4e54e5",
+      "semantic_mapping": "sha256:aeb70fe7c9e60a85fbfcaaad1e5f1bb33226d769baca7523d22e31e2be843335",
+      "spatial_relations": "sha256:15c57368663085fc68bda6697e4b3e90adb5dd4320904b7a14c6c1e92ad0bbdd"
+    }
+  },
+  "context_map_id": "4f2f837fb889342ec81e83a607c88381",
+  "map": {
+    "index": 1,
+    "location": "workspace/corridor02-f055-f061-florenceod-florencesem-boxdepth-vox10/000001"
+  },
+  "ok": true,
+  "run_directory": "workspace/run-frame-10_31/corridor-02/run-0023"
+}

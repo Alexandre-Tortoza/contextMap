@@ -1,0 +1,20 @@
+$ python experiments/semantic-voxel-color-20260930/derive_voxel_support.py
+raw map: corridor-02--f42ba67df8392e04f478c1141c028254  frame=map
+voxel aggregation: run_id=voxel-cell-0_10  voxels=30491  source_map_id=corridor-02--f42ba67df8392e04f478c1141c028254
+semantic support: cells=818  entities_covered=28  integrity_problems=[]
+  source_map_id=corridor-02--f42ba67df8392e04f478c1141c028254
+
+=== viewer env (aponte e reinicie o viewer) ===
+NUXT_CONTEXT_MAP_ARTIFACTS_ROOT=/home/alexmrtr/Projects/contextmap2/workspace
+NUXT_VOXEL_ARTIFACTS_ROOT=/home/alexmrtr/Projects/contextmap2/outputs/semantic-voxel-color-20260930/voxel/cell-0_10
+NUXT_SPATIAL_SUPPORT_ARTIFACTS_ROOT=/home/alexmrtr/Projects/contextmap2/outputs/semantic-voxel-color-20260930/semantic-support
+
+# Verificação de contrato com o viewer (server/utils/spatial-support-artifact.ts):
+#   voxel manifest.run_id                         = voxel-cell-0_10
+#   support lineage.source.voxel_aggregation.run_id = voxel-cell-0_10          -> MATCH
+#   voxel manifest.source_map_id == support manifest.source_map_id             -> MATCH
+#   support outputs/cells.jsonl presente, schema_version 0.1.0                  -> OK
+#   célula: {aggregate_index, entity_support:[{entity_id, support_weight}]}    -> campos batem
+#   integridade do artefato (verify_integrity)                                 -> []  (sem problemas)
+
+# NB: artefatos são imutáveis; para re-derivar, remova outputs/semantic-voxel-color-20260930/ antes.

@@ -1,0 +1,20 @@
+{
+  "schema_version": "0.1.0",
+  "entries": [
+    {
+      "stage_id": "visual_perception",
+      "contract": "PerceptionRunArtifact",
+      "artifact_id": "c4e5415bf8afbb83bcdd401f4cbfae50",
+      "content_hash": "sha256:b7e18dddbe1c67f08e771d8674dfb938c594e6e43ee17948ebe0ba54d01ce7e3",
+      "location": "corridor-02/run-0006/visual_perception",
+      "run_index": 6,
+      "lineage": {
+        "upstream": {
+          "ingestion": [
+            "4a4d895e0e4e4731ad91326114607296"
+          ]
+        }
+      }
+    }
+  ]
+}

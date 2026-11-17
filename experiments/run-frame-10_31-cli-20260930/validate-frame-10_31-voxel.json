@@ -1,0 +1,21 @@
+{
+  "integrity": {
+    "ok": true,
+    "problems": [],
+    "warnings": [
+      "dependency.optional_missing: the sequence '4a4d895e0e4e4731ad91326114607296' has no recorded hint; pass its location explicitly",
+      "dependency.optional_missing: the semantic_fusion_run '8777688f7b6cb6ac74b2ccac79cb996e' has no recorded hint; pass its location explicitly",
+      "dependency.optional_missing: the semantic_map 'semantic-map-corridor-02' has no recorded hint; pass its location explicitly"
+    ]
+  },
+  "kind": "artifact",
+  "path": "workspace/frame-10_31-voxel/000001",
+  "summary": {
+    "code_version": "a3a175f+local.04d61c01a05c",
+    "content_identity": "sha256:2c0d165f7ba66c97cd14b9c3dde6441cae32d8810f4225ce49e608068e440be6",
+    "context_map_id": "71613c69963db1f61eb8a1e2ecff0a90",
+    "files": 8,
+    "schema_version": "0.2.0",
+    "total_bytes": 4967375
+  }
+}

@@ -1,0 +1,203 @@
+{
+  "arm": "E3-g-iou0.60-stab0.90",
+  "arm_kind": "none",
+  "baseline_arm": "E0",
+  "deltas": {
+    "association": {
+      "arm": "not_in_run",
+      "baseline": "measured",
+      "status": "not_compared"
+    },
+    "calibration": {
+      "arm": "not_in_run",
+      "baseline": "pending_annotation",
+      "status": "not_compared"
+    },
+    "entities": {
+      "arm": "not_in_run",
+      "baseline": "measured",
+      "status": "not_compared"
+    },
+    "geometry": {
+      "arm": "not_in_run",
+      "baseline": "measured",
+      "status": "not_compared"
+    },
+    "regions": {
+      "accepted_mask_ratio": {
+        "arm": 0.5942028985507246,
+        "baseline": 0.1925754060324826,
+        "delta": 0.40162749251824204
+      },
+      "accepted_region_count": {
+        "arm": 41,
+        "baseline": 83,
+        "delta": -42
+      },
+      "area_px_median": {
+        "arm": 829.0,
+        "baseline": 1100.0,
+        "delta": -271.0
+      },
+      "area_px_p10": {
+        "arm": 205.0,
+        "baseline": 270.6,
+        "delta": -65.60000000000002
+      },
+      "area_px_p90": {
+        "arm": 4334.0,
+        "baseline": 7892.0,
+        "delta": -3558.0
+      },
+      "contained_pair_count": {
+        "arm": 3,
+        "baseline": 56,
+        "delta": -53
+      },
+      "covered_pixel_count": {
+        "arm": 68652,
+        "baseline": 168168,
+        "delta": -99516
+      },
+      "discovery_backend.configuration_fingerprint": {
+        "arm": "sha256:46e23025961c4d28e25301d6ca84c1fc9fce87c48a04b4d6e9197cdc3304d40e",
+        "baseline": "sha256:9336bb272b4474c3020ce2910755a37060bd5bde67fa8a97779d51c4a4d64f69",
+        "delta": "changed"
+      },
+      "fragmentation_rate": {
+        "arm": 0.2926829268292683,
+        "baseline": 0.6867469879518072,
+        "delta": -0.39406406112253894
+      },
+      "fragmented_mask_count": {
+        "arm": 12,
+        "baseline": 57,
+        "delta": -45
+      },
+      "mask_count": {
+        "arm": 41,
+        "baseline": 83,
+        "delta": -42
+      },
+      "masks_below_500px": {
+        "arm": 15,
+        "baseline": 23,
+        "delta": -8
+      },
+      "masks_contained_in_another": {
+        "arm": 3,
+        "baseline": 43,
+        "delta": -40
+      },
+      "masks_measured": {
+        "arm": 41,
+        "baseline": 83,
+        "delta": -42
+      },
+      "masks_with_gt_10_components": {
+        "arm": 0,
+        "baseline": 20,
+        "delta": -20
+      },
+      "max_nesting_depth": {
+        "arm": 2,
+        "baseline": 7,
+        "delta": -5
+      },
+      "median_components": {
+        "arm": 1.0,
+        "baseline": 3.0,
+        "delta": -2.0
+      },
+      "merge_decisions_by_kind.containment": {
+        "arm": 7,
+        "baseline": 99,
+        "delta": -92
+      },
+      "merge_decisions_by_kind.iou_duplicate": {
+        "arm": 5,
+        "baseline": 14,
+        "delta": -9
+      },
+      "multiple_mask_pixel_fraction": {
+        "arm": 0.055977975878342946,
+        "baseline": 0.848633509347795,
+        "delta": -0.7926555334694521
+      },
+      "nesting_depth_histogram.1": {
+        "arm": 64809,
+        "baseline": 25455,
+        "delta": 39354
+      },
+      "nesting_depth_histogram.2": {
+        "arm": 3843,
+        "baseline": 66005,
+        "delta": -62162
+      },
+      "normalization_rejections_by_reason.exclusion_overlap": {
+        "arm": 8,
+        "baseline": 44,
+        "delta": -36
+      },
+      "normalization_rejections_by_reason.merged_duplicate": {
+        "arm": 12,
+        "baseline": 113,
+        "delta": -101
+      },
+      "normalization_rejections_by_reason.outside_valid_region": {
+        "arm": 8,
+        "baseline": 16,
+        "delta": -8
+      },
+      "overlapping_pair_count": {
+        "arm": 12,
+        "baseline": 323,
+        "delta": -311
+      },
+      "pixels_with_multiple_masks": {
+        "arm": 3843,
+        "baseline": 142713,
+        "delta": -138870
+      },
+      "proposal_count": {
+        "arm": 69,
+        "baseline": 431,
+        "delta": -362
+      },
+      "region_count_total": {
+        "arm": 41,
+        "baseline": 83,
+        "delta": -42
+      },
+      "sam2_raw_proposal_count": {
+        "arm": 69,
+        "baseline": 431,
+        "delta": -362
+      },
+      "usable_area_coverage": {
+        "arm": 0.2889887868744206,
+        "baseline": 0.7081200976968435,
+        "delta": -0.4191313108224229
+      }
+    },
+    "relations": {
+      "arm": "not_in_run",
+      "baseline": "measured",
+      "status": "not_compared"
+    },
+    "semantics": {
+      "arm": "not_in_run",
+      "baseline": "measured",
+      "status": "not_compared"
+    }
+  },
+  "gate_policy": "c10-gate/v1",
+  "invariants": {
+    "geometry": "not_applicable (a side has no geometry layer)"
+  },
+  "non_regression": [],
+  "passed": true,
+  "target_layer": "regions",
+  "violations": [],
+  "warnings": []
+}

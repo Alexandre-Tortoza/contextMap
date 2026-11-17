@@ -1,0 +1,417 @@
+{
+  "schema": "correction-benchmark/weak-annotation/v1",
+  "status": "draft-pending-review",
+  "sample": {
+    "observation_id": "camera_1_image_raw-000061",
+    "image_file": "frame-61.png",
+    "image_sha256": "sha256:508ad22a980197df4d796326a1606a03f04dfb05ace26adef4034af20ac4610c",
+    "image_size": [
+      640,
+      480
+    ],
+    "pixel_convention": "box_xyxy semiaberto [x_min, y_min, x_max, y_max), pixels da imagem preparada"
+  },
+  "annotator": {
+    "id": "model-draft (Claude, a partir da lista de objetos de um VLM e da imagem com grade)",
+    "date": "2026-10-01",
+    "tool": "inspeção de recortes com grade de 10 px",
+    "time_spent_min": null,
+    "notes": "rascunho: precisa de revisão humana antes de status=annotated. Fechadores hidráulicos citados pelo VLM não foram localizados com segurança e ficaram de fora. O robô está na ego-mask e não é anotado."
+  },
+  "coverage": "partial",
+  "class_vocabulary": [
+    "door",
+    "door_handle",
+    "window",
+    "wall",
+    "ceiling",
+    "floor"
+  ],
+  "extra_classes": [
+    "ceiling_light",
+    "ceiling_beam",
+    "baseboard",
+    "fallen_bar",
+    "debris"
+  ],
+  "instances": [
+    {
+      "instance_id": "door-left",
+      "class": "door",
+      "box_xyxy": [
+        45,
+        0,
+        236,
+        345
+      ],
+      "polygon_xy": null,
+      "accepted_labels": [
+        "door",
+        "blue door",
+        "metal door",
+        "door panel",
+        "double door",
+        "fire door",
+        "emergency door"
+      ],
+      "truncated": false,
+      "occluded": false,
+      "structure": false,
+      "notes": ""
+    },
+    {
+      "instance_id": "door-right",
+      "class": "door",
+      "box_xyxy": [
+        495,
+        50,
+        640,
+        290
+      ],
+      "polygon_xy": null,
+      "accepted_labels": [
+        "door",
+        "blue door",
+        "metal door",
+        "door panel",
+        "double door",
+        "fire door",
+        "emergency door"
+      ],
+      "truncated": false,
+      "occluded": false,
+      "structure": false,
+      "notes": "cortada pela vinheta à direita"
+    },
+    {
+      "instance_id": "door-far",
+      "class": "door",
+      "box_xyxy": [
+        280,
+        205,
+        330,
+        255
+      ],
+      "polygon_xy": null,
+      "accepted_labels": [
+        "door",
+        "doorway",
+        "double door",
+        "doors",
+        "corridor end",
+        "hallway end"
+      ],
+      "truncated": false,
+      "occluded": false,
+      "structure": false,
+      "notes": ""
+    },
+    {
+      "instance_id": "handle-left",
+      "class": "door_handle",
+      "box_xyxy": [
+        105,
+        65,
+        218,
+        165
+      ],
+      "polygon_xy": null,
+      "accepted_labels": [
+        "handle",
+        "door handle",
+        "push bar",
+        "panic bar",
+        "bar",
+        "metal bar",
+        "handrail",
+        "rail",
+        "crash bar",
+        "door bar"
+      ],
+      "truncated": false,
+      "occluded": false,
+      "structure": false,
+      "notes": ""
+    },
+    {
+      "instance_id": "handle-right",
+      "class": "door_handle",
+      "box_xyxy": [
+        505,
+        158,
+        625,
+        185
+      ],
+      "polygon_xy": null,
+      "accepted_labels": [
+        "handle",
+        "door handle",
+        "push bar",
+        "panic bar",
+        "bar",
+        "metal bar",
+        "handrail",
+        "rail",
+        "crash bar",
+        "door bar"
+      ],
+      "truncated": false,
+      "occluded": false,
+      "structure": false,
+      "notes": ""
+    },
+    {
+      "instance_id": "window-left-door",
+      "class": "window",
+      "box_xyxy": [
+        105,
+        90,
+        140,
+        138
+      ],
+      "polygon_xy": null,
+      "accepted_labels": [
+        "window",
+        "glass",
+        "glass panel",
+        "vision panel",
+        "windows",
+        "glass window"
+      ],
+      "truncated": false,
+      "occluded": false,
+      "structure": false,
+      "notes": ""
+    },
+    {
+      "instance_id": "window-right-door",
+      "class": "window",
+      "box_xyxy": [
+        588,
+        75,
+        616,
+        112
+      ],
+      "polygon_xy": null,
+      "accepted_labels": [
+        "window",
+        "glass",
+        "glass panel",
+        "vision panel",
+        "windows",
+        "glass window"
+      ],
+      "truncated": false,
+      "occluded": false,
+      "structure": false,
+      "notes": "parcialmente visível"
+    },
+    {
+      "instance_id": "window-corridor-01",
+      "class": "window",
+      "box_xyxy": [
+        375,
+        140,
+        435,
+        215
+      ],
+      "polygon_xy": null,
+      "accepted_labels": [
+        "window",
+        "glass",
+        "glass panel",
+        "vision panel",
+        "windows",
+        "glass window"
+      ],
+      "truncated": false,
+      "occluded": false,
+      "structure": false,
+      "notes": ""
+    },
+    {
+      "instance_id": "window-corridor-02",
+      "class": "window",
+      "box_xyxy": [
+        345,
+        198,
+        362,
+        228
+      ],
+      "polygon_xy": null,
+      "accepted_labels": [
+        "window",
+        "glass",
+        "glass panel",
+        "vision panel",
+        "windows",
+        "glass window"
+      ],
+      "truncated": false,
+      "occluded": false,
+      "structure": false,
+      "notes": ""
+    },
+    {
+      "instance_id": "light-01",
+      "class": "ceiling_light",
+      "box_xyxy": [
+        300,
+        98,
+        362,
+        112
+      ],
+      "polygon_xy": null,
+      "accepted_labels": [
+        "light",
+        "ceiling light",
+        "lamp",
+        "fluorescent light",
+        "light fixture",
+        "lighting"
+      ],
+      "truncated": false,
+      "occluded": false,
+      "structure": false,
+      "notes": ""
+    },
+    {
+      "instance_id": "beam-ceiling",
+      "class": "ceiling_beam",
+      "box_xyxy": [
+        225,
+        22,
+        505,
+        62
+      ],
+      "polygon_xy": null,
+      "accepted_labels": [
+        "beam",
+        "ceiling beam",
+        "frame",
+        "metal frame",
+        "door frame",
+        "girder",
+        "bar",
+        "metal beam"
+      ],
+      "truncated": false,
+      "occluded": false,
+      "structure": false,
+      "notes": ""
+    },
+    {
+      "instance_id": "plank-floor",
+      "class": "fallen_bar",
+      "box_xyxy": [
+        470,
+        283,
+        600,
+        318
+      ],
+      "polygon_xy": null,
+      "accepted_labels": [
+        "plank",
+        "board",
+        "wood",
+        "wooden board",
+        "stick",
+        "bar",
+        "rod",
+        "debris",
+        "wooden plank"
+      ],
+      "truncated": false,
+      "occluded": false,
+      "structure": false,
+      "notes": ""
+    },
+    {
+      "instance_id": "debris-03",
+      "class": "debris",
+      "box_xyxy": [
+        145,
+        325,
+        170,
+        338
+      ],
+      "polygon_xy": null,
+      "accepted_labels": [
+        "debris",
+        "rubble",
+        "brick",
+        "rock",
+        "stone",
+        "trash"
+      ],
+      "truncated": false,
+      "occluded": false,
+      "structure": false,
+      "notes": ""
+    },
+    {
+      "instance_id": "wall-right",
+      "class": "wall",
+      "box_xyxy": [
+        360,
+        120,
+        500,
+        280
+      ],
+      "polygon_xy": null,
+      "accepted_labels": [
+        "wall",
+        "white wall"
+      ],
+      "truncated": false,
+      "occluded": false,
+      "structure": true,
+      "notes": ""
+    },
+    {
+      "instance_id": "ceiling",
+      "class": "ceiling",
+      "box_xyxy": [
+        230,
+        20,
+        500,
+        180
+      ],
+      "polygon_xy": null,
+      "accepted_labels": [
+        "ceiling"
+      ],
+      "truncated": false,
+      "occluded": false,
+      "structure": true,
+      "notes": ""
+    },
+    {
+      "instance_id": "floor",
+      "class": "floor",
+      "box_xyxy": [
+        40,
+        255,
+        640,
+        380
+      ],
+      "polygon_xy": null,
+      "accepted_labels": [
+        "floor",
+        "wet floor",
+        "flooded floor"
+      ],
+      "truncated": false,
+      "occluded": false,
+      "structure": true,
+      "notes": ""
+    }
+  ],
+  "scene_terms": [
+    "hallway",
+    "corridor",
+    "flooded hallway",
+    "building",
+    "interior"
+  ]
+}

@@ -1,0 +1,1103 @@
+frame_id,mask_id,label,role,category,attributes,region_kind,clip_cosine,sam2_predicted_iou,sam2_stability,mask_area_px,mask_components,view_bbox_fraction_of_image,fusion_support,semantic_entity,context_map_entity,context_map_hypotheses,context_map_status,model,model_revision,prompt_template,prompt_fingerprint,failure,raw_model_output
+camera_1_image_raw-000055,region-0001,door,primary,door,"{""color"": ""blue"", ""handle"": ""metal bar"", ""material"": ""metal""}",thing,0.2032,0.4814,0.0399,6648,171,0.123,support-000001,entity--support-000001,entity-0025,"[""blue door"", ""door"", ""door handle"", ""metal latch"", ""metal rod"", ""metal towel rack""]",ambiguous,Qwen/Qwen3-VL-4B-Instruct,ebb281ec70b05090aa6165b016eac8ec08e71b17,region-label/v1,sha256:a8d24febc99b8fda9172c2c672b3c977703e1d449be3da472a014006103cf64b,,"{
+  ""abstained"": false,
+  ""claims"": [
+    {
+      ""hypothesis"": ""door"",
+      ""category"": ""door"",
+      ""region_kind"": ""thing"",
+      ""attributes"": {
+        ""color"": ""blue"",
+        ""material"": ""metal"",
+        ""handle"": ""metal bar""
+      },
+      ""role"": ""primary""
+    }
+  ]
+}"
+camera_1_image_raw-000055,region-0002,peeling paint,primary,surface,"{""description"": ""peeling paint on a wall""}",thing,0.1776,0.9165,0.7707,7461,17,0.0606,support-000002,entity--support-000002,entity-0004,"[""peeling paint""]",unambiguous,Qwen/Qwen3-VL-4B-Instruct,ebb281ec70b05090aa6165b016eac8ec08e71b17,region-label/v1,sha256:0a111bd850b83cb21e0109aa280c5f7a065e171c1d71b9ef68cce2de017f4520,,"{
+  ""abstained"": false,
+  ""claims"": [
+    {
+      ""hypothesis"": ""peeling paint"",
+      ""category"": ""surface"",
+      ""region_kind"": ""thing"",
+      ""attributes"": {
+        ""description"": ""peeling paint on a wall""
+      },
+      ""role"": ""primary""
+    }
+  ]
+}"
+camera_1_image_raw-000055,region-0003,wooden plank,primary,thing,"{""description"": ""a dark brown wooden plank with a yellowish edge, possibly part of a construction or display setup""}",thing,0.2506,0.9606,0.9534,2591,1,0.0141,support-000003,entity--support-000003,entity-0018,"[""wooden plank""]",unambiguous,Qwen/Qwen3-VL-4B-Instruct,ebb281ec70b05090aa6165b016eac8ec08e71b17,region-label/v1,sha256:9b9c014e1ca56ec16ad60e0fcb926a5180dec1ea0e01ebeee5ae43a98c5cad6f,,"{
+  ""abstained"": false,
+  ""claims"": [
+    {
+      ""hypothesis"": ""wooden plank"",
+      ""category"": ""thing"",
+      ""region_kind"": ""thing"",
+      ""attributes"": {
+        ""description"": ""a dark brown wooden plank with a yellowish edge, possibly part of a construction or display setup""
+      },
+      ""role"": ""primary""
+    }
+  ]
+}"
+camera_1_image_raw-000055,region-0004,dark surface,primary,surface,"{""description"": ""a dark, textured surface with indistinct features""}",thing,0.2098,0.9563,0.9611,631,1,0.0024,support-000004,entity--support-000004,entity-0001,"[""dark surface""]",unambiguous,Qwen/Qwen3-VL-4B-Instruct,ebb281ec70b05090aa6165b016eac8ec08e71b17,region-label/v1,sha256:c77760bf2848d1e65b4f285e51645d9840e03961e23211849de0636738c180d9,,"{
+  ""abstained"": false,
+  ""claims"": [
+    {
+      ""hypothesis"": ""dark surface"",
+      ""category"": ""surface"",
+      ""region_kind"": ""thing"",
+      ""attributes"": {
+        ""description"": ""a dark, textured surface with indistinct features""
+      },
+      ""role"": ""primary""
+    }
+  ]
+}"
+camera_1_image_raw-000055,region-0005,flooded hallway,primary,structure,"{""description"": ""a long, empty hallway with water on the floor, peeling paint, and blue doors""}",thing,0.2515,0.7294,0.3903,43793,129,0.5666,support-000005,entity--support-000005,entity-0027,"[""door"", ""flooded hallway"", ""metal pole"", ""metal railing""]",ambiguous,Qwen/Qwen3-VL-4B-Instruct,ebb281ec70b05090aa6165b016eac8ec08e71b17,region-label/v1,sha256:39975ad545822cab77eb2af9ff2d9827677e3e825303238c6de1d59f7a2d491a,,"{
+  ""abstained"": false,
+  ""claims"": [
+    {
+      ""hypothesis"": ""flooded hallway"",
+      ""category"": ""structure"",
+      ""region_kind"": ""thing"",
+      ""attributes"": {
+        ""description"": ""a long, empty hallway with water on the floor, peeling paint, and blue doors""
+      },
+      ""role"": ""primary""
+    }
+  ]
+}"
+camera_1_image_raw-000055,region-0006,metal railing,primary,thing,"{""description"": ""a metallic handrail mounted on a blue wall, extending along a hallway""}",thing,0.1756,0.8294,0.7053,4831,24,0.0927,support-000006,entity--support-000006,entity-0020,"[""metal railing""]",unambiguous,Qwen/Qwen3-VL-4B-Instruct,ebb281ec70b05090aa6165b016eac8ec08e71b17,region-label/v1,sha256:2531f9882683d06cd95eeef474cdad5727081bab2c53149ee127096169eaabca,,"{
+  ""abstained"": false,
+  ""claims"": [
+    {
+      ""hypothesis"": ""metal railing"",
+      ""category"": ""thing"",
+      ""region_kind"": ""thing"",
+      ""attributes"": {
+        ""description"": ""a metallic handrail mounted on a blue wall, extending along a hallway""
+      },
+      ""role"": ""primary""
+    }
+  ]
+}"
+camera_1_image_raw-000055,region-0007,metal rod,primary,thing,"{""description"": ""a metallic rod mounted on a wall""}",thing,0.2459,0.3291,0.799,340,6,0.012,support-000007,entity--support-000007,entity-0025,"[""blue door"", ""door"", ""door handle"", ""metal latch"", ""metal rod"", ""metal towel rack""]",ambiguous,Qwen/Qwen3-VL-4B-Instruct,ebb281ec70b05090aa6165b016eac8ec08e71b17,region-label/v1,sha256:f96ee285e56e19d46c3a6db16641f698c7ca47e15facbf38e1e24b267fb858f4,,"{
+  ""abstained"": false,
+  ""claims"": [
+    {
+      ""hypothesis"": ""metal rod"",
+      ""category"": ""thing"",
+      ""region_kind"": ""thing"",
+      ""attributes"": {
+        ""description"": ""a metallic rod mounted on a wall""
+      },
+      ""role"": ""primary""
+    }
+  ]
+}"
+camera_1_image_raw-000055,region-0008,door,primary,thing,"{""description"": ""blue door with metal handle and lock mechanism""}",thing,0.19,0.3781,0.5642,37840,35,0.3395,support-000008,entity--support-000008,entity-0011,"[""blue trim"", ""ceiling panel"", ""ceiling tile"", ""door"", ""metal bracket""]",ambiguous,Qwen/Qwen3-VL-4B-Instruct,ebb281ec70b05090aa6165b016eac8ec08e71b17,region-label/v1,sha256:f13fd6f5346b383256fcabe23734ba3f0b10b3e0e1dd8745190d8a8d20fe78b9,,"{
+  ""abstained"": false,
+  ""claims"": [
+    {
+      ""hypothesis"": ""door"",
+      ""category"": ""thing"",
+      ""region_kind"": ""thing"",
+      ""attributes"": {
+        ""description"": ""blue door with metal handle and lock mechanism""
+      },
+      ""role"": ""primary""
+    }
+  ]
+}"
+camera_1_image_raw-000055,region-0009,metal handle,primary,thing,"{""description"": ""a metallic handle attached to a surface with a textured pattern""}",thing,0.1959,0.9262,0.912,3178,2,0.034,support-000009,entity--support-000009,entity-0013,"[""metal handle"", ""window""]",ambiguous,Qwen/Qwen3-VL-4B-Instruct,ebb281ec70b05090aa6165b016eac8ec08e71b17,region-label/v1,sha256:1d80ab0d5c87c695bae515cacd06833b05ccd561ea103791f01f3ff9878823ba,,"{
+  ""abstained"": false,
+  ""claims"": [
+    {
+      ""hypothesis"": ""metal handle"",
+      ""category"": ""thing"",
+      ""region_kind"": ""thing"",
+      ""attributes"": {
+        ""description"": ""a metallic handle attached to a surface with a textured pattern""
+      },
+      ""role"": ""primary""
+    }
+  ]
+}"
+camera_1_image_raw-000055,region-0010,blue door,primary,door,"{""description"": ""a blue painted door with a metal handle and a small window""}",thing,0.1663,0.7893,0.1601,45562,394,0.5291,support-000010,entity--support-000010,entity-0026,"[""blue door""]",unambiguous,Qwen/Qwen3-VL-4B-Instruct,ebb281ec70b05090aa6165b016eac8ec08e71b17,region-label/v1,sha256:0f9912f60c3d6a3d3e9aa5848d9e5d79ecd8beeed16cf29b6eda2ca9a156bfe4,,"{
+  ""abstained"": false,
+  ""claims"": [
+    {
+      ""hypothesis"": ""blue door"",
+      ""category"": ""door"",
+      ""region_kind"": ""thing"",
+      ""attributes"": {
+        ""description"": ""a blue painted door with a metal handle and a small window""
+      },
+      ""role"": ""primary""
+    }
+  ]
+}"
+camera_1_image_raw-000055,region-0011,metallic object,primary,thing,"{""description"": ""a small metallic object on the floor near a wall""}",thing,0.1492,0.4509,0.559,6358,8,0.0607,support-000011,entity--support-000011,entity-0037,"[""metallic object""]",unambiguous,Qwen/Qwen3-VL-4B-Instruct,ebb281ec70b05090aa6165b016eac8ec08e71b17,region-label/v1,sha256:bc645cef659ddb21d84f3fb79d1acfff82b830bc3efcb1090c53e05987e5224a,,"{
+  ""abstained"": false,
+  ""claims"": [
+    {
+      ""hypothesis"": ""metallic object"",
+      ""category"": ""thing"",
+      ""region_kind"": ""thing"",
+      ""attributes"": {
+        ""description"": ""a small metallic object on the floor near a wall""
+      },
+      ""role"": ""primary""
+    }
+  ]
+}"
+camera_1_image_raw-000055,region-0012,yellow paint,primary,surface,"{""description"": ""a long, yellowish strip of paint on a surface""}",thing,0.2313,0.9132,0.9419,967,1,0.008,support-000012,entity--support-000012,entity-0024,"[""yellow paint""]",unambiguous,Qwen/Qwen3-VL-4B-Instruct,ebb281ec70b05090aa6165b016eac8ec08e71b17,region-label/v1,sha256:172ed22650dacabdcd04a439a8aa041c591472e6fa78d7e812faad87c4a805c0,,"{
+  ""abstained"": false,
+  ""claims"": [
+    {
+      ""hypothesis"": ""yellow paint"",
+      ""category"": ""surface"",
+      ""region_kind"": ""thing"",
+      ""attributes"": {
+        ""description"": ""a long, yellowish strip of paint on a surface""
+      },
+      ""role"": ""primary""
+    }
+  ]
+}"
+camera_1_image_raw-000055,region-0013,dark horizontal bar,primary,structure,"{""description"": ""a dark, horizontal bar-like structure in the upper portion of the image""}",thing,0.2341,0.907,0.9037,382,1,0.0017,,,,,,Qwen/Qwen3-VL-4B-Instruct,ebb281ec70b05090aa6165b016eac8ec08e71b17,region-label/v1,sha256:fc1d53157336ec0701735fec83fac7d7550da2ade109cd4d3db5d1e38190168d,,"{
+  ""abstained"": false,
+  ""claims"": [
+    {
+      ""hypothesis"": ""dark horizontal bar"",
+      ""category"": ""structure"",
+      ""region_kind"": ""thing"",
+      ""attributes"": {
+        ""description"": ""a dark, horizontal bar-like structure in the upper portion of the image""
+      },
+      ""role"": ""primary""
+    }
+  ]
+}"
+camera_1_image_raw-000055,region-0014,door,primary,structure,"{""description"": ""a dark green door with a vertical rectangular window, partially open, revealing a hallway with a pinkish light in the distance""}",thing,0.2324,0.5764,0.8881,2046,1,0.0071,support-000013,entity--support-000013,entity-0002,"[""door""]",unambiguous,Qwen/Qwen3-VL-4B-Instruct,ebb281ec70b05090aa6165b016eac8ec08e71b17,region-label/v1,sha256:fabd205e3e95dc7c0dcccdc9d38940349fb45b2812399fc046f2340cfecbf962,,"{
+  ""abstained"": false,
+  ""claims"": [
+    {
+      ""hypothesis"": ""door"",
+      ""category"": ""structure"",
+      ""region_kind"": ""thing"",
+      ""attributes"": {
+        ""description"": ""a dark green door with a vertical rectangular window, partially open, revealing a hallway with a pinkish light in the distance""
+      },
+      ""role"": ""primary""
+    }
+  ]
+}"
+camera_1_image_raw-000055,region-0015,blue door,primary,door,"{""color"": ""blue"", ""location"": ""hallway"", ""material"": ""metal""}",thing,0.1571,0.7073,0.2746,38646,239,0.3688,support-000010,entity--support-000010,entity-0026,"[""blue door""]",unambiguous,Qwen/Qwen3-VL-4B-Instruct,ebb281ec70b05090aa6165b016eac8ec08e71b17,region-label/v1,sha256:529a70b6a4dcc95219cf05c8da1ae661dda8aa7d45c27bf85ec593fe1fa85647,,"{
+  ""abstained"": false,
+  ""claims"": [
+    {
+      ""hypothesis"": ""blue door"",
+      ""category"": ""door"",
+      ""region_kind"": ""thing"",
+      ""attributes"": {
+        ""color"": ""blue"",
+        ""material"": ""metal"",
+        ""location"": ""hallway""
+      },
+      ""role"": ""primary""
+    }
+  ]
+}"
+camera_1_image_raw-000055,region-0016,metal rod,primary,tool,"{""description"": ""a long, slender metal rod with a handle-like end, possibly part of a tool or equipment""}",thing,0.2243,0.7376,0.7863,1380,3,0.034,support-000014,entity--support-000014,entity-0035,"[""metal rod""]",unambiguous,Qwen/Qwen3-VL-4B-Instruct,ebb281ec70b05090aa6165b016eac8ec08e71b17,region-label/v1,sha256:f474d0dcf0e1bc39ef9765430994f0c21a449ac4a1f92ede0df1a407f3ceac0e,,"{
+  ""abstained"": false,
+  ""claims"": [
+    {
+      ""hypothesis"": ""metal rod"",
+      ""category"": ""tool"",
+      ""region_kind"": ""thing"",
+      ""attributes"": {
+        ""description"": ""a long, slender metal rod with a handle-like end, possibly part of a tool or equipment""
+      },
+      ""role"": ""primary""
+    }
+  ]
+}"
+camera_1_image_raw-000055,region-0017,door,primary,thing,"{""description"": ""blue door with metal handle and lock, set in a hallway with tiled ceiling and wall-mounted fixtures""}",thing,0.1917,0.724,0.1638,56037,97,0.3729,support-000005,entity--support-000005,entity-0027,"[""door"", ""flooded hallway"", ""metal pole"", ""metal railing""]",ambiguous,Qwen/Qwen3-VL-4B-Instruct,ebb281ec70b05090aa6165b016eac8ec08e71b17,region-label/v1,sha256:4b90fddfff7bc3a99478ee18ac7d1288763b0da7b44e90f719d5bce5c3a2be86,,"{
+  ""abstained"": false,
+  ""claims"": [
+    {
+      ""hypothesis"": ""door"",
+      ""category"": ""thing"",
+      ""region_kind"": ""thing"",
+      ""attributes"": {
+        ""description"": ""blue door with metal handle and lock, set in a hallway with tiled ceiling and wall-mounted fixtures""
+      },
+      ""role"": ""primary""
+    }
+  ]
+}"
+camera_1_image_raw-000055,region-0018,window,primary,structure,"{""description"": ""a narrow vertical window with a dark frame""}",thing,0.1991,0.7727,0.8636,997,3,0.0066,,,,,,Qwen/Qwen3-VL-4B-Instruct,ebb281ec70b05090aa6165b016eac8ec08e71b17,region-label/v1,sha256:0102ba295b6febc8fc13fc96dae96935da40f6ad41787d805ecab82355661825,,"{
+  ""abstained"": false,
+  ""claims"": [
+    {
+      ""hypothesis"": ""window"",
+      ""category"": ""structure"",
+      ""region_kind"": ""thing"",
+      ""attributes"": {
+        ""description"": ""a narrow vertical window with a dark frame""
+      },
+      ""role"": ""primary""
+    }
+  ]
+}"
+camera_1_image_raw-000055,region-0019,spacecraft,primary,thing,"{""description"": ""curved edge of a spacecraft with visible structural lines and a dark background""}",thing,0.2597,0.8845,0.9098,3257,1,0.0325,support-000015,entity--support-000015,entity-0010,"[""spacecraft""]",unambiguous,Qwen/Qwen3-VL-4B-Instruct,ebb281ec70b05090aa6165b016eac8ec08e71b17,region-label/v1,sha256:037918fbba5203e91d6bac0c7efa8b5ee54ac46cce9cf50f3efb280509e6f9d2,,"{
+  ""abstained"": false,
+  ""claims"": [
+    {
+      ""hypothesis"": ""spacecraft"",
+      ""category"": ""thing"",
+      ""region_kind"": ""thing"",
+      ""attributes"": {
+        ""description"": ""curved edge of a spacecraft with visible structural lines and a dark background""
+      },
+      ""role"": ""primary""
+    }
+  ]
+}"
+camera_1_image_raw-000055,region-0020,window,primary,structure,"{""description"": ""a window with dark frames and a visible interior view""}",thing,0.2168,0.6922,0.6937,6349,4,0.0363,support-000016,entity--support-000016,entity-0038,"[""window""]",unambiguous,Qwen/Qwen3-VL-4B-Instruct,ebb281ec70b05090aa6165b016eac8ec08e71b17,region-label/v1,sha256:a2290726556b77fb2e16d5a3acf073b03c3a352adfcdc79b83e33f62b0da4237,,"{
+  ""abstained"": false,
+  ""claims"": [
+    {
+      ""hypothesis"": ""window"",
+      ""category"": ""structure"",
+      ""region_kind"": ""thing"",
+      ""attributes"": {
+        ""description"": ""a window with dark frames and a visible interior view""
+      },
+      ""role"": ""primary""
+    }
+  ]
+}"
+camera_1_image_raw-000055,region-0021,window,primary,structure,"{""description"": ""a window with vertical panes""}",thing,0.2184,0.8816,0.811,4078,5,0.0203,support-000016,entity--support-000016,entity-0038,"[""window""]",unambiguous,Qwen/Qwen3-VL-4B-Instruct,ebb281ec70b05090aa6165b016eac8ec08e71b17,region-label/v1,sha256:6594931922cfab5b79c84bd4520a16699c99e1526beb13ad9fdd97bd827da031,,"{
+  ""abstained"": false,
+  ""claims"": [
+    {
+      ""hypothesis"": ""window"",
+      ""category"": ""structure"",
+      ""region_kind"": ""thing"",
+      ""attributes"": {
+        ""description"": ""a window with vertical panes""
+      },
+      ""role"": ""primary""
+    }
+  ]
+}"
+camera_1_image_raw-000055,region-0022,metal pole,primary,structure,"{""description"": ""a vertical metal pole, possibly part of a railing or support structure, with a curved top and visible wear or discoloration""}",thing,0.1287,0.8808,0.7025,28971,31,0.1881,support-000005,entity--support-000005,entity-0027,"[""door"", ""flooded hallway"", ""metal pole"", ""metal railing""]",ambiguous,Qwen/Qwen3-VL-4B-Instruct,ebb281ec70b05090aa6165b016eac8ec08e71b17,region-label/v1,sha256:6ea6505e6aa584f07cace79f26142afcf0bba9a09d365dc17e5534d1dfbb5fd7,,"{
+  ""abstained"": false,
+  ""claims"": [
+    {
+      ""hypothesis"": ""metal pole"",
+      ""category"": ""structure"",
+      ""region_kind"": ""thing"",
+      ""attributes"": {
+        ""description"": ""a vertical metal pole, possibly part of a railing or support structure, with a curved top and visible wear or discoloration""
+      },
+      ""role"": ""primary""
+    }
+  ]
+}"
+camera_1_image_raw-000055,region-0023,,,,,,,0.8775,0.915,711,1,,support-000017,entity--support-000017,entity-0034,[],insufficient_evidence,Qwen/Qwen3-VL-4B-Instruct,,,,semantic response is missing required fields: ['claims'],"{
+  ""abstained"": true
+}"
+camera_1_image_raw-000055,region-0024,vertical surface,primary,wall,"{""description"": ""a vertical surface with a gradient from dark to light, possibly a wall or pillar""}",thing,0.1825,0.429,0.602,1362,5,0.0111,support-000018,entity--support-000018,entity-0007,"[""curved edge"", ""vertical surface""]",ambiguous,Qwen/Qwen3-VL-4B-Instruct,ebb281ec70b05090aa6165b016eac8ec08e71b17,region-label/v1,sha256:a1faf7850b3975d8be2f1d2890d61eb9f2c422ddbecfd372bf224efdfc6269cc,,"{
+  ""abstained"": false,
+  ""claims"": [
+    {
+      ""hypothesis"": ""vertical surface"",
+      ""category"": ""wall"",
+      ""region_kind"": ""thing"",
+      ""attributes"": {
+        ""description"": ""a vertical surface with a gradient from dark to light, possibly a wall or pillar""
+      },
+      ""role"": ""primary""
+    }
+  ]
+}"
+camera_1_image_raw-000055,region-0025,ceiling tile,primary,structure,"{""description"": ""a blurry, low-resolution image of a ceiling tile with visible grid lines""}",thing,0.2116,0.8579,0.8079,613,5,0.0042,,,,,,Qwen/Qwen3-VL-4B-Instruct,ebb281ec70b05090aa6165b016eac8ec08e71b17,region-label/v1,sha256:c9cd3330566818a8b17d56367cb67319affe828ff49e21e5c66cb54dc15a7866,,"{
+  ""abstained"": false,
+  ""claims"": [
+    {
+      ""hypothesis"": ""ceiling tile"",
+      ""category"": ""structure"",
+      ""region_kind"": ""thing"",
+      ""attributes"": {
+        ""description"": ""a blurry, low-resolution image of a ceiling tile with visible grid lines""
+      },
+      ""role"": ""primary""
+    }
+  ]
+}"
+camera_1_image_raw-000055,region-0026,metal door,primary,door,"{""description"": ""blue painted metal door with visible hinges and a vertical handle""}",thing,0.2233,0.8477,0.7745,4952,13,0.0759,support-000019,entity--support-000019,entity-0017,"[""metal door""]",unambiguous,Qwen/Qwen3-VL-4B-Instruct,ebb281ec70b05090aa6165b016eac8ec08e71b17,region-label/v1,sha256:75ae9949bd8bcaf231ab6e14159af8fcce9706674f1e01c013f41404811dce57,,"{
+  ""abstained"": false,
+  ""claims"": [
+    {
+      ""hypothesis"": ""metal door"",
+      ""category"": ""door"",
+      ""region_kind"": ""thing"",
+      ""attributes"": {
+        ""description"": ""blue painted metal door with visible hinges and a vertical handle""
+      },
+      ""role"": ""primary""
+    }
+  ]
+}"
+camera_1_image_raw-000055,region-0027,,,,,,,0.8455,0.9041,70,1,,,,,,,Qwen/Qwen3-VL-4B-Instruct,,,,semantic response is missing required fields: ['claims'],"{
+  ""abstained"": true
+}"
+camera_1_image_raw-000055,region-0028,window,primary,structure,"{""description"": ""a dark, rectangular window with visible vertical lines""}",thing,0.1824,0.8414,0.9105,1125,2,0.0059,support-000009,entity--support-000009,entity-0013,"[""metal handle"", ""window""]",ambiguous,Qwen/Qwen3-VL-4B-Instruct,ebb281ec70b05090aa6165b016eac8ec08e71b17,region-label/v1,sha256:b5a1d904e5927c43ac8da453ebfb5677329a3a5bd20481aa91c2076422e73ba2,,"{
+  ""abstained"": false,
+  ""claims"": [
+    {
+      ""hypothesis"": ""window"",
+      ""category"": ""structure"",
+      ""region_kind"": ""thing"",
+      ""attributes"": {
+        ""description"": ""a dark, rectangular window with visible vertical lines""
+      },
+      ""role"": ""primary""
+    }
+  ]
+}"
+camera_1_image_raw-000055,region-0029,ceiling tile,primary,structure,"{""description"": ""a white ceiling tile with grid lines and a blue structural element below""}",thing,0.2181,0.7425,0.9295,17583,1,0.0782,support-000008,entity--support-000008,entity-0011,"[""blue trim"", ""ceiling panel"", ""ceiling tile"", ""door"", ""metal bracket""]",ambiguous,Qwen/Qwen3-VL-4B-Instruct,ebb281ec70b05090aa6165b016eac8ec08e71b17,region-label/v1,sha256:f95214b29c9291bb245e09a9fd3435adcbe65c039c6a79ef3eff7f3604e9b8ef,,"{
+  ""abstained"": false,
+  ""claims"": [
+    {
+      ""hypothesis"": ""ceiling tile"",
+      ""category"": ""structure"",
+      ""region_kind"": ""thing"",
+      ""attributes"": {
+        ""description"": ""a white ceiling tile with grid lines and a blue structural element below""
+      },
+      ""role"": ""primary""
+    }
+  ]
+}"
+camera_1_image_raw-000055,region-0030,metal towel rack,primary,fixture,"{""description"": ""a metallic towel rack mounted on a blue wall""}",thing,0.2272,0.5626,0.6467,1030,5,0.0221,support-000007,entity--support-000007,entity-0025,"[""blue door"", ""door"", ""door handle"", ""metal latch"", ""metal rod"", ""metal towel rack""]",ambiguous,Qwen/Qwen3-VL-4B-Instruct,ebb281ec70b05090aa6165b016eac8ec08e71b17,region-label/v1,sha256:67f7669bf142388cacc66436901cb381324b7eba05b8f105cc7e33d70855f86b,,"{
+  ""abstained"": false,
+  ""claims"": [
+    {
+      ""hypothesis"": ""metal towel rack"",
+      ""category"": ""fixture"",
+      ""region_kind"": ""thing"",
+      ""attributes"": {
+        ""description"": ""a metallic towel rack mounted on a blue wall""
+      },
+      ""role"": ""primary""
+    }
+  ]
+}"
+camera_1_image_raw-000055,region-0031,ceiling panel,primary,structure,"{""description"": ""a gray, rectangular ceiling panel with visible edges and a slightly textured surface""}",thing,0.1916,0.8343,0.9046,698,2,0.0032,support-000020,entity--support-000020,entity-0012,"[""ceiling panel""]",unambiguous,Qwen/Qwen3-VL-4B-Instruct,ebb281ec70b05090aa6165b016eac8ec08e71b17,region-label/v1,sha256:e6102ad86231b935383741d3e2fea5f318833ced562c92350a58cb7557b81742,,"{
+  ""abstained"": false,
+  ""claims"": [
+    {
+      ""hypothesis"": ""ceiling panel"",
+      ""category"": ""structure"",
+      ""region_kind"": ""thing"",
+      ""attributes"": {
+        ""description"": ""a gray, rectangular ceiling panel with visible edges and a slightly textured surface""
+      },
+      ""role"": ""primary""
+    }
+  ]
+}"
+camera_1_image_raw-000055,region-0032,text,primary,text,"{""description"": ""blurry text on a dark background""}",thing,0.1983,0.8324,0.8625,269,1,0.0012,,,,,,Qwen/Qwen3-VL-4B-Instruct,ebb281ec70b05090aa6165b016eac8ec08e71b17,region-label/v1,sha256:4fbbb9fbd93eeb64a40176a88ed2c7b371902a6d6e0aa1ea12622765922afbe0,,"{
+  ""abstained"": false,
+  ""claims"": [
+    {
+      ""hypothesis"": ""text"",
+      ""category"": ""text"",
+      ""region_kind"": ""thing"",
+      ""attributes"": {
+        ""description"": ""blurry text on a dark background""
+      },
+      ""role"": ""primary""
+    }
+  ]
+}"
+camera_1_image_raw-000055,region-0033,,,,,,,0.5591,0.7209,38,1,,,,,,,Qwen/Qwen3-VL-4B-Instruct,,,,semantic response is missing required fields: ['claims'],"{
+  ""abstained"": true
+}"
+camera_1_image_raw-000055,region-0034,metal bracket,primary,hardware,"{""description"": ""a dark metallic bracket attached to a wall or structure, with a diagonal arm extending from it""}",thing,0.2258,0.4468,0.795,437,1,0.0048,support-000021,entity--support-000021,entity-0033,"[""metal bracket""]",unambiguous,Qwen/Qwen3-VL-4B-Instruct,ebb281ec70b05090aa6165b016eac8ec08e71b17,region-label/v1,sha256:e2ef573c627dae1ce199f4b9ef8007c790e9ebf8c536ecba47ad46c3e6a4c4c6,,"{
+  ""abstained"": false,
+  ""claims"": [
+    {
+      ""hypothesis"": ""metal bracket"",
+      ""category"": ""hardware"",
+      ""region_kind"": ""thing"",
+      ""attributes"": {
+        ""description"": ""a dark metallic bracket attached to a wall or structure, with a diagonal arm extending from it""
+      },
+      ""role"": ""primary""
+    }
+  ]
+}"
+camera_1_image_raw-000055,region-0035,metal railing,primary,structure,"{""description"": ""a metallic handrail mounted on a blue wall, with a vertical pipe running alongside it""}",thing,0.1605,0.8148,0.7453,15669,14,0.0979,support-000022,entity--support-000022,entity-0027,"[""door"", ""flooded hallway"", ""metal pole"", ""metal railing""]",ambiguous,Qwen/Qwen3-VL-4B-Instruct,ebb281ec70b05090aa6165b016eac8ec08e71b17,region-label/v1,sha256:42f0c703af55b1029d3d2df29ed048076f4a967c2dc8d089ab6648c7f4c9e305,,"{
+  ""abstained"": false,
+  ""claims"": [
+    {
+      ""hypothesis"": ""metal railing"",
+      ""category"": ""structure"",
+      ""region_kind"": ""thing"",
+      ""attributes"": {
+        ""description"": ""a metallic handrail mounted on a blue wall, with a vertical pipe running alongside it""
+      },
+      ""role"": ""primary""
+    }
+  ]
+}"
+camera_1_image_raw-000055,region-0036,orange peel,primary,food,"{""description"": ""a blurry orange peel on a dark surface""}",thing,0.2173,0.414,0.8771,277,1,0.002,,,,,,Qwen/Qwen3-VL-4B-Instruct,ebb281ec70b05090aa6165b016eac8ec08e71b17,region-label/v1,sha256:efea11dc23f731a14b08bb1a787d2e508fba02d63d377240ab5bfe5c135f4554,,"{
+  ""abstained"": false,
+  ""claims"": [
+    {
+      ""hypothesis"": ""orange peel"",
+      ""category"": ""food"",
+      ""region_kind"": ""thing"",
+      ""attributes"": {
+        ""description"": ""a blurry orange peel on a dark surface""
+      },
+      ""role"": ""primary""
+    }
+  ]
+}"
+camera_1_image_raw-000055,region-0037,metal hook,primary,hardware,"{""description"": ""a metallic hook attached to a blue surface""}",thing,0.2413,0.8036,0.856,1546,2,0.0212,support-000023,entity--support-000023,entity-0005,"[""metal hook"", ""metal rail""]",ambiguous,Qwen/Qwen3-VL-4B-Instruct,ebb281ec70b05090aa6165b016eac8ec08e71b17,region-label/v1,sha256:b219b0db2c264eded82c42dc781094bae0547865eff15cd5618a3750ccbeb1c9,,"{
+  ""abstained"": false,
+  ""claims"": [
+    {
+      ""hypothesis"": ""metal hook"",
+      ""category"": ""hardware"",
+      ""region_kind"": ""thing"",
+      ""attributes"": {
+        ""description"": ""a metallic hook attached to a blue surface""
+      },
+      ""role"": ""primary""
+    }
+  ]
+}"
+camera_1_image_raw-000055,region-0038,curved edge,primary,surface,"{""description"": ""a smooth, curved surface with a gradient from dark to light""}",thing,0.2365,0.8012,0.8675,1619,2,0.0155,support-000018,entity--support-000018,entity-0007,"[""curved edge"", ""vertical surface""]",ambiguous,Qwen/Qwen3-VL-4B-Instruct,ebb281ec70b05090aa6165b016eac8ec08e71b17,region-label/v1,sha256:0c6605ce1b785ee598291f7fb409b568eb0afbfcbb4e745e3663f39958b33b17,,"{
+  ""abstained"": false,
+  ""claims"": [
+    {
+      ""hypothesis"": ""curved edge"",
+      ""category"": ""surface"",
+      ""region_kind"": ""thing"",
+      ""attributes"": {
+        ""description"": ""a smooth, curved surface with a gradient from dark to light""
+      },
+      ""role"": ""primary""
+    }
+  ]
+}"
+camera_1_image_raw-000055,region-0039,baseboard,primary,structure,"{""description"": ""dark-colored baseboard along the bottom of a wall""}",thing,0.2415,0.4221,0.4795,467,8,0.0069,,,,,,Qwen/Qwen3-VL-4B-Instruct,ebb281ec70b05090aa6165b016eac8ec08e71b17,region-label/v1,sha256:567c64659ea6961e97f9a2ba16489dfeda78ce9aa413185653b3d331dbb97523,,"{
+  ""abstained"": false,
+  ""claims"": [
+    {
+      ""hypothesis"": ""baseboard"",
+      ""category"": ""structure"",
+      ""region_kind"": ""thing"",
+      ""attributes"": {
+        ""description"": ""dark-colored baseboard along the bottom of a wall""
+      },
+      ""role"": ""primary""
+    }
+  ]
+}"
+camera_1_image_raw-000055,region-0040,ceiling tile,primary,structure,"{""description"": ""a light-colored, possibly beige or off-white, ceiling tile with a visible seam or edge""}",thing,0.2149,0.7894,0.9415,1475,1,0.006,support-000024,entity--support-000024,entity-0028,"[""ceiling tile""]",unambiguous,Qwen/Qwen3-VL-4B-Instruct,ebb281ec70b05090aa6165b016eac8ec08e71b17,region-label/v1,sha256:279e3fdc543fe817a42075e21c8a828155690bdaacceed3cd01e22e0c09d9c66,,"{
+  ""abstained"": false,
+  ""claims"": [
+    {
+      ""hypothesis"": ""ceiling tile"",
+      ""category"": ""structure"",
+      ""region_kind"": ""thing"",
+      ""attributes"": {
+        ""description"": ""a light-colored, possibly beige or off-white, ceiling tile with a visible seam or edge""
+      },
+      ""role"": ""primary""
+    }
+  ]
+}"
+camera_1_image_raw-000055,region-0041,floor tile,primary,surface,"{""description"": ""dark gray, slightly textured surface with faint lines suggesting grout or seams""}",thing,0.2016,0.7745,0.7885,336,2,0.0019,,,,,,Qwen/Qwen3-VL-4B-Instruct,ebb281ec70b05090aa6165b016eac8ec08e71b17,region-label/v1,sha256:28d40d71c16948e7a7d7c613b15950724e91f29156dd7248321a90bda531990f,,"{
+  ""abstained"": false,
+  ""claims"": [
+    {
+      ""hypothesis"": ""floor tile"",
+      ""category"": ""surface"",
+      ""region_kind"": ""thing"",
+      ""attributes"": {
+        ""description"": ""dark gray, slightly textured surface with faint lines suggesting grout or seams""
+      },
+      ""role"": ""primary""
+    }
+  ]
+}"
+camera_1_image_raw-000055,region-0042,door,primary,structure,"{""description"": ""dark vertical opening with a lighter vertical strip inside, possibly a door frame or doorway""}",thing,0.2126,0.7626,0.9144,315,1,0.0015,,,,,,Qwen/Qwen3-VL-4B-Instruct,ebb281ec70b05090aa6165b016eac8ec08e71b17,region-label/v1,sha256:e1581ada7eac0cbeb72da5ae42ae93e7190f8eda85ebe2edb382cfe1116bd2cd,,"{
+  ""abstained"": false,
+  ""claims"": [
+    {
+      ""hypothesis"": ""door"",
+      ""category"": ""structure"",
+      ""region_kind"": ""thing"",
+      ""attributes"": {
+        ""description"": ""dark vertical opening with a lighter vertical strip inside, possibly a door frame or doorway""
+      },
+      ""role"": ""primary""
+    }
+  ]
+}"
+camera_1_image_raw-000055,region-0043,blue trim,primary,structure,"{""description"": ""a curved blue trim along a white wall""}",thing,0.2217,0.7554,0.8633,3595,2,0.0269,support-000008,entity--support-000008,entity-0011,"[""blue trim"", ""ceiling panel"", ""ceiling tile"", ""door"", ""metal bracket""]",ambiguous,Qwen/Qwen3-VL-4B-Instruct,ebb281ec70b05090aa6165b016eac8ec08e71b17,region-label/v1,sha256:fcb1859e80a2c4f49783cba56fb2b9c2ec34df2cca9d06fba5c89ca6a19473be,,"{
+  ""abstained"": false,
+  ""claims"": [
+    {
+      ""hypothesis"": ""blue trim"",
+      ""category"": ""structure"",
+      ""region_kind"": ""thing"",
+      ""attributes"": {
+        ""description"": ""a curved blue trim along a white wall""
+      },
+      ""role"": ""primary""
+    }
+  ]
+}"
+camera_1_image_raw-000055,region-0044,metal edge,primary,object,"{""description"": ""blurry metallic edge of an object""}",thing,0.2245,0.7554,0.8736,255,1,0.0017,support-000025,entity--support-000025,entity-0021,"[""metal edge"", ""metal rail""]",ambiguous,Qwen/Qwen3-VL-4B-Instruct,ebb281ec70b05090aa6165b016eac8ec08e71b17,region-label/v1,sha256:24082f0a0b98d9538bce11b6a31d3bb3bab41a14002509edba393ba40da67d3d,,"{
+  ""abstained"": false,
+  ""claims"": [
+    {
+      ""hypothesis"": ""metal edge"",
+      ""category"": ""object"",
+      ""region_kind"": ""thing"",
+      ""attributes"": {
+        ""description"": ""blurry metallic edge of an object""
+      },
+      ""role"": ""primary""
+    }
+  ]
+}"
+camera_1_image_raw-000055,region-0045,,,,,,,0.7453,0.9006,1100,2,,support-000026,entity--support-000026,entity-0003,[],insufficient_evidence,Qwen/Qwen3-VL-4B-Instruct,,,,semantic response is missing required fields: ['claims'],"{
+  ""abstained"": true
+}"
+camera_1_image_raw-000055,region-0046,ceiling tile,primary,structure,"{""description"": ""a section of a ceiling with visible grid lines and a dark rectangular area in the upper left""}",thing,0.2652,0.7393,0.8386,912,2,0.006,,,,,,Qwen/Qwen3-VL-4B-Instruct,ebb281ec70b05090aa6165b016eac8ec08e71b17,region-label/v1,sha256:37299e7951490973618da70eb183ba3e3d7223a4ea0e7f3411abd0dabd518642,,"{
+  ""abstained"": false,
+  ""claims"": [
+    {
+      ""hypothesis"": ""ceiling tile"",
+      ""category"": ""structure"",
+      ""region_kind"": ""thing"",
+      ""attributes"": {
+        ""description"": ""a section of a ceiling with visible grid lines and a dark rectangular area in the upper left""
+      },
+      ""role"": ""primary""
+    }
+  ]
+}"
+camera_1_image_raw-000055,region-0047,metal rod,primary,thing,"{""description"": ""a vertical metal rod with a clamp near the top and a base at the bottom, set against a blue wall""}",thing,0.2292,0.2559,0.7762,1225,5,0.023,support-000027,entity--support-000027,entity-0029,"[""metal rod""]",unambiguous,Qwen/Qwen3-VL-4B-Instruct,ebb281ec70b05090aa6165b016eac8ec08e71b17,region-label/v1,sha256:6386f3f343b29f6e4a86ea401bc44d941edbf9576254ce5d510d70d0952a9d3f,,"{
+  ""abstained"": false,
+  ""claims"": [
+    {
+      ""hypothesis"": ""metal rod"",
+      ""category"": ""thing"",
+      ""region_kind"": ""thing"",
+      ""attributes"": {
+        ""description"": ""a vertical metal rod with a clamp near the top and a base at the bottom, set against a blue wall""
+      },
+      ""role"": ""primary""
+    }
+  ]
+}"
+camera_1_image_raw-000055,region-0048,dark surface,primary,surface,"{""description"": ""indistinct dark area with faint diagonal lines""}",thing,0.2125,0.7365,0.7453,457,5,0.0029,,,,,,Qwen/Qwen3-VL-4B-Instruct,ebb281ec70b05090aa6165b016eac8ec08e71b17,region-label/v1,sha256:7b3916232ed20cf4125bec17cd15fcf845cdf05a52b33d781f2131f9b51f042e,,"{
+  ""abstained"": false,
+  ""claims"": [
+    {
+      ""hypothesis"": ""dark surface"",
+      ""category"": ""surface"",
+      ""region_kind"": ""thing"",
+      ""attributes"": {
+        ""description"": ""indistinct dark area with faint diagonal lines""
+      },
+      ""role"": ""primary""
+    }
+  ]
+}"
+camera_1_image_raw-000055,region-0049,metal pole,primary,structure,"{""description"": ""vertical metallic pole with reflective surface""}",thing,0.2243,0.2795,0.5695,1199,2,0.0065,support-000028,entity--support-000028,entity-0006,"[""metal pole""]",unambiguous,Qwen/Qwen3-VL-4B-Instruct,ebb281ec70b05090aa6165b016eac8ec08e71b17,region-label/v1,sha256:d94b661076233d363c6a152d1fe698e932ef0ac71a87aef423571ec0a0638442,,"{
+  ""abstained"": false,
+  ""claims"": [
+    {
+      ""hypothesis"": ""metal pole"",
+      ""category"": ""structure"",
+      ""region_kind"": ""thing"",
+      ""attributes"": {
+        ""description"": ""vertical metallic pole with reflective surface""
+      },
+      ""role"": ""primary""
+    }
+  ]
+}"
+camera_1_image_raw-000055,region-0050,door,primary,structure,"{""description"": ""blurry vertical structure with indistinct details""}",thing,0.1846,0.7321,0.8815,126,3,0.0011,,,,,,Qwen/Qwen3-VL-4B-Instruct,ebb281ec70b05090aa6165b016eac8ec08e71b17,region-label/v1,sha256:e3922c114bb477b1d586419706a1fb2bed19b7c70c8e25648a5ed505d2d69f48,,"{
+  ""abstained"": false,
+  ""claims"": [
+    {
+      ""hypothesis"": ""door"",
+      ""category"": ""structure"",
+      ""region_kind"": ""thing"",
+      ""attributes"": {
+        ""description"": ""blurry vertical structure with indistinct details""
+      },
+      ""role"": ""primary""
+    }
+  ]
+}"
+camera_1_image_raw-000055,region-0051,metal rail,primary,structure,"{""description"": ""a blue metallic rail with a dark gray end cap, mounted on a tiled floor""}",thing,0.2075,0.3986,0.5485,800,3,0.0182,support-000025,entity--support-000025,entity-0021,"[""metal edge"", ""metal rail""]",ambiguous,Qwen/Qwen3-VL-4B-Instruct,ebb281ec70b05090aa6165b016eac8ec08e71b17,region-label/v1,sha256:209d3364da61c6ec5fb6a27604314bad036daf92ab968e66f0b5292dfe2605e6,,"{
+  ""abstained"": false,
+  ""claims"": [
+    {
+      ""hypothesis"": ""metal rail"",
+      ""category"": ""structure"",
+      ""region_kind"": ""thing"",
+      ""attributes"": {
+        ""description"": ""a blue metallic rail with a dark gray end cap, mounted on a tiled floor""
+      },
+      ""role"": ""primary""
+    }
+  ]
+}"
+camera_1_image_raw-000055,region-0052,ceiling panel,primary,structure,"{""description"": ""a curved ceiling panel with a blue trim and visible mounting hardware""}",thing,0.2266,0.7103,0.54,4479,8,0.0571,support-000008,entity--support-000008,entity-0011,"[""blue trim"", ""ceiling panel"", ""ceiling tile"", ""door"", ""metal bracket""]",ambiguous,Qwen/Qwen3-VL-4B-Instruct,ebb281ec70b05090aa6165b016eac8ec08e71b17,region-label/v1,sha256:aad142ed865ad616ed5d77530897441a53c471d97693eab1321796cb544c7d53,,"{
+  ""abstained"": false,
+  ""claims"": [
+    {
+      ""hypothesis"": ""ceiling panel"",
+      ""category"": ""structure"",
+      ""region_kind"": ""thing"",
+      ""attributes"": {
+        ""description"": ""a curved ceiling panel with a blue trim and visible mounting hardware""
+      },
+      ""role"": ""primary""
+    }
+  ]
+}"
+camera_1_image_raw-000055,region-0053,,,,,,,0.6628,0.9245,51,1,,,,,,,Qwen/Qwen3-VL-4B-Instruct,,,,semantic response is missing required fields: ['claims'],"{
+  ""abstained"": true
+}"
+camera_1_image_raw-000055,region-0054,metal latch,primary,hardware,"{""description"": ""a metallic latch attached to a blue surface""}",thing,0.2454,0.6497,0.8815,806,1,0.0174,support-000029,entity--support-000029,entity-0031,"[""metal latch"", ""metal rod""]",ambiguous,Qwen/Qwen3-VL-4B-Instruct,ebb281ec70b05090aa6165b016eac8ec08e71b17,region-label/v1,sha256:2c44dce50709e65be1c869a251add34ef1a3e6c656cb16032d8b85e3cd729b5d,,"{
+  ""abstained"": false,
+  ""claims"": [
+    {
+      ""hypothesis"": ""metal latch"",
+      ""category"": ""hardware"",
+      ""region_kind"": ""thing"",
+      ""attributes"": {
+        ""description"": ""a metallic latch attached to a blue surface""
+      },
+      ""role"": ""primary""
+    }
+  ]
+}"
+camera_1_image_raw-000055,region-0055,metal door,primary,door,"{""description"": ""dark vertical surface with reflective highlights""}",thing,0.198,0.5962,0.9172,587,1,0.0025,,,,,,Qwen/Qwen3-VL-4B-Instruct,ebb281ec70b05090aa6165b016eac8ec08e71b17,region-label/v1,sha256:fc79faf1978ffa898a692f2b4ee4a40964412b856278e8109556dff19c13fa69,,"{
+  ""abstained"": false,
+  ""claims"": [
+    {
+      ""hypothesis"": ""metal door"",
+      ""category"": ""door"",
+      ""region_kind"": ""thing"",
+      ""attributes"": {
+        ""description"": ""dark vertical surface with reflective highlights""
+      },
+      ""role"": ""primary""
+    }
+  ]
+}"
+camera_1_image_raw-000055,region-0056,metal pole,primary,structure,"{""description"": ""vertical metallic object with reflective surface""}",thing,0.2193,0.5127,0.8623,1706,1,0.0075,support-000030,entity--support-000030,entity-0008,"[""metal pole""]",unambiguous,Qwen/Qwen3-VL-4B-Instruct,ebb281ec70b05090aa6165b016eac8ec08e71b17,region-label/v1,sha256:1539b4233b8ae8b43c7b98dc9ab92b85984ab3c8f07f049536f0d1fe81bc5571,,"{
+  ""abstained"": false,
+  ""claims"": [
+    {
+      ""hypothesis"": ""metal pole"",
+      ""category"": ""structure"",
+      ""region_kind"": ""thing"",
+      ""attributes"": {
+        ""description"": ""vertical metallic object with reflective surface""
+      },
+      ""role"": ""primary""
+    }
+  ]
+}"
+camera_1_image_raw-000055,region-0057,blurry image,primary,image,"{""description"": ""indistinct visual content""}",,0.2146,0.62,0.8577,226,1,0.0022,,,,,,Qwen/Qwen3-VL-4B-Instruct,ebb281ec70b05090aa6165b016eac8ec08e71b17,region-label/v1,sha256:3f9a273814ff0c20e8a8a10f8b99ad6567aad5d454fe9f76d92d7c2b64aa540f,,"{
+  ""abstained"": false,
+  ""claims"": [
+    {
+      ""hypothesis"": ""blurry image"",
+      ""category"": ""image"",
+      ""region_kind"": null,
+      ""attributes"": {
+        ""description"": ""indistinct visual content""
+      },
+      ""role"": ""primary""
+    }
+  ]
+}"
+camera_1_image_raw-000055,region-0058,ceiling panel,primary,structure,"{""description"": ""a section of ceiling with visible grid lines and a blue trim along the edge""}",thing,0.2021,0.6157,0.7765,588,5,0.0224,support-000031,entity--support-000031,entity-0016,"[""ceiling panel""]",unambiguous,Qwen/Qwen3-VL-4B-Instruct,ebb281ec70b05090aa6165b016eac8ec08e71b17,region-label/v1,sha256:da8b8b2960b3e133d7fc982a18dde2df1f7b8d7add1354d189f05b8bab53f407,,"{
+  ""abstained"": false,
+  ""claims"": [
+    {
+      ""hypothesis"": ""ceiling panel"",
+      ""category"": ""structure"",
+      ""region_kind"": ""thing"",
+      ""attributes"": {
+        ""description"": ""a section of ceiling with visible grid lines and a blue trim along the edge""
+      },
+      ""role"": ""primary""
+    }
+  ]
+}"
+camera_1_image_raw-000055,region-0059,metal latch,primary,hardware,"{""description"": ""a metallic latch with a reflective surface, mounted on a light-colored surface""}",thing,0.2223,0.5607,0.5516,630,2,0.0045,support-000007,entity--support-000007,entity-0025,"[""blue door"", ""door"", ""door handle"", ""metal latch"", ""metal rod"", ""metal towel rack""]",ambiguous,Qwen/Qwen3-VL-4B-Instruct,ebb281ec70b05090aa6165b016eac8ec08e71b17,region-label/v1,sha256:27b6b19e0c68b22da9abb4e6581495d056c8e99c0860629c1e1e9baaa57566d3,,"{
+  ""abstained"": false,
+  ""claims"": [
+    {
+      ""hypothesis"": ""metal latch"",
+      ""category"": ""hardware"",
+      ""region_kind"": ""thing"",
+      ""attributes"": {
+        ""description"": ""a metallic latch with a reflective surface, mounted on a light-colored surface""
+      },
+      ""role"": ""primary""
+    }
+  ]
+}"
+camera_1_image_raw-000055,region-0060,metal bracket,primary,thing,"{""description"": ""a blue metal bracket attached to a white tiled surface""}",thing,0.2105,0.5587,0.5511,3871,18,0.0387,support-000008,entity--support-000008,entity-0011,"[""blue trim"", ""ceiling panel"", ""ceiling tile"", ""door"", ""metal bracket""]",ambiguous,Qwen/Qwen3-VL-4B-Instruct,ebb281ec70b05090aa6165b016eac8ec08e71b17,region-label/v1,sha256:27d55a3db716e2e97a5619ff99ae22ec94b8ea7898804d5c1d6e85c0275dab92,,"{
+  ""abstained"": false,
+  ""claims"": [
+    {
+      ""hypothesis"": ""metal bracket"",
+      ""category"": ""thing"",
+      ""region_kind"": ""thing"",
+      ""attributes"": {
+        ""description"": ""a blue metal bracket attached to a white tiled surface""
+      },
+      ""role"": ""primary""
+    }
+  ]
+}"
+camera_1_image_raw-000055,region-0061,metal rod,primary,tool,"{""description"": ""a metallic rod with a reflective surface, lying horizontally on a textured blue surface""}",thing,0.2063,0.544,0.4602,1696,12,0.0209,support-000007,entity--support-000007,entity-0025,"[""blue door"", ""door"", ""door handle"", ""metal latch"", ""metal rod"", ""metal towel rack""]",ambiguous,Qwen/Qwen3-VL-4B-Instruct,ebb281ec70b05090aa6165b016eac8ec08e71b17,region-label/v1,sha256:c8ce7fbd7d42a0fa23f1df142b72af3233a481e1b7b389c51dd43e8355061601,,"{
+  ""abstained"": false,
+  ""claims"": [
+    {
+      ""hypothesis"": ""metal rod"",
+      ""category"": ""tool"",
+      ""region_kind"": ""thing"",
+      ""attributes"": {
+        ""description"": ""a metallic rod with a reflective surface, lying horizontally on a textured blue surface""
+      },
+      ""role"": ""primary""
+    }
+  ]
+}"
+camera_1_image_raw-000055,region-0062,window frame,primary,structure,"{""description"": ""dark vertical frame with vertical slats, possibly part of a window or door""}",thing,0.2551,0.5047,0.8438,2410,1,0.0135,support-000032,entity--support-000032,entity-0023,"[""window frame""]",unambiguous,Qwen/Qwen3-VL-4B-Instruct,ebb281ec70b05090aa6165b016eac8ec08e71b17,region-label/v1,sha256:cfd35e3e2bc11d5778d436a11f8e02fa71aadfaee121798b19c06773283bfaf5,,"{
+  ""abstained"": false,
+  ""claims"": [
+    {
+      ""hypothesis"": ""window frame"",
+      ""category"": ""structure"",
+      ""region_kind"": ""thing"",
+      ""attributes"": {
+        ""description"": ""dark vertical frame with vertical slats, possibly part of a window or door""
+      },
+      ""role"": ""primary""
+    }
+  ]
+}"
+camera_1_image_raw-000055,region-0063,blue wall,primary,wall,"{""description"": ""a vertical blue surface with some wear and tear visible at the bottom""}",thing,0.1924,0.5401,0.1685,914,48,0.0157,support-000033,entity--support-000033,entity-0022,"[""blue wall""]",unambiguous,Qwen/Qwen3-VL-4B-Instruct,ebb281ec70b05090aa6165b016eac8ec08e71b17,region-label/v1,sha256:05e04ceb715ad2a43ae30672f75750df9572d2607ebd9b015eb617741244a55c,,"{
+  ""abstained"": false,
+  ""claims"": [
+    {
+      ""hypothesis"": ""blue wall"",
+      ""category"": ""wall"",
+      ""region_kind"": ""thing"",
+      ""attributes"": {
+        ""description"": ""a vertical blue surface with some wear and tear visible at the bottom""
+      },
+      ""role"": ""primary""
+    }
+  ]
+}"
+camera_1_image_raw-000055,region-0064,window frame,primary,structure,"{""description"": ""dark vertical frame with light-colored glass panes""}",thing,0.249,0.5326,0.7536,1433,2,0.0085,,,,,,Qwen/Qwen3-VL-4B-Instruct,ebb281ec70b05090aa6165b016eac8ec08e71b17,region-label/v1,sha256:dc52aec7119481f88e1b518d0e21252e44726fb4c1bd9968ef2f2005923f46f6,,"{
+  ""abstained"": false,
+  ""claims"": [
+    {
+      ""hypothesis"": ""window frame"",
+      ""category"": ""structure"",
+      ""region_kind"": ""thing"",
+      ""attributes"": {
+        ""description"": ""dark vertical frame with light-colored glass panes""
+      },
+      ""role"": ""primary""
+    }
+  ]
+}"
+camera_1_image_raw-000055,region-0065,window,primary,structure,"{""description"": ""a window with a greenish tint and a white frame, partially visible on a curved surface""}",thing,0.2393,0.2262,0.4794,1126,16,0.0642,support-000034,entity--support-000034,entity-0030,"[""window""]",unambiguous,Qwen/Qwen3-VL-4B-Instruct,ebb281ec70b05090aa6165b016eac8ec08e71b17,region-label/v1,sha256:6bd0077179d7e4b4e8793cd63b8c78f8e03247bae213529852bb5326ff826160,,"{
+  ""abstained"": false,
+  ""claims"": [
+    {
+      ""hypothesis"": ""window"",
+      ""category"": ""structure"",
+      ""region_kind"": ""thing"",
+      ""attributes"": {
+        ""description"": ""a window with a greenish tint and a white frame, partially visible on a curved surface""
+      },
+      ""role"": ""primary""
+    }
+  ]
+}"
+camera_1_image_raw-000055,region-0066,metal rail,primary,structure,"{""description"": ""a curved metallic rail against a blue wall""}",thing,0.2546,0.5283,0.4996,1675,10,0.0279,support-000023,entity--support-000023,entity-0005,"[""metal hook"", ""metal rail""]",ambiguous,Qwen/Qwen3-VL-4B-Instruct,ebb281ec70b05090aa6165b016eac8ec08e71b17,region-label/v1,sha256:28cca8c65b4086f481c19e76499e239c755065f89e470131728379d4f50ff618,,"{
+  ""abstained"": false,
+  ""claims"": [
+    {
+      ""hypothesis"": ""metal rail"",
+      ""category"": ""structure"",
+      ""region_kind"": ""thing"",
+      ""attributes"": {
+        ""description"": ""a curved metallic rail against a blue wall""
+      },
+      ""role"": ""primary""
+    }
+  ]
+}"
+camera_1_image_raw-000055,region-0067,blue surface,primary,surface,"{""description"": ""blurry blue area with indistinct edges""}",thing,0.2157,0.5103,0.8663,320,1,0.0017,,,,,,Qwen/Qwen3-VL-4B-Instruct,ebb281ec70b05090aa6165b016eac8ec08e71b17,region-label/v1,sha256:ce3e77db2fddfa6e0d63af45a88ac0747b90bb0664e706ef9ce60a29f0a1bc56,,"{
+  ""abstained"": false,
+  ""claims"": [
+    {
+      ""hypothesis"": ""blue surface"",
+      ""category"": ""surface"",
+      ""region_kind"": ""thing"",
+      ""attributes"": {
+        ""description"": ""blurry blue area with indistinct edges""
+      },
+      ""role"": ""primary""
+    }
+  ]
+}"
+camera_1_image_raw-000055,region-0068,,,,,,,0.5071,0.871,142,1,,,,,,,Qwen/Qwen3-VL-4B-Instruct,,,,semantic response is missing required fields: ['claims'],"{
+  ""abstained"": true
+}"
+camera_1_image_raw-000055,region-0069,blue door,primary,door,"{""color"": ""blue"", ""material"": ""metal"", ""state"": ""weathered""}",thing,0.1944,0.4472,0.036,7828,195,0.1886,support-000001,entity--support-000001,entity-0025,"[""blue door"", ""door"", ""door handle"", ""metal latch"", ""metal rod"", ""metal towel rack""]",ambiguous,Qwen/Qwen3-VL-4B-Instruct,ebb281ec70b05090aa6165b016eac8ec08e71b17,region-label/v1,sha256:18cb48fe2260e8a3354c81618ff45b7f9a8fef6f3cb4503cc424f6aa8adeabee,,"{
+  ""abstained"": false,
+  ""claims"": [
+    {
+      ""hypothesis"": ""blue door"",
+      ""category"": ""door"",
+      ""region_kind"": ""thing"",
+      ""attributes"": {
+        ""color"": ""blue"",
+        ""material"": ""metal"",
+        ""state"": ""weathered""
+      },
+      ""role"": ""primary""
+    }
+  ]
+}"
+camera_1_image_raw-000055,region-0070,door handle,primary,door,"{""description"": ""metal handle mounted on a blue door""}",thing,0.2099,0.4401,0.2689,7908,158,0.0915,support-000001,entity--support-000001,entity-0025,"[""blue door"", ""door"", ""door handle"", ""metal latch"", ""metal rod"", ""metal towel rack""]",ambiguous,Qwen/Qwen3-VL-4B-Instruct,ebb281ec70b05090aa6165b016eac8ec08e71b17,region-label/v1,sha256:1b5b558baf160917cc98c75c6c57f487cae8b9a218c0c4002a2c1a36016eb6df,,"{
+  ""abstained"": false,
+  ""claims"": [
+    {
+      ""hypothesis"": ""door handle"",
+      ""category"": ""door"",
+      ""region_kind"": ""thing"",
+      ""attributes"": {
+        ""description"": ""metal handle mounted on a blue door""
+      },
+      ""role"": ""primary""
+    }
+  ]
+}"
+camera_1_image_raw-000055,region-0071,door,primary,door,"{""description"": ""dark-colored door with a handle and lock, partially visible in a dimly lit environment""}",thing,0.1962,0.3281,0.1002,290,7,0.0035,support-000013,entity--support-000013,entity-0002,"[""door""]",unambiguous,Qwen/Qwen3-VL-4B-Instruct,ebb281ec70b05090aa6165b016eac8ec08e71b17,region-label/v1,sha256:aacab9747418ac7217bd482ad41275fd28f818aa0301df33713c7f251e9267ed,,"{
+  ""abstained"": false,
+  ""claims"": [
+    {
+      ""hypothesis"": ""door"",
+      ""category"": ""door"",
+      ""region_kind"": ""thing"",
+      ""attributes"": {
+        ""description"": ""dark-colored door with a handle and lock, partially visible in a dimly lit environment""
+      },
+      ""role"": ""primary""
+    }
+  ]
+}"
+camera_1_image_raw-000055,region-0072,curved edge,primary,surface,"{""description"": ""a smooth, curved boundary between two contrasting colors""}",thing,0.2182,0.3241,0.7837,282,1,0.0068,,,,,,Qwen/Qwen3-VL-4B-Instruct,ebb281ec70b05090aa6165b016eac8ec08e71b17,region-label/v1,sha256:377647e9643ce5723c6935c69eff654e9b463614215d74f53166fbd568b7b568,,"{
+  ""abstained"": false,
+  ""claims"": [
+    {
+      ""hypothesis"": ""curved edge"",
+      ""category"": ""surface"",
+      ""region_kind"": ""thing"",
+      ""attributes"": {
+        ""description"": ""a smooth, curved boundary between two contrasting colors""
+      },
+      ""role"": ""primary""
+    }
+  ]
+}"
+camera_1_image_raw-000055,region-0073,metal latch,primary,mechanism,"{""description"": ""a metallic latch attached to a blue surface, possibly a door or panel""}",thing,0.2477,0.316,0.5254,1897,13,0.0385,support-000035,entity--support-000035,entity-0014,"[""metal latch""]",unambiguous,Qwen/Qwen3-VL-4B-Instruct,ebb281ec70b05090aa6165b016eac8ec08e71b17,region-label/v1,sha256:62b466dfdb3de8a393683fc30f9257b42e7ea5a43eb5fed938ca78c1649d4644,,"{
+  ""abstained"": false,
+  ""claims"": [
+    {
+      ""hypothesis"": ""metal latch"",
+      ""category"": ""mechanism"",
+      ""region_kind"": ""thing"",
+      ""attributes"": {
+        ""description"": ""a metallic latch attached to a blue surface, possibly a door or panel""
+      },
+      ""role"": ""primary""
+    }
+  ]
+}"
+camera_1_image_raw-000055,region-0074,dark surface,primary,surface,"{""description"": ""blurry dark area with indistinct edges""}",thing,0.2072,0.313,0.9042,340,1,0.0021,,,,,,Qwen/Qwen3-VL-4B-Instruct,ebb281ec70b05090aa6165b016eac8ec08e71b17,region-label/v1,sha256:2a2363fdda4c536bd41cdb02df9b453c2cb3a3215cf64f6a956702260630c63a,,"{
+  ""abstained"": false,
+  ""claims"": [
+    {
+      ""hypothesis"": ""dark surface"",
+      ""category"": ""surface"",
+      ""region_kind"": ""thing"",
+      ""attributes"": {
+        ""description"": ""blurry dark area with indistinct edges""
+      },
+      ""role"": ""primary""
+    }
+  ]
+}"
+camera_1_image_raw-000055,region-0075,ceiling panel,primary,structure,"{""description"": ""a ceiling panel with visible grid lines and a recessed light fixture below""}",thing,0.2286,0.2955,0.593,581,2,0.0051,support-000036,entity--support-000036,entity-0019,"[""ceiling panel""]",unambiguous,Qwen/Qwen3-VL-4B-Instruct,ebb281ec70b05090aa6165b016eac8ec08e71b17,region-label/v1,sha256:92c1886a4a5428a61f6a01840028b866a2cba51ff9ebd025fe7599e67d1f5934,,"{
+  ""abstained"": false,
+  ""claims"": [
+    {
+      ""hypothesis"": ""ceiling panel"",
+      ""category"": ""structure"",
+      ""region_kind"": ""thing"",
+      ""attributes"": {
+        ""description"": ""a ceiling panel with visible grid lines and a recessed light fixture below""
+      },
+      ""role"": ""primary""
+    }
+  ]
+}"
+camera_1_image_raw-000055,region-0076,metal hook,primary,hardware,"{""description"": ""a metallic hook with a curved end and a flat base, mounted on a blue surface""}",thing,0.1736,0.2654,0.5938,632,7,0.0064,support-000037,entity--support-000037,entity-0015,"[""metal hook"", ""metal pole""]",ambiguous,Qwen/Qwen3-VL-4B-Instruct,ebb281ec70b05090aa6165b016eac8ec08e71b17,region-label/v1,sha256:952aff49a5504a8ba09e6469809bc95c6c7695481c1b5e2c947568c1f7ddb830,,"{
+  ""abstained"": false,
+  ""claims"": [
+    {
+      ""hypothesis"": ""metal hook"",
+      ""category"": ""hardware"",
+      ""region_kind"": ""thing"",
+      ""attributes"": {
+        ""description"": ""a metallic hook with a curved end and a flat base, mounted on a blue surface""
+      },
+      ""role"": ""primary""
+    }
+  ]
+}"
+camera_1_image_raw-000055,region-0077,blue vertical bar,primary,structure,"{""description"": ""a vertical blue bar on the left side of the image""}",thing,0.2633,0.2511,0.6661,486,4,0.0035,,,,,,Qwen/Qwen3-VL-4B-Instruct,ebb281ec70b05090aa6165b016eac8ec08e71b17,region-label/v1,sha256:78319aad032d6d9153d072aa60df32f3ccc92faf71d3a8e29bb90f5829127fa1,,"{
+  ""abstained"": false,
+  ""claims"": [
+    {
+      ""hypothesis"": ""blue vertical bar"",
+      ""category"": ""structure"",
+      ""region_kind"": ""thing"",
+      ""attributes"": {
+        ""description"": ""a vertical blue bar on the left side of the image""
+      },
+      ""role"": ""primary""
+    }
+  ]
+}"
+camera_1_image_raw-000055,region-0078,doorway,primary,structure,"{""description"": ""a narrow opening between two walls, leading to a darker space beyond""}",thing,0.2398,0.2482,0.6354,911,2,0.008,support-000038,entity--support-000038,entity-0032,"[""doorway""]",unambiguous,Qwen/Qwen3-VL-4B-Instruct,ebb281ec70b05090aa6165b016eac8ec08e71b17,region-label/v1,sha256:254c4caa82bb843d09f8ae31760807412d7762118b7a27952b36185da759586c,,"{
+  ""abstained"": false,
+  ""claims"": [
+    {
+      ""hypothesis"": ""doorway"",
+      ""category"": ""structure"",
+      ""region_kind"": ""thing"",
+      ""attributes"": {
+        ""description"": ""a narrow opening between two walls, leading to a darker space beyond""
+      },
+      ""role"": ""primary""
+    }
+  ]
+}"
+camera_1_image_raw-000055,region-0079,metal latch,primary,mechanical component,"{""description"": ""a close-up view of a metallic latch or locking mechanism on a blue surface""}",thing,0.2213,0.2407,0.18,990,17,0.0285,support-000039,entity--support-000039,entity-0009,"[""metal latch""]",unambiguous,Qwen/Qwen3-VL-4B-Instruct,ebb281ec70b05090aa6165b016eac8ec08e71b17,region-label/v1,sha256:1f7d2b8c4294f0aefdd46fceaa05916b48345a371a6c7a84d770441e1f15b190,,"{
+  ""abstained"": false,
+  ""claims"": [
+    {
+      ""hypothesis"": ""metal latch"",
+      ""category"": ""mechanical component"",
+      ""region_kind"": ""thing"",
+      ""attributes"": {
+        ""description"": ""a close-up view of a metallic latch or locking mechanism on a blue surface""
+      },
+      ""role"": ""primary""
+    }
+  ]
+}"
+camera_1_image_raw-000055,region-0080,metal pole,primary,structure,"{""description"": ""a vertical metallic pole with a blurred background""}",thing,0.1869,0.2338,0.7783,181,4,0.0053,,,,,,Qwen/Qwen3-VL-4B-Instruct,ebb281ec70b05090aa6165b016eac8ec08e71b17,region-label/v1,sha256:b5633be46fe5a89a68791b1f3545573e7b493ad518395abe4ed43ada052a9dcb,,"{
+  ""abstained"": false,
+  ""claims"": [
+    {
+      ""hypothesis"": ""metal pole"",
+      ""category"": ""structure"",
+      ""region_kind"": ""thing"",
+      ""attributes"": {
+        ""description"": ""a vertical metallic pole with a blurred background""
+      },
+      ""role"": ""primary""
+    }
+  ]
+}"
+camera_1_image_raw-000055,region-0081,metal rod,primary,thing,"{""description"": ""a metallic rod with a reflective surface, mounted on a wall or structure""}",thing,0.2479,0.231,0.4284,1139,14,0.015,support-000040,entity--support-000040,entity-0031,"[""metal latch"", ""metal rod""]",ambiguous,Qwen/Qwen3-VL-4B-Instruct,ebb281ec70b05090aa6165b016eac8ec08e71b17,region-label/v1,sha256:92637fab4332b513aa32e8c45c9932d06d0330491d54da0a063994e151f69c43,,"{
+  ""abstained"": false,
+  ""claims"": [
+    {
+      ""hypothesis"": ""metal rod"",
+      ""category"": ""thing"",
+      ""region_kind"": ""thing"",
+      ""attributes"": {
+        ""description"": ""a metallic rod with a reflective surface, mounted on a wall or structure""
+      },
+      ""role"": ""primary""
+    }
+  ]
+}"
+camera_1_image_raw-000055,region-0082,metal pole,primary,structure,"{""description"": ""blurry vertical metallic object""}",thing,0.1581,0.2308,0.7186,456,5,0.0042,support-000037,entity--support-000037,entity-0015,"[""metal hook"", ""metal pole""]",ambiguous,Qwen/Qwen3-VL-4B-Instruct,ebb281ec70b05090aa6165b016eac8ec08e71b17,region-label/v1,sha256:b62dd49005762e2c423c601c82493dc26ba24e40d0495658c6ffca4969b0d452,,"{
+  ""abstained"": false,
+  ""claims"": [
+    {
+      ""hypothesis"": ""metal pole"",
+      ""category"": ""structure"",
+      ""region_kind"": ""thing"",
+      ""attributes"": {
+        ""description"": ""blurry vertical metallic object""
+      },
+      ""role"": ""primary""
+    }
+  ]
+}"
+camera_1_image_raw-000055,region-0083,dark surface,primary,surface,"{""description"": ""a dark, curved surface with a slight gradient from dark to lighter tone on the left edge""}",thing,0.215,0.2301,0.8015,1693,3,0.0153,support-000041,entity--support-000041,entity-0036,"[""dark surface""]",unambiguous,Qwen/Qwen3-VL-4B-Instruct,ebb281ec70b05090aa6165b016eac8ec08e71b17,region-label/v1,sha256:b0581485af2902fb30eab079aeb5b3e286d53f1912dabf68b8160aba4421e3de,,"{
+  ""abstained"": false,
+  ""claims"": [
+    {
+      ""hypothesis"": ""dark surface"",
+      ""category"": ""surface"",
+      ""region_kind"": ""thing"",
+      ""attributes"": {
+        ""description"": ""a dark, curved surface with a slight gradient from dark to lighter tone on the left edge""
+      },
+      ""role"": ""primary""
+    }
+  ]
+}"

@@ -1,0 +1,16 @@
+{
+  "components": {
+    "semantic_interpretation": {
+      "interpreter": {
+        "qwen": {
+          "view_policy": {
+            "region_views": [
+              "contextual_crop"
+            ],
+            "context_margin_ratio": 0.5
+          }
+        }
+      }
+    }
+  }
+}

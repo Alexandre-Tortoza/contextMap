@@ -1,0 +1,2834 @@
+{
+  "corridor02-f055-f061-sam2-qwen-baseline-vox10": {
+    "map_id": "corridor02-f055-f061-sam2-qwen-baseline-vox10",
+    "annotation_status": [
+      "draft-pending-review"
+    ],
+    "annotators": [
+      "model-draft (Claude, a partir da lista de objetos de um VLM e da imagem com grade)"
+    ],
+    "build_run": "run-0016",
+    "frames": {
+      "000061": {
+        "perception_run": "run-0007",
+        "regions": 68,
+        "region_area_px": {
+          "median": 846.5,
+          "below_0_5pct_frame": 47
+        },
+        "known_object_recall": {
+          "matched": 9,
+          "total": 13,
+          "recall": 0.692
+        },
+        "known_object_recall_c4": {
+          "matched": 6,
+          "total": 9,
+          "recall": 0.667
+        },
+        "known_object_recall_extra": {
+          "matched": 3,
+          "total": 4,
+          "recall": 0.75
+        },
+        "structure_recall": {
+          "matched": 1,
+          "total": 3,
+          "recall": 0.333
+        },
+        "fragments_per_object": {
+          "mean_over_hit": 3.33,
+          "max": 14,
+          "by_instance": {
+            "door-left": 14,
+            "door-right": 7,
+            "door-far": 2,
+            "handle-left": 3,
+            "handle-right": 2,
+            "window-left-door": 1,
+            "window-right-door": 1,
+            "window-corridor-01": 3,
+            "window-corridor-02": 1,
+            "light-01": 0,
+            "beam-ceiling": 4,
+            "plank-floor": 1,
+            "debris-03": 1
+          }
+        },
+        "regions_not_matching_any_instance": 58,
+        "label_correct": {
+          "correct": 2,
+          "matched": 9
+        },
+        "matches": {
+          "door-left": {
+            "region_id": "region-0021",
+            "iou": 0.804,
+            "label": "cabinet",
+            "label_correct": false
+          },
+          "door-right": {
+            "region_id": "region-0005",
+            "iou": 0.875,
+            "label": "screen",
+            "label_correct": false
+          },
+          "handle-left": {
+            "region_id": "region-0065",
+            "iou": 0.722,
+            "label": "tool",
+            "label_correct": false
+          },
+          "handle-right": {
+            "region_id": "region-0017",
+            "iou": 0.639,
+            "label": "bar",
+            "label_correct": true
+          },
+          "window-corridor-01": {
+            "region_id": "region-0015",
+            "iou": 0.696,
+            "label": "window",
+            "label_correct": true
+          },
+          "window-corridor-02": {
+            "region_id": "region-0035",
+            "iou": 0.55,
+            "label": "door",
+            "label_correct": false
+          },
+          "beam-ceiling": {
+            "region_id": "region-0041",
+            "iou": 0.636,
+            "label": "shelf",
+            "label_correct": false
+          },
+          "plank-floor": {
+            "region_id": "region-0010",
+            "iou": 0.892,
+            "label": "log",
+            "label_correct": false
+          },
+          "debris-03": {
+            "region_id": "region-0020",
+            "iou": 0.552,
+            "label": "shell",
+            "label_correct": false
+          },
+          "wall-right": {
+            "region_id": "region-0002",
+            "iou": 0.672,
+            "label": "wall",
+            "label_correct": true
+          }
+        },
+        "semantic_calls": 68,
+        "semantic_parse_failures": 0,
+        "abstentions": 5,
+        "primary_labels": {
+          "door": 6,
+          "bar": 4,
+          "frame": 4,
+          "handle": 3,
+          "shelf": 3,
+          "wall": 2,
+          "pipe": 2,
+          "line": 2,
+          "window": 2,
+          "plate": 2,
+          "label": 2,
+          "leaf": 2,
+          "button": 2,
+          "baseboard": 1,
+          "screen": 1,
+          "chair": 1,
+          "edge": 1,
+          "log": 1,
+          "lamp": 1,
+          "box": 1,
+          "shell": 1,
+          "cabinet": 1,
+          "blade": 1,
+          "tube": 1,
+          "pad": 1,
+          "sign": 1,
+          "screw": 1,
+          "stick": 1,
+          "spatula": 1,
+          "tag": 1,
+          "rod": 1,
+          "rocket": 1,
+          "glove": 1,
+          "folder": 1,
+          "cap": 1,
+          "pen": 1,
+          "strip": 1,
+          "tool": 1,
+          "key": 1,
+          "outline": 1
+        },
+        "stage_seconds": {
+          "image_preparation": 2.1039995772298425e-06,
+          "dense_feature_extraction": 1.2160463969994453,
+          "region_discovery": 4.374424842000735,
+          "dense_region_pooling": 0.022328682000079425,
+          "region_feature_extraction": 3.8709618159991805,
+          "region_interpretation": 173.369823301
+        },
+        "perception_seconds": 182.85
+      },
+      "000055": {
+        "perception_run": "run-0006",
+        "regions": 61,
+        "region_area_px": {
+          "median": 806.0,
+          "below_0_5pct_frame": 39
+        },
+        "known_object_recall": {
+          "matched": 13,
+          "total": 16,
+          "recall": 0.812
+        },
+        "known_object_recall_c4": {
+          "matched": 9,
+          "total": 9,
+          "recall": 1.0
+        },
+        "known_object_recall_extra": {
+          "matched": 4,
+          "total": 7,
+          "recall": 0.571
+        },
+        "structure_recall": {
+          "matched": 2,
+          "total": 3,
+          "recall": 0.667
+        },
+        "fragments_per_object": {
+          "mean_over_hit": 2.93,
+          "max": 9,
+          "by_instance": {
+            "door-left": 9,
+            "door-right": 9,
+            "door-far": 2,
+            "handle-left": 1,
+            "handle-right": 1,
+            "window-left-door": 4,
+            "window-right-door": 1,
+            "window-corridor-01": 2,
+            "window-corridor-02": 1,
+            "light-01": 1,
+            "light-02": 1,
+            "beam-ceiling": 7,
+            "baseboard-left": 0,
+            "plank-floor": 1,
+            "debris-01": 1,
+            "debris-02": 0
+          }
+        },
+        "regions_not_matching_any_instance": 46,
+        "label_correct": {
+          "correct": 5,
+          "matched": 13
+        },
+        "matches": {
+          "door-left": {
+            "region_id": "region-0028",
+            "iou": 0.598,
+            "label": "handle",
+            "label_correct": false
+          },
+          "door-right": {
+            "region_id": "region-0015",
+            "iou": 0.947,
+            "label": "door",
+            "label_correct": true
+          },
+          "door-far": {
+            "region_id": "region-0013",
+            "iou": 0.917,
+            "label": "door",
+            "label_correct": true
+          },
+          "handle-left": {
+            "region_id": "region-0053",
+            "iou": 0.76,
+            "label": "handle",
+            "label_correct": true
+          },
+          "handle-right": {
+            "region_id": "region-0029",
+            "iou": 0.949,
+            "label": "towel rack",
+            "label_correct": false
+          },
+          "window-left-door": {
+            "region_id": "region-0009",
+            "iou": 0.8,
+            "label": "seat",
+            "label_correct": false
+          },
+          "window-right-door": {
+            "region_id": "region-0014",
+            "iou": 0.547,
+            "label": "knife",
+            "label_correct": false
+          },
+          "window-corridor-01": {
+            "region_id": "region-0020",
+            "iou": 0.928,
+            "label": "window",
+            "label_correct": true
+          },
+          "window-corridor-02": {
+            "region_id": "region-0038",
+            "iou": 0.715,
+            "label": "door",
+            "label_correct": false
+          },
+          "light-01": {
+            "region_id": "region-0008",
+            "iou": 0.886,
+            "label": "bar",
+            "label_correct": false
+          },
+          "light-02": {
+            "region_id": "region-0049",
+            "iou": 0.647,
+            "label": "text",
+            "label_correct": false
+          },
+          "beam-ceiling": {
+            "region_id": "region-0048",
+            "iou": 0.553,
+            "label": "bar",
+            "label_correct": true
+          },
+          "plank-floor": {
+            "region_id": "region-0011",
+            "iou": 0.841,
+            "label": "barrel",
+            "label_correct": false
+          },
+          "wall-left": {
+            "region_id": "region-0041",
+            "iou": 0.715,
+            "label": "panel",
+            "label_correct": false
+          },
+          "ceiling": {
+            "region_id": "region-0027",
+            "iou": 0.534,
+            "label": "ceiling",
+            "label_correct": true
+          }
+        },
+        "semantic_calls": 61,
+        "semantic_parse_failures": 0,
+        "abstentions": 6,
+        "primary_labels": {
+          "bar": 9,
+          "door": 7,
+          "panel": 3,
+          "blade": 3,
+          "edge": 3,
+          "handle": 2,
+          "line": 2,
+          "wall": 1,
+          "board": 1,
+          "microphone": 1,
+          "seat": 1,
+          "barrel": 1,
+          "knife": 1,
+          "spatula": 1,
+          "pole": 1,
+          "wing": 1,
+          "window": 1,
+          "screen": 1,
+          "frame": 1,
+          "pad": 1,
+          "ceiling": 1,
+          "towel rack": 1,
+          "plate": 1,
+          "object": 1,
+          "shelf": 1,
+          "button": 1,
+          "cap": 1,
+          "pen": 1,
+          "screw": 1,
+          "text": 1,
+          "sleeve": 1,
+          "skateboard": 1,
+          "leaf": 1
+        },
+        "stage_seconds": {
+          "image_preparation": 1.8239989003632218e-06,
+          "dense_feature_extraction": 1.2095198389979487,
+          "region_discovery": 4.308094123000046,
+          "dense_region_pooling": 0.019940895999752684,
+          "region_feature_extraction": 3.7038205630015,
+          "region_interpretation": 154.40788794800028
+        },
+        "perception_seconds": 163.65
+      }
+    },
+    "association": {
+      "000061": {
+        "association_run": "run-0015",
+        "membership_policy_id": "mask-membership-v1",
+        "observations": 68,
+        "observations_with_support": 60,
+        "support_points_total": 5554,
+        "skipped_regions": {},
+        "excluded_visible_points": 0,
+        "footprint_kinds": {
+          "mask": 68
+        },
+        "support_depth_range_m": {
+          "median": 0.255,
+          "share_over_1m": 0.233
+        }
+      },
+      "000055": {
+        "association_run": "run-0014",
+        "membership_policy_id": "mask-membership-v1",
+        "observations": 61,
+        "observations_with_support": 52,
+        "support_points_total": 6124,
+        "skipped_regions": {},
+        "excluded_visible_points": 0,
+        "footprint_kinds": {
+          "mask": 61
+        },
+        "support_depth_range_m": {
+          "median": 0.337,
+          "share_over_1m": 0.212
+        }
+      }
+    },
+    "entities": {
+      "resolved_with_annotated_instance": 15,
+      "false_merges": [
+        [
+          "beam-ceiling",
+          "ceiling"
+        ],
+        [
+          "wall-right",
+          "window-corridor-01"
+        ]
+      ],
+      "false_splits": {
+        "door-left": 2,
+        "handle-right": 2
+      },
+      "instances_in_one_entity_in_both_frames": 5
+    },
+    "map": {
+      "location": "workspace/corridor02-f055-f061-sam2-qwen-baseline-vox10/000001",
+      "context_map_id": "6f327d6891ab182b776ad3ac3f655cb0",
+      "entity_count": 51,
+      "relation_count": 3526,
+      "geometry_points": 393054,
+      "fusion": {
+        "supports": 57,
+        "excluded_observations": 54
+      },
+      "semantic_mapping": {
+        "entities": 57,
+        "ambiguity_state": {
+          "conflicting": 7,
+          "unambiguous": 42,
+          "insufficient_evidence": 3,
+          "ambiguous": 5
+        },
+        "with_primary_label": 42
+      },
+      "entity_resolution": {
+        "resolved": 51,
+        "merged_from_several_entities": 5,
+        "seen_in_both_frames": 11,
+        "belief_support_status": {
+          "tentative": 43,
+          "insufficient_evidence": 3,
+          "supported": 5
+        },
+        "without_interaction_radius": 13,
+        "with_several_distinct_radii": 3,
+        "interaction_radius_m": {
+          "count": 42,
+          "min": 0.024799584162337053,
+          "median": 0.2853597068148678,
+          "p90": 0.9544495071229676,
+          "max": 3.7839228428579363
+        },
+        "max_extent_m": {
+          "count": 51,
+          "min": 0.06199896040584263,
+          "median": 0.7129306655819079,
+          "p90": 1.8353752012822042,
+          "max": 10.37589561208209
+        },
+        "distinct_labels": 42
+      },
+      "relations": {
+        "next_to": {
+          "supported": 292,
+          "rejected": 96,
+          "unresolved": 266
+        },
+        "touching": {
+          "unresolved": 282,
+          "rejected": 290,
+          "supported": 82
+        },
+        "within_interaction_range": {
+          "rejected": 804,
+          "unresolved": 1222,
+          "supported": 192
+        }
+      }
+    },
+    "cost": {
+      "perception_seconds_two_frames": 346.5,
+      "semantic_calls_two_frames": 129,
+      "per_process": {
+        "000055": {
+          "wall_s": 2.42,
+          "gpu_peak_mib": 410,
+          "gpu_baseline_mib": 410,
+          "exit": 0
+        },
+        "000061": {
+          "wall_s": 2.36,
+          "gpu_peak_mib": 410,
+          "gpu_baseline_mib": 410,
+          "exit": 0
+        },
+        "build": {
+          "wall_s": 15.5,
+          "gpu_peak_mib": 390,
+          "gpu_baseline_mib": 376,
+          "exit": 0
+        }
+      },
+      "gpu_peak_mib": 410
+    }
+  },
+  "corridor02-f055-f061-sam2-qwentight-vox10": {
+    "map_id": "corridor02-f055-f061-sam2-qwentight-vox10",
+    "annotation_status": [
+      "draft-pending-review"
+    ],
+    "annotators": [
+      "model-draft (Claude, a partir da lista de objetos de um VLM e da imagem com grade)"
+    ],
+    "build_run": "run-0033",
+    "frames": {
+      "000061": {
+        "perception_run": "run-0032",
+        "regions": 68,
+        "region_area_px": {
+          "median": 846.5,
+          "below_0_5pct_frame": 47
+        },
+        "known_object_recall": {
+          "matched": 9,
+          "total": 13,
+          "recall": 0.692
+        },
+        "known_object_recall_c4": {
+          "matched": 6,
+          "total": 9,
+          "recall": 0.667
+        },
+        "known_object_recall_extra": {
+          "matched": 3,
+          "total": 4,
+          "recall": 0.75
+        },
+        "structure_recall": {
+          "matched": 1,
+          "total": 3,
+          "recall": 0.333
+        },
+        "fragments_per_object": {
+          "mean_over_hit": 3.33,
+          "max": 14,
+          "by_instance": {
+            "door-left": 14,
+            "door-right": 7,
+            "door-far": 2,
+            "handle-left": 3,
+            "handle-right": 2,
+            "window-left-door": 1,
+            "window-right-door": 1,
+            "window-corridor-01": 3,
+            "window-corridor-02": 1,
+            "light-01": 0,
+            "beam-ceiling": 4,
+            "plank-floor": 1,
+            "debris-03": 1
+          }
+        },
+        "regions_not_matching_any_instance": 58,
+        "label_correct": {
+          "correct": 0,
+          "matched": 9
+        },
+        "matches": {
+          "door-left": {
+            "region_id": "region-0021",
+            "iou": 0.804,
+            "label": "pipe",
+            "label_correct": false
+          },
+          "door-right": {
+            "region_id": "region-0005",
+            "iou": 0.875,
+            "label": "bar",
+            "label_correct": false
+          },
+          "handle-left": {
+            "region_id": "region-0065",
+            "iou": 0.722,
+            "label": "rod",
+            "label_correct": false
+          },
+          "handle-right": {
+            "region_id": "region-0017",
+            "iou": 0.639,
+            "label": "rod",
+            "label_correct": false
+          },
+          "window-corridor-01": {
+            "region_id": "region-0015",
+            "iou": 0.696,
+            "label": "lamp",
+            "label_correct": false
+          },
+          "window-corridor-02": {
+            "region_id": "region-0035",
+            "iou": 0.55,
+            "label": "door",
+            "label_correct": false
+          },
+          "beam-ceiling": {
+            "region_id": "region-0041",
+            "iou": 0.636,
+            "label": "clip",
+            "label_correct": false
+          },
+          "plank-floor": {
+            "region_id": "region-0010",
+            "iou": 0.892,
+            "label": "pavement",
+            "label_correct": false
+          },
+          "debris-03": {
+            "region_id": "region-0020",
+            "iou": 0.552,
+            "label": "shell",
+            "label_correct": false
+          },
+          "wall-right": {
+            "region_id": "region-0002",
+            "iou": 0.672,
+            "label": "window",
+            "label_correct": false
+          }
+        },
+        "semantic_calls": 68,
+        "semantic_parse_failures": 0,
+        "abstentions": 31,
+        "primary_labels": {
+          "door": 6,
+          "rod": 6,
+          "ceiling": 4,
+          "tile": 3,
+          "baseboard": 2,
+          "window": 2,
+          "pipe": 2,
+          "bar": 2,
+          "clip": 2,
+          "bottle": 1,
+          "base": 1,
+          "pavement": 1,
+          "lamp": 1,
+          "shell": 1,
+          "grid": 1,
+          "edge": 1,
+          "bolt": 1
+        },
+        "stage_seconds": {
+          "image_preparation": 3.0759983928874135e-06,
+          "dense_feature_extraction": 1.1960404319979716,
+          "region_discovery": 4.4120456870005,
+          "dense_region_pooling": 0.021878358005778864,
+          "region_feature_extraction": 3.8361559670011047,
+          "region_interpretation": 142.34891472799063
+        },
+        "perception_seconds": 151.82
+      },
+      "000055": {
+        "perception_run": "run-0031",
+        "regions": 61,
+        "region_area_px": {
+          "median": 806.0,
+          "below_0_5pct_frame": 39
+        },
+        "known_object_recall": {
+          "matched": 13,
+          "total": 16,
+          "recall": 0.812
+        },
+        "known_object_recall_c4": {
+          "matched": 9,
+          "total": 9,
+          "recall": 1.0
+        },
+        "known_object_recall_extra": {
+          "matched": 4,
+          "total": 7,
+          "recall": 0.571
+        },
+        "structure_recall": {
+          "matched": 2,
+          "total": 3,
+          "recall": 0.667
+        },
+        "fragments_per_object": {
+          "mean_over_hit": 2.93,
+          "max": 9,
+          "by_instance": {
+            "door-left": 9,
+            "door-right": 9,
+            "door-far": 2,
+            "handle-left": 1,
+            "handle-right": 1,
+            "window-left-door": 4,
+            "window-right-door": 1,
+            "window-corridor-01": 2,
+            "window-corridor-02": 1,
+            "light-01": 1,
+            "light-02": 1,
+            "beam-ceiling": 7,
+            "baseboard-left": 0,
+            "plank-floor": 1,
+            "debris-01": 1,
+            "debris-02": 0
+          }
+        },
+        "regions_not_matching_any_instance": 46,
+        "label_correct": {
+          "correct": 6,
+          "matched": 13
+        },
+        "matches": {
+          "door-left": {
+            "region_id": "region-0028",
+            "iou": 0.598,
+            "label": "door",
+            "label_correct": true
+          },
+          "door-right": {
+            "region_id": "region-0015",
+            "iou": 0.947,
+            "label": "door",
+            "label_correct": true
+          },
+          "door-far": {
+            "region_id": "region-0013",
+            "iou": 0.917,
+            "label": "door",
+            "label_correct": true
+          },
+          "handle-left": {
+            "region_id": "region-0053",
+            "iou": 0.76,
+            "label": "handle",
+            "label_correct": true
+          },
+          "handle-right": {
+            "region_id": "region-0029",
+            "iou": 0.949,
+            "label": "bar",
+            "label_correct": true
+          },
+          "window-left-door": {
+            "region_id": "region-0009",
+            "iou": 0.8,
+            "label": "handle",
+            "label_correct": false
+          },
+          "window-right-door": {
+            "region_id": "region-0014",
+            "iou": 0.547,
+            "label": "bar",
+            "label_correct": false
+          },
+          "window-corridor-01": {
+            "region_id": "region-0020",
+            "iou": 0.928,
+            "label": "lamp",
+            "label_correct": false
+          },
+          "window-corridor-02": {
+            "region_id": "region-0038",
+            "iou": 0.715,
+            "label": null,
+            "label_correct": false
+          },
+          "light-01": {
+            "region_id": "region-0008",
+            "iou": 0.886,
+            "label": "light",
+            "label_correct": true
+          },
+          "light-02": {
+            "region_id": "region-0049",
+            "iou": 0.647,
+            "label": null,
+            "label_correct": false
+          },
+          "beam-ceiling": {
+            "region_id": "region-0048",
+            "iou": 0.553,
+            "label": "track",
+            "label_correct": false
+          },
+          "plank-floor": {
+            "region_id": "region-0011",
+            "iou": 0.841,
+            "label": "barrier",
+            "label_correct": false
+          },
+          "wall-left": {
+            "region_id": "region-0041",
+            "iou": 0.715,
+            "label": "light",
+            "label_correct": false
+          },
+          "ceiling": {
+            "region_id": "region-0027",
+            "iou": 0.534,
+            "label": "ceiling",
+            "label_correct": true
+          }
+        },
+        "semantic_calls": 61,
+        "semantic_parse_failures": 0,
+        "abstentions": 28,
+        "primary_labels": {
+          "ceiling": 5,
+          "window": 4,
+          "bar": 4,
+          "handle": 3,
+          "door": 3,
+          "light": 2,
+          "tile": 2,
+          "panel": 1,
+          "scraper": 1,
+          "handrail": 1,
+          "shovel": 1,
+          "barrier": 1,
+          "wing": 1,
+          "lamp": 1,
+          "hook": 1,
+          "lever": 1,
+          "track": 1
+        },
+        "stage_seconds": {
+          "image_preparation": 2.7759961085394025e-06,
+          "dense_feature_extraction": 1.2019017300044652,
+          "region_discovery": 4.369628307991661,
+          "dense_region_pooling": 0.01942919300927315,
+          "region_feature_extraction": 3.5891853740031365,
+          "region_interpretation": 131.3192992240074
+        },
+        "perception_seconds": 140.5
+      }
+    },
+    "association": {
+      "000055": {
+        "association_run": "run-0031",
+        "membership_policy_id": "mask-membership-v1",
+        "observations": 61,
+        "observations_with_support": 52,
+        "support_points_total": 6124,
+        "skipped_regions": {},
+        "excluded_visible_points": 0,
+        "footprint_kinds": {
+          "mask": 61
+        },
+        "support_depth_range_m": {
+          "median": 0.337,
+          "share_over_1m": 0.212
+        }
+      },
+      "000061": {
+        "association_run": "run-0032",
+        "membership_policy_id": "mask-membership-v1",
+        "observations": 68,
+        "observations_with_support": 60,
+        "support_points_total": 5554,
+        "skipped_regions": {},
+        "excluded_visible_points": 0,
+        "footprint_kinds": {
+          "mask": 68
+        },
+        "support_depth_range_m": {
+          "median": 0.255,
+          "share_over_1m": 0.233
+        }
+      }
+    },
+    "entities": {
+      "resolved_with_annotated_instance": 15,
+      "false_merges": [
+        [
+          "beam-ceiling",
+          "ceiling"
+        ],
+        [
+          "wall-right",
+          "window-corridor-01"
+        ]
+      ],
+      "false_splits": {
+        "door-left": 2,
+        "handle-right": 2
+      },
+      "instances_in_one_entity_in_both_frames": 5
+    },
+    "map": {
+      "location": "workspace/corridor02-f055-f061-sam2-qwentight-vox10/000001",
+      "context_map_id": "72f152e4fe8ac1f7cdb14c056120dc49",
+      "entity_count": 51,
+      "relation_count": 3526,
+      "geometry_points": 393054,
+      "fusion": {
+        "supports": 57,
+        "excluded_observations": 54
+      },
+      "semantic_mapping": {
+        "entities": 57,
+        "ambiguity_state": {
+          "conflicting": 5,
+          "unambiguous": 34,
+          "insufficient_evidence": 15,
+          "ambiguous": 3
+        },
+        "with_primary_label": 34
+      },
+      "entity_resolution": {
+        "resolved": 51,
+        "merged_from_several_entities": 5,
+        "seen_in_both_frames": 11,
+        "belief_support_status": {
+          "insufficient_evidence": 14,
+          "tentative": 33,
+          "supported": 4
+        },
+        "without_interaction_radius": 22,
+        "with_several_distinct_radii": 3,
+        "interaction_radius_m": {
+          "count": 33,
+          "min": 0.07161936227367392,
+          "median": 0.37066497739998444,
+          "p90": 2.039172355365474,
+          "max": 4.150358244832836
+        },
+        "max_extent_m": {
+          "count": 51,
+          "min": 0.06199896040584263,
+          "median": 0.7129306655819079,
+          "p90": 1.8353752012822042,
+          "max": 10.37589561208209
+        },
+        "distinct_labels": 26
+      },
+      "relations": {
+        "next_to": {
+          "supported": 292,
+          "rejected": 96,
+          "unresolved": 266
+        },
+        "touching": {
+          "unresolved": 282,
+          "rejected": 290,
+          "supported": 82
+        },
+        "within_interaction_range": {
+          "unresolved": 1529,
+          "supported": 159,
+          "rejected": 530
+        }
+      }
+    },
+    "cost": {
+      "perception_seconds_two_frames": 292.32,
+      "semantic_calls_two_frames": 129,
+      "per_process": {
+        "000055": {
+          "wall_s": 147.64,
+          "gpu_peak_mib": 6068,
+          "gpu_baseline_mib": 434,
+          "exit": 0
+        },
+        "000061": {
+          "wall_s": 158.94,
+          "gpu_peak_mib": 6066,
+          "gpu_baseline_mib": 434,
+          "exit": 0
+        },
+        "build": {
+          "wall_s": 15.96,
+          "gpu_peak_mib": 434,
+          "gpu_baseline_mib": 434,
+          "exit": 0
+        }
+      },
+      "gpu_peak_mib": 6068
+    }
+  },
+  "corridor02-f055-f061-sam2-qwen-minarea1536-vox10": {
+    "map_id": "corridor02-f055-f061-sam2-qwen-minarea1536-vox10",
+    "annotation_status": [
+      "draft-pending-review"
+    ],
+    "annotators": [
+      "model-draft (Claude, a partir da lista de objetos de um VLM e da imagem com grade)"
+    ],
+    "build_run": "run-0019",
+    "frames": {
+      "000061": {
+        "perception_run": "run-0018",
+        "regions": 21,
+        "region_area_px": {
+          "median": 2600.0,
+          "below_0_5pct_frame": 0
+        },
+        "known_object_recall": {
+          "matched": 6,
+          "total": 13,
+          "recall": 0.462
+        },
+        "known_object_recall_c4": {
+          "matched": 4,
+          "total": 9,
+          "recall": 0.444
+        },
+        "known_object_recall_extra": {
+          "matched": 2,
+          "total": 4,
+          "recall": 0.5
+        },
+        "structure_recall": {
+          "matched": 1,
+          "total": 3,
+          "recall": 0.333
+        },
+        "fragments_per_object": {
+          "mean_over_hit": 2.5,
+          "max": 7,
+          "by_instance": {
+            "door-left": 7,
+            "door-right": 4,
+            "door-far": 0,
+            "handle-left": 1,
+            "handle-right": 0,
+            "window-left-door": 0,
+            "window-right-door": 0,
+            "window-corridor-01": 1,
+            "window-corridor-02": 0,
+            "light-01": 0,
+            "beam-ceiling": 1,
+            "plank-floor": 1,
+            "debris-03": 0
+          }
+        },
+        "regions_not_matching_any_instance": 14,
+        "label_correct": {
+          "correct": 1,
+          "matched": 6
+        },
+        "matches": {
+          "door-left": {
+            "region_id": "region-0010",
+            "iou": 0.804,
+            "label": "cabinet",
+            "label_correct": false
+          },
+          "door-right": {
+            "region_id": "region-0005",
+            "iou": 0.875,
+            "label": "screen",
+            "label_correct": false
+          },
+          "handle-left": {
+            "region_id": "region-0020",
+            "iou": 0.722,
+            "label": "tool",
+            "label_correct": false
+          },
+          "window-corridor-01": {
+            "region_id": "region-0014",
+            "iou": 0.696,
+            "label": "window",
+            "label_correct": true
+          },
+          "beam-ceiling": {
+            "region_id": "region-0016",
+            "iou": 0.636,
+            "label": "ceiling",
+            "label_correct": false
+          },
+          "plank-floor": {
+            "region_id": "region-0007",
+            "iou": 0.892,
+            "label": "log",
+            "label_correct": false
+          },
+          "wall-right": {
+            "region_id": "region-0002",
+            "iou": 0.672,
+            "label": "wall",
+            "label_correct": true
+          }
+        },
+        "semantic_calls": 21,
+        "semantic_parse_failures": 0,
+        "abstentions": 0,
+        "primary_labels": {
+          "door": 4,
+          "wall": 3,
+          "baseboard": 1,
+          "pipe": 1,
+          "screen": 1,
+          "log": 1,
+          "bar": 1,
+          "cabinet": 1,
+          "blade": 1,
+          "plate": 1,
+          "window": 1,
+          "ceiling": 1,
+          "shelf": 1,
+          "rod": 1,
+          "tool": 1,
+          "lamp": 1
+        },
+        "stage_seconds": {
+          "image_preparation": 1.9330036593601108e-06,
+          "dense_feature_extraction": 1.206247213005554,
+          "region_discovery": 4.482580411990057,
+          "dense_region_pooling": 0.008665656991070136,
+          "region_feature_extraction": 1.442582654999569,
+          "region_interpretation": 61.45669844500662
+        },
+        "perception_seconds": 68.6
+      },
+      "000055": {
+        "perception_run": "run-0017",
+        "regions": 21,
+        "region_area_px": {
+          "median": 3257.0,
+          "below_0_5pct_frame": 0
+        },
+        "known_object_recall": {
+          "matched": 6,
+          "total": 16,
+          "recall": 0.375
+        },
+        "known_object_recall_c4": {
+          "matched": 5,
+          "total": 9,
+          "recall": 0.556
+        },
+        "known_object_recall_extra": {
+          "matched": 1,
+          "total": 7,
+          "recall": 0.143
+        },
+        "structure_recall": {
+          "matched": 2,
+          "total": 3,
+          "recall": 0.667
+        },
+        "fragments_per_object": {
+          "mean_over_hit": 2,
+          "max": 3,
+          "by_instance": {
+            "door-left": 3,
+            "door-right": 2,
+            "door-far": 1,
+            "handle-left": 0,
+            "handle-right": 0,
+            "window-left-door": 3,
+            "window-right-door": 0,
+            "window-corridor-01": 1,
+            "window-corridor-02": 0,
+            "light-01": 0,
+            "light-02": 0,
+            "beam-ceiling": 2,
+            "baseboard-left": 0,
+            "plank-floor": 0,
+            "debris-01": 0,
+            "debris-02": 0
+          }
+        },
+        "regions_not_matching_any_instance": 13,
+        "label_correct": {
+          "correct": 4,
+          "matched": 6
+        },
+        "matches": {
+          "door-left": {
+            "region_id": "region-0011",
+            "iou": 0.598,
+            "label": "handle",
+            "label_correct": false
+          },
+          "door-right": {
+            "region_id": "region-0008",
+            "iou": 0.947,
+            "label": "door",
+            "label_correct": true
+          },
+          "door-far": {
+            "region_id": "region-0019",
+            "iou": 0.917,
+            "label": "door",
+            "label_correct": true
+          },
+          "window-left-door": {
+            "region_id": "region-0006",
+            "iou": 0.8,
+            "label": "seat",
+            "label_correct": false
+          },
+          "window-corridor-01": {
+            "region_id": "region-0021",
+            "iou": 0.928,
+            "label": "window",
+            "label_correct": true
+          },
+          "beam-ceiling": {
+            "region_id": "region-0017",
+            "iou": 0.553,
+            "label": "bar",
+            "label_correct": true
+          },
+          "wall-left": {
+            "region_id": "region-0015",
+            "iou": 0.715,
+            "label": "panel",
+            "label_correct": false
+          },
+          "ceiling": {
+            "region_id": "region-0016",
+            "iou": 0.534,
+            "label": "ceiling",
+            "label_correct": true
+          }
+        },
+        "semantic_calls": 21,
+        "semantic_parse_failures": 0,
+        "abstentions": 0,
+        "primary_labels": {
+          "door": 4,
+          "panel": 2,
+          "blade": 2,
+          "wall": 1,
+          "pallet": 1,
+          "board": 1,
+          "seat": 1,
+          "wing": 1,
+          "screen": 1,
+          "handle": 1,
+          "edge": 1,
+          "shelf": 1,
+          "ceiling": 1,
+          "bar": 1,
+          "spatula": 1,
+          "window": 1
+        },
+        "stage_seconds": {
+          "image_preparation": 2.5140034267678857e-06,
+          "dense_feature_extraction": 1.2092829260072904,
+          "region_discovery": 4.421021966001717,
+          "dense_region_pooling": 0.008865697993314825,
+          "region_feature_extraction": 1.512783643003786,
+          "region_interpretation": 61.902563215000555
+        },
+        "perception_seconds": 69.05
+      }
+    },
+    "association": {
+      "000061": {
+        "association_run": "run-0018",
+        "membership_policy_id": "mask-membership-v1",
+        "observations": 21,
+        "observations_with_support": 21,
+        "support_points_total": 4835,
+        "skipped_regions": {},
+        "excluded_visible_points": 0,
+        "footprint_kinds": {
+          "mask": 21
+        },
+        "support_depth_range_m": {
+          "median": 0.811,
+          "share_over_1m": 0.476
+        }
+      },
+      "000055": {
+        "association_run": "run-0017",
+        "membership_policy_id": "mask-membership-v1",
+        "observations": 21,
+        "observations_with_support": 21,
+        "support_points_total": 5387,
+        "skipped_regions": {},
+        "excluded_visible_points": 0,
+        "footprint_kinds": {
+          "mask": 21
+        },
+        "support_depth_range_m": {
+          "median": 0.617,
+          "share_over_1m": 0.333
+        }
+      }
+    },
+    "entities": {
+      "resolved_with_annotated_instance": 10,
+      "false_merges": [
+        [
+          "beam-ceiling",
+          "ceiling"
+        ],
+        [
+          "wall-right",
+          "window-corridor-01"
+        ]
+      ],
+      "false_splits": {
+        "door-left": 2
+      },
+      "instances_in_one_entity_in_both_frames": 3
+    },
+    "map": {
+      "location": "workspace/corridor02-f055-f061-sam2-qwen-minarea1536-vox10/000001",
+      "context_map_id": "45ab48e6c67ac0baebc822e1433c6eca",
+      "entity_count": 28,
+      "relation_count": 1324,
+      "geometry_points": 393054,
+      "fusion": {
+        "supports": 31,
+        "excluded_observations": 4
+      },
+      "semantic_mapping": {
+        "entities": 31,
+        "ambiguity_state": {
+          "conflicting": 4,
+          "unambiguous": 26,
+          "ambiguous": 1
+        },
+        "with_primary_label": 26
+      },
+      "entity_resolution": {
+        "resolved": 28,
+        "merged_from_several_entities": 2,
+        "seen_in_both_frames": 5,
+        "belief_support_status": {
+          "tentative": 25,
+          "supported": 2,
+          "contested": 1
+        },
+        "without_interaction_radius": 4,
+        "with_several_distinct_radii": 1,
+        "interaction_radius_m": {
+          "count": 26,
+          "min": 0.13647056713645042,
+          "median": 0.3767657854878814,
+          "p90": 2.039172355365474,
+          "max": 4.150358244832836
+        },
+        "max_extent_m": {
+          "count": 28,
+          "min": 0.34117641784112607,
+          "median": 0.9196170685138095,
+          "p90": 2.4792434644367916,
+          "max": 10.37589561208209
+        },
+        "distinct_labels": 24
+      },
+      "relations": {
+        "next_to": {
+          "rejected": 68,
+          "supported": 120,
+          "unresolved": 118
+        },
+        "touching": {
+          "supported": 50,
+          "rejected": 136,
+          "unresolved": 120
+        },
+        "within_interaction_range": {
+          "supported": 136,
+          "rejected": 215,
+          "unresolved": 361
+        }
+      }
+    },
+    "cost": {
+      "perception_seconds_two_frames": 137.65,
+      "semantic_calls_two_frames": 42,
+      "per_process": {
+        "000055": {
+          "wall_s": 75.72,
+          "gpu_peak_mib": 6107,
+          "gpu_baseline_mib": 376,
+          "exit": 0
+        },
+        "000061": {
+          "wall_s": 74.98,
+          "gpu_peak_mib": 6105,
+          "gpu_baseline_mib": 475,
+          "exit": 0
+        },
+        "build": {
+          "wall_s": 12.61,
+          "gpu_peak_mib": 475,
+          "gpu_baseline_mib": 475,
+          "exit": 0
+        }
+      },
+      "gpu_peak_mib": 6107
+    }
+  },
+  "corridor02-f055-f061-florenceod-florencesem-boxdepth-vox10": {
+    "map_id": "corridor02-f055-f061-florenceod-florencesem-boxdepth-vox10",
+    "annotation_status": [
+      "draft-pending-review"
+    ],
+    "annotators": [
+      "model-draft (Claude, a partir da lista de objetos de um VLM e da imagem com grade)"
+    ],
+    "build_run": "run-0023",
+    "frames": {
+      "000055": {
+        "perception_run": "run-0020",
+        "regions": 2,
+        "region_area_px": {
+          "median": 2428.0,
+          "below_0_5pct_frame": 1
+        },
+        "known_object_recall": {
+          "matched": 2,
+          "total": 16,
+          "recall": 0.125
+        },
+        "known_object_recall_c4": {
+          "matched": 2,
+          "total": 9,
+          "recall": 0.222
+        },
+        "known_object_recall_extra": {
+          "matched": 0,
+          "total": 7,
+          "recall": 0.0
+        },
+        "structure_recall": {
+          "matched": 0,
+          "total": 3,
+          "recall": 0.0
+        },
+        "fragments_per_object": {
+          "mean_over_hit": 1,
+          "max": 1,
+          "by_instance": {
+            "door-left": 0,
+            "door-right": 0,
+            "door-far": 0,
+            "handle-left": 0,
+            "handle-right": 0,
+            "window-left-door": 0,
+            "window-right-door": 0,
+            "window-corridor-01": 1,
+            "window-corridor-02": 1,
+            "light-01": 0,
+            "light-02": 0,
+            "beam-ceiling": 0,
+            "baseboard-left": 0,
+            "plank-floor": 0,
+            "debris-01": 0,
+            "debris-02": 0
+          }
+        },
+        "regions_not_matching_any_instance": 0,
+        "label_correct": {
+          "correct": 0,
+          "matched": 2
+        },
+        "matches": {
+          "window-corridor-01": {
+            "region_id": "region-0001",
+            "iou": 0.97,
+            "label": "house",
+            "label_correct": false
+          },
+          "window-corridor-02": {
+            "region_id": "region-0002",
+            "iou": 1.0,
+            "label": "curtain",
+            "label_correct": false
+          }
+        },
+        "semantic_calls": 2,
+        "semantic_parse_failures": 0,
+        "abstentions": 0,
+        "primary_labels": {
+          "house": 1,
+          "curtain": 1
+        },
+        "stage_seconds": {
+          "image_preparation": 1.7639977158978581e-06,
+          "dense_feature_extraction": 0.28036361999693327,
+          "region_discovery": 2.34014158899663,
+          "region_feature_extraction": 0.668074508997961,
+          "region_interpretation": 1.404102739004884
+        },
+        "perception_seconds": 4.69
+      },
+      "000061": {
+        "perception_run": "run-0022",
+        "regions": 2,
+        "region_area_px": {
+          "median": 2993.5,
+          "below_0_5pct_frame": 1
+        },
+        "known_object_recall": {
+          "matched": 2,
+          "total": 13,
+          "recall": 0.154
+        },
+        "known_object_recall_c4": {
+          "matched": 2,
+          "total": 9,
+          "recall": 0.222
+        },
+        "known_object_recall_extra": {
+          "matched": 0,
+          "total": 4,
+          "recall": 0.0
+        },
+        "structure_recall": {
+          "matched": 0,
+          "total": 3,
+          "recall": 0.0
+        },
+        "fragments_per_object": {
+          "mean_over_hit": 1,
+          "max": 1,
+          "by_instance": {
+            "door-left": 0,
+            "door-right": 0,
+            "door-far": 0,
+            "handle-left": 0,
+            "handle-right": 0,
+            "window-left-door": 0,
+            "window-right-door": 0,
+            "window-corridor-01": 1,
+            "window-corridor-02": 1,
+            "light-01": 0,
+            "beam-ceiling": 0,
+            "plank-floor": 0,
+            "debris-03": 0
+          }
+        },
+        "regions_not_matching_any_instance": 0,
+        "label_correct": {
+          "correct": 0,
+          "matched": 2
+        },
+        "matches": {
+          "window-corridor-01": {
+            "region_id": "region-0001",
+            "iou": 0.761,
+            "label": "house",
+            "label_correct": false
+          },
+          "window-corridor-02": {
+            "region_id": "region-0002",
+            "iou": 0.531,
+            "label": "curtain",
+            "label_correct": false
+          }
+        },
+        "semantic_calls": 2,
+        "semantic_parse_failures": 0,
+        "abstentions": 0,
+        "primary_labels": {
+          "house": 1,
+          "curtain": 1
+        },
+        "stage_seconds": {
+          "image_preparation": 1.8029968487098813e-06,
+          "dense_feature_extraction": 0.2845458480005618,
+          "region_discovery": 2.3659677040122915,
+          "region_feature_extraction": 0.6716353649972007,
+          "region_interpretation": 1.421660451000207
+        },
+        "perception_seconds": 4.74
+      }
+    },
+    "association": {
+      "000055": {
+        "association_run": "run-0020",
+        "membership_policy_id": "box-depth-component-v1",
+        "observations": 0,
+        "observations_with_support": 0,
+        "support_points_total": 0,
+        "skipped_regions": {
+          "insufficient_box_support": 2
+        },
+        "excluded_visible_points": 0,
+        "footprint_kinds": {},
+        "support_depth_range_m": {
+          "median": null,
+          "share_over_1m": null
+        }
+      },
+      "000061": {
+        "association_run": "run-0022",
+        "membership_policy_id": "box-depth-component-v1",
+        "observations": 0,
+        "observations_with_support": 0,
+        "support_points_total": 0,
+        "skipped_regions": {
+          "insufficient_box_support": 2
+        },
+        "excluded_visible_points": 0,
+        "footprint_kinds": {},
+        "support_depth_range_m": {
+          "median": null,
+          "share_over_1m": null
+        }
+      }
+    },
+    "entities": {
+      "resolved_with_annotated_instance": 0,
+      "false_merges": [],
+      "false_splits": {},
+      "instances_in_one_entity_in_both_frames": 0
+    },
+    "map": {
+      "location": "workspace/corridor02-f055-f061-florenceod-florencesem-boxdepth-vox10/000001",
+      "context_map_id": "4f2f837fb889342ec81e83a607c88381",
+      "entity_count": 0,
+      "relation_count": 0,
+      "geometry_points": 393054,
+      "fusion": {
+        "supports": 0,
+        "excluded_observations": 0
+      },
+      "semantic_mapping": {
+        "entities": 0,
+        "ambiguity_state": {},
+        "with_primary_label": 0
+      },
+      "entity_resolution": {
+        "resolved": 0,
+        "merged_from_several_entities": 0,
+        "seen_in_both_frames": 0,
+        "belief_support_status": {},
+        "without_interaction_radius": 0,
+        "with_several_distinct_radii": 0,
+        "interaction_radius_m": {
+          "count": 0
+        },
+        "max_extent_m": {
+          "count": 0
+        },
+        "distinct_labels": 0
+      },
+      "relations": {}
+    },
+    "cost": {
+      "perception_seconds_two_frames": 9.43,
+      "semantic_calls_two_frames": 4,
+      "per_process": {
+        "000055": {
+          "wall_s": 11.6,
+          "gpu_peak_mib": 5917,
+          "gpu_baseline_mib": 485,
+          "exit": 0
+        },
+        "000061": {
+          "wall_s": 11.58,
+          "gpu_peak_mib": 5917,
+          "gpu_baseline_mib": 485,
+          "exit": 0
+        },
+        "build": {
+          "wall_s": 1.11,
+          "gpu_peak_mib": 485,
+          "gpu_baseline_mib": 485,
+          "exit": 0
+        }
+      },
+      "gpu_peak_mib": 5917
+    }
+  },
+  "corridor02-f055-f061-florencerp-florencesem-boxdepth-vox10": {
+    "map_id": "corridor02-f055-f061-florencerp-florencesem-boxdepth-vox10",
+    "annotation_status": [
+      "draft-pending-review"
+    ],
+    "annotators": [
+      "model-draft (Claude, a partir da lista de objetos de um VLM e da imagem com grade)"
+    ],
+    "build_run": "run-0025",
+    "frames": {
+      "000055": {
+        "perception_run": "run-0021",
+        "regions": 5,
+        "region_area_px": {
+          "median": 4307.0,
+          "below_0_5pct_frame": 2
+        },
+        "known_object_recall": {
+          "matched": 4,
+          "total": 16,
+          "recall": 0.25
+        },
+        "known_object_recall_c4": {
+          "matched": 4,
+          "total": 9,
+          "recall": 0.444
+        },
+        "known_object_recall_extra": {
+          "matched": 0,
+          "total": 7,
+          "recall": 0.0
+        },
+        "structure_recall": {
+          "matched": 0,
+          "total": 3,
+          "recall": 0.0
+        },
+        "fragments_per_object": {
+          "mean_over_hit": 1,
+          "max": 1,
+          "by_instance": {
+            "door-left": 0,
+            "door-right": 1,
+            "door-far": 1,
+            "handle-left": 0,
+            "handle-right": 0,
+            "window-left-door": 1,
+            "window-right-door": 0,
+            "window-corridor-01": 1,
+            "window-corridor-02": 1,
+            "light-01": 0,
+            "light-02": 0,
+            "beam-ceiling": 0,
+            "baseboard-left": 0,
+            "plank-floor": 0,
+            "debris-01": 0,
+            "debris-02": 0
+          }
+        },
+        "regions_not_matching_any_instance": 1,
+        "label_correct": {
+          "correct": 0,
+          "matched": 4
+        },
+        "matches": {
+          "door-right": {
+            "region_id": "region-0001",
+            "iou": 0.986,
+            "label": "refrigerator",
+            "label_correct": false
+          },
+          "window-left-door": {
+            "region_id": "region-0002",
+            "iou": 0.778,
+            "label": "ruler",
+            "label_correct": false
+          },
+          "window-corridor-01": {
+            "region_id": "region-0003",
+            "iou": 0.954,
+            "label": "house",
+            "label_correct": false
+          },
+          "window-corridor-02": {
+            "region_id": "region-0005",
+            "iou": 1.0,
+            "label": "curtain",
+            "label_correct": false
+          }
+        },
+        "semantic_calls": 5,
+        "semantic_parse_failures": 0,
+        "abstentions": 0,
+        "primary_labels": {
+          "house": 2,
+          "refrigerator": 1,
+          "ruler": 1,
+          "curtain": 1
+        },
+        "stage_seconds": {
+          "image_preparation": 2.134009264409542e-06,
+          "dense_feature_extraction": 0.2802833370078588,
+          "region_discovery": 2.5179615749948425,
+          "region_feature_extraction": 0.7590434629964875,
+          "region_interpretation": 2.111974743005703
+        },
+        "perception_seconds": 5.67
+      },
+      "000061": {
+        "perception_run": "run-0024",
+        "regions": 4,
+        "region_area_px": {
+          "median": 3286.5,
+          "below_0_5pct_frame": 2
+        },
+        "known_object_recall": {
+          "matched": 2,
+          "total": 13,
+          "recall": 0.154
+        },
+        "known_object_recall_c4": {
+          "matched": 2,
+          "total": 9,
+          "recall": 0.222
+        },
+        "known_object_recall_extra": {
+          "matched": 0,
+          "total": 4,
+          "recall": 0.0
+        },
+        "structure_recall": {
+          "matched": 0,
+          "total": 3,
+          "recall": 0.0
+        },
+        "fragments_per_object": {
+          "mean_over_hit": 1,
+          "max": 1,
+          "by_instance": {
+            "door-left": 0,
+            "door-right": 1,
+            "door-far": 1,
+            "handle-left": 0,
+            "handle-right": 0,
+            "window-left-door": 0,
+            "window-right-door": 0,
+            "window-corridor-01": 1,
+            "window-corridor-02": 1,
+            "light-01": 0,
+            "beam-ceiling": 0,
+            "plank-floor": 0,
+            "debris-03": 0
+          }
+        },
+        "regions_not_matching_any_instance": 2,
+        "label_correct": {
+          "correct": 0,
+          "matched": 2
+        },
+        "matches": {
+          "window-corridor-01": {
+            "region_id": "region-0002",
+            "iou": 0.771,
+            "label": "house",
+            "label_correct": false
+          },
+          "window-corridor-02": {
+            "region_id": "region-0004",
+            "iou": 0.531,
+            "label": "curtain",
+            "label_correct": false
+          }
+        },
+        "semantic_calls": 4,
+        "semantic_parse_failures": 0,
+        "abstentions": 0,
+        "primary_labels": {
+          "window": 1,
+          "house": 1,
+          "television": 1,
+          "curtain": 1
+        },
+        "stage_seconds": {
+          "image_preparation": 3.216002369299531e-06,
+          "dense_feature_extraction": 0.2826641129940981,
+          "region_discovery": 2.4581683659926057,
+          "region_feature_extraction": 0.7332568849960808,
+          "region_interpretation": 1.8648738480114844
+        },
+        "perception_seconds": 5.34
+      }
+    },
+    "association": {
+      "000061": {
+        "association_run": "run-0024",
+        "membership_policy_id": "box-depth-component-v1",
+        "observations": 2,
+        "observations_with_support": 2,
+        "support_points_total": 708,
+        "skipped_regions": {
+          "insufficient_box_support": 2
+        },
+        "excluded_visible_points": 4,
+        "footprint_kinds": {
+          "box": 2
+        },
+        "support_depth_range_m": {
+          "median": 0.401,
+          "share_over_1m": 0.0
+        }
+      },
+      "000055": {
+        "association_run": "run-0021",
+        "membership_policy_id": "box-depth-component-v1",
+        "observations": 3,
+        "observations_with_support": 3,
+        "support_points_total": 4107,
+        "skipped_regions": {
+          "insufficient_box_support": 2
+        },
+        "excluded_visible_points": 15,
+        "footprint_kinds": {
+          "box": 3
+        },
+        "support_depth_range_m": {
+          "median": 0.929,
+          "share_over_1m": 0.333
+        }
+      }
+    },
+    "entities": {
+      "resolved_with_annotated_instance": 2,
+      "false_merges": [],
+      "false_splits": {},
+      "instances_in_one_entity_in_both_frames": 0
+    },
+    "map": {
+      "location": "workspace/corridor02-f055-f061-florencerp-florencesem-boxdepth-vox10/000001",
+      "context_map_id": "4ae500bcacfb40e2a6bd9a5a6edbcfe2",
+      "entity_count": 4,
+      "relation_count": 4,
+      "geometry_points": 393054,
+      "fusion": {
+        "supports": 5,
+        "excluded_observations": 0
+      },
+      "semantic_mapping": {
+        "entities": 5,
+        "ambiguity_state": {
+          "unambiguous": 5
+        },
+        "with_primary_label": 5
+      },
+      "entity_resolution": {
+        "resolved": 4,
+        "merged_from_several_entities": 1,
+        "seen_in_both_frames": 1,
+        "belief_support_status": {
+          "tentative": 4
+        },
+        "without_interaction_radius": 4,
+        "with_several_distinct_radii": 0,
+        "interaction_radius_m": {
+          "count": 0
+        },
+        "max_extent_m": {
+          "count": 4,
+          "min": 0.7553448087871533,
+          "median": 0.9143260854501738,
+          "p90": 2.048919279061962,
+          "max": 2.048919279061962
+        },
+        "distinct_labels": 5
+      },
+      "relations": {
+        "next_to": {
+          "rejected": 2
+        },
+        "touching": {
+          "supported": 2
+        }
+      }
+    },
+    "cost": {
+      "perception_seconds_two_frames": 11.01,
+      "semantic_calls_two_frames": 9,
+      "per_process": {
+        "000055": {
+          "wall_s": 12.61,
+          "gpu_peak_mib": 5917,
+          "gpu_baseline_mib": 485,
+          "exit": 0
+        },
+        "000061": {
+          "wall_s": 12.16,
+          "gpu_peak_mib": 5917,
+          "gpu_baseline_mib": 485,
+          "exit": 0
+        },
+        "build": {
+          "wall_s": 8.89,
+          "gpu_peak_mib": 485,
+          "gpu_baseline_mib": 484,
+          "exit": 0
+        }
+      },
+      "gpu_peak_mib": 5917
+    }
+  },
+  "corridor02-f055-f061-florencerp-qwen-boxdepth-vox10": {
+    "map_id": "corridor02-f055-f061-florencerp-qwen-boxdepth-vox10",
+    "annotation_status": [
+      "draft-pending-review"
+    ],
+    "annotators": [
+      "model-draft (Claude, a partir da lista de objetos de um VLM e da imagem com grade)"
+    ],
+    "build_run": "run-0030",
+    "frames": {
+      "000061": {
+        "perception_run": "run-0029",
+        "regions": 4,
+        "region_area_px": {
+          "median": 3286.5,
+          "below_0_5pct_frame": 2
+        },
+        "known_object_recall": {
+          "matched": 2,
+          "total": 13,
+          "recall": 0.154
+        },
+        "known_object_recall_c4": {
+          "matched": 2,
+          "total": 9,
+          "recall": 0.222
+        },
+        "known_object_recall_extra": {
+          "matched": 0,
+          "total": 4,
+          "recall": 0.0
+        },
+        "structure_recall": {
+          "matched": 0,
+          "total": 3,
+          "recall": 0.0
+        },
+        "fragments_per_object": {
+          "mean_over_hit": 1,
+          "max": 1,
+          "by_instance": {
+            "door-left": 0,
+            "door-right": 1,
+            "door-far": 1,
+            "handle-left": 0,
+            "handle-right": 0,
+            "window-left-door": 0,
+            "window-right-door": 0,
+            "window-corridor-01": 1,
+            "window-corridor-02": 1,
+            "light-01": 0,
+            "beam-ceiling": 0,
+            "plank-floor": 0,
+            "debris-03": 0
+          }
+        },
+        "regions_not_matching_any_instance": 2,
+        "label_correct": {
+          "correct": 2,
+          "matched": 2
+        },
+        "matches": {
+          "window-corridor-01": {
+            "region_id": "region-0002",
+            "iou": 0.771,
+            "label": "window",
+            "label_correct": true
+          },
+          "window-corridor-02": {
+            "region_id": "region-0004",
+            "iou": 0.531,
+            "label": "window",
+            "label_correct": true
+          }
+        },
+        "semantic_calls": 4,
+        "semantic_parse_failures": 0,
+        "abstentions": 0,
+        "primary_labels": {
+          "window": 2,
+          "sail": 1,
+          "door": 1
+        },
+        "stage_seconds": {
+          "image_preparation": 2.3750035325065255e-06,
+          "dense_feature_extraction": 0.2810202029941138,
+          "region_discovery": 2.4388099950010655,
+          "region_feature_extraction": 0.7387094159930712,
+          "region_interpretation": 15.757545515996753
+        },
+        "perception_seconds": 19.22
+      },
+      "000055": {
+        "perception_run": "run-0028",
+        "regions": 5,
+        "region_area_px": {
+          "median": 4307.0,
+          "below_0_5pct_frame": 2
+        },
+        "known_object_recall": {
+          "matched": 4,
+          "total": 16,
+          "recall": 0.25
+        },
+        "known_object_recall_c4": {
+          "matched": 4,
+          "total": 9,
+          "recall": 0.444
+        },
+        "known_object_recall_extra": {
+          "matched": 0,
+          "total": 7,
+          "recall": 0.0
+        },
+        "structure_recall": {
+          "matched": 0,
+          "total": 3,
+          "recall": 0.0
+        },
+        "fragments_per_object": {
+          "mean_over_hit": 1,
+          "max": 1,
+          "by_instance": {
+            "door-left": 0,
+            "door-right": 1,
+            "door-far": 1,
+            "handle-left": 0,
+            "handle-right": 0,
+            "window-left-door": 1,
+            "window-right-door": 0,
+            "window-corridor-01": 1,
+            "window-corridor-02": 1,
+            "light-01": 0,
+            "light-02": 0,
+            "beam-ceiling": 0,
+            "baseboard-left": 0,
+            "plank-floor": 0,
+            "debris-01": 0,
+            "debris-02": 0
+          }
+        },
+        "regions_not_matching_any_instance": 1,
+        "label_correct": {
+          "correct": 2,
+          "matched": 4
+        },
+        "matches": {
+          "door-right": {
+            "region_id": "region-0001",
+            "iou": 0.986,
+            "label": "door",
+            "label_correct": true
+          },
+          "window-left-door": {
+            "region_id": "region-0002",
+            "iou": 0.778,
+            "label": "handle",
+            "label_correct": false
+          },
+          "window-corridor-01": {
+            "region_id": "region-0003",
+            "iou": 0.954,
+            "label": "window",
+            "label_correct": true
+          },
+          "window-corridor-02": {
+            "region_id": "region-0005",
+            "iou": 1.0,
+            "label": "door",
+            "label_correct": false
+          }
+        },
+        "semantic_calls": 5,
+        "semantic_parse_failures": 0,
+        "abstentions": 0,
+        "primary_labels": {
+          "door": 3,
+          "handle": 1,
+          "window": 1
+        },
+        "stage_seconds": {
+          "image_preparation": 1.8830032786354423e-06,
+          "dense_feature_extraction": 0.2855390299955616,
+          "region_discovery": 2.517099099000916,
+          "region_feature_extraction": 0.7838857180031482,
+          "region_interpretation": 18.797757786000147
+        },
+        "perception_seconds": 22.38
+      }
+    },
+    "association": {
+      "000061": {
+        "association_run": "run-0029",
+        "membership_policy_id": "box-depth-component-v1",
+        "observations": 2,
+        "observations_with_support": 2,
+        "support_points_total": 708,
+        "skipped_regions": {
+          "insufficient_box_support": 2
+        },
+        "excluded_visible_points": 4,
+        "footprint_kinds": {
+          "box": 2
+        },
+        "support_depth_range_m": {
+          "median": 0.401,
+          "share_over_1m": 0.0
+        }
+      },
+      "000055": {
+        "association_run": "run-0028",
+        "membership_policy_id": "box-depth-component-v1",
+        "observations": 3,
+        "observations_with_support": 3,
+        "support_points_total": 4107,
+        "skipped_regions": {
+          "insufficient_box_support": 2
+        },
+        "excluded_visible_points": 15,
+        "footprint_kinds": {
+          "box": 3
+        },
+        "support_depth_range_m": {
+          "median": 0.929,
+          "share_over_1m": 0.333
+        }
+      }
+    },
+    "entities": {
+      "resolved_with_annotated_instance": 2,
+      "false_merges": [],
+      "false_splits": {},
+      "instances_in_one_entity_in_both_frames": 0
+    },
+    "map": {
+      "location": "workspace/corridor02-f055-f061-florencerp-qwen-boxdepth-vox10/000001",
+      "context_map_id": "370880da0eebfd222610559c273c8d39",
+      "entity_count": 4,
+      "relation_count": 6,
+      "geometry_points": 393054,
+      "fusion": {
+        "supports": 5,
+        "excluded_observations": 0
+      },
+      "semantic_mapping": {
+        "entities": 5,
+        "ambiguity_state": {
+          "unambiguous": 5
+        },
+        "with_primary_label": 5
+      },
+      "entity_resolution": {
+        "resolved": 4,
+        "merged_from_several_entities": 1,
+        "seen_in_both_frames": 1,
+        "belief_support_status": {
+          "tentative": 4
+        },
+        "without_interaction_radius": 0,
+        "with_several_distinct_radii": 1,
+        "interaction_radius_m": {
+          "count": 5,
+          "min": 0.30213792351486135,
+          "median": 0.3972784155204789,
+          "p90": 0.8195677116247849,
+          "max": 0.8195677116247849
+        },
+        "max_extent_m": {
+          "count": 4,
+          "min": 0.7553448087871533,
+          "median": 0.9143260854501738,
+          "p90": 2.048919279061962,
+          "max": 2.048919279061962
+        },
+        "distinct_labels": 3
+      },
+      "relations": {
+        "next_to": {
+          "rejected": 2
+        },
+        "touching": {
+          "supported": 2
+        },
+        "within_interaction_range": {
+          "supported": 2
+        }
+      }
+    },
+    "cost": {
+      "perception_seconds_two_frames": 41.6,
+      "semantic_calls_two_frames": 9,
+      "per_process": {
+        "000055": {
+          "wall_s": 30.22,
+          "gpu_peak_mib": 7314,
+          "gpu_baseline_mib": 484,
+          "exit": 0
+        },
+        "000061": {
+          "wall_s": 26.7,
+          "gpu_peak_mib": 7314,
+          "gpu_baseline_mib": 484,
+          "exit": 0
+        },
+        "build": {
+          "wall_s": 9.09,
+          "gpu_peak_mib": 484,
+          "gpu_baseline_mib": 484,
+          "exit": 0
+        }
+      },
+      "gpu_peak_mib": 7314
+    }
+  },
+  "corridor02-f055-f061-sam2-qwen-baseline-relinside-vox10": {
+    "map_id": "corridor02-f055-f061-sam2-qwen-baseline-relinside-vox10",
+    "annotation_status": [
+      "draft-pending-review"
+    ],
+    "annotators": [
+      "model-draft (Claude, a partir da lista de objetos de um VLM e da imagem com grade)"
+    ],
+    "build_run": "run-0039",
+    "frames": {
+      "000061": {
+        "perception_run": "run-0007",
+        "regions": 68,
+        "region_area_px": {
+          "median": 846.5,
+          "below_0_5pct_frame": 47
+        },
+        "known_object_recall": {
+          "matched": 9,
+          "total": 13,
+          "recall": 0.692
+        },
+        "known_object_recall_c4": {
+          "matched": 6,
+          "total": 9,
+          "recall": 0.667
+        },
+        "known_object_recall_extra": {
+          "matched": 3,
+          "total": 4,
+          "recall": 0.75
+        },
+        "structure_recall": {
+          "matched": 1,
+          "total": 3,
+          "recall": 0.333
+        },
+        "fragments_per_object": {
+          "mean_over_hit": 3.33,
+          "max": 14,
+          "by_instance": {
+            "door-left": 14,
+            "door-right": 7,
+            "door-far": 2,
+            "handle-left": 3,
+            "handle-right": 2,
+            "window-left-door": 1,
+            "window-right-door": 1,
+            "window-corridor-01": 3,
+            "window-corridor-02": 1,
+            "light-01": 0,
+            "beam-ceiling": 4,
+            "plank-floor": 1,
+            "debris-03": 1
+          }
+        },
+        "regions_not_matching_any_instance": 58,
+        "label_correct": {
+          "correct": 2,
+          "matched": 9
+        },
+        "matches": {
+          "door-left": {
+            "region_id": "region-0021",
+            "iou": 0.804,
+            "label": "cabinet",
+            "label_correct": false
+          },
+          "door-right": {
+            "region_id": "region-0005",
+            "iou": 0.875,
+            "label": "screen",
+            "label_correct": false
+          },
+          "handle-left": {
+            "region_id": "region-0065",
+            "iou": 0.722,
+            "label": "tool",
+            "label_correct": false
+          },
+          "handle-right": {
+            "region_id": "region-0017",
+            "iou": 0.639,
+            "label": "bar",
+            "label_correct": true
+          },
+          "window-corridor-01": {
+            "region_id": "region-0015",
+            "iou": 0.696,
+            "label": "window",
+            "label_correct": true
+          },
+          "window-corridor-02": {
+            "region_id": "region-0035",
+            "iou": 0.55,
+            "label": "door",
+            "label_correct": false
+          },
+          "beam-ceiling": {
+            "region_id": "region-0041",
+            "iou": 0.636,
+            "label": "shelf",
+            "label_correct": false
+          },
+          "plank-floor": {
+            "region_id": "region-0010",
+            "iou": 0.892,
+            "label": "log",
+            "label_correct": false
+          },
+          "debris-03": {
+            "region_id": "region-0020",
+            "iou": 0.552,
+            "label": "shell",
+            "label_correct": false
+          },
+          "wall-right": {
+            "region_id": "region-0002",
+            "iou": 0.672,
+            "label": "wall",
+            "label_correct": true
+          }
+        },
+        "semantic_calls": 68,
+        "semantic_parse_failures": 0,
+        "abstentions": 5,
+        "primary_labels": {
+          "door": 6,
+          "bar": 4,
+          "frame": 4,
+          "handle": 3,
+          "shelf": 3,
+          "wall": 2,
+          "pipe": 2,
+          "line": 2,
+          "window": 2,
+          "plate": 2,
+          "label": 2,
+          "leaf": 2,
+          "button": 2,
+          "baseboard": 1,
+          "screen": 1,
+          "chair": 1,
+          "edge": 1,
+          "log": 1,
+          "lamp": 1,
+          "box": 1,
+          "shell": 1,
+          "cabinet": 1,
+          "blade": 1,
+          "tube": 1,
+          "pad": 1,
+          "sign": 1,
+          "screw": 1,
+          "stick": 1,
+          "spatula": 1,
+          "tag": 1,
+          "rod": 1,
+          "rocket": 1,
+          "glove": 1,
+          "folder": 1,
+          "cap": 1,
+          "pen": 1,
+          "strip": 1,
+          "tool": 1,
+          "key": 1,
+          "outline": 1
+        },
+        "stage_seconds": {
+          "image_preparation": 2.1039995772298425e-06,
+          "dense_feature_extraction": 1.2160463969994453,
+          "region_discovery": 4.374424842000735,
+          "dense_region_pooling": 0.022328682000079425,
+          "region_feature_extraction": 3.8709618159991805,
+          "region_interpretation": 173.369823301
+        },
+        "perception_seconds": 182.85
+      },
+      "000055": {
+        "perception_run": "run-0006",
+        "regions": 61,
+        "region_area_px": {
+          "median": 806.0,
+          "below_0_5pct_frame": 39
+        },
+        "known_object_recall": {
+          "matched": 13,
+          "total": 16,
+          "recall": 0.812
+        },
+        "known_object_recall_c4": {
+          "matched": 9,
+          "total": 9,
+          "recall": 1.0
+        },
+        "known_object_recall_extra": {
+          "matched": 4,
+          "total": 7,
+          "recall": 0.571
+        },
+        "structure_recall": {
+          "matched": 2,
+          "total": 3,
+          "recall": 0.667
+        },
+        "fragments_per_object": {
+          "mean_over_hit": 2.93,
+          "max": 9,
+          "by_instance": {
+            "door-left": 9,
+            "door-right": 9,
+            "door-far": 2,
+            "handle-left": 1,
+            "handle-right": 1,
+            "window-left-door": 4,
+            "window-right-door": 1,
+            "window-corridor-01": 2,
+            "window-corridor-02": 1,
+            "light-01": 1,
+            "light-02": 1,
+            "beam-ceiling": 7,
+            "baseboard-left": 0,
+            "plank-floor": 1,
+            "debris-01": 1,
+            "debris-02": 0
+          }
+        },
+        "regions_not_matching_any_instance": 46,
+        "label_correct": {
+          "correct": 5,
+          "matched": 13
+        },
+        "matches": {
+          "door-left": {
+            "region_id": "region-0028",
+            "iou": 0.598,
+            "label": "handle",
+            "label_correct": false
+          },
+          "door-right": {
+            "region_id": "region-0015",
+            "iou": 0.947,
+            "label": "door",
+            "label_correct": true
+          },
+          "door-far": {
+            "region_id": "region-0013",
+            "iou": 0.917,
+            "label": "door",
+            "label_correct": true
+          },
+          "handle-left": {
+            "region_id": "region-0053",
+            "iou": 0.76,
+            "label": "handle",
+            "label_correct": true
+          },
+          "handle-right": {
+            "region_id": "region-0029",
+            "iou": 0.949,
+            "label": "towel rack",
+            "label_correct": false
+          },
+          "window-left-door": {
+            "region_id": "region-0009",
+            "iou": 0.8,
+            "label": "seat",
+            "label_correct": false
+          },
+          "window-right-door": {
+            "region_id": "region-0014",
+            "iou": 0.547,
+            "label": "knife",
+            "label_correct": false
+          },
+          "window-corridor-01": {
+            "region_id": "region-0020",
+            "iou": 0.928,
+            "label": "window",
+            "label_correct": true
+          },
+          "window-corridor-02": {
+            "region_id": "region-0038",
+            "iou": 0.715,
+            "label": "door",
+            "label_correct": false
+          },
+          "light-01": {
+            "region_id": "region-0008",
+            "iou": 0.886,
+            "label": "bar",
+            "label_correct": false
+          },
+          "light-02": {
+            "region_id": "region-0049",
+            "iou": 0.647,
+            "label": "text",
+            "label_correct": false
+          },
+          "beam-ceiling": {
+            "region_id": "region-0048",
+            "iou": 0.553,
+            "label": "bar",
+            "label_correct": true
+          },
+          "plank-floor": {
+            "region_id": "region-0011",
+            "iou": 0.841,
+            "label": "barrel",
+            "label_correct": false
+          },
+          "wall-left": {
+            "region_id": "region-0041",
+            "iou": 0.715,
+            "label": "panel",
+            "label_correct": false
+          },
+          "ceiling": {
+            "region_id": "region-0027",
+            "iou": 0.534,
+            "label": "ceiling",
+            "label_correct": true
+          }
+        },
+        "semantic_calls": 61,
+        "semantic_parse_failures": 0,
+        "abstentions": 6,
+        "primary_labels": {
+          "bar": 9,
+          "door": 7,
+          "panel": 3,
+          "blade": 3,
+          "edge": 3,
+          "handle": 2,
+          "line": 2,
+          "wall": 1,
+          "board": 1,
+          "microphone": 1,
+          "seat": 1,
+          "barrel": 1,
+          "knife": 1,
+          "spatula": 1,
+          "pole": 1,
+          "wing": 1,
+          "window": 1,
+          "screen": 1,
+          "frame": 1,
+          "pad": 1,
+          "ceiling": 1,
+          "towel rack": 1,
+          "plate": 1,
+          "object": 1,
+          "shelf": 1,
+          "button": 1,
+          "cap": 1,
+          "pen": 1,
+          "screw": 1,
+          "text": 1,
+          "sleeve": 1,
+          "skateboard": 1,
+          "leaf": 1
+        },
+        "stage_seconds": {
+          "image_preparation": 1.8239989003632218e-06,
+          "dense_feature_extraction": 1.2095198389979487,
+          "region_discovery": 4.308094123000046,
+          "dense_region_pooling": 0.019940895999752684,
+          "region_feature_extraction": 3.7038205630015,
+          "region_interpretation": 154.40788794800028
+        },
+        "perception_seconds": 163.65
+      }
+    },
+    "association": {
+      "000061": {
+        "association_run": "run-0038",
+        "membership_policy_id": "mask-membership-v1",
+        "observations": 68,
+        "observations_with_support": 60,
+        "support_points_total": 5554,
+        "skipped_regions": {},
+        "excluded_visible_points": 0,
+        "footprint_kinds": {
+          "mask": 68
+        },
+        "support_depth_range_m": {
+          "median": 0.255,
+          "share_over_1m": 0.233
+        }
+      },
+      "000055": {
+        "association_run": "run-0037",
+        "membership_policy_id": "mask-membership-v1",
+        "observations": 61,
+        "observations_with_support": 52,
+        "support_points_total": 6124,
+        "skipped_regions": {},
+        "excluded_visible_points": 0,
+        "footprint_kinds": {
+          "mask": 61
+        },
+        "support_depth_range_m": {
+          "median": 0.337,
+          "share_over_1m": 0.212
+        }
+      }
+    },
+    "entities": {
+      "resolved_with_annotated_instance": 15,
+      "false_merges": [
+        [
+          "beam-ceiling",
+          "ceiling"
+        ],
+        [
+          "wall-right",
+          "window-corridor-01"
+        ]
+      ],
+      "false_splits": {
+        "door-left": 2,
+        "handle-right": 2
+      },
+      "instances_in_one_entity_in_both_frames": 5
+    },
+    "map": {
+      "location": "workspace/corridor02-f055-f061-sam2-qwen-baseline-relinside-vox10/000001",
+      "context_map_id": "a791176dce8fea4af5c879a040625793",
+      "entity_count": 51,
+      "relation_count": 4813,
+      "geometry_points": 393054,
+      "fusion": {
+        "supports": 57,
+        "excluded_observations": 54
+      },
+      "semantic_mapping": {
+        "entities": 57,
+        "ambiguity_state": {
+          "conflicting": 7,
+          "unambiguous": 42,
+          "insufficient_evidence": 3,
+          "ambiguous": 5
+        },
+        "with_primary_label": 42
+      },
+      "entity_resolution": {
+        "resolved": 51,
+        "merged_from_several_entities": 5,
+        "seen_in_both_frames": 11,
+        "belief_support_status": {
+          "tentative": 43,
+          "insufficient_evidence": 3,
+          "supported": 5
+        },
+        "without_interaction_radius": 13,
+        "with_several_distinct_radii": 3,
+        "interaction_radius_m": {
+          "count": 42,
+          "min": 0.024799584162337053,
+          "median": 0.2853597068148678,
+          "p90": 0.9544495071229676,
+          "max": 3.7839228428579363
+        },
+        "max_extent_m": {
+          "count": 51,
+          "min": 0.06199896040584263,
+          "median": 0.7129306655819079,
+          "p90": 1.8353752012822042,
+          "max": 10.37589561208209
+        },
+        "distinct_labels": 42
+      },
+      "relations": {
+        "above": {
+          "rejected": 62,
+          "unresolved": 81,
+          "supported": 26
+        },
+        "below": {
+          "supported": 26,
+          "rejected": 62,
+          "unresolved": 81
+        },
+        "contains": {
+          "rejected": 265,
+          "unresolved": 128,
+          "supported": 11
+        },
+        "inside": {
+          "rejected": 265,
+          "supported": 11,
+          "unresolved": 128
+        },
+        "next_to": {
+          "supported": 292,
+          "rejected": 96,
+          "unresolved": 266
+        },
+        "on_top_of": {
+          "rejected": 79,
+          "unresolved": 61,
+          "supported": 1
+        },
+        "touching": {
+          "unresolved": 282,
+          "rejected": 290,
+          "supported": 82
+        },
+        "within_interaction_range": {
+          "rejected": 804,
+          "unresolved": 1222,
+          "supported": 192
+        }
+      }
+    },
+    "cost": {
+      "perception_seconds_two_frames": 346.5,
+      "semantic_calls_two_frames": 129,
+      "per_process": {
+        "build": {
+          "wall_s": 16.93,
+          "gpu_peak_mib": 434,
+          "gpu_baseline_mib": 434,
+          "exit": 0
+        }
+      },
+      "gpu_peak_mib": 434
+    }
+  }
+}

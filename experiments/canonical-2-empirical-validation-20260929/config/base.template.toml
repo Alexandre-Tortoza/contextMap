@@ -1,0 +1,153 @@
+# canonical/2 empirical validation — shared configuration template (#688 item 5).
+#
+# This is a TEMPLATE: it declares model IDENTITIES only. It carries no machine-local paths and
+# no model weights. Before running, provide, without committing them back:
+#   - resources.providers targets: a machine-local RuntimeProvider module for SAM2 and Qwen
+#     (see the pilot/campaign READMEs; e.g. `your_loaders:load_sam2` / `:load_qwen`). CLIP and
+#     DINOv2 self-load and need no provider.
+#   - inputs.sequence: the ingested corridor-02 window SequenceArtifact id (from ingestion).
+#   - resources.workspace: the run workspace root.
+# Fill them with `--set` overrides or a private layer file; the preflight refuses leftover
+# PLACEHOLDER values. Physical checkpoint/HF-cache/dataset locations are the environment's
+# responsibility; this file only names the expected model identity + revision.
+
+schema_version = "0.1.0"
+
+[pipeline]
+preset = "canonical/2"                 # dense_region_pooling ON; pooling-off.toml overrides to canonical/1
+
+[pipeline.stages]
+semantic_scoring = true
+
+[inputs]
+sequence = "PLACEHOLDER-SEQUENCE-ARTIFACT-ID"
+
+[resources]
+device = "cuda"
+workspace = "PLACEHOLDER-WORKSPACE"
+
+[resources.providers]
+"visual_perception.region_discovery" = "PLACEHOLDER-MODULE:load_sam2"
+"visual_perception.semantic_interpretation" = "PLACEHOLDER-MODULE:load_qwen"
+
+[policies]
+debug_level = "standard"
+trajectory_mode = "allow_ground_truth"
+
+[components.ingestion.source_adapter]
+backend = "ros1_bag"
+
+[components.region_perception.discovery]
+backend = "sam2"
+
+[components.region_perception.discovery.sam2]
+checkpoint = "facebook/sam2.1-hiera-tiny"
+model_version = "de431c4043854a71d8101e17995dfe596bf101a5"  # documented fresh choice: the HF snapshot revision
+device = "cuda"
+precision = "float32"
+
+[components.region_perception.discovery.sam2.pass_config]
+include_full_frame = true
+max_candidates_per_pass = 256
+
+[components.visual_features.dense]
+backend = "dinov2"
+
+[components.visual_features.dense.dinov2]
+checkpoint = "facebook/dinov2-base"
+revision = "f9e44c814b77203eaa57a6bdbbd535f21ede1415"
+device = "cuda"
+precision = "float32"
+
+[components.visual_features.region]
+backend = "clip"
+
+[components.visual_features.region.clip]
+checkpoint = "openai/clip-vit-large-patch14"
+revision = "32bd64288804d66eefd0ccbe215aa642df71cc41"
+device = "cuda"
+precision = "float32"
+
+[components.semantic_interpretation.interpreter]
+backend = "qwen"
+
+[components.semantic_interpretation.interpreter.qwen]
+model = "Qwen/Qwen3-VL-4B-Instruct"
+revision = "ebb281ec70b05090aa6165b016eac8ec08e71b17"
+quantization = "4bit"
+temperature = 0.0
+device = "cuda"
+precision = "bfloat16"
+max_new_tokens = 1024                  # documented fresh choice; 256 truncated Qwen scene JSON
+prompt_policy = { scene = "scene/v1", region = "region/v1" }
+view_policy = { region_views = ["tight_crop"] }
+
+[components.semantic_scoring.scorer]
+backend = "clip"
+
+[components.semantic_scoring.scorer.clip]
+checkpoint = "openai/clip-vit-large-patch14"
+revision = "32bd64288804d66eefd0ccbe215aa642df71cc41"
+device = "cuda"
+precision = "float32"
+text_template = "a photo of a {hypothesis}"   # documented fresh choice
+
+[components.state_estimation.estimator]
+backend = "external_pose"
+
+[components.state_estimation.estimator.external_pose]
+reference_frame = "map"
+body_frame = "epson"
+invalid_sample_policy = "skip"
+
+[components.geometric_mapping.pose_lookup]
+backend = "lookup-policy-v1"
+
+[components.geometric_mapping.pose_lookup.lookup-policy-v1]
+mode = "interpolated"
+max_interpolation_gap_ns = 400000000
+
+[components.geometric_mapping.motion_correction]
+backend = "motion-correction-v1"
+
+[components.geometric_mapping.motion_correction.motion-correction-v1]
+raw = "accept"
+unknown = "warn"
+
+[components.sensor_association.occlusion]
+backend = "conservative-depth-support-v1"
+
+[components.sensor_association.occlusion.conservative-depth-support-v1]
+cell_size_px = 4
+neighborhood_radius_cells = 2
+depth_margin_m = 0.1
+depth_margin_ratio = 0.02
+
+[components.sensor_association.tolerances]
+backend = "diagnostic-tolerances-v1"
+
+[components.sensor_association.tolerances.diagnostic-tolerances-v1]
+max_pose_time_delta_ns = 250000000
+max_map_window_offset_ns = 1000000000
+max_reprojection_p95_px = 100000.0     # permissive (diagnostic only): the canonical run left this unset
+max_reprojection_invalid_rate = 1.0
+
+[components.sensor_association.pose_policy]
+backend = "lookup-policy-v1"
+
+[components.sensor_association.pose_policy.lookup-policy-v1]
+mode = "interpolated"
+max_interpolation_gap_ns = 450000000
+
+[components.semantic_fusion.support]
+backend = "geometry-jaccard-support-v1"
+
+[components.semantic_fusion.support.geometry-jaccard-support-v1]
+min_geometry_count = 5
+min_overlap = 0.3
+
+[components.semantic_fusion.accumulation]
+backend = "baseline-evidence-accumulation-v1"
+
+[components.semantic_fusion.accumulation.baseline-evidence-accumulation-v1]
+channels = ["semantic_claims", "semantic_scores", "visual_features"]

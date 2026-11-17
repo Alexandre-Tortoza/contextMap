@@ -1,0 +1,773 @@
+{
+  "encoder": {
+    "model": "openai/clip-vit-large-patch14",
+    "revision": "32bd64288804d66eefd0ccbe215aa642df71cc41",
+    "template": "a photo of a {label}"
+  },
+  "labels_frame": [
+    "baseboard",
+    "blue door",
+    "blue surface",
+    "blue trim",
+    "blue vertical bar",
+    "blue wall",
+    "blurry image",
+    "ceiling panel",
+    "ceiling tile",
+    "curved edge",
+    "dark horizontal bar",
+    "dark surface",
+    "door",
+    "door handle",
+    "doorway",
+    "flooded hallway",
+    "floor tile",
+    "metal bracket",
+    "metal door",
+    "metal edge",
+    "metal handle",
+    "metal hook",
+    "metal latch",
+    "metal pole",
+    "metal rail",
+    "metal railing",
+    "metal rod",
+    "metal towel rack",
+    "metallic object",
+    "orange peel",
+    "peeling paint",
+    "spacecraft",
+    "text",
+    "vertical surface",
+    "window",
+    "window frame",
+    "wooden plank",
+    "yellow paint"
+  ],
+  "labels_in_context_map": [
+    "blue door",
+    "blue trim",
+    "blue wall",
+    "ceiling panel",
+    "ceiling tile",
+    "curved edge",
+    "dark surface",
+    "door",
+    "door handle",
+    "doorway",
+    "flooded hallway",
+    "metal bracket",
+    "metal door",
+    "metal edge",
+    "metal handle",
+    "metal hook",
+    "metal latch",
+    "metal pole",
+    "metal rail",
+    "metal railing",
+    "metal rod",
+    "metal towel rack",
+    "metallic object",
+    "peeling paint",
+    "spacecraft",
+    "vertical surface",
+    "window",
+    "window frame",
+    "wooden plank",
+    "yellow paint"
+  ],
+  "cosine_offdiag_quantiles": [
+    0.3898,
+    0.5876,
+    0.6462,
+    0.6985,
+    0.7592,
+    0.9461
+  ],
+  "nearest_neighbour": {
+    "baseboard": {
+      "label": "wooden plank",
+      "cosine": 0.7817
+    },
+    "blue door": {
+      "label": "door",
+      "cosine": 0.8054
+    },
+    "blue surface": {
+      "label": "blue wall",
+      "cosine": 0.8275
+    },
+    "blue trim": {
+      "label": "blue surface",
+      "cosine": 0.8007
+    },
+    "blue vertical bar": {
+      "label": "dark horizontal bar",
+      "cosine": 0.7805
+    },
+    "blue wall": {
+      "label": "blue surface",
+      "cosine": 0.8275
+    },
+    "blurry image": {
+      "label": "text",
+      "cosine": 0.7856
+    },
+    "ceiling panel": {
+      "label": "ceiling tile",
+      "cosine": 0.8277
+    },
+    "ceiling tile": {
+      "label": "ceiling panel",
+      "cosine": 0.8277
+    },
+    "curved edge": {
+      "label": "metal edge",
+      "cosine": 0.8399
+    },
+    "dark horizontal bar": {
+      "label": "blue vertical bar",
+      "cosine": 0.7805
+    },
+    "dark surface": {
+      "label": "metallic object",
+      "cosine": 0.7973
+    },
+    "door": {
+      "label": "doorway",
+      "cosine": 0.9461
+    },
+    "door handle": {
+      "label": "door",
+      "cosine": 0.8741
+    },
+    "doorway": {
+      "label": "door",
+      "cosine": 0.9461
+    },
+    "flooded hallway": {
+      "label": "doorway",
+      "cosine": 0.6653
+    },
+    "floor tile": {
+      "label": "ceiling tile",
+      "cosine": 0.7826
+    },
+    "metal bracket": {
+      "label": "metal rail",
+      "cosine": 0.8242
+    },
+    "metal door": {
+      "label": "door",
+      "cosine": 0.9038
+    },
+    "metal edge": {
+      "label": "curved edge",
+      "cosine": 0.8399
+    },
+    "metal handle": {
+      "label": "metal hook",
+      "cosine": 0.8503
+    },
+    "metal hook": {
+      "label": "metal handle",
+      "cosine": 0.8503
+    },
+    "metal latch": {
+      "label": "metal handle",
+      "cosine": 0.8118
+    },
+    "metal pole": {
+      "label": "metal rod",
+      "cosine": 0.8632
+    },
+    "metal rail": {
+      "label": "metal railing",
+      "cosine": 0.8947
+    },
+    "metal railing": {
+      "label": "metal rail",
+      "cosine": 0.8947
+    },
+    "metal rod": {
+      "label": "metal pole",
+      "cosine": 0.8632
+    },
+    "metal towel rack": {
+      "label": "metal railing",
+      "cosine": 0.7466
+    },
+    "metallic object": {
+      "label": "metal edge",
+      "cosine": 0.8245
+    },
+    "orange peel": {
+      "label": "yellow paint",
+      "cosine": 0.6613
+    },
+    "peeling paint": {
+      "label": "yellow paint",
+      "cosine": 0.7026
+    },
+    "spacecraft": {
+      "label": "metallic object",
+      "cosine": 0.8029
+    },
+    "text": {
+      "label": "metallic object",
+      "cosine": 0.7987
+    },
+    "vertical surface": {
+      "label": "window",
+      "cosine": 0.7399
+    },
+    "window": {
+      "label": "window frame",
+      "cosine": 0.9225
+    },
+    "window frame": {
+      "label": "window",
+      "cosine": 0.9225
+    },
+    "wooden plank": {
+      "label": "baseboard",
+      "cosine": 0.7817
+    },
+    "yellow paint": {
+      "label": "metallic object",
+      "cosine": 0.7141
+    }
+  },
+  "clusters": {
+    "average_linkage_cos_ge_0.9": {
+      "cluster_count": 36,
+      "label_count": 38,
+      "multi_label_clusters": [
+        {
+          "labels": [
+            "door",
+            "doorway"
+          ],
+          "regions": [
+            "region-0001:door",
+            "region-0008:door",
+            "region-0014:door",
+            "region-0017:door",
+            "region-0042:door",
+            "region-0050:door",
+            "region-0071:door",
+            "region-0078:doorway"
+          ],
+          "region_count": 8,
+          "region_pairs": 28,
+          "region_pairs_containment_ge_0p3": 3,
+          "fusion_supports": [
+            "support-000001",
+            "support-000005",
+            "support-000008",
+            "support-000013",
+            "support-000038"
+          ],
+          "context_map_entities": [
+            "entity-0002",
+            "entity-0011",
+            "entity-0025",
+            "entity-0027",
+            "entity-0032"
+          ],
+          "regions_not_in_map": 2,
+          "mean_intra_cosine": 0.9461
+        },
+        {
+          "labels": [
+            "window",
+            "window frame"
+          ],
+          "regions": [
+            "region-0018:window",
+            "region-0020:window",
+            "region-0021:window",
+            "region-0028:window",
+            "region-0062:window frame",
+            "region-0064:window frame",
+            "region-0065:window"
+          ],
+          "region_count": 7,
+          "region_pairs": 21,
+          "region_pairs_containment_ge_0p3": 6,
+          "fusion_supports": [
+            "support-000009",
+            "support-000016",
+            "support-000032",
+            "support-000034"
+          ],
+          "context_map_entities": [
+            "entity-0013",
+            "entity-0023",
+            "entity-0030",
+            "entity-0038"
+          ],
+          "regions_not_in_map": 2,
+          "mean_intra_cosine": 0.9225
+        }
+      ]
+    },
+    "average_linkage_cos_ge_0.85": {
+      "cluster_count": 32,
+      "label_count": 38,
+      "multi_label_clusters": [
+        {
+          "labels": [
+            "door",
+            "doorway",
+            "metal door"
+          ],
+          "regions": [
+            "region-0001:door",
+            "region-0008:door",
+            "region-0014:door",
+            "region-0017:door",
+            "region-0026:metal door",
+            "region-0042:door",
+            "region-0050:door",
+            "region-0055:metal door",
+            "region-0071:door",
+            "region-0078:doorway"
+          ],
+          "region_count": 10,
+          "region_pairs": 45,
+          "region_pairs_containment_ge_0p3": 4,
+          "fusion_supports": [
+            "support-000001",
+            "support-000005",
+            "support-000008",
+            "support-000013",
+            "support-000019",
+            "support-000038"
+          ],
+          "context_map_entities": [
+            "entity-0002",
+            "entity-0011",
+            "entity-0017",
+            "entity-0025",
+            "entity-0027",
+            "entity-0032"
+          ],
+          "regions_not_in_map": 3,
+          "mean_intra_cosine": 0.903
+        },
+        {
+          "labels": [
+            "metal handle",
+            "metal hook"
+          ],
+          "regions": [
+            "region-0009:metal handle",
+            "region-0037:metal hook",
+            "region-0076:metal hook"
+          ],
+          "region_count": 3,
+          "region_pairs": 3,
+          "region_pairs_containment_ge_0p3": 1,
+          "fusion_supports": [
+            "support-000009",
+            "support-000023",
+            "support-000037"
+          ],
+          "context_map_entities": [
+            "entity-0005",
+            "entity-0013",
+            "entity-0015"
+          ],
+          "regions_not_in_map": 0,
+          "mean_intra_cosine": 0.8503
+        },
+        {
+          "labels": [
+            "metal pole",
+            "metal rod"
+          ],
+          "regions": [
+            "region-0007:metal rod",
+            "region-0016:metal rod",
+            "region-0022:metal pole",
+            "region-0047:metal rod",
+            "region-0049:metal pole",
+            "region-0056:metal pole",
+            "region-0061:metal rod",
+            "region-0080:metal pole",
+            "region-0081:metal rod",
+            "region-0082:metal pole"
+          ],
+          "region_count": 10,
+          "region_pairs": 45,
+          "region_pairs_containment_ge_0p3": 1,
+          "fusion_supports": [
+            "support-000005",
+            "support-000007",
+            "support-000014",
+            "support-000027",
+            "support-000028",
+            "support-000030",
+            "support-000037",
+            "support-000040"
+          ],
+          "context_map_entities": [
+            "entity-0006",
+            "entity-0008",
+            "entity-0015",
+            "entity-0025",
+            "entity-0027",
+            "entity-0029",
+            "entity-0031",
+            "entity-0035"
+          ],
+          "regions_not_in_map": 1,
+          "mean_intra_cosine": 0.8632
+        },
+        {
+          "labels": [
+            "metal rail",
+            "metal railing"
+          ],
+          "regions": [
+            "region-0006:metal railing",
+            "region-0035:metal railing",
+            "region-0051:metal rail",
+            "region-0066:metal rail"
+          ],
+          "region_count": 4,
+          "region_pairs": 6,
+          "region_pairs_containment_ge_0p3": 1,
+          "fusion_supports": [
+            "support-000006",
+            "support-000022",
+            "support-000023",
+            "support-000025"
+          ],
+          "context_map_entities": [
+            "entity-0005",
+            "entity-0020",
+            "entity-0021",
+            "entity-0027"
+          ],
+          "regions_not_in_map": 0,
+          "mean_intra_cosine": 0.8947
+        },
+        {
+          "labels": [
+            "window",
+            "window frame"
+          ],
+          "regions": [
+            "region-0018:window",
+            "region-0020:window",
+            "region-0021:window",
+            "region-0028:window",
+            "region-0062:window frame",
+            "region-0064:window frame",
+            "region-0065:window"
+          ],
+          "region_count": 7,
+          "region_pairs": 21,
+          "region_pairs_containment_ge_0p3": 6,
+          "fusion_supports": [
+            "support-000009",
+            "support-000016",
+            "support-000032",
+            "support-000034"
+          ],
+          "context_map_entities": [
+            "entity-0013",
+            "entity-0023",
+            "entity-0030",
+            "entity-0038"
+          ],
+          "regions_not_in_map": 2,
+          "mean_intra_cosine": 0.9225
+        }
+      ]
+    },
+    "lexical_head": {
+      "cluster_count": 26,
+      "label_count": 38,
+      "multi_label_clusters": [
+        {
+          "labels": [
+            "blue door",
+            "door",
+            "metal door"
+          ],
+          "regions": [
+            "region-0001:door",
+            "region-0008:door",
+            "region-0010:blue door",
+            "region-0014:door",
+            "region-0015:blue door",
+            "region-0017:door",
+            "region-0026:metal door",
+            "region-0042:door",
+            "region-0050:door",
+            "region-0055:metal door",
+            "region-0069:blue door",
+            "region-0071:door"
+          ],
+          "region_count": 12,
+          "region_pairs": 66,
+          "region_pairs_containment_ge_0p3": 7,
+          "fusion_supports": [
+            "support-000001",
+            "support-000005",
+            "support-000008",
+            "support-000010",
+            "support-000013",
+            "support-000019"
+          ],
+          "context_map_entities": [
+            "entity-0002",
+            "entity-0011",
+            "entity-0017",
+            "entity-0025",
+            "entity-0026",
+            "entity-0027"
+          ],
+          "regions_not_in_map": 3,
+          "mean_intra_cosine": 0.8247
+        },
+        {
+          "labels": [
+            "blue surface",
+            "dark surface",
+            "vertical surface"
+          ],
+          "regions": [
+            "region-0004:dark surface",
+            "region-0024:vertical surface",
+            "region-0048:dark surface",
+            "region-0067:blue surface",
+            "region-0074:dark surface",
+            "region-0083:dark surface"
+          ],
+          "region_count": 6,
+          "region_pairs": 15,
+          "region_pairs_containment_ge_0p3": 0,
+          "fusion_supports": [
+            "support-000004",
+            "support-000018",
+            "support-000041"
+          ],
+          "context_map_entities": [
+            "entity-0001",
+            "entity-0007",
+            "entity-0036"
+          ],
+          "regions_not_in_map": 3,
+          "mean_intra_cosine": 0.7118
+        },
+        {
+          "labels": [
+            "ceiling panel",
+            "ceiling tile",
+            "floor tile"
+          ],
+          "regions": [
+            "region-0025:ceiling tile",
+            "region-0029:ceiling tile",
+            "region-0031:ceiling panel",
+            "region-0040:ceiling tile",
+            "region-0041:floor tile",
+            "region-0046:ceiling tile",
+            "region-0052:ceiling panel",
+            "region-0058:ceiling panel",
+            "region-0075:ceiling panel"
+          ],
+          "region_count": 9,
+          "region_pairs": 36,
+          "region_pairs_containment_ge_0p3": 2,
+          "fusion_supports": [
+            "support-000008",
+            "support-000020",
+            "support-000024",
+            "support-000031",
+            "support-000036"
+          ],
+          "context_map_entities": [
+            "entity-0011",
+            "entity-0012",
+            "entity-0016",
+            "entity-0019",
+            "entity-0028"
+          ],
+          "regions_not_in_map": 3,
+          "mean_intra_cosine": 0.7829
+        },
+        {
+          "labels": [
+            "blue vertical bar",
+            "dark horizontal bar"
+          ],
+          "regions": [
+            "region-0013:dark horizontal bar",
+            "region-0077:blue vertical bar"
+          ],
+          "region_count": 2,
+          "region_pairs": 1,
+          "region_pairs_containment_ge_0p3": 0,
+          "fusion_supports": [],
+          "context_map_entities": [],
+          "regions_not_in_map": 2,
+          "mean_intra_cosine": 0.7805
+        },
+        {
+          "labels": [
+            "curved edge",
+            "metal edge"
+          ],
+          "regions": [
+            "region-0038:curved edge",
+            "region-0044:metal edge",
+            "region-0072:curved edge"
+          ],
+          "region_count": 3,
+          "region_pairs": 3,
+          "region_pairs_containment_ge_0p3": 0,
+          "fusion_supports": [
+            "support-000018",
+            "support-000025"
+          ],
+          "context_map_entities": [
+            "entity-0007",
+            "entity-0021"
+          ],
+          "regions_not_in_map": 1,
+          "mean_intra_cosine": 0.8399
+        },
+        {
+          "labels": [
+            "door handle",
+            "metal handle"
+          ],
+          "regions": [
+            "region-0009:metal handle",
+            "region-0070:door handle"
+          ],
+          "region_count": 2,
+          "region_pairs": 1,
+          "region_pairs_containment_ge_0p3": 0,
+          "fusion_supports": [
+            "support-000001",
+            "support-000009"
+          ],
+          "context_map_entities": [
+            "entity-0013",
+            "entity-0025"
+          ],
+          "regions_not_in_map": 0,
+          "mean_intra_cosine": 0.8134
+        },
+        {
+          "labels": [
+            "metal pole",
+            "metal rod"
+          ],
+          "regions": [
+            "region-0007:metal rod",
+            "region-0016:metal rod",
+            "region-0022:metal pole",
+            "region-0047:metal rod",
+            "region-0049:metal pole",
+            "region-0056:metal pole",
+            "region-0061:metal rod",
+            "region-0080:metal pole",
+            "region-0081:metal rod",
+            "region-0082:metal pole"
+          ],
+          "region_count": 10,
+          "region_pairs": 45,
+          "region_pairs_containment_ge_0p3": 1,
+          "fusion_supports": [
+            "support-000005",
+            "support-000007",
+            "support-000014",
+            "support-000027",
+            "support-000028",
+            "support-000030",
+            "support-000037",
+            "support-000040"
+          ],
+          "context_map_entities": [
+            "entity-0006",
+            "entity-0008",
+            "entity-0015",
+            "entity-0025",
+            "entity-0027",
+            "entity-0029",
+            "entity-0031",
+            "entity-0035"
+          ],
+          "regions_not_in_map": 1,
+          "mean_intra_cosine": 0.8632
+        },
+        {
+          "labels": [
+            "metal rail",
+            "metal railing"
+          ],
+          "regions": [
+            "region-0006:metal railing",
+            "region-0035:metal railing",
+            "region-0051:metal rail",
+            "region-0066:metal rail"
+          ],
+          "region_count": 4,
+          "region_pairs": 6,
+          "region_pairs_containment_ge_0p3": 1,
+          "fusion_supports": [
+            "support-000006",
+            "support-000022",
+            "support-000023",
+            "support-000025"
+          ],
+          "context_map_entities": [
+            "entity-0005",
+            "entity-0020",
+            "entity-0021",
+            "entity-0027"
+          ],
+          "regions_not_in_map": 0,
+          "mean_intra_cosine": 0.8947
+        },
+        {
+          "labels": [
+            "peeling paint",
+            "yellow paint"
+          ],
+          "regions": [
+            "region-0002:peeling paint",
+            "region-0012:yellow paint"
+          ],
+          "region_count": 2,
+          "region_pairs": 1,
+          "region_pairs_containment_ge_0p3": 0,
+          "fusion_supports": [
+            "support-000002",
+            "support-000012"
+          ],
+          "context_map_entities": [
+            "entity-0004",
+            "entity-0024"
+          ],
+          "regions_not_in_map": 0,
+          "mean_intra_cosine": 0.7026
+        }
+      ]
+    }
+  },
+  "mechanisms": {
+    "A_same_mask_multiple_labels": 0,
+    "B_supports_with_gt1_distinct_label": 9,
+    "B_distinct_labels_inside_multi_label_supports": 24,
+    "C_multi_frame": "n\u00e3o aplic\u00e1vel: o run tem 1 frame (ver relation-graph-diagnostic para o run de 4 frames)",
+    "D_label_key_is_exact_text": "accumulation.py: NFKC+casefold+espa\u00e7os; 'door'/'blue door'/'metal door' s\u00e3o hip\u00f3teses distintas"
+  }
+}

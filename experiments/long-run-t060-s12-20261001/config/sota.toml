@@ -1,0 +1,44 @@
+# Perfil SOTA local da run longa (sobre a pilha da run frame-10_31: calibração C2, deskew, ego-mask,
+# prompt region-interaction/v3 com mask_outline_crop, fusão/ER/crença do B0).
+# - modelos isolados: estágio-major libera cada modelo depois do seu último estágio (#689);
+# - SAM2.1-hiera-tiny (o do B0; no V0 o large perdeu partes, recall 17/29 contra 22/29, e o gate
+#   declarado era >= 22/29), limiares do B0 (0,5/0,8) e piso de área de 250 px (medido no B0:
+#   nenhum objeto anotado abaixo de 269 px; no V0, tiny + piso manteve 22/29);
+# - DINOv3-vitb16 denso (preset canonical/1: o canonical/2 exige DINOv2, sem pooling denso);
+# - Qwen3-VL-8B nf4 só nas 8 maiores regiões de cada frame (as demais seguem para o mapa);
+# - relações do R1 (inclui inside/on_top_of/above).
+schema_version = "0.1.0"
+
+[pipeline]
+preset = "canonical/1"
+
+[policies]
+perception_schedule = "stage_major"
+
+[resources.providers]
+"visual_perception.region_discovery" = "ablation_providers:load_sam2"
+"visual_perception.semantic_interpretation" = "ablation_providers:load_qwen"
+
+[components.region_perception.discovery.sam2]
+checkpoint = "facebook/sam2.1-hiera-tiny"
+model_version = "de431c4043854a71d8101e17995dfe596bf101a5"
+
+[components.region_perception.discovery.sam2.normalization_config]
+minimum_area_pixels = 250.0
+
+[components.visual_features.dense]
+backend = "dinov3"
+
+[components.visual_features.dense.dinov3]
+checkpoint = "facebook/dinov3-vitb16-pretrain-lvd1689m"
+revision = "5931719e67bbdb9737e363e781fb0c67687896bc"
+device = "cuda"
+precision = "float32"
+
+[components.semantic_interpretation.interpreter.qwen]
+model = "Qwen/Qwen3-VL-8B-Instruct"
+revision = "0c351dd01ed87e9c1b53cbc748cba10e6187ff3b"
+region_budget = { max_regions = 8 }
+
+[components.spatial_relations.candidate.bounds-neighborhood-candidates-v1]
+predicates = ["next_to", "touching", "within_interaction_range", "inside", "on_top_of", "above"]

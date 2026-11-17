@@ -1,0 +1,21 @@
+{
+  "integrity": {
+    "ok": true,
+    "problems": [],
+    "warnings": [
+      "dependency.optional_missing: the semantic_fusion_run '276e605d611b23d088fd0e0aaa4b9a31' has no recorded hint; pass its location explicitly",
+      "dependency.optional_missing: the sequence '4a4d895e0e4e4731ad91326114607296' has no recorded hint; pass its location explicitly",
+      "dependency.optional_missing: the semantic_map 'semantic-map-corridor-02' has no recorded hint; pass its location explicitly"
+    ]
+  },
+  "kind": "artifact",
+  "path": "workspace/frame-10_31-raw/000001",
+  "summary": {
+    "code_version": "a3a175f+local.04d61c01a05c",
+    "content_identity": "sha256:e5f095969bb6ba38fafbbe6b3cac2fad0af7288ba19f5252f91d6df314780e01",
+    "context_map_id": "91a94edf924d74485a33587a805e02fb",
+    "files": 8,
+    "schema_version": "0.2.0",
+    "total_bytes": 13980983
+  }
+}

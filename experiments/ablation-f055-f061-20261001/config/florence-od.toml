@@ -1,0 +1,29 @@
+# Descoberta object-centric com Florence-2-large, task <OD> (só caixas), fora do canonical/2
+# (que força sam2): preset canonical/1, sem dense_region_pooling. A normalização repete a da
+# ego-mask/vinheta do corridor-02, que fica sob sam2 na camada de image masks.
+schema_version = "0.1.0"
+
+[pipeline]
+preset = "canonical/1"
+
+[resources.providers]
+"visual_perception.region_discovery" = "ablation_providers:load_florence2"
+
+[components.region_perception.discovery]
+backend = "florence2"
+
+[components.region_perception.discovery.florence2]
+checkpoint = "florence-community/Florence-2-large"
+model_version = "4271c66b88cdbc05735372ec13b2360108de5317"
+task = "<OD>"
+device = "cuda"
+precision = "float16"
+generation_settings = { max_new_tokens = 1024, num_beams = 3 }
+
+[components.region_perception.discovery.florence2.pass_config]
+include_full_frame = true
+max_candidates_per_pass = 256
+
+[components.region_perception.discovery.florence2.normalization_config]
+minimum_valid_fraction = 0.5
+maximum_exclusion_fraction = 0.0

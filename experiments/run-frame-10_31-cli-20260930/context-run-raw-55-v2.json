@@ -1,0 +1,67 @@
+{
+  "branch": {
+    "name": "frame-10_31-raw",
+    "revision": 1
+  },
+  "context_run": {
+    "artifacts": [
+      {
+        "artifact_id": "c8836e330f0f5765fb184245b8f23379",
+        "content_hash": "sha256:72628af72f013ca4f44cb3934635215c2731de61dcd25384ef8b9efb5638d9e0",
+        "contract": "SensorAssociationRunArtifact",
+        "disposition": "produced",
+        "location": "corridor-02/run-0005/sensor_association",
+        "stage_id": "sensor_association"
+      },
+      {
+        "artifact_id": "15a8d4ecbac66e8af3e20ea66d2e94ec",
+        "content_hash": "sha256:e66f10f0fdbdd207dfd9032f054da5ea24262e3f1b18852983edbd9f5f435ed4",
+        "contract": "PerceptionRunArtifact",
+        "disposition": "produced",
+        "location": "corridor-02/run-0005/visual_perception",
+        "stage_id": "visual_perception"
+      }
+    ],
+    "context_run_id": "sha256:9cb642822c449b7b27110f2f5335c4dc0332206c56a4822863b379c95e04d6a3",
+    "foundation": {
+      "geometry": {
+        "artifact_id": "1ee700b9bedfe887767f1b0206acf674",
+        "content_hash": "sha256:b0e8034b04f51b761a8174d718b08ec70ebedbed3e3ae784ada3107a0b580480",
+        "contract": "GeometricMapArtifact",
+        "location": "corridor-02/run-0001/geometric_mapping",
+        "stage_id": "geometric_mapping"
+      },
+      "identity": "sha256:67b83cc3f2d0dbd59082cc14963828bf40a12f316d23d530ec2e0af442aceeac",
+      "sequence": {
+        "artifact_id": "4a4d895e0e4e4731ad91326114607296",
+        "content_hash": "sha256:a5aedeec06003aa335a26dd071bce5de5de1a38b46d0c791ecdcc6cf442f9f41",
+        "contract": "SequenceArtifact",
+        "location": "sequences/corridor-02/frame-10_31-refined",
+        "stage_id": "ingestion"
+      },
+      "state_estimation": {
+        "artifact_id": "656b7e023842c4e0d1b2759644634026",
+        "content_hash": "sha256:1de9434ff4cfa527b5bc652629776b0a5febea5fe76f96c2a236525b6f8d5cfe",
+        "contract": "StateEstimationRunArtifact",
+        "location": "corridor-02/run-0001/state_estimation",
+        "stage_id": "state_estimation"
+      }
+    },
+    "observation_selection": {
+      "kind": "explicit_ids",
+      "observation_ids": [
+        "camera_1_image_raw-000055"
+      ]
+    },
+    "plan_digest": "sha256:ccdb413ab41267f9af89e069dbfc90e1666cbe0c4d9ecf9a24a53b8a0a700bc2",
+    "run": "corridor-02/run-0005",
+    "schema_version": "0.1.0"
+  },
+  "ok": true,
+  "run_directory": "workspace/run-frame-10_31/corridor-02/run-0005",
+  "stages": {
+    "point_representation": "not selected",
+    "sensor_association": "produced",
+    "visual_perception": "produced"
+  }
+}

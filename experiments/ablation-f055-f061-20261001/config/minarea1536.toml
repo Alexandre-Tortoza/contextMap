@@ -1,0 +1,7 @@
+# A1: a única variável é o piso de área da normalização do SAM2 (0,5 % de 640x480 = 1536 px).
+# Hipótese: as regiões < 0,5 % do frame concentram as labels absurdas/abstenções e o custo do Qwen;
+# cortá-las reduz chamadas de VLM sem perder known_object_recall.
+schema_version = "0.1.0"
+
+[components.region_perception.discovery.sam2.normalization_config]
+minimum_area_pixels = 1536.0

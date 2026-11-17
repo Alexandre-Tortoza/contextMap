@@ -1,0 +1,242 @@
+{
+  "annotation": {
+    "path": "experiments/correction-benchmark-10_31-20260930/annotations/frame-55.json",
+    "sha256": null,
+    "status": "pending_annotation"
+  },
+  "arm": {
+    "arm_id": "E0-sam2-iou0.00-stab0.00",
+    "arm_kind": "none",
+    "checkpoint_override": null,
+    "config_stack": [
+      "examples/v0.2.0/canonical-config.toml",
+      "experiments/canonical-2-empirical-validation-20260929/config/base.template.toml",
+      "experiments/frame-10_31-raw-vs-voxel-20260930/providers.toml",
+      "examples/v0.2.0/corridor-02-image-masks.toml",
+      "experiments/frame-10_31-raw-vs-voxel-20260930/region-label.toml"
+    ],
+    "cuda_max_memory_allocated_bytes": 2969346560,
+    "discovery_identity": {
+      "border_truncation_policy_id": "internal_edge_contact_v1",
+      "mask_remap_policy_id": "nearest_pixel_center_v1",
+      "normalization_config_digest": "sha256:c2a42c0da8c7138fbdea886f92088d7a816d041c7cdbb71702b99a4efdf09faa",
+      "pass_config_digest": "sha256:f1c08c0821b7243c23463304f1f5d8be5a2b3c7a328a6d83f6573e1dc1262aae",
+      "pass_planning_policy_id": "row_major_edge_aligned_v1"
+    },
+    "effective_config_digest": "sha256:ae7f90a7ddb65c2e054d87c1c4e362bdeba1c85b80fd8d3189835c5ec8f3ed6b",
+    "elapsed_s": 8.18,
+    "image_id": "camera_1_image_raw-000055",
+    "input_workspace": "workspace-old/frame-10_31-raw",
+    "overrides": [
+      "components.visual_perception.region_discovery.sam2.predicted_iou_threshold=0.0",
+      "components.visual_perception.region_discovery.sam2.stability_threshold=0.0"
+    ],
+    "perception_dir": "outputs/correction-benchmark-10_31-20260930/c4/E0-sam2-iou0.00-stab0.00/visual_perception",
+    "perception_run_id": "02d05747a53dc5828ee2ab39b1a4b952",
+    "predicted_iou_threshold": 0.0,
+    "preset": "canonical/1-regions-only",
+    "region_discovery_backend": {
+      "backend_id": "sam2",
+      "capability": "region_discovery",
+      "configuration_fingerprint": "sha256:9336bb272b4474c3020ce2910755a37060bd5bde67fa8a97779d51c4a4d64f69",
+      "model": "facebook/sam2.1-hiera-tiny",
+      "provider": "facebook",
+      "version": "de431c4043854a71d8101e17995dfe596bf101a5"
+    },
+    "stability_threshold": 0.0,
+    "target_layer": "regions",
+    "torch": "2.8.0+cu126",
+    "variable": "sam2 predicted_iou_threshold / stability_threshold"
+  },
+  "arm_id": "E0-sam2-iou0.00-stab0.00",
+  "benchmark": "B1",
+  "image_id": "camera_1_image_raw-000055",
+  "layers": {
+    "association": {
+      "status": "not_in_run"
+    },
+    "calibration": {
+      "status": "not_in_run"
+    },
+    "entities": {
+      "status": "not_in_run"
+    },
+    "geometry": {
+      "status": "not_in_run"
+    },
+    "regions": {
+      "accepted_mask_ratio": 0.1925754060324826,
+      "accepted_region_count": 83,
+      "area_px_median": 1100.0,
+      "area_px_p10": 270.6,
+      "area_px_p90": 7892.0,
+      "contained_pair_count": 56,
+      "covered_pixel_count": 168168,
+      "definition": {
+        "area_quantile_method": "linear",
+        "connectivity": 4,
+        "containment_threshold": 0.8,
+        "duplicate_iou_threshold": 0.8
+      },
+      "definitions": {
+        "containment_threshold": 0.8,
+        "duplicate_iou_threshold": 0.8,
+        "proposal_count": "SAM2 raw proposals minus those filtered by the backend thresholds",
+        "usable_area": "camera_1-valid.npy AND NOT camera_1-ego.npy"
+      },
+      "discovery_backend": {
+        "backend_id": "sam2",
+        "capability": "region_discovery",
+        "configuration_fingerprint": "sha256:9336bb272b4474c3020ce2910755a37060bd5bde67fa8a97779d51c4a4d64f69",
+        "model": "facebook/sam2.1-hiera-tiny",
+        "provider": "facebook",
+        "version": "de431c4043854a71d8101e17995dfe596bf101a5"
+      },
+      "discovery_identity": {
+        "border_truncation_policy_id": "internal_edge_contact_v1",
+        "mask_remap_policy_id": "nearest_pixel_center_v1",
+        "normalization_config_digest": "sha256:c2a42c0da8c7138fbdea886f92088d7a816d041c7cdbb71702b99a4efdf09faa",
+        "pass_config_digest": "sha256:f1c08c0821b7243c23463304f1f5d8be5a2b3c7a328a6d83f6573e1dc1262aae",
+        "pass_planning_policy_id": "row_major_edge_aligned_v1"
+      },
+      "duplicate_pair_count": 0,
+      "fragmentation_rate": 0.6867469879518072,
+      "fragmented_mask_count": 57,
+      "implementation": "contextmap.evaluation.region_structure 1.0.0",
+      "known_object_recall": "pending_annotation",
+      "mask_count": 83,
+      "mask_sha256_by_region": {
+        "region-0001": "sha256:decfd3c7ac802b956689f5e8beef9f1848dd4f9aceb0db9dfe9172ebcf4cc244",
+        "region-0002": "sha256:c0963fa7a187ed1c5f84be9e849053ffe2102710a3088888d660c54fcdaade08",
+        "region-0003": "sha256:44e3b2c7a8e65f8aa1af084c4e48e2d9b585a4a9c02188847cbc828af3e7b033",
+        "region-0004": "sha256:5f41b9aed3beeb279901bc5bc39e01f60a441f987b5d375470d9df49d88300e3",
+        "region-0005": "sha256:12998e04ebc1ca1879b8c0d29a0640e850d6f4f3da950aece71ae9187384fb8f",
+        "region-0006": "sha256:c1da1d1134a762e004920adea826f6654968a02d8dd24b76e54c9fd9281d5b35",
+        "region-0007": "sha256:df8091308d2bacb6193bc1a26d0479450744e1fbb6c4a84205ef8ba2f9ca226d",
+        "region-0008": "sha256:1f2aaca726cb2434bebac7587b72928e8227eb683d20e5fe0a9ead0ace714e0a",
+        "region-0009": "sha256:300603432479db9bc3a6ecdb55a10baf66eb61649089227c55700c3cc59030fd",
+        "region-0010": "sha256:d648eb9c22e020b3d60687aed638b039d04133007efdd326949156e550dae2d1",
+        "region-0011": "sha256:b7774878ff637703d649e489af43c3c72701202e6f59f00edc9426e3e8f3222c",
+        "region-0012": "sha256:72ba6b605d1aaa488eebdfcd2486d7e8e7762b3f08c70cd6db6f48b1c30dbd9f",
+        "region-0013": "sha256:6b3b1352f0efa5f255addf2375bd51e5db5bcc2a32fe6f503d20ac42de55adac",
+        "region-0014": "sha256:b4eb1e73d4913b2fe1a4e1f8dca4fd02b1963a5e37a871522a47cd2733cf2fc7",
+        "region-0015": "sha256:df2c1ba82ba8a7cfcd0b073f3b56b0e07150f75bf390f8b15640a1e7c40a562b",
+        "region-0016": "sha256:5eab78588a91dbfacee07205963c421573e82b711fe67a287f2436bbd72e83a2",
+        "region-0017": "sha256:6bd8c5c0b5fd4f47644745f5ce29dc341cc2ec93b741d945e5b443b687fb67fd",
+        "region-0018": "sha256:6eec2ef9e2298b2248ce55ae6068c93f447f7c0d65211f30f5a330dd31ab3b62",
+        "region-0019": "sha256:d6467da77a258c4b4d916e4ed5dd62498a41dfb4c8ae04b9fc97ae52f845ed41",
+        "region-0020": "sha256:ea0f80bfbec5df36188b7c0402cee33c9def0642f625cb333a8d434a51a6dd7b",
+        "region-0021": "sha256:d1c2a6434243e579a8c03af5885e36a2148751871b377e50a048ba0ee4a19b31",
+        "region-0022": "sha256:6f8ee741b3016b0c3cdb4a8f1553dc510000e5a67f8c5752c96171e00b7d0cee",
+        "region-0023": "sha256:c781a58bac6bfbff6ba299142dcc034f95afa32ef27c0c334e2be36d00ebd47b",
+        "region-0024": "sha256:423d507c038b0cfe408b0303f787fd026a3b9d0d010163d89edf3f77f2b174a7",
+        "region-0025": "sha256:1669a138b87690ff3588e4fc77c23d3e82a7a256cd57a27b6580c4cd278cf573",
+        "region-0026": "sha256:3b0246d31abeb1fb2ffb104bc6f83748d796a542bbae3da32c0322eaf8599cef",
+        "region-0027": "sha256:6e4f221a77ec6aa4ff577372e5cf76dca8c48ab4ad478758884774fe7a19724c",
+        "region-0028": "sha256:e5f91292a6e687879a43d663bbf4b6ac8f7b6323c31463f74e3edb8872902d2e",
+        "region-0029": "sha256:abe29407fe000335a52595305d0e2a944ca6888fd1d163ef69033b0707b50e94",
+        "region-0030": "sha256:1d6523df3cea9dd7adc4ab4fc43c148739781ea89c00b9600cdb1a89a050bcff",
+        "region-0031": "sha256:4f3114a0cd2c32f91325f58189a2236ef40748dfb16b8c95cbdbef415f144aee",
+        "region-0032": "sha256:794b1cb621834aa88cd19c3b86d2b43da9d908b2a067642d189be06978d19a48",
+        "region-0033": "sha256:db468257ee747c1df26f438e42e3a9e71a442721b92f638f62d788418bd5566b",
+        "region-0034": "sha256:000f1f9b255f8683a83dd8fdaed7ece0897ad0e4156927fa17cc23a16df91315",
+        "region-0035": "sha256:4ec9a6831d72c21785c95b1b511d9ad3760f0e82b14bce075cf25a435a315fa6",
+        "region-0036": "sha256:25807ba062039cabfa569cb86d1e77207222ced8a97a176a617bf98a788ad18b",
+        "region-0037": "sha256:039093006eaad093c01a16361a17b87a80b9f2f63fe8e478d5d7d762e1ee900b",
+        "region-0038": "sha256:e9538328369e1bc2925737011f05efe7ad309e10620e925b5fc1155205cb8601",
+        "region-0039": "sha256:6e82ac0033e6bd1228e2d5762ecf47ee3d6603cda2058b2f8f1462e8a2f83c71",
+        "region-0040": "sha256:8c13b6c17469993e5a36c79f061e6ff0f3a9ffe71ab76b0a2d8bec006ee4e9e9",
+        "region-0041": "sha256:2144a1dbd8e56a90c19dcc59c44c97087a1028ca9f3b4b053fd5f146ffa901f5",
+        "region-0042": "sha256:c72347b477a65380e7a5d01847d0af581093dc13e65d2576bc7398aea6dabb51",
+        "region-0043": "sha256:cae0d5a2b7f193b55e05ca3e4e12a95a59b319c7a2188305b6afc1882b892eb8",
+        "region-0044": "sha256:f5b0d633e2c07432ad90765f5ddd1c14be554c9d00db30f95926530534be3703",
+        "region-0045": "sha256:697ee40590ad3eb35f57edea630d8bc5d216b31e22219da7d3a84615ec3ed79b",
+        "region-0046": "sha256:a12c564513d9fa28b3ddd03162d52a859dfcfd3a05f38c33ea0ff5f747000c2f",
+        "region-0047": "sha256:c3633d2dba508299a5b879ea379fc820c48f6d91d427248823075b2a553db996",
+        "region-0048": "sha256:9ceffa3d545d763b2789d6db27cb68bad61d8e2404e9a6aa2f0e1796e5162c6d",
+        "region-0049": "sha256:9e4cc8f652d51c70d28b2d88b3122102137760c1c7c29f46bd97d69e980afc5d",
+        "region-0050": "sha256:2c5121559cdac488a4b33d15ea29c9ba6b78f7f48ed3c8056f338137eb5e9cad",
+        "region-0051": "sha256:058acc40eb1d2247229c8b70a05016b3ec2c14d56d3ffa19b79a84735ea8d8f7",
+        "region-0052": "sha256:a0a1003c2b149ce4dba120528bce6efeb50d26fe939ffe5299239ae3c9483add",
+        "region-0053": "sha256:a934b849d1d2d62c2982e5b1c21d19e7912377dccad7f95e125d75d0ca4a8d0b",
+        "region-0054": "sha256:66a071e57b7606c78e09eb7dc4ec9ba111e6af62e587acf6120c454a14ca4dee",
+        "region-0055": "sha256:28f174eeb162f635ae8ac2b12de135bbf58ccc9030246b26973ad3ed263be23b",
+        "region-0056": "sha256:f396e7ccbb13486e7183e3811b5a0c420c6fe51a7febbd0926e1efd7d4c8b902",
+        "region-0057": "sha256:022f28ffc79da74aefb3ab345ca106a0949b639cc45a8614d68a39a3a8abd47c",
+        "region-0058": "sha256:df94a41b98909e3c2e38960d3f1a222fbbbe991086cc2479d41191df21fd9a05",
+        "region-0059": "sha256:6ae977ffacb8a496f3613f45f12f623e8fb4fd29ec5a7ed109be6d006c210eaa",
+        "region-0060": "sha256:a6cc37eac5e4172617e82bb4c333aa141b8c3e367696b37a3da7ce6ad131ee9f",
+        "region-0061": "sha256:ef5b23c7b9eda21759b7ddf6689832f743036323104723f8b796b854703d4e2b",
+        "region-0062": "sha256:3968530646fd9a912798b5e980ba1482f48ed7a7775b0bf5e79ebd12f33a5f0c",
+        "region-0063": "sha256:554428f63ab857e1b9d41c6553d5945fac5b17fff9090754f2c04c9325a75d76",
+        "region-0064": "sha256:b3a6ae1869772215635d1853e0e438e1ee43cffe008acb7981d87f6fd109c865",
+        "region-0065": "sha256:3dc9ca43cf4aeb6bb410440c4524fc071d7e008a028c28206b2f7c565c70b958",
+        "region-0066": "sha256:4857ba9b0ee2df7e28c2c0972517163687755318f5a59dd34ee9a810859f9b44",
+        "region-0067": "sha256:c811ff6a311ae279c53f7ad8e735aa8d585a24703a221f76e9f0885f4d6afb19",
+        "region-0068": "sha256:2a2bcc242c02867d6a6e919a70337107b1e3e5f946a356d1d5affb08fa701850",
+        "region-0069": "sha256:b1f4b808fdd3c40a5ac2596a6ac69d25b064c4fb593a7c0fcd1e3ecf8460922c",
+        "region-0070": "sha256:64727d3ac9c3ff8d5a12045d43587929591b901a35228001a7c86851d730d672",
+        "region-0071": "sha256:b51bb7789cd5373c6b5b1a8613a48b318c74cb0327a4ee050e394e5a2d54b95c",
+        "region-0072": "sha256:34238cc3d3e2fd839bfd8e54c428d45b01096f61afd99f2b9728a267f83ae995",
+        "region-0073": "sha256:b8406960c0acefd4f8d4fc34e249d68790e4199225b42ad98ff31d45931fbea2",
+        "region-0074": "sha256:e39a32bb0010e9eae93b088b967354c3c8ff2647acae3fd4059174261a3cc286",
+        "region-0075": "sha256:b1f79c839299fff0a67dc602be7fe757c9548d70c14eb8997c9380a4e56e9f93",
+        "region-0076": "sha256:a2256a694ec50e6804efb2fa6442c8438cc6571f3c22499049034807a91c41d5",
+        "region-0077": "sha256:02567f851dcd1118a37d9caae37ee30dcce8691a9e69d29f734497adf240ad1f",
+        "region-0078": "sha256:4622a3101b09855c0ef5f779ebb5015e5331f912bab05f3e4b532ed2189a1839",
+        "region-0079": "sha256:fb5298c9cb7e07759447915209d6dd9ecf43b46b5873519ba5c01f181621dc99",
+        "region-0080": "sha256:dc687ecdbd5e12a7fa6ab7e946f2f1e238794e6189d1aee12c2463a474ab175a",
+        "region-0081": "sha256:a67cc20b7f40dc711c4ee4457c8e0a585ab9a865eeb2ce37e9f3443cf5783a43",
+        "region-0082": "sha256:3a1935bd1c243ee64537f514c8c26799607085be1dc4c2bbbcd29b1bd9ea5f2c",
+        "region-0083": "sha256:f816fa3dc175aad8adbde3805168387bac42280055ce4c98b74f82c4a32c1aa4"
+      },
+      "masks_below_500px": 23,
+      "masks_contained_in_another": 43,
+      "masks_measured": 83,
+      "masks_with_gt_10_components": 20,
+      "max_nesting_depth": 7,
+      "median_components": 3.0,
+      "merge_decisions_by_kind": {
+        "containment": 99,
+        "iou_duplicate": 14
+      },
+      "metric_version": "1.0.0",
+      "multiple_mask_pixel_fraction": 0.848633509347795,
+      "nesting_depth_histogram": {
+        "1": 25455,
+        "2": 66005,
+        "3": 60180,
+        "4": 11240,
+        "5": 4041,
+        "6": 1021,
+        "7": 226
+      },
+      "normalization_rejections_by_reason": {
+        "exclusion_overlap": 44,
+        "merged_duplicate": 113,
+        "outside_valid_region": 16
+      },
+      "overlapping_pair_count": 323,
+      "pass_rejections_by_reason": {
+        "region_budget_exceeded": 175
+      },
+      "pixels_with_multiple_masks": 142713,
+      "proposal_count": 431,
+      "region_count_total": 83,
+      "sam2_filtered_by_threshold_count": 0,
+      "sam2_raw_proposal_count": 431,
+      "status": "measured",
+      "usable_area_coverage": 0.7081200976968435,
+      "usable_pixel_count": 236241
+    },
+    "relations": {
+      "status": "not_in_run"
+    },
+    "semantics": {
+      "status": "not_in_run"
+    }
+  },
+  "notes": "bra\u00e7o C4 (s\u00f3 regi\u00f5es)",
+  "run_dir": "outputs/correction-benchmark-10_31-20260930/c4/E0-sam2-iou0.00-stab0.00",
+  "schema": "correction-benchmark/metrics/v1"
+}

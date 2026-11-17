@@ -1,0 +1,24 @@
+{
+  "raw": {
+    "semantics_off_geometry_sha256": "sha256:d4e4b03ead3ce667bbf747fc6895cad5fe2bba3a71fe0b2fce8f17ac7b06c4e6",
+    "semantics_on_geometry_sha256": "sha256:d4e4b03ead3ce667bbf747fc6895cad5fe2bba3a71fe0b2fce8f17ac7b06c4e6",
+    "identical": true,
+    "point_count_off": 2322324,
+    "point_count_on": 2322324,
+    "map_id_off": "corridor-02--5659900dc9d8f118d7ff41071f722453",
+    "map_id_on": "corridor-02--5659900dc9d8f118d7ff41071f722453",
+    "scan_count_off": 81,
+    "rejected_scan_count_off": 8
+  },
+  "voxel": {
+    "semantics_off_geometry_sha256": "sha256:b243d2276829a27590c1190dbf69e330f808e30f7029bbdf88fd76dfec0be12d",
+    "semantics_on_geometry_sha256": "sha256:b243d2276829a27590c1190dbf69e330f808e30f7029bbdf88fd76dfec0be12d",
+    "identical": true,
+    "point_count_off": 402626,
+    "point_count_on": 402626,
+    "map_id_off": "corridor-02--e28185e4c6e82d60f7e5ba3108fa9e50",
+    "map_id_on": "corridor-02--e28185e4c6e82d60f7e5ba3108fa9e50",
+    "scan_count_off": 81,
+    "rejected_scan_count_off": 8
+  }
+}

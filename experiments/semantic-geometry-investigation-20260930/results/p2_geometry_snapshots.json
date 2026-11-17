@@ -1,0 +1,584 @@
+{
+  "raw": {
+    "reference_scan": "velodyne_points-000022",
+    "reference_scan_minus_image_ms": -50.264798,
+    "01_raw_sensor_cloud": {
+      "point_count": 28709,
+      "centroid_m": [
+        0.1158,
+        -0.2152,
+        0.0857
+      ],
+      "min_m": [
+        -34.842,
+        -5.8664,
+        -0.6503
+      ],
+      "max_m": [
+        32.115,
+        7.8713,
+        2.2512
+      ],
+      "bbox_dims_m": [
+        66.957,
+        13.7377,
+        2.9016
+      ],
+      "mean_nn_distance_m": 0.01926,
+      "median_nn_distance_m": 0.00939,
+      "duplicate_xyz_fraction": 0.0,
+      "voxel_occupancy_0.10m": 5298
+    },
+    "02_cloud_after_sensor_transform": {
+      "point_count": 28709,
+      "centroid_m": [
+        0.1166,
+        -0.2152,
+        0.0846
+      ],
+      "min_m": [
+        -34.823,
+        -5.8664,
+        -0.867
+      ],
+      "max_m": [
+        32.1082,
+        7.8713,
+        2.4945
+      ],
+      "bbox_dims_m": [
+        66.9312,
+        13.7377,
+        3.3615
+      ],
+      "mean_nn_distance_m": 0.01926,
+      "median_nn_distance_m": 0.00939,
+      "duplicate_xyz_fraction": 0.0,
+      "voxel_occupancy_0.10m": 5294
+    },
+    "03_cloud_world": {
+      "point_count": 28709,
+      "centroid_m": [
+        44.7904,
+        -91.4054,
+        -1.4183
+      ],
+      "min_m": [
+        31.2059,
+        -122.8027,
+        -2.1818
+      ],
+      "max_m": [
+        62.0934,
+        -62.3239,
+        0.8146
+      ],
+      "bbox_dims_m": [
+        30.8875,
+        60.4788,
+        2.9964
+      ],
+      "mean_nn_distance_m": 0.01926,
+      "median_nn_distance_m": 0.00939,
+      "duplicate_xyz_fraction": 0.0,
+      "voxel_occupancy_0.10m": 5607
+    },
+    "03_pose_bracket": {
+      "gap_ns": 302580000,
+      "fraction": 3.3049110978914665e-07,
+      "ids": [
+        "d1aa1eae316d547a89494f517b971ea2--trajectory--pose-004223",
+        "d1aa1eae316d547a89494f517b971ea2--trajectory--pose-004224"
+      ]
+    },
+    "check_source_xyz_equals_payload": {
+      "matched": 28709,
+      "max_delta_m": 0.0,
+      "mean_delta_m": 0.0,
+      "median_delta_m": 0.0,
+      "rmse_m": 0.0,
+      "exactly_equal_fraction": 1.0
+    },
+    "check_map_xyz_vs_our_chain": {
+      "matched": 28709,
+      "max_delta_m": 1.7520318360109786e-13,
+      "mean_delta_m": 1.5131427562139813e-14,
+      "median_delta_m": 1.432144669219779e-14,
+      "rmse_m": 2.0940329281775676e-14,
+      "exactly_equal_fraction": 0.007663102163084747
+    },
+    "check_map_xyz_vs_recorded_chain": {
+      "matched": 28709,
+      "max_delta_m": 1.589442370446406e-14,
+      "mean_delta_m": 6.242068954191503e-16,
+      "median_delta_m": 0.0,
+      "rmse_m": 2.7765486924483457e-15,
+      "exactly_equal_fraction": 0.8832073565780766
+    },
+    "raw_scan_points_dropped": 0,
+    "05_cloud_before_semantics_full_map": {
+      "point_count": 2322324,
+      "centroid_m": [
+        43.2026,
+        -87.7045,
+        -1.4709
+      ],
+      "min_m": [
+        -1.5456,
+        -149.9177,
+        -3.0335
+      ],
+      "max_m": [
+        75.9836,
+        -61.9223,
+        3.0698
+      ],
+      "bbox_dims_m": [
+        77.5292,
+        87.9953,
+        6.1033
+      ],
+      "mean_nn_distance_m": 0.01012,
+      "median_nn_distance_m": 0.00672,
+      "duplicate_xyz_fraction": 1e-05,
+      "voxel_occupancy_0.10m": 98399
+    },
+    "05_geometry_bin_sha256": "sha256:d4e4b03ead3ce667bbf747fc6895cad5fe2bba3a71fe0b2fce8f17ac7b06c4e6",
+    "05_manifest_geometry_hash": "sha256:d4e4b03ead3ce667bbf747fc6895cad5fe2bba3a71fe0b2fce8f17ac7b06c4e6",
+    "06_association_payload": {
+      "support_references": 53977,
+      "unique_points": 21602,
+      "unique_fraction_of_map": 0.009301888969842279,
+      "spatial_observations": 83,
+      "records_with_xyz_fields": []
+    },
+    "06_cloud_after_2d3d_association": {
+      "point_count": 21602,
+      "centroid_m": [
+        44.5405,
+        -89.3741,
+        -1.3946
+      ],
+      "min_m": [
+        38.8891,
+        -91.1689,
+        -2.0023
+      ],
+      "max_m": [
+        46.0834,
+        -79.3392,
+        0.9766
+      ],
+      "bbox_dims_m": [
+        7.1943,
+        11.8297,
+        2.9789
+      ],
+      "mean_nn_distance_m": 0.00963,
+      "median_nn_distance_m": 0.00701,
+      "duplicate_xyz_fraction": 0.0,
+      "voxel_occupancy_0.10m": 987
+    },
+    "07_cloud_after_semantic_fusion": {
+      "point_count": 21594,
+      "centroid_m": [
+        44.5407,
+        -89.3744,
+        -1.3944
+      ],
+      "min_m": [
+        38.8891,
+        -91.1689,
+        -1.9646
+      ],
+      "max_m": [
+        46.0834,
+        -79.3392,
+        0.9766
+      ],
+      "bbox_dims_m": [
+        7.1943,
+        11.8297,
+        2.9412
+      ],
+      "mean_nn_distance_m": 0.00958,
+      "median_nn_distance_m": 0.00701,
+      "duplicate_xyz_fraction": 0.0,
+      "voxel_occupancy_0.10m": 982
+    },
+    "07_support_summary_vs_recomputed_max_abs_m": 2.5579538487363607e-13,
+    "07_fused_points_subset_of_associated": true,
+    "07b_entity_centroid_vs_recomputed_max_abs_m": 2.5579538487363607e-13,
+    "08_context_map_geometry_reference": {
+      "map_id": "corridor-02--5659900dc9d8f118d7ff41071f722453",
+      "point_count": 2322324
+    },
+    "08_context_map_dependency_hashes": [
+      {
+        "kind": null,
+        "artifact_id": "11254db545f96daa1651f85cd274e311",
+        "content_hash": null,
+        "locator": "../entity_resolution"
+      },
+      {
+        "kind": null,
+        "artifact_id": "corridor-02--5659900dc9d8f118d7ff41071f722453",
+        "content_hash": null,
+        "locator": "../geometric_mapping"
+      },
+      {
+        "kind": null,
+        "artifact_id": "7e541d2fb4f648d92f4f10ae32758327",
+        "content_hash": null,
+        "locator": null
+      },
+      {
+        "kind": null,
+        "artifact_id": "semantic-map-corridor-02-frame-10_31",
+        "content_hash": null,
+        "locator": null
+      },
+      {
+        "kind": null,
+        "artifact_id": "aa0551d92f7b4a7aa3508dbaa1ee8ea3",
+        "content_hash": null,
+        "locator": null
+      },
+      {
+        "kind": null,
+        "artifact_id": "90caeb93ffe0761be5bb7ed50c4cc9f7",
+        "content_hash": null,
+        "locator": "../spatial_relations"
+      }
+    ],
+    "08_entity_points_in_context_map": {
+      "point_count": 21594,
+      "centroid_m": [
+        44.5407,
+        -89.3744,
+        -1.3944
+      ],
+      "min_m": [
+        38.8891,
+        -91.1689,
+        -1.9646
+      ],
+      "max_m": [
+        46.0834,
+        -79.3392,
+        0.9766
+      ],
+      "bbox_dims_m": [
+        7.1943,
+        11.8297,
+        2.9412
+      ],
+      "mean_nn_distance_m": 0.00958,
+      "median_nn_distance_m": 0.00701,
+      "duplicate_xyz_fraction": 0.0,
+      "voxel_occupancy_0.10m": 982
+    },
+    "08_entity_points_subset_of_associated": true,
+    "08_viewer_opaque_fraction_with_coverage": 0.009301888969842279
+  },
+  "voxel": {
+    "reference_scan": "velodyne_points-000022",
+    "reference_scan_minus_image_ms": -50.264798,
+    "01_raw_sensor_cloud": {
+      "point_count": 28709,
+      "centroid_m": [
+        0.1158,
+        -0.2152,
+        0.0857
+      ],
+      "min_m": [
+        -34.842,
+        -5.8664,
+        -0.6503
+      ],
+      "max_m": [
+        32.115,
+        7.8713,
+        2.2512
+      ],
+      "bbox_dims_m": [
+        66.957,
+        13.7377,
+        2.9016
+      ],
+      "mean_nn_distance_m": 0.01926,
+      "median_nn_distance_m": 0.00939,
+      "duplicate_xyz_fraction": 0.0,
+      "voxel_occupancy_0.10m": 5298
+    },
+    "02_cloud_after_sensor_transform": {
+      "point_count": 28709,
+      "centroid_m": [
+        0.1166,
+        -0.2152,
+        0.0846
+      ],
+      "min_m": [
+        -34.823,
+        -5.8664,
+        -0.867
+      ],
+      "max_m": [
+        32.1082,
+        7.8713,
+        2.4945
+      ],
+      "bbox_dims_m": [
+        66.9312,
+        13.7377,
+        3.3615
+      ],
+      "mean_nn_distance_m": 0.01926,
+      "median_nn_distance_m": 0.00939,
+      "duplicate_xyz_fraction": 0.0,
+      "voxel_occupancy_0.10m": 5294
+    },
+    "03_cloud_world": {
+      "point_count": 28709,
+      "centroid_m": [
+        44.7904,
+        -91.4054,
+        -1.4183
+      ],
+      "min_m": [
+        31.2059,
+        -122.8027,
+        -2.1818
+      ],
+      "max_m": [
+        62.0934,
+        -62.3239,
+        0.8146
+      ],
+      "bbox_dims_m": [
+        30.8875,
+        60.4788,
+        2.9964
+      ],
+      "mean_nn_distance_m": 0.01926,
+      "median_nn_distance_m": 0.00939,
+      "duplicate_xyz_fraction": 0.0,
+      "voxel_occupancy_0.10m": 5607
+    },
+    "03_pose_bracket": {
+      "gap_ns": 302580000,
+      "fraction": 3.3049110978914665e-07,
+      "ids": [
+        "d1aa1eae316d547a89494f517b971ea2--trajectory--pose-004223",
+        "d1aa1eae316d547a89494f517b971ea2--trajectory--pose-004224"
+      ]
+    },
+    "04_cloud_after_geometric_voxelization_scan": {
+      "point_count": 5607,
+      "centroid_m": [
+        44.6637,
+        -91.3515,
+        -1.1618
+      ],
+      "min_m": [
+        31.2059,
+        -122.8027,
+        -2.1818
+      ],
+      "max_m": [
+        62.0934,
+        -62.3239,
+        0.8146
+      ],
+      "bbox_dims_m": [
+        30.8875,
+        60.4788,
+        2.9964
+      ],
+      "mean_nn_distance_m": 0.08357,
+      "median_nn_distance_m": 0.06732,
+      "duplicate_xyz_fraction": 0.0,
+      "voxel_occupancy_0.10m": 5607
+    },
+    "04_counts_per_voxel_point": {
+      "min": 1,
+      "max": 68,
+      "sum": 28709,
+      "raw_points_in_scan": 28709
+    },
+    "04_voxel_point_to_nearest_raw_point_m": {
+      "median": 0.004541633722773014,
+      "p95": 0.03346407946959331,
+      "max": 0.0584722523591217
+    },
+    "04_aggregation_config": {
+      "cell_m": 0.1,
+      "kind": "scan_voxel_centroid",
+      "rule": "scan-voxel-centroid-0.1m"
+    },
+    "05_cloud_before_semantics_full_map": {
+      "point_count": 402626,
+      "centroid_m": [
+        43.2295,
+        -88.2162,
+        -1.1833
+      ],
+      "min_m": [
+        -1.5456,
+        -149.9177,
+        -3.0335
+      ],
+      "max_m": [
+        75.9836,
+        -61.9223,
+        3.0698
+      ],
+      "bbox_dims_m": [
+        77.5292,
+        87.9953,
+        6.1033
+      ],
+      "mean_nn_distance_m": 0.02698,
+      "median_nn_distance_m": 0.02003,
+      "duplicate_xyz_fraction": 0.0,
+      "voxel_occupancy_0.10m": 98399
+    },
+    "05_geometry_bin_sha256": "sha256:b243d2276829a27590c1190dbf69e330f808e30f7029bbdf88fd76dfec0be12d",
+    "05_manifest_geometry_hash": "sha256:b243d2276829a27590c1190dbf69e330f808e30f7029bbdf88fd76dfec0be12d",
+    "06_association_payload": {
+      "support_references": 9989,
+      "unique_points": 4132,
+      "unique_fraction_of_map": 0.010262625861221083,
+      "spatial_observations": 83,
+      "records_with_xyz_fields": []
+    },
+    "06_cloud_after_2d3d_association": {
+      "point_count": 4132,
+      "centroid_m": [
+        44.3166,
+        -88.7518,
+        -1.2201
+      ],
+      "min_m": [
+        38.8948,
+        -91.1689,
+        -1.9632
+      ],
+      "max_m": [
+        46.069,
+        -79.3597,
+        0.9749
+      ],
+      "bbox_dims_m": [
+        7.1742,
+        11.8092,
+        2.9381
+      ],
+      "mean_nn_distance_m": 0.02407,
+      "median_nn_distance_m": 0.01785,
+      "duplicate_xyz_fraction": 0.0,
+      "voxel_occupancy_0.10m": 985
+    },
+    "07_cloud_after_semantic_fusion": {
+      "point_count": 4122,
+      "centroid_m": [
+        44.3176,
+        -88.7513,
+        -1.2195
+      ],
+      "min_m": [
+        38.8948,
+        -91.1689,
+        -1.96
+      ],
+      "max_m": [
+        46.069,
+        -79.3597,
+        0.9749
+      ],
+      "bbox_dims_m": [
+        7.1742,
+        11.8092,
+        2.9349
+      ],
+      "mean_nn_distance_m": 0.02399,
+      "median_nn_distance_m": 0.01785,
+      "duplicate_xyz_fraction": 0.0,
+      "voxel_occupancy_0.10m": 977
+    },
+    "07_support_summary_vs_recomputed_max_abs_m": 8.526512829121202e-14,
+    "07_fused_points_subset_of_associated": true,
+    "07b_entity_centroid_vs_recomputed_max_abs_m": 8.526512829121202e-14,
+    "08_context_map_geometry_reference": {
+      "map_id": "corridor-02--e28185e4c6e82d60f7e5ba3108fa9e50",
+      "point_count": 402626
+    },
+    "08_context_map_dependency_hashes": [
+      {
+        "kind": null,
+        "artifact_id": "1be1c9ecbab4e7ae7654cd36022b9bd1",
+        "content_hash": null,
+        "locator": "../entity_resolution"
+      },
+      {
+        "kind": null,
+        "artifact_id": "corridor-02--e28185e4c6e82d60f7e5ba3108fa9e50",
+        "content_hash": null,
+        "locator": "../geometric_mapping"
+      },
+      {
+        "kind": null,
+        "artifact_id": "1bf66e0ea96df526114420eea7d1775a",
+        "content_hash": null,
+        "locator": null
+      },
+      {
+        "kind": null,
+        "artifact_id": "semantic-map-corridor-02-frame-10_31",
+        "content_hash": null,
+        "locator": null
+      },
+      {
+        "kind": null,
+        "artifact_id": "aa0551d92f7b4a7aa3508dbaa1ee8ea3",
+        "content_hash": null,
+        "locator": null
+      },
+      {
+        "kind": null,
+        "artifact_id": "dc5cf78c5bcd33119b878f156b74f0b8",
+        "content_hash": null,
+        "locator": "../spatial_relations"
+      }
+    ],
+    "08_entity_points_in_context_map": {
+      "point_count": 4122,
+      "centroid_m": [
+        44.3176,
+        -88.7513,
+        -1.2195
+      ],
+      "min_m": [
+        38.8948,
+        -91.1689,
+        -1.96
+      ],
+      "max_m": [
+        46.069,
+        -79.3597,
+        0.9749
+      ],
+      "bbox_dims_m": [
+        7.1742,
+        11.8092,
+        2.9349
+      ],
+      "mean_nn_distance_m": 0.02399,
+      "median_nn_distance_m": 0.01785,
+      "duplicate_xyz_fraction": 0.0,
+      "voxel_occupancy_0.10m": 977
+    },
+    "08_entity_points_subset_of_associated": true,
+    "08_viewer_opaque_fraction_with_coverage": 0.010262625861221083
+  }
+}

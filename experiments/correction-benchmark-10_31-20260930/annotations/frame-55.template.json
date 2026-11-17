@@ -1,0 +1,47 @@
+{
+  "schema": "correction-benchmark/weak-annotation/v1",
+  "status": "template",
+  "sample": {
+    "benchmark_id": "B1",
+    "sequence_artifact_id": "aa0551d92f7b4a7aa3508dbaa1ee8ea3",
+    "observation_id": "camera_1_image_raw-000055",
+    "calibration_id": "camera_1_image_raw-calib",
+    "image_file": "frame-55.png",
+    "image_sha256": "sha256:c00c9d53caaf2adfcdd5f960da815bac0c018ffd4a89d28a98838b63997ffeda",
+    "image_size": [640, 480],
+    "pixel_convention": "u = coluna, v = linha, 0-based, origem no canto superior esquerdo; um inteiro (u, v) é o CENTRO do pixel (mesma convenção da projeção do pipeline: pixel = floor(uv + 0.5))"
+  },
+  "annotator": {
+    "id": "",
+    "date": "",
+    "tool": "",
+    "time_spent_min": null,
+    "notes": ""
+  },
+  "coverage": "partial",
+  "class_vocabulary": ["door", "door_handle", "window", "wall", "ceiling", "floor"],
+  "instances": [
+    {
+      "instance_id": "door-01",
+      "class": "door",
+      "box_xyxy": [0, 0, 1, 1],
+      "polygon_xy": null,
+      "accepted_labels": ["door", "blue door", "metal door"],
+      "truncated": false,
+      "occluded": false,
+      "notes": "EXEMPLO — substituir. box_xyxy = [x_min, y_min, x_max, y_max) semiaberto, em pixels; ou polygon_xy = [[u, v], ...] (um dos dois basta; se houver os dois, o polígono vale para máscara)."
+    }
+  ],
+  "scene_terms": ["hallway", "corridor", "flooded hallway"],
+  "correspondences": [
+    {
+      "correspondence_id": "c01",
+      "pixel_uv": [0, 0],
+      "geometry_index": null,
+      "map_id": "corridor-02--5659900dc9d8f118d7ff41071f722453",
+      "point_map_m": null,
+      "pixel_tolerance_px": 2.0,
+      "description": "EXEMPLO — substituir. Ex.: quina superior esquerda do batente da porta da direita. Informe geometry_index (índice global do ponto no geometry.bin do mapa map_id) OU point_map_m [x, y, z] em metros no frame 'map'."
+    }
+  ]
+}

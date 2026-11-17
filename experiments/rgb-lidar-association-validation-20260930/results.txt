@@ -1,0 +1,60 @@
+### validate_membership.py
+geometry-support.u32: 62067 entries (membership_pair_count)
+
+region      label                  painted  in_mask    pct    states
+region-0001 curved wall              46880    46880 100.0%  associated:46880
+region-0002 robotic vehicle           1936     1936 100.0%  associated:1936
+region-0003 blurred fabric             101      101 100.0%  associated:101
+region-0004 all-terrain vehicle         47       47 100.0%  associated:47
+region-0005 vehicle                   2790     2790 100.0%  associated:2790
+region-0006 ceiling panel              213      213 100.0%  associated:213
+region-0008 ceiling tile                28       28 100.0%  associated:28
+region-0009 door                        95       95 100.0%  associated:95
+region-0010 door                       483      483 100.0%  associated:483
+region-0011 off-road vehicle           397      397 100.0%  associated:397
+region-0013 blurry image                 3        3 100.0%  associated:3
+region-0018 blurred wheel              100      100 100.0%  associated:100
+region-0020 curved surface              38       38 100.0%  associated:38
+region-0022 dark surface                17       17 100.0%  associated:17
+region-0024 wooden floor                30       30 100.0%  associated:30
+region-0028 ?                            5        5 100.0%  associated:5
+region-0031 ceiling panel              232      232 100.0%  associated:232
+region-0033 ceiling tile               759      759 100.0%  associated:759
+region-0036 dark surface                 6        6 100.0%  associated:6
+region-0037 blurred wheel               20       20 100.0%  associated:20
+region-0039 blue vertical stripe        24       24 100.0%  associated:24
+region-0042 door                       654      654 100.0%  associated:654
+region-0044 ?                           23       23 100.0%  associated:23
+region-0045 vertical edge               35       35 100.0%  associated:35
+region-0048 curved lens                537      537 100.0%  associated:537
+region-0049 keyboard                    23       23 100.0%  associated:23
+region-0055 red light                    3        3 100.0%  associated:3
+region-0056 door                       331      331 100.0%  associated:331
+region-0059 cloudy sky                   1        1 100.0%  associated:1
+region-0062 sand                         3        3 100.0%  associated:3
+region-0063 wall                      2776     2776 100.0%  associated:2776
+region-0065 red light                   22       22 100.0%  associated:22
+region-0068 door                         7        7 100.0%  associated:7
+region-0071 ceiling tile               713      713 100.0%  associated:713
+region-0072 car dashboard              183      183 100.0%  associated:183
+region-0073 ceiling panel              182      182 100.0%  associated:182
+region-0076 wooden floor               398      398 100.0%  associated:398
+region-0077 ceiling panel              267      267 100.0%  associated:267
+region-0080 glass panel                 44       44 100.0%  associated:44
+region-0082 blue fabric                  3        3 100.0%  associated:3
+region-0083 ceiling panel                9        9 100.0%  associated:9
+region-0084 door                       416      416 100.0%  associated:416
+region-0085 bright light               927      927 100.0%  associated:927
+region-0090 tire                       131      131 100.0%  associated:131
+region-0091 metal frame                 23       23 100.0%  associated:23
+region-0092 ceiling tile                10       10 100.0%  associated:10
+region-0093 door                       142      142 100.0%  associated:142
+
+TOTAL: 62067/62067 painted points land inside their region mask = 100.00%
+
+### reproject_independent.py
+pontos: 426576
+comparados: 223734 pontos in-support
+erro de reprojeção (px): mediana=0.0000  p99=0.0000  max=0.0000  média=0.0000
+erro > 1px: 0  (0.000%)
+erro > 0.5px: 0  (0.000%)

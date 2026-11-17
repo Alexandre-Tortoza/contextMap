@@ -1,0 +1,143 @@
+# Modelo da configuração canônica para a próxima release (v0.2.0). RASCUNHO: a v0.2.0 não foi
+# lançada, e este arquivo não é o registro de nenhuma release.
+#
+# Corrige examples/v0.1.0/canonical-config.toml, que continua congelado como registro da v0.1.0:
+# aquele arquivo nomeia os modelos com `model`, um parâmetro que SAM2, DINOv2 e CLIP não têm, e
+# omite o que eles e o Qwen exigem. Ele resolve em `inspect config`, mas o estágio
+# visual_perception não é composto a partir dele (#643; erratum em docs/releases/v0.1.0.md).
+#
+# Só estão preenchidos valores que o repositório registra, com a fonte ao lado. Todo valor não
+# registrado é um PLACEHOLDER, uma tabela `{ PLACEHOLDER = "<NOME>" }`: nenhum parâmetro de backend
+# aceita uma tabela, então enquanto restar um o estágio visual_perception não é composto. O
+# README.md ao lado lista cada um, o que o substitui e por que não há valor registrado.
+#
+# Os parâmetros dos demais estágios (frames, modos de lookup, disposições e limiares de política)
+# também não estão aqui: são decisão do run, não deste modelo (README.md, "O que este modelo não
+# fixa").
+#
+# Resolva e confira sem executar nada:
+#   contextmap inspect config -c examples/v0.2.0/canonical-config.toml --json
+#   contextmap inspect plan   -c examples/v0.2.0/canonical-config.toml
+
+schema_version = "0.1.0"
+
+[pipeline]
+preset = "canonical/1"
+
+[inputs]
+# Do usuário, como no v0.1.0: identidade do SequenceArtifact já ingerido que este run consome.
+sequence = "REPLACE-WITH-YOUR-SEQUENCE-ARTIFACT-ID"
+
+[resources]
+# O run real registrado executou visual_perception em CUDA, numa RTX 3060 de 8 GB
+# (experiments/e2e-real-canonical-run-20260923/resource-profile.json), e a quantização em 4 bits
+# do Qwen exige CUDA (HuggingFaceQwenRuntime).
+device = "cuda"
+# Run store interno (datasets, run-NNNN e branches) e maps root em caminhos distintos: o maps root
+# guarda só o ContextMapArtifact final de cada mapa (<maps_root>/<map_id>/<NNNNNN>), para um viewer
+# escaneá-lo sozinho. Ausente, o context build ainda publica por map_id no default <workspace>/../maps.
+workspace = "outputs/runstore"
+maps_root = "outputs/maps"
+# SAM2 e Qwen não têm loader empacotado: o runtime de cada um vem de um RuntimeProvider, passado
+# pela API Python ou declarado em [resources.providers] (src/contextmap/runtime/docs/composition.md).
+
+[policies]
+debug_level = "standard"
+
+# --- Backends, um por ponto de variação, como o cenário 1.0.5 os seleciona -------------------
+# Checkpoints: tabela "Perfil canônico" de src/contextmap/evaluation/docs/end-to-end.md.
+
+[components.ingestion.source_adapter]
+backend = "ros1_bag"
+
+[components.region_perception.discovery]
+backend = "sam2"
+
+[components.region_perception.discovery.sam2]
+checkpoint = "facebook/sam2.1-hiera-tiny"
+model_version = { PLACEHOLDER = "SAM2_MODEL_VERSION" }
+# resource-profile.json: "precision": {"sam2_dinov2_clip": "float32", ...}
+precision = "float32"
+
+[components.visual_features.dense]
+backend = "dinov2"
+
+[components.visual_features.dense.dinov2]
+checkpoint = "facebook/dinov2-base"
+revision = { PLACEHOLDER = "DINOV2_REVISION" }
+precision = "float32"  # resource-profile.json
+
+[components.visual_features.region]
+backend = "clip"
+
+[components.visual_features.region.clip]
+checkpoint = "openai/clip-vit-large-patch14"
+revision = { PLACEHOLDER = "CLIP_REVISION" }
+precision = "float32"  # resource-profile.json
+
+# EXPERIMENTAL desde o v0.1.0: este backend roda no pipeline canônico e sua evidência chega ao
+# mapa, mas a equivalência exata de rerun das claims que ele gera NÃO faz parte do contrato de
+# release (29/90 = 32,2% de concordância entre duas execuções reais idênticas; issue #556).
+[components.semantic_interpretation.interpreter]
+backend = "qwen"
+
+[components.semantic_interpretation.interpreter.qwen]
+model = "Qwen/Qwen3-VL-4B-Instruct"
+revision = { PLACEHOLDER = "QWEN_REVISION" }
+# "nf4" nos registros do run (docs/release-v0.1.0.md, seção 3): é o que `quantization = "4bit"`
+# aplica, bitsandbytes NF4 (QwenSemanticConfig).
+quantization = "4bit"
+# Decodificação greedy, `temperature=0.0` (docs/release-v0.1.0.md, seção 3).
+temperature = 0.0
+precision = { PLACEHOLDER = "QWEN_PRECISION" }
+max_new_tokens = { PLACEHOLDER = "QWEN_MAX_NEW_TOKENS" }
+# Política de request explícita, sem padrão desde a ablação de percepção (#542, #524): a que
+# reproduz o request da v0.1.0, os prompts anteriores à #542 e uma única view, o recorte justo da
+# região (src/contextmap/runtime/docs/composition.md).
+prompt_policy = { scene = "scene/v1", region = "region/v1" }
+view_policy = { region_views = ["tight_crop"] }
+
+[components.state_estimation.estimator]
+backend = "external_pose"
+
+[components.geometric_mapping.pose_lookup]
+backend = "lookup-policy-v1"
+
+[components.geometric_mapping.motion_correction]
+backend = "motion-correction-v1"
+
+[components.sensor_association.occlusion]
+backend = "conservative-depth-support-v1"
+
+[components.sensor_association.tolerances]
+backend = "diagnostic-tolerances-v1"
+
+[components.sensor_association.pose_policy]
+backend = "lookup-policy-v1"
+
+[components.semantic_fusion.support]
+backend = "geometry-jaccard-support-v1"
+
+[components.semantic_fusion.accumulation]
+backend = "baseline-evidence-accumulation-v1"
+
+[components.semantic_mapping.geometry_summary]
+backend = "entity-geometry-summary-v1"
+
+[components.entity_resolution.retrieval]
+backend = "entity-candidate-retrieval-v1"
+
+[components.entity_resolution.resolution]
+backend = "conservative-staged-resolution-v1"
+
+[components.entity_resolution.geometry_comparison]
+backend = "entity-geometry-comparison-v1"
+
+[components.spatial_relations.frame_conventions]
+backend = "map-frame-conventions-v1"
+
+[components.spatial_relations.candidate]
+backend = "bounds-neighborhood-candidates-v1"
+
+[components.spatial_relations.geometry_summary]
+backend = "entity-geometry-summary-v1"
